@@ -4,6 +4,7 @@ Status: Draft v0.1
 build_target: mixed
 build_into: /home/jsy/wintermute/constellation
 Vision: visions/constellation.md
+deferred_acs: [2, 4, 5]
 
 ## TL;DR
 
