@@ -3,6 +3,11 @@
 Status: Draft v0.1
 build_target: rust-extend
 build_into: /home/jsy/wintermute/relay
+build_version_bump: minor
+deferred_acs: [8]
+mock_unjustified_for: [8]
+mock_justifications:
+  - "AC8: end-to-end extraction quality against the real qwen2.5:3b is a live local-model judgement on 10 example situations — it cannot be mocked without becoming tautological, and must never hit a cloud API (privacy). Verified by hand post-build, not in CI; ACs 1-7 (the deterministic matcher core) are fully tested."
 Vision: visions/relay.md
 
 ## TL;DR
