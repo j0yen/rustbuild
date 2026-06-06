@@ -5624,3 +5624,50 @@ Still held (not drafted): agentns root-cause = an INSTRUMENTATION PRD in
 Open questions for jsy: confirm wm.health.* shared envelope / two-producer
   shape; default OnUnitActiveSec for the watch timer (drafted 30min);
   whether --ping (peon-ping on transition) should default on or off (drafted off).
+
+## 2026-06-06T08:08  /dream  vision-assay (new)
+Drafted: PRD-assay-agentns.md, PRD-agentns-clone-flag-fix.md, PRD-assay-quicken-bridge.md
+Vision: visions/assay.md
+Seed: bare /dream + Phase-1 LIVE run (not a surface read). The strongest
+  unaddressed signal this pass was a WRONG CONCLUSION baked into two existing
+  visions, caught only by exercising the primitive.
+THE FINDING (verify-first, feedback_verify_before_concluding): on the booted
+  7.0.10-arch1-5-wintermute kernel, `~/wintermute/agentns/tests/test_unshare`
+  prints `unshare(CLONE_NEWAGENT) failed: Invalid argument` (EINVAL). The
+  compiled flag is `#define CLONE_NEWAGENT 0x00000100` == **CLONE_VM** — a bit
+  collision; patch-0001's commit msg claims 0x40000000 (== CLONE_NEWNET, also
+  taken). The legacy 32-bit clone-flag space is EXHAUSTED. So the agentns
+  all-zeros is NOT a wiring gap — the namespace physically cannot be created
+  via legacy unshare.
+  ⇒ onramp's SHIPPED `claude-agentns-wrap` is FUTILE (it calls the rejected
+    flag). I added a ⚠ blocked-by note to visions/onramp.md (durable update,
+    not a rewrite).
+  ⇒ quicken's AgentnsProbe verdict `Inert` is correct-but-uninformative — it
+    reads the live process (always init ns → always zero) and can never tell
+    wiring-gap from kernel-bug.
+Order for /build:
+  - PRD-assay-agentns FIRST. Airtight (the diagnosis is already proven by the
+    live run); new workspace ~/wintermute/assay (rust-cli); no consumers; ships
+    independently. AC2 REQUIRES it reproduce the EINVAL + 0x100==CLONE_VM
+    verdict on the booted kernel.
+  - PRD-agentns-clone-flag-fix and PRD-assay-quicken-bridge BOTH depend on
+    assay-agentns but are independent of EACH OTHER → may build in parallel
+    (disjoint build_into: ~/wintermute/agentns kernel-patches vs
+    ~/wintermute/quicken rust-extend; no integrate-collision).
+Heads-up for /build:
+  - agentns-clone-flag-fix is build_target:mixed (kernel patch + apply-agentns.py
+    anchor). Its LIVE proof ACs (3,4) are USER-GATED on a reboot of the rebuilt
+    kernel (same reboot window self-review keeps flagging for the blocked
+    linux/linux-firmware pacman queue). Build/apply ACs (1,2,5,6,7) are NOT
+    gated — advance those autonomously; park the proof ACs as deferred_acs.
+  - assay-quicken-bridge is rust-extend into quicken; keep the Verdict enum +
+    PrimitiveReport JSON append-only (docket-digest consumes it). Fail-open if
+    `assay` is absent (self_build_jq_escape_reads_absent).
+  - DO NOT re-ship onramp's claude-agentns-wrap as-is — re-point it at the new
+    `agentns-unshare` (prctl) shim from agentns-clone-flag-fix first.
+Open questions for jsy (vision §Open questions): the real design decision is
+  the creation MECHANISM for the fix — prctl(PR_SET_AGENT_NS) (drafted default,
+  reuses patch-0005 dispatch, no clone bit) vs clone3-only (unshare can't reach
+  it) vs reclaim a legacy bit (risky). Settle BEFORE agentns-clone-flag-fix is
+  built. Also: should `assay` ever absorb quicken's passive probes (drafted no —
+  stay disjoint: assay exercises mechanisms, quicken reads live state).

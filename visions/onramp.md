@@ -28,6 +28,17 @@ consume it":
    process — too late to enter a new namespace. PRD-agentns-claude
    builds the wrapper binary; nothing yet routes the actual `claude`
    launch through it.
+
+   > **⚠ 2026-06-06 (/dream, visions/assay.md) — this diagnosis is WRONG, and
+   > the `claude-agentns-wrap` remedy is FUTILE on the booted kernel.** Live
+   > run: `unshare(CLONE_NEWAGENT)` returns **EINVAL** — the namespace cannot
+   > be created at all, because `CLONE_NEWAGENT` is `#define`d as `0x100`,
+   > which **is `CLONE_VM`** (the legacy clone-flag space is exhausted). No
+   > launch wrapper that calls `unshare(CLONE_NEWAGENT)` can ever produce a
+   > non-zero `agent_session`. **Blocked-by:** `PRD-agentns-clone-flag-fix`
+   > (re-route creation through `prctl(PR_SET_AGENT_NS)`) and gated on
+   > `PRD-assay-agentns` proving the fix. Re-point `claude-agentns-wrap` at the
+   > new `agentns-unshare` (prctl) shim before shipping it.
 3. **`provfs` fallback values mis-attribute the writer.**
    Live xattrs today: `~/wintermute/recall/Cargo.toml` →
    `comm:awk:pid:76630`; `~/.local/bin/recall` → `comm:install`.
