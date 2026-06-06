@@ -5358,3 +5358,46 @@ Open (next /dream pass / user — HELD, not yet drafted): keel-floor-eval (score
   golden-set provenance unresolved). brain-keel-wire (rust-extend wintermute-brain so LadderClient
   consults the cordon before dispatch — touches live ollama path, NOT cloud-safe, USER-GATED).
   keel spend → thrift cost-model feed? wm.keel.degraded → homestead self-heal vs report-only?
+
+## 2026-06-05T  /dream  vision-anchor  (seed: bare /dream → strongest UNADDRESSED recurring signal; quicken took inert-kernel, keel took dead-cloud, this observation-layer fragility was still open)
+Drafted: PRD-anchor-roots.md, PRD-anchor-probe.md, PRD-anchor-reconcile.md, PRD-anchor-boot.md
+Vision: visions/anchor.md
+Axis: keel=which brain TIER are we standing on. anchor=which change-OBSERVATION
+  roots are we standing on. Both are "is the footing real + legible", different substrate.
+Motivation (live, recurring across reboots): watchman drops watched roots on reboot/socket-bounce
+  → wchg since/reset go SILENTLY empty-or-error → self-review re-watches ~/.claude+~/brain BY HAND
+  every run (journals 06-01/02/03). 8+ reflective memories, top recall:01KT6VCBX1PSWT9MAQP607TAWY
+  score 10.3. The 06-03 journal itself proposed "a SessionStart re-watch hook if it recurs" — it
+  recurs; anchor-boot IS that hook. Confirmed live 2026-06-05: watchman.service is socket-activated
+  `--inetd` (no persisted-root restore); wchg list shows mixed clock ages (mid-May beside today) =
+  ad-hoc per-root re-watching; ZERO of the 8 SessionStart hooks touch watchman.
+Order (STRICT hard dependency):
+  anchor-roots FIRST (new repo ~/wintermute/anchor, rust-cli; creates workspace + `anchor` binary +
+    RootStatus/WatchRoot/WatchState/ReconcileAction/ReconcilePlan types + WatchBackend trait +
+    RootsConfig manifest loader + PURE reconcile diff). Do NOT start any rust-extend until roots has
+    SHIPPED and the repo exists, or extend-validate fails (the rule that bit relay+concord+quicken+keel).
+  THEN: anchor-probe ∥ anchor-reconcile (both depend on roots ONLY, build in PARALLEL) → anchor-boot
+    (mixed: systemd unit + SessionStart hook; needs reconcile's --apply path to exist).
+Notes for /build:
+  - anchor-roots + anchor-probe are PURE-READ / fully cloud-build-safe: watchman behind WatchBackend,
+    FakeBackend fixtures in tests, clock INJECTED (no Date::now). A test asserts reconcile makes ZERO
+    backend calls; probe asserts it calls ONLY read methods (live_roots/ping), never watch/reseed.
+  - anchor-reconcile defaults PRINT-ONLY; --apply is the ONE live-side-effect path. Its ONE live AC
+    (real watch/wchg delta) is deferred_acs:[6] — cloud box has NO watchman + NO wchg.
+  - anchor-boot is mixed (systemd unit + hook + installer). Live ACs deferred_acs:[5,6] (real reboot /
+    real session on the laptop). install.sh PRINTS the settings.json hook entry, does NOT auto-edit
+    ~/.claude (settings edits user-gated, feedback_classifier_per_command). systemd-analyze verify is
+    the offline gate for the unit. Hook exits 0 even on reconcile failure (never block session start).
+  - probe/reconcile/boot each require their integration test ENTRY FILE (tests/probe.rs, tests/
+    reconcile.rs, the boot installer test) to appear in cargo/test output (self_orphaned_mock_tests).
+  - anchor is INWARD toolkit (sibling of vigil/quicken/keel/binstale) → publishes as a j0yen repo like
+    the rest of the self-tooling, NOT outward/public-civic like homeward/relay/concord.
+  - sigpipe::reset() first line of main() in the binary (self_sigpipe_panic_toolkit — anchor x | head).
+  - MSRV 1.85, no let-chains (recall baseline-gate discipline).
+Open (next /dream pass / user — HELD, not yet drafted): anchor-watch (wm.anchor.* bus event on
+  lost-root → homestead self-heal loop, mirrors keel-beacon/quicken-watch held notes). Should probe
+  feed the docket ledger (open a watchman-root-lost key) vs just exit non-zero? — leaning: probe stays
+  pure, the HOOK opens the docket key. Mid-session socket-teardown coverage (a wchg-shim that
+  auto-reconciles-on-empty) — held until boot+session coverage proves insufficient. Alternative the
+  user may prefer: configure watchman to persist watches instead of a reconciler (current --inetd unit
+  doesn't restore; reconciler is the backend-agnostic answer but noting the option).
