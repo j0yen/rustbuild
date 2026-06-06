@@ -5320,3 +5320,41 @@ Open (next /dream pass — held, not yet motivated enough): quicken-watch (boot 
   bus events for a homestead self-heal loop), self-heal-vs-report decision (auto-install protected
   kernel pkg? leaning report-only), agentns all-zeros root cause (kernel-side → agentns repo patch,
   not a quicken PRD).
+
+## 2026-06-05T  /dream  vision-keel  (seed: bare /dream → laptop's strongest UNADDRESSED signal; quicken took the inert-kernel signal earlier today, this one was still open)
+Drafted: PRD-keel-pulse.md, PRD-keel-ledger.md, PRD-keel-cordon.md, PRD-keel-beacon.md
+Vision: visions/keel.md
+Axis: thrift=spend cloud only where it earns warmth (COST). keel=which tier is the
+  brain actually STANDING on, does it KNOW, does it SAY so (FOOTING). Distinct, complementary.
+Motivation (live, recurring): docket wm-anthropic-key-empty OPEN since 2026-05-30, 6 runs / 8
+  reports (evidence recall:01KT6VCBX1PSWT9MAQP607TAWY). ladder.rs:91-94 degrade is correct but
+  STATELESS+INVISIBLE: brain re-discovers dead cloud EVERY turn (wasted round-trip on a voice
+  path), and floored-on-3B is legible ONLY at daily self-review (journals 06-01/02/03 re-report
+  it as if new). local-3b is the de-facto brain (cloud dead, local-8b skipped — pins this CPU).
+Order (STRICT hard dependency):
+  keel-pulse FIRST (new repo ~/wintermute/keel, rust-cli; creates workspace + `keel` binary +
+    TierHealth/TierStatus/LedgerEntry/Ladder types + TierProbe & ProbeEnv traits + non-generating
+    reachability/auth probe). Do NOT start any rust-extend until pulse has SHIPPED and the repo
+    exists, or extend-validate fails (the rule that bit relay + concord + quicken).
+  THEN: ledger ∥ cordon (both depend on pulse ONLY, build in PARALLEL) → beacon (depends on cordon
+    for the effective ceiling + pulse for the floored-tier line).
+Notes for /build:
+  - ALL FOUR are cloud-build-safe: probe/bus/ledger-store behind traits, fixtures in tests, clock
+    INJECTED (no Date::now), a test in each asserts zero live network / zero live-bus. The cloud
+    box has no ollama and no Anthropic key — NEVER gate a test on a real backend.
+  - keel-pulse probe is NON-GENERATING by contract (TCP+/v1/models GET, never /v1/chat/completions)
+    so it never bills and never blocks on the CPU-pinned local model. AC5 asserts the path.
+  - keyless cloud tier must NOT open a socket (keel-pulse AC4) — check the env var, skip the call.
+  - ledger is APPEND-ONLY NDJSON (mirrors gossip/recall); AC2 asserts byte-prefix stability.
+  - beacon is EDGE-triggered (emit only on ceiling change, zero on no-change — AC5), NOT a heartbeat.
+  - ledger/cordon/beacon each require their integration test ENTRY FILE (tests/ledger.rs etc.) to
+    appear in cargo output (self_orphaned_mock_tests guard).
+  - keel is INWARD toolkit (sibling of vigil/quicken/binstale) → publishes as a j0yen repo like the
+    rest of the self-tooling, NOT outward/public-civic like homeward/relay/concord.
+  - sigpipe::reset() first line of main() in the binary (self_sigpipe_panic_toolkit — keel x | head).
+  - MSRV 1.85, no let-chains (recall baseline-gate discipline).
+Open (next /dream pass / user — HELD, not yet drafted): keel-floor-eval (score local-3b on a
+  HAND-BUILT held-out golden set — NOT self-written, feedback_agent_written_fixtures_tautology;
+  golden-set provenance unresolved). brain-keel-wire (rust-extend wintermute-brain so LadderClient
+  consults the cordon before dispatch — touches live ollama path, NOT cloud-safe, USER-GATED).
+  keel spend → thrift cost-model feed? wm.keel.degraded → homestead self-heal vs report-only?
