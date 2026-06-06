@@ -5849,3 +5849,31 @@ Open questions (HELD — need jsy, already in vision OQ#1/#2):
   - Webhook/push inbound (device-reachable-from-outside) deferred — inbound-imap is
     the headless-safe minimum. A durable on-disk distress outbox (crash-replay) is a
     noted Fleet-3 follow-on, not drafted.
+
+## 2026-06-06T03:05  /dream  (saturation scan — no PRDs drafted)
+Seed: bare /dream (interactive). Verified, did not assume.
+Finding: every strong inward signal from tonight's research already has an
+  ACTIVE vision, several built TODAY — re-checked to ground, not surface:
+  - ctrace SessionEnd summaries (625 missing in self-review prose) → coda
+    (coda-boot/close/sweep, v0.2 local today). LIVE: ~/.cache/ctrace/sessions
+    = 5 missing, not 625; coda backfill is working.
+  - watchman drops roots on reboot / wchg lies silently → anchor
+    (anchor-roots/boot/probe, v0.3 today). I independently re-derived this
+    seam (sketched 'moor') from recall 01KT6VCBX1PSWT9MAQP607TAWY + verified
+    no boot wiring exists + watchman roots present only via manual re-watch —
+    then found anchor already drafted+shipped it citing the SAME recall hit.
+  - agentns all-zeros → assay. warden inert → warden. stale binary → vigil.
+    dead cloud tier → keel. re-noticed findings w/o forcing fn → docket.
+Tonight's journal/recall surfaced ONLY inward self-review material; no fresh
+  OUTWARD evidence. Prior two ticks today already went outward (kin Fleet-2
+  09:33, constellation 08:10). Per hard-rule 6 (don't dream past research) +
+  rule 3 (cite research), drafted nothing rather than fabricate.
+Asked jsy for direction (interactive); question dismissed → recorded this
+  and stopped.
+Notes for /build: nothing new from this tick. The covering visions above are
+  the live queue; advance those.
+Open question for next /dream: the only un-visioned recurring escalations are
+  install/arming ACTIONS, not design gaps (memlog staged-awaiting-install,
+  warden arming, binstale never installed). These want a user action or a
+  forcing-function PRD under docket — not a new vision. Reconsider if they
+  keep aging.
