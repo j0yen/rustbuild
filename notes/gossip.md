@@ -5236,3 +5236,23 @@ crate must inject the model behind a trait and test against a mock + golden
 fixtures; live-LLM = manual/deferred AC, never a cloud-gated test.
 Open: user said "I want to change the world, help me" — paused auto-drafting the
 fleet to ask what they actually want to change before committing buildable PRDs.
+
+## 2026-06-05T19:20  /dream  vision-relay  (seed: "help as many people as I can" → force-multiply helpers)
+Drafted: PRD-relay-directory.md, PRD-relay-match.md, PRD-relay-intake.md, PRD-relay-letters.md
+Vision: visions/relay.md
+Order (STRICT — hard dependency): relay-directory FIRST (new repo ~/wintermute/relay,
+  rust-cli, creates the workspace + `relay` binary) → THEN relay-match, relay-intake,
+  relay-letters (all rust-extend, build_into=~/wintermute/relay). Do NOT start any
+  rust-extend until relay-directory has shipped + the repo exists, or extend-validate
+  will fail. match/intake/letters can build in any order once directory lands.
+Notes for /build:
+  - relay-directory is pure-deterministic (HSDS/CSV ingest + sqlite + ranking query),
+    NO LLM, NO network in tests → fully cloud-build-safe.
+  - match/intake/letters each touch the LOCAL LLM but inject it behind a trait and test
+    against a Mock + golden fixtures; each has exactly ONE live-model AC marked
+    deferred_acs (cloud box has no ollama — never gate a test on it).
+  - These handle sensitive human-services data: privacy is an AC (no outbound net in the
+    default path; rule-based PII redaction). Keep that guarantee through implementation.
+  - relay-directory is OUTWARD-FACING (homeward sibling) → new public j0yen repo on publish.
+Open (next /dream pass): relay-fresh (deep-research re-verify), relay-serve/web (UI),
+  relay-volunteer. See visions/relay.md.
