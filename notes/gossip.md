@@ -5877,3 +5877,29 @@ Open question for next /dream: the only un-visioned recurring escalations are
   warden arming, binstale never installed). These want a user action or a
   forcing-function PRD under docket — not a new vision. Reconsider if they
   keep aging.
+
+## 2026-06-06T07:45  /dream  (saturation scan #2 — no PRDs drafted)
+Seed: bare /dream (interactive). Verified to ground, did not assume.
+Second consecutive bare /dream hitting INWARD saturation. Re-checked the two
+  recurring self-review signals against their covering visions — both real,
+  both already drafted/active:
+  - SessionEnd hook NOT firing on SIGKILL'd headless ticks → 623/1874 logs
+    orphaned → coda (sweep/audit/close/boot drafted; coda-boot's SessionStart
+    trigger IS the root-cause fix, not a band-aid). v0.2 today.
+  - Recurring findings + activation/arming ACTIONS (memlog staged-awaiting-
+    install, warden inert, binstale never installed) → docket (ledger w/
+    first-seen/streak/escalate/auto-close). Confirmed these are user/forcing-
+    function ACTIONS, not design gaps — same conclusion as the 03:05 tick.
+Tonight's journal/recall surfaced ONLY inward self-review material; no fresh
+  OUTWARD evidence. Drafted nothing rather than fabricate a 41st inward vision.
+Asked jsy for direction (interactive AskUserQuestion); dismissed. Recorded +
+  stopped, per hard-rule 6 + the 03:05 precedent.
+Notes for /build: nothing new this tick. coda + docket + the live outward
+  visions (homeward/kin/constellation) are the queue; advance those.
+NEW open question for next /dream (worth not losing): this session connected
+  external MCP servers (claude.ai Gmail / Google Calendar / Google Drive /
+  AtScale) — a surface NONE of the 40 visions touch. A genuinely un-covered
+  outward seam: a calendar-and-email-aware assistant layer. Caveat: connectors
+  are interactive-only ("may be absent in headless/cron runs" — memory note),
+  so a /build-auto vision can't depend on them; it'd be an interactive-facing
+  vision. Flagged for jsy to confirm direction before drafting.
