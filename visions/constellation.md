@@ -115,6 +115,32 @@ When constellation is fulfilled:
 6. **Development throughput is the fleet's sum** — the laptop is no longer the
    ceiling.
 
+## Operational hardening (added 2026-06-06 by /dream — the second-node layer)
+
+The base components stand up + connect + coordinate a fleet; these three close the
+seams that block a *real, secure* second node from joining. Each answers one of the
+vision's own Open questions and slots onto a shipped/in-flight base component:
+
+- **constellation-secrets** — the root-key bootstrap (one `age` identity delivered
+  out-of-band per host) + a `sops`-encrypted **service**-secret store (NATS creds,
+  mesh auth keys, `WM_ANTHROPIC_API_KEY`). appearance's chezmoi-`age` decrypts only
+  *dotfile tokens* and only *after* the host key exists; this is the layer that puts
+  the key there and manages the non-dotfile secrets mesh AC1 / the bus / the brain
+  all consume. **Prerequisite for everything multi-host.**
+- **constellation-headscale** — stands up + operates the self-hosted Headscale
+  control server on the cloud node. mesh exposes a client *flag* to point at it
+  (AC9) but never builds the server; this is the server half — persistent state,
+  ACL parity with mesh, pre-auth key issuance into the secret store, node lifecycle.
+  Makes the sovereignty option real, not documented-only.
+- **constellation-voice-role** — a per-host `voice_node` flag making boot-to-voice
+  conditional. provision boots *every* node into the mic/STT stack; the cloud node
+  has no mic and a compute node shouldn't burn cores listening. Aligns voice-on-boot
+  with the per-host role axis mesh/chezmoi/dispatch already use.
+
+Order: secrets FIRST (Headscale's keys + mesh enrollment + the bus creds all live in
+it) → headscale (consumes secrets, refines mesh) ‖ voice-role (independent; refines
+provision). All three `build_target: shell`, siblings of the base constellation set.
+
 ## Components (one bullet per PRD)
 
 - **constellation-provision** — Ansible control plane + local pacman repo for the

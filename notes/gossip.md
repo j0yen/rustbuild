@@ -5755,3 +5755,48 @@ Open questions for jsy (vision §Open questions — HELD, not drafted):
   - Should `warrants.toml` be hand-written at close time, or should audit
     propose a stub per Unwarranted close? v1 = hand-written + Unwarranted
     backlog; auto-stub is Fleet 2.
+
+## 2026-06-06T08:10  /dream  vision-constellation (extend — operational hardening)
+Drafted: PRD-constellation-secrets.md, PRD-constellation-headscale.md, PRD-constellation-voice-role.md
+Vision: visions/constellation.md (added "Operational hardening" section)
+Seed: bare /dream. Inward self-tooling space is SATURATED (anchor owns
+  watchman-rewatch, coda+scribe own ctrace summary-debt, assay owns the agentns
+  flag-collision) — verified by direct grep, did not re-draft any of them.
+  constellation is the live frontier: base components shipped/in-flight
+  (wm-busbridge v0.1.1 built; constellation/{ansible,chezmoi,localrepo} +
+  constellation-provision worktree active in wchg), so I extended with the three
+  un-drafted pieces that block a real 2nd node — each answers a vision Open question.
+
+Order: secrets → headscale ‖ voice-role.
+  - constellation-secrets is the HARD prerequisite for any multi-host work: mesh
+    AC1 ("auth key from the encrypted store"), the bus's NATS creds, and the cloud
+    brain's WM_ANTHROPIC_API_KEY all consume a store that does not exist yet.
+    appearance's chezmoi-age covers ONLY dotfile tokens AFTER the host key exists —
+    it does not bootstrap the root key or manage service secrets. Build secrets
+    before headscale.
+  - constellation-headscale is the SERVER half of mesh's AC9 (mesh ships only the
+    client flag pointing at an absent server). Depends on secrets (server key +
+    issued pre-auth keys are managed secrets) AND constellation-cloud (the host).
+    Do NOT start until secrets has shipped — extend-validate rule.
+  - constellation-voice-role is INDEPENDENT (refines provision; can build in
+    parallel). Makes boot-to-voice a per-host flag so cloud/compute nodes don't
+    bring up a mic stack. Additive + backward-compatible (no flag = role default).
+
+Notes for /build:
+  - All three are build_target: shell, siblings of the constellation family
+    (mesh/provision/appearance pattern). sigpipe::reset() guard on any helper
+    (self_sigpipe_panic_toolkit). Keep the "repo contains no plaintext secret"
+    grep-gate that appearance AC6 established — secrets AC3/AC10 + headscale AC2
+    all lean on it.
+  - secrets AC4 needs two distinct test age keys / a FakeRecipient to prove
+    role-scoped decryption without real cloud keys — fixture-able, cloud-build-safe.
+  - The [live] multi-host ACs (mesh-reachability, real Headscale registration) need
+    a second machine; park those as deferred_acs and advance the
+    fixture/FakeRecipient/local-server ACs autonomously (deferred_acs inline-int
+    form only — self_deferred_acs_inline_only).
+
+Open questions (HELD, not drafted — need user/state):
+  - Bootstrap delivery channel default: manual-paste/USB vs cloud-tunnel. PRD
+    documents both; user picks the canonical one when node 2 actually arrives.
+  - secrets backend: sops+age (drafted) is the assumption. If the user prefers
+    Vault/agenix the PRD's store half changes; bootstrap half is unaffected.
