@@ -5458,3 +5458,72 @@ Open (next /dream pass / user — HELD, not yet drafted): coda-witness (rust-ext
   concern, user opts in). Should coda-close SUBSUME self-review's backfill entirely
   vs run alongside (leaning: canonical, coordinate via gossip). Grace-window tuning
   (started 120s).
+
+## 2026-06-05T  /dream  vision-christen  (seed: bare /dream → strongest UNADDRESSED open docket item)
+Drafted: PRD-christen-plan.md, PRD-christen-detect.md, PRD-christen-route.md,
+  PRD-christen-cap.md, PRD-christen-ledger.md
+Vision: visions/christen.md
+Axis: keel=which brain TIER. anchor=which OBSERVATION roots. coda=did every
+  session get its CLOSING summary. christen=does every session get its TRUE
+  NAME (agent-namespace identity) at birth. Same "is the footing real +
+  legible" family; substrate = the CLONE_NEWAGENT per-session identity layer.
+Motivation (live, measured 2026-06-05): the agentns substrate is BUILT + BOOTED
+  but INERT. `/proc/self/ns/agent -> agent:[4026531996]` = the INIT namespace;
+  all 3 live Claude PIDs read `agent_session = 0…0`, all `agent_counters` zero,
+  despite `CONFIG_AGENT_NS=y` on 7.0.10-arch1-5-wintermute. Root cause is
+  STRUCTURAL: a SessionStart HOOK cannot unshare its already-running parent —
+  the wrap must happen at EXEC time (`agentns-claude --intent … -- claude`),
+  which means editing the launch sites + granting the launcher CAP_SYS_ADMIN.
+  Neither was ever done. The launchers (agentns-claude, agent-wrap) + probe
+  (agentns-doctor) ALL exist and are installed; christen is the missing WIRING
+  layer, not new primitives. Closes the single unaddressed open docket item
+  `agentns-session-zeros` (warn, 8 reports across 6 runs since 2026-05-30, no
+  playbook) — keel took `wm-anthropic-key-empty`, coda took `ctrace-sessionend-flake`.
+Order (STRICT hard dependency, mirrors anchor/coda):
+  christen-plan FIRST (new repo ~/wintermute/christen, rust-cli; creates
+    workspace + `christen` binary + LaunchSite/SiteKind/WrapState/RouteAction/
+    RoutePlan types + LaunchSiteSource trait + FakeSource + ChristenConfig +
+    PURE planner). Do NOT start any rust-extend until plan has SHIPPED and the
+    repo exists, or extend-validate fails (the rule that bit relay/concord/
+    quicken/keel/anchor).
+  THEN: christen-detect ∥ christen-route ∥ christen-cap (all depend on plan
+    ONLY, build in PARALLEL) → christen-ledger (meaningful once route is live;
+    builds vs FakeStore).
+Notes for /build:
+  - christen-plan is PURE / cloud-build-safe: launch sites behind LaunchSiteSource,
+    FakeSource fixtures, KernelInfo + wrapper_installed INJECTED into the pure
+    `plan`. A test asserts `plan` makes ZERO source calls.
+  - christen-detect is read-only except a single `docket report`/`resolve`
+    edge-trigger. Anti-regression invariant (from the existing draft proposal
+    self-review-agentns-block.draft.md): the string "registration failed" MUST
+    NOT appear for any state — a test iterates every NsState and asserts it.
+    Live `/proc/self` AC is deferred_acs:[7] (needs -wintermute kernel).
+  - christen-route is mixed (systemd drop-in installer). DEFAULT print-only;
+    --apply writes `10-christen.conf` drop-ins but NEVER daemon-reload/enable/
+    restart (prints those — feedback_classifier_per_command). Offline gate is
+    `systemd-analyze --user verify` on the generated drop-in (skip-with-note if
+    absent, never silent-pass — self_orphaned_mock_tests). The clear-then-set
+    `ExecStart=` / `ExecStart=…` pair is a systemd correctness detail a test
+    must assert. Live wiring of the 3 real units is deferred_acs:[7].
+  - christen-cap is mixed + SECURITY-SENSITIVE. NEVER auto-`setcap`; prints the
+    scope explainer THEN the `sudo setcap cap_sys_admin+ep <path>` line. cap_plan
+    is pure. `--verify` spawns the launcher under `sbx` and reads the child's
+    agent_session for a nonzero id (deferred_acs:[6], needs -wintermute + sbx).
+    README documents the narrower setuid-helper alternative as an open decision.
+  - christen-ledger is mixed + wires `agentns-doctor receipt` (does NOT
+    re-implement counter reading). Open-only entries are a SIGKILL SIGNAL, not a
+    bug (coda lesson: headless ticks die before graceful hooks). Live ledger AC
+    deferred_acs:[7]. Hook installer PRINTS settings.json entries, no auto-edit.
+  - christen is INWARD toolkit (sibling of vigil/quicken/keel/anchor/coda) →
+    publishes as a j0yen repo, NOT outward/civic.
+  - sigpipe::reset() first line of main() in the binary (self_sigpipe_panic_toolkit).
+  - MSRV 1.85, no let-chains (recall baseline-gate discipline).
+  - CAP ORDERING: christen-route's wiring is INERT until christen-cap's setcap
+    is granted (unshare EPERMs and falls back to unwrapped exec). Build order is
+    parallel, but the LIVE effect needs cap BEFORE route's drop-ins do anything.
+Open (next /dream pass / user — HELD, not yet drafted): christen-budget
+  (rust-extend; measured per-intent budget ceilings from real counter histograms
+  + a runaway-kill verification — draft once route is live and we have histograms).
+  Narrower-privilege setuid helper (security, user decision). Interactive-shell
+  routing is user-typed → christen can only Advise (print alias); systemd sites
+  are the deterministic win.
