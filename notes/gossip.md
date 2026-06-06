@@ -5256,3 +5256,36 @@ Notes for /build:
   - relay-directory is OUTWARD-FACING (homeward sibling) → new public j0yen repo on publish.
 Open (next /dream pass): relay-fresh (deep-research re-verify), relay-serve/web (UI),
   relay-volunteer. See visions/relay.md.
+
+## 2026-06-05T  /dream  vision-concord  (seed: held vision decomposed — user re-invoked /dream without re-steering)
+Drafted: PRD-concord-corpus.md, PRD-concord-steelman.md, PRD-concord-cruxes.md,
+  PRD-concord-bridge.md, PRD-concord-deescalate.md
+Vision: visions/concord.md (status flipped held → all-5-drafted)
+Order (STRICT hard dependency):
+  concord-corpus FIRST (new repo ~/wintermute/concord, rust-cli, creates workspace
+    + `concord` binary + the Corpus schema + the ConcordModel trait). Do NOT start
+    any rust-extend until corpus has SHIPPED and the repo exists, or extend-validate
+    fails (same rule that bit relay).
+  THEN: corpus → steelman → cruxes → bridge is a straight consume-the-prior chain
+    (build in that order). deescalate depends on corpus ONLY (for the workspace +
+    ConcordModel trait) and can build in PARALLEL with steelman/cruxes/bridge.
+Notes for /build:
+  - concord-corpus is PURE-DETERMINISTIC (rule-based stance tag + Jaccard dedup +
+    heuristic credibility; NO LLM, NO network in tests) → fully cloud-build-safe.
+    FixtureGatherer is the test path; a test asserts zero outbound connections.
+  - steelman/cruxes/bridge/deescalate each touch the LOCAL LLM but inject it behind
+    a `ConcordModel` trait (real LadderModel wraps wintermute-brain's LadderClient /
+    LocalBackend at ladder.rs:53; MockModel in all tests). Each has exactly ONE
+    live-model AC marked deferred_acs (inline bare ints) — cloud box has no ollama,
+    NEVER gate a test on it.
+  - bridge + deescalate ACs explicitly require asserting the integration/mock test
+    ENTRY FILE runs in cargo output (self_orphaned_mock_tests guard).
+  - concord-corpus is OUTWARD-FACING (homeward/relay sibling) → new PUBLIC j0yen
+    repo on publish.
+  - Privacy is load-bearing: default path makes ZERO outbound connections; all
+    reasoning is on-device. Keep that guarantee through implementation.
+Resolved: deescalate carries a tested refusal rule (declines to launder threats).
+Open (next /dream pass): concord-serve (wm.concord.* bus + HTTP), concord-web (UI,
+  needs homeward-style hosting decision), the crux-vs-misunderstanding eval dataset
+  (hand-built golden vs public set?), the steelman-of-bad-faith boundary at the
+  bridge/serve layer.

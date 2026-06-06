@@ -75,6 +75,24 @@ cloud provider.
 the prior's structured output). `deescalate` is independent — it needs only the
 local LLM, so /build can ship it in parallel with the corpus chain.
 
+## Status — all 5 components drafted (2026-06-05)
+
+All five components are now PRDs (was: held for user direction). The user
+re-invoked `/dream` without re-steering, so the fleet was decomposed from the
+existing, fully-researched vision rather than waiting further.
+
+- ✅ `PRD-concord-corpus.md` — Draft v0.1, rust-cli, new repo `~/wintermute/concord`.
+- ✅ `PRD-concord-steelman.md` — Draft v0.1, rust-extend (deferred_acs: [6]).
+- ✅ `PRD-concord-cruxes.md` — Draft v0.1, rust-extend (deferred_acs: [6]).
+- ✅ `PRD-concord-bridge.md` — Draft v0.1, rust-extend (deferred_acs: [7]).
+- ✅ `PRD-concord-deescalate.md` — Draft v0.1, rust-extend (deferred_acs: [7]).
+
+Resolved during drafting: the **steelman/deescalate abuse boundary** open question
+is partly answered — `concord-deescalate` now carries a documented, tested refusal
+rule (it declines to launder threats/harassment rather than "politely rephrasing"
+them). The steelman-of-bad-faith-positions boundary remains open at the
+`concord-bridge`/serve layer.
+
 ## Design note for buildability (important)
 
 `/build` now runs cargo on the **cloud box**, which has **no ollama**. So every
