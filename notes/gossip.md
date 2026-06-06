@@ -5289,3 +5289,34 @@ Open (next /dream pass): concord-serve (wm.concord.* bus + HTTP), concord-web (U
   needs homeward-style hosting decision), the crux-vs-misunderstanding eval dataset
   (hand-built golden vs public set?), the steelman-of-bad-faith boundary at the
   bridge/serve layer.
+
+## 2026-06-05T  /dream  vision-quicken  (seed: bare /dream, user declined steer → dreamed from laptop's strongest unaddressed signal)
+Drafted: PRD-quicken-probe.md, PRD-quicken-remedy.md, PRD-quicken-attest.md, PRD-quicken-crossdep.md
+Vision: visions/quicken.md
+Axis: vigil=stale-but-running bytes; quicken=NEVER-came-alive (built/installed but runtime-inert).
+  Distinct from vigil/freshness/drift. Caught live 2026-06-05: memlog EACCES (user not in
+  memlog group; installed pkgrel-5, fix sits uninstalled at pkgrel-11 — gap WIDENED 5→10→11),
+  agentns /proc/self/agent_session all-zeros, bpolicy {"loaded":false}, provfs LIVE-but-DEGRADED
+  (xattr is comm:zsh fallback, NOT the 128-bit agentns id — provfs degraded BECAUSE agentns is dark).
+Order (STRICT hard dependency):
+  quicken-probe FIRST (new repo ~/wintermute/quicken, rust-cli; creates workspace + `quicken`
+    binary + Verdict/Evidence/PrimitiveReport types + the Probe trait + 4 probes). Do NOT start
+    any rust-extend until probe has SHIPPED and the repo exists, or extend-validate fails
+    (same rule that bit relay + concord).
+  THEN remedy, attest, crossdep are ALL rust-extend (build_into=~/wintermute/quicken), any order
+    after probe lands. crossdep reads cleanest after probe; attest independent of remedy/crossdep.
+Notes for /build:
+  - quicken-probe is PURE-READ (proc/dev/xattr/pacman-query behind a ProbeEnv trait, fixtures in
+    tests, ZERO network/writes) → fully cloud-build-safe. A test asserts the probe path is pure-read.
+  - remedy defaults to PRINT-ONLY (--dry-run posture, mirrors rollout); --apply runs ONLY the safe
+    userspace subset (group/udev), prints (never runs) sudo/reboot/kernel steps. Its ONE live AC
+    (apply actually revives memlog group) is deferred_acs:[8] — cloud box has no /dev/memlog.
+  - attest/crossdep are deterministic + cloud-safe; boot_id + clock INJECTED in tests (no Date::now).
+  - crossdep AC requires the integration test entry file (tests/crossdep.rs) appear in cargo output
+    (self_orphaned_mock_tests guard).
+  - quicken is INWARD tooling (sibling of vigil/binstale/rollout) → publishes as j0yen repo like the
+    rest of the toolkit, NOT outward/public-civic like homeward/relay/concord.
+Open (next /dream pass — held, not yet motivated enough): quicken-watch (boot oneshot → wm.quicken.*
+  bus events for a homestead self-heal loop), self-heal-vs-report decision (auto-install protected
+  kernel pkg? leaning report-only), agentns all-zeros root cause (kernel-side → agentns repo patch,
+  not a quicken PRD).
