@@ -5671,3 +5671,87 @@ Open questions for jsy (vision §Open questions): the real design decision is
   it) vs reclaim a legacy bit (risky). Settle BEFORE agentns-clone-flag-fix is
   built. Also: should `assay` ever absorb quicken's passive probes (drafted no —
   stay disjoint: assay exercises mechanisms, quicken reads live state).
+
+## 2026-06-06T01:40  /dream  vision-warrant (new)
+Drafted: PRD-warrant-corpus.md, PRD-warrant-audit.md, PRD-warrant-docket.md
+Vision: visions/warrant.md
+Seed: bare /dream + Phase-1 LIVE verification (not a surface read). Second
+  consecutive pass to catch a SHIPPED/CLOSED PRD whose closing mechanism
+  claim is mechanically false (yesterday: assay→onramp's agentns-wrap futile).
+
+THE FINDING (verify-first, feedback_verify_before_concluding) — a FALSE CLOSE,
+  proven live:
+  `PRD-ctrace-session-end-resilient.md` is `Status: Closed (2026-06-02) —
+  outcome achieved live by a different mechanism`. The named mechanism:
+  "ctrace-reap.timer runs ctrace-orphan-reap --apply every 2 min; its
+  render_log step summarizes any orphaned *.ndjson." THIS IS FALSE.
+  - `ctrace-orphan-reap --apply` renders a log ONLY on `verdict:
+    orphaned-tracer` (a *live* stranded tracer to stop+render).
+  - But the SAME repo's `ctrace-reap.service` comment says: "session.bt now
+    self-terminates on root exit, so this should normally find nothing." Live
+    journalctl confirms: `verdict: healthy` → `apply: state is healthy;
+    nothing to do`.
+  - ⇒ The two shipped fixes are MUTUALLY DEFEATING: self-terminating the
+    tracer removes the orphan the reaper needed to trigger render. In the
+    common SIGKILL case (every headless /build /dream /self-review tick) there
+    is NO orphan → reaper renders NOTHING → and SessionEnd hook never fired
+    (SIGKILL) → the log is summarized by NOTHING but self-review's hand-run
+    `scribe backfill`. (`ctrace-session-end.sh` also still shells the slow
+    `summarize-ctrace-session.sh`, never `scribe`.)
+  ⇒ The gap silently REOPENED to 623/1874 (33%) by 2026-06-05 — which is the
+    ONLY reason the `coda` vision + 4 PRDs had to be drafted from scratch.
+    coda IS the correct superseding fix; warrant does NOT re-fix it.
+
+DURABLE CORRECTION for /build (do NOT trust the 06-02 close):
+  - PRD-ctrace-session-end-resilient.md's close is mechanically false for the
+    common case. Treat `coda` (coda-sweep→audit∥close→boot, in-flight) as the
+    real fix for the ctrace summary-debt gap. Do not ship anything that leans
+    on "ctrace-reap.timer backfills summaries" — it does not.
+
+vision-warrant = the CLOSE-side dual of assay (assay attests a PRIMITIVE's
+  creation mechanism by forking a child; warrant attests a CLOSE's claimed
+  mechanism by running a declared side-effect-free assertion — incl. the
+  systemd/shell/timer/pipeline closes assay structurally can't fork). Inward
+  toolkit, sibling of docket/coda/quicken/assay; publishes as a j0yen repo.
+
+Order (STRICT hard chain, mirrors coda/anchor):
+  - warrant-corpus FIRST. New repo ~/wintermute/warrant (rust-cli). Ships the
+    workspace + types (CloseClaim/ClaimKind/Warrant/AssertionSpec/
+    WarrantStatus/WarrantVerdict/AuditPlan) + CloseSource trait + FakeSource +
+    a PURE `classify()` (AC2: zero source calls, no IO). No consumers; ships
+    independently; cloud-build-safe.
+  - THEN warrant-audit (rust-extend): real FsDocketSource over PRDs-archive/ +
+    a warrants.toml registry of side-effect-free assertions + the runner.
+    First warrant shipped = the session-end-resilient one → resolves Refuted.
+    DO NOT start until warrant-corpus has SHIPPED + repo exists
+    (extend-validate rule that bit relay/concord/quicken/keel/anchor).
+  - THEN warrant-docket (rust-extend): edge-triggered reopen of Refuted closes
+    into docket under slug `warrant:<source>`; print-only default, --apply
+    gated; fail-open if docket absent. Depends on audit's verdict JSON.
+
+Heads-up for /build:
+  - All three are PURE-READ / cloud-build-safe in their non-[live] ACs (source
+    behind a trait, FakeSource/FakeDocketSink fixtures, archive dir INJECTED).
+    The [live] ACs (warrant-audit AC8, warrant-docket AC8) need ~/.claude/
+    scripts + ctrace on the real laptop → park as deferred_acs, advance the
+    rest autonomously.
+  - warrant-audit enforces a side-effect-free assertion contract (AC3: rejects
+    a CommandExit cmd containing --apply/rm/>/write at load). Keep that gate.
+  - sigpipe::reset() first line of main() (self_sigpipe_panic_toolkit).
+  - MSRV 1.85, no let-chains; tests/{corpus,audit,report}.rs must each appear
+    as `Running tests/<x>.rs` in cargo output (self_orphaned_mock_tests).
+  - DocketSink + FsDocketSource both fail-open on missing docket
+    (self_build_jq_escape_reads_absent).
+
+Open questions for jsy (vision §Open questions — HELD, not drafted):
+  - warrant-GATE (prevention): a /build close-time hook that refuses to write
+    a "by a different mechanism" close note unless a warrant is registered.
+    This is the load-bearing half (stop false closes BEFORE vs detect AFTER)
+    but touches the /build close path + classifier — not yet traced. Draft
+    after warrant-audit + locating the close-note write site.
+  - assay-bridge: when a close's mechanism IS a kernel primitive, delegate the
+    warrant to `assay <name>` instead of a local assertion (unify creation-
+    side + close-side under one verdict). Draft once both are live.
+  - Should `warrants.toml` be hand-written at close time, or should audit
+    propose a stub per Unwarranted close? v1 = hand-written + Unwarranted
+    backlog; auto-stub is Fleet 2.
