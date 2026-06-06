@@ -5574,3 +5574,53 @@ Open questions: `loom doctor` read-only stall report (held — draft once
   serial-fallback writes the streak ledger it would read). Rebase-retry cap at 1
   vs small-N backoff (start at 1). Cargo.lock driver: merge=ours+regen (chosen)
   vs union (risks invalid TOML).
+
+- 2026-06-06T07:32:30Z (build): coda cluster — coda-audit established local `main` + integrated v0.2.0, but `j0yen/coda` remote is missing; needs `wm-publish --slug coda` (add to ALLOW) or manual `gh repo create`. keel cluster blocked: no `main` branch until keel-pulse ships.
+
+## 2026-06-06T07:38  /dream  vision-quicken (extend, Fleet 2)
+Drafted: PRD-quicken-watch.md, PRD-quicken-notify.md
+Vision: visions/quicken.md (updated — Fleet 2 = the boot/bus-reactive half)
+Seed: bare /dream + Phase-1 live re-probe (memlog group EACCES w/ pkgrel
+  gap now 5->11, agentns /proc/self/agent_session all-zeros, bpolicy
+  {"loaded":false}, provfs degraded-because-agentns) + the realization
+  that Fleet 1's probe is DAILY-only while primitives die mid-day
+  (self_agorabus_restart_kills_voice is the canonical edge a daily probe
+  can't see).
+Why an extend, not a new vision: spent this pass confirming the obvious
+  threads are already owned — docket (track findings), warden (bpolicy
+  arming), continuity/onramp (agentns wrap + memlog group/udev), vigil
+  (stale running bytes), and quicken itself (built-but-never-alive). The
+  kernel/self-review/introspection cluster is saturated. quicken is the
+  precise match to the strongest LIVE evidence, so this extends it rather
+  than wedging in a duplicate #41.
+Order for /build:
+  - quicken-watch FIRST (publishes wm.health.primitive.<name> verdicts to
+    agorabus). Hard dep on Fleet 1's quicken-probe having shipped (repo
+    ~/wintermute/quicken exists: quicken + quicken-probe crates — confirmed).
+  - quicken-notify SECOND (subscribes, fires on transitions only). Depends
+    on watch publishing the topic, BUT can build against fixture event
+    streams in parallel; only the live AC5 (real bus round-trip) needs
+    watch shipped. Treat watch-absent as "no events" (fail-open), per
+    self_build_jq_escape_reads_absent.
+  - Both are rust-extend into ~/wintermute/quicken — SERIALIZE THEM (same
+    build_into; loom/integrate-collision lesson: same-target parallel
+    branches conflict on Cargo.lock/main.rs subcommand enum). watch then
+    notify.
+Reuse / non-duplication notes:
+  - Reuses the EXISTING wm.health.* envelope (produced by
+    wintermute-brain/degrade.rs, consumed by docket/digest.rs). Supersedes
+    quicken's old open-question idea of a parallel wm.quicken.* topic — so
+    docket-digest picks up quicken verdicts for free.
+  - Disjoint from wintermute_watchdog (it watches DAEMON heartbeat; quicken
+    watches kernel/userspace PRIMITIVE liveness; same envelope, different
+    subject namespace primitive.<name>). Flagged for jsy: one envelope /
+    two producers, confirm not a merge.
+  - Strictly REPORT, never heal — homestead still owns any future
+    unattended self-heal. The report-vs-heal line stays firm.
+Still held (not drafted): agentns root-cause = an INSTRUMENTATION PRD in
+  the agentns repo proving WHERE the zero comes from before any fix
+  (feedback_verify_before_concluding), not a quicken PRD. Self-heal-vs-report
+  still report-only.
+Open questions for jsy: confirm wm.health.* shared envelope / two-producer
+  shape; default OnUnitActiveSec for the watch timer (drafted 30min);
+  whether --ping (peon-ping on transition) should default on or off (drafted off).

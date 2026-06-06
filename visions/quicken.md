@@ -2,6 +2,11 @@
 
 **Authored by:** /dream (Claude Opus 4.8), with jsy
 **Created:** 2026-06-05
+**Updated:** 2026-06-06 (`/dream extend quicken` — Fleet 2 drafted: the
+boot/bus-reactive half. `quicken-watch` + `quicken-notify` move from
+open-questions to drafted PRDs, now that this pass re-confirmed the dark
+set live *and* surfaced the real-time gap: self-review is daily, but
+primitives die mid-day.)
 **Status:** active
 **Seed:** bare `/dream` + Phase-1 live inspection. The user declined a
 steer, so this pass dreamed from the laptop's strongest *unaddressed*
@@ -107,17 +112,62 @@ into `~/wintermute/quicken` and may build in any order after probe
 lands. `crossdep` reads cleanest after `probe`'s verdicts exist;
 `attest` is independent of both `remedy` and `crossdep`.
 
-## Open questions (next /dream pass — not yet motivated enough to draft)
+## Fleet 2 — the boot/bus-reactive half (drafted 2026-06-06)
 
-- **quicken-watch**: a boot-time oneshot that runs `quicken probe` and
-  publishes verdicts to agorabus (`wm.quicken.*`) so the fleet — and a
-  future `homestead` self-heal loop — can react without polling. Needs
-  the bus-event shape decided.
+Fleet 1 (`probe`/`remedy`/`attest`/`crossdep`) makes the dark set
+*knowable on demand* — but only when something runs `quicken probe`,
+which in practice is the **daily** self-review tick. That leaves a
+real-time hole. A primitive can be live at 09:00 and dark by 14:00 and
+nothing notices until tomorrow's review. This is not hypothetical: the
+`agorabus-restart-kills-voice` incident (memory
+`self_agorabus_restart_kills_voice`) is exactly this shape — the
+`wm-{audio,stt,tts}` daemons exited on a bus-close and **stayed dead**
+because nothing watched the transition; it was caught manually, not by a
+probe. Fleet 2 closes the hole by making liveness an *event*, not a poll.
+
+- **quicken-watch** (rust-extend → quicken): a oneshot (`quicken watch
+  --once`) wired to a systemd-user unit (boot + a low-frequency timer)
+  that runs the probe set and **publishes each verdict to agorabus** on
+  the existing `wm.health.*` envelope (`wm.health.primitive.<name>` —
+  verdict, evidence digest, inert-streak, `blocked_by`). REUSES the
+  health envelope already produced by `wintermute-brain/degrade.rs` and
+  consumed by `docket/digest.rs`; does **not** mint a parallel
+  `wm.quicken.*` topic (the `wm.quicken.*` idea in the prior open
+  question is superseded — composing with `wm.health.*` is why
+  `docket-digest` can pick it up for free). Pure publish; no enforcement.
+
+- **quicken-notify** (rust-extend → quicken): the report-side consumer.
+  `agorabus subscribe wm.health.primitive.` (auto-reconnect, already in
+  the CLI) and fire **one** signal on a *transition* — live→dark, or an
+  inert-streak crossing a threshold — debounced so a steadily-dark
+  primitive doesn't spam every boot. Output is a surfaced line
+  (SessionStart banner fragment + optional peon-ping), never a heal.
+  This is deliberately the **report** end of the report-vs-heal split:
+  it tells you the moment voice went dark; it does not restart it
+  (`homestead` owns any future unattended self-heal — see boundary).
+
+### Open questions (still held — not yet motivated enough to draft)
+
 - **Self-heal vs. report**: should `quicken` ever auto-install the
   staged kernel pkg (it's user-protected, needs reboot), or stay
   strictly report+userspace-only forever? Leaning report-only; revisit
   if `homestead` wants an unattended path for jsy's mother's device.
+  Fleet 2 keeps the line firm: `watch` publishes, `notify` surfaces,
+  neither acts.
 - **agentns root cause**: the all-zeros registration is kernel-side
-  (no userspace playbook). quicken can *detect* and *report* it, but
-  reviving it may need a `wintermute-kernel` patch — a separate vision
-  thread (`agentns` repo), not a quicken PRD.
+  (no userspace playbook). quicken can *detect* and *report* it (and
+  Fleet 2 can now alert the moment provfs degrades because of it), but
+  *reviving* it may need a `wintermute-kernel` patch — a separate vision
+  thread (`agentns` repo), not a quicken PRD. Honest frontier: the next
+  step there is an **instrumentation** PRD that proves *where* the zero
+  comes from (launcher not wrapping vs. kernel hook returning zero vs.
+  `/proc` read bug) before anyone proposes a fix —
+  see `feedback_verify_before_concluding`.
+- **Boundary vs. `wintermute_watchdog`**: `wintermute-platform` already
+  ships a `wintermute_watchdog` binary that watches *daemon* liveness on
+  `wm.health.*`. `quicken-watch` watches a different axis — *kernel/
+  userspace primitive* liveness (dark/inert/degraded), not "is daemon X
+  heartbeating." They publish to the same envelope but cover disjoint
+  subjects (`wm.health.primitive.<name>` vs the daemon health subjects).
+  Confirm with jsy that one envelope / two producers is right, not a
+  merge.
