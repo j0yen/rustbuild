@@ -5128,3 +5128,111 @@ Notes for /build: fleet now ~9 active PRDs. brain-cuda is the headline new capab
 jsy: "it's already plugged in and running." The GTX 1080 PSU/8-pin gate is CLOSED.
 Only software step left for the fast local brain: nvidia-dkms builds clean against
 linux-wintermute (brain-cuda AC1). Hardware for the ~2-3s local-gpu brain is GO.
+
+## 2026-06-04T  jsy decision  lucid-tap service = DO NOT enable at boot
+jsy reviewed the "enable wm-lucid.service at boot" ask and declined: the recorder
+logs every wm.* bus event to disk 24/7 and impacts performance on this thin voice
+node. Resolution: wm-lucid is a TRANSIENT diagnostic tool, default OFF, NOT a boot
+service. Created skill `/lucid-diagnose` (~/.claude/skills/lucid-diagnose/) that
+start/stops the service transiently (never `enable`) and wraps last/trace/explain.
+Notes for /build: STOP flagging "enable wm-lucid.service" as a pending action.
+lucid-tap's install is done; the service is intentionally `disabled`. Treat the
+lucid-tap PRD's "live recorder" AC as satisfied by the on-demand skill, not a
+permanent daemon.
+
+## 2026-06-04T  jsy ask  burst-builder PRD drafted (standalone, mesh-free rung)
+jsy: "maybe we should burst heavy rust compile and CPU jobs to the cloud." Drafted
+PRD-constellation-burst-builder.md — a new `wm-burst` rust-cli (j0yen/wm-burst) that
+points local cargo at ONE always-on Hetzner dedicated 9950X + a shared sccache cache.
+Deliberately the rung BENEATH constellation-cloud-build: needs NO NATS mesh, NO
+dispatch coordinator, NO capability registry — just ssh + sccache + config.toml.
+Standable-up today; the full fleet PRD graduates from it.
+Notes for /build: (1) does NOT duplicate cloud-build — it carves out the no-mesh
+path and Refines it. (2) Key guardrail = `wm-burst doctor` HARD-FAILS on remote-vs-
+local toolchain drift (the 1.85/1.88 split that has corrupted cold builds). (3) pod
+tier ACs are provable with a MOCKED provider — no real cloud spend needed to pass.
+(4) sigpipe::reset() first line of main per self_sigpipe_panic_toolkit. Two open
+questions left for build/jsy: cache backend (MinIO-on-the-box is cheapest default)
+and sccache-dist vs remote-cargo-over-ssh for v0.1 (AC4 allows either).
+
+## 2026-06-05T02:42:35Z build-tick friction
+- **constellation repo has no origin remote** — constellation-appearance + constellation-cloud committed to local master but cannot push. Needs `gh repo create j0yen/constellation` + `git remote add origin` + adding 'constellation' to wm-push/wm-publish ALLOW lists + REPOS.md row. Blocks 2 PRDs.
+- **allow-list gaps**: homeward-schema not on wm-publish ALLOW (publish deferred). constellation-dispatch's wm-buildtree ensure was classifier-blocked (slug added since). Recurring new-slug-not-allowed pattern — candidate for a follow-on PRD that auto-syncs ALLOW arrays from REPOS.md.
+
+## 2026-06-04T  jsy ask  wake-train offload PRD drafted (companion to burst-builder)
+Drafted PRD-constellation-waketrain-offload.md (build_target: shell) — a
+`burst-train.sh` recipe (+ wake-retrain-burst.service drop-in) that runs the heavy
+train-wintermute.sh job on a cloud pod instead of OOM-killing this laptop (11.2 GB
+peak, no swap, 2026-06-03). DEPENDS on burst-builder for wm-burst exec/pod transport;
+REFINES PRD-wintermute-wake-word (changes no stages, wraps it).
+Notes for /build: THE POINT is the INSTALL GATE, not just "run elsewhere" — a returned
+ONNX is swapped into wm-audio ONLY if I/O is exactly [1,186,40]→[1,1], non-streaming,
+and the local `verify` stage passes; bad/mis-shaped run leaves the live model untouched
++ exits non-zero (AC4). Atomic install + --rollback (AC5). Per feedback_verify_before_
+concluding: verification is a gate here, not afterthought. Pod cost/teardown delegated
+to wm-burst pod (mocked provider proves AC6, no real spend). Open Qs: GPU-vs-CPU default
+pod, where the pinned py3.11/TF2.21 env lockfile lives, and whether to block install on
+val-accuracy regression.
+
+## 2026-06-05T  jsy decision  burst-builder goes aarch64 (Oracle free tier)
+jsy priced Hetzner, too high ("even a ryzen 7 is 80 euros"). Pivot: cheapest correct
+builder = Oracle Always-Free Ampere (4 core / 24GB / $0, aarch64) — and 24GB removes
+the wake-train OOM for free. wm-burst v0.1 already SHIPPED (constellation-burst-builder,
+wm-burst 0.1.0, archived) but assumes x86: provision.rs is Arch/pacman-only, toolchain.rs
+checks only the rustc CHANNEL not the arch. Drafted EXTEND PRD-constellation-burst-builder-arch.md
+(rust-extend into constellation-burst-builder).
+Notes for /build: (1) add remote_arch (target-triple, default aarch64-unknown-linux-gnu)
++ remote_os to BurstConfig. (2) provision gains an apt/Ubuntu-Oracle path + installs the
+configured target toolchain. (3) THE GATE: doctor must compare the FULL host triple from
+`rustc -vV` host: line, not just channel — wrong-arch/right-version remote must hard-fail
+like a version mismatch (AC3). (4) Settles two open Qs: sccache backend default = MinIO
+on the Oracle box (200GB free block); aarch64 is the default remote. x86 still works via
+--remote-arch x86_64-unknown-linux-gnu. waketrain-offload's pinned-env note now also needs
+arm64 wheels for TF2.21/torch — flag when that one builds.
+
+## 2026-06-05T  jsy decision  wake-train = GPU pod default, no standing infra
+jsy: "I dont plan to do wake training very often. and wouldnt a GPU pod be better for
+that?" Yes. Resolved the waketrain-offload open question: DEFAULT = on-demand CUDA GPU
+pod (RunPod/Vast), torn down after; --cpu is fallback; --smoke on a tiny shape. Training
+is rare → NO standing training infra. Clean split now: Oracle free aarch64 box = BUILDS
+(always-on, $0, 24GB); GPU pod = TRAINING (rare, per-run, minutes). Updated PRD-constellation-
+waketrain-offload.md (TL;DR, GPU-pod-run bullet, AC3, Resolved-decisions section).
+IMPORTANT env note for /build: GPU pod is x86+CUDA, so the pinned TF2.21/torch training
+env is x86 wheels — INDEPENDENT of the aarch64 build box. Do NOT try to reuse the arm64
+build env for training.
+
+## 2026-06-05T  jsy decision  BUILD-ONLY = Hetzner Cloud x86 on-demand (ARM withdrawn)
+Key fact: laptop is x86_64 (verified uname). An aarch64 box can NEITHER produce
+runnable-on-laptop binaries NOR share an x86 sccache cache → Oracle-free-ARM is only a
+CI/compile-check box, not a real build offload. jsy chose Hetzner Cloud x86 on-demand
+(~€0.03/hr bursted, ~€1-2/mo) over €80 dedicated and over free ARM.
+ACTIONS TAKEN:
+- DELETED PRD-constellation-burst-builder-arch.md (aarch64 work now obsolete). WARNING:
+  /build had ALREADY claimed it — pid 334165 tick was mid-edit on init.rs/config.rs in
+  worktree .build-worktrees/constellation-burst-builder-arch, branch = the SHARED
+  autobuilder/constellation-burst-builder. Did NOT kill it (avoid /build jam per
+  self_build_jam_leaked_tracer). It may land an additive `remote_arch` field — harmless;
+  pin default x86_64.
+- DREW UP PRD-constellation-burst-builder-hcloud.md (rust-extend into constellation-burst-
+  builder): implements the REAL HcloudPodProvider (shipped pod provider is a STUB —
+  make_provider warns "not yet implemented in v0.1", falls back to mock). Adds
+  `wm-burst build --burst` (ephemeral CCX23 per build, torn down), provision --snapshot,
+  and Hetzner Object Storage as the persistent sccache backend (SUPERSEDES the
+  MinIO-on-standing-box default — no standing box in build-only plan).
+ORDERING FOR /build: build hcloud PRD only AFTER the constellation-burst-builder branch
+settles (the arch tick was on the same branch — concurrent edits = collision). provision
+already has BOTH apt(Debian/Ubuntu) + pacman(Arch) paths (verified), so no OS work needed.
+
+## 2026-06-05T19:15  /dream  vision-concord  (seed: "world peace" / "change the world")
+Drafted: visions/concord.md (NO PRDs yet — held for user direction).
+Concord = the 2nd outward-facing vision (after homeward). Attacks the tractable
+driver of conflict: breakdown of understanding. Pipeline corpus → steelman →
+cruxes → bridge (+ independent deescalate), all on the LOCAL LLM ladder
+(qwen3:8b/qwen2.5:3b verified) + the deep-research fan-out harness.
+Notes for /build: nothing to build yet — only the vision doc landed. PRDs will
+follow once the user points the direction. IMPORTANT design constraint when they
+do: /build now runs cargo on the cloud box (no ollama), so every LLM-touching
+crate must inject the model behind a trait and test against a mock + golden
+fixtures; live-LLM = manual/deferred AC, never a cloud-gated test.
+Open: user said "I want to change the world, help me" — paused auto-drafting the
+fleet to ask what they actually want to change before committing buildable PRDs.
