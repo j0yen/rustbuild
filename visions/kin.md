@@ -194,3 +194,63 @@ family-enroll   (config capstone; consumed by all)
   fix at the unit level on install.
 - Presence/silence/digest default OFF in config; distress defaults ON. Don't
   ship a device that phones home about Mom unless she enrolled it.
+
+## Fleet 2 — closing the open loops (drafted 2026-06-06)
+
+Fleet 1 shipped the daemons: `wintermute-reach` (v0.2.0), `wintermute-presence`,
+`wintermute-family-enroll`, and the dialog Family/Distress branches all exist with
+src and tests. But three of the seven end-states are *half-open* — the runtime is
+present, the feedback path is stubbed or missing. Phase-1 evidence (2026-06-06,
+direct grep of the shipped repos):
+
+- **End-state #2 "You can reach her back" is a stub.** `wm-reach reply` is a
+  one-shot CLI publish (`src/dispatch.rs:54 publish_reply`, `src/main.rs:7 "v1
+  inbound stub"`). There is no transport that carries jsy's *off-device* reply
+  back to Mom's device. The dialog side is ready — `family.rs:363 on_reply`
+  already formats `"{from} says: {body}"` and routes it to `wm.tts.say` — but
+  nothing produces the inbound `wm.family.reply` except a human running a CLI on
+  the same box. OQ#4 ("Email-poll is simplest") is the answer; it's just unbuilt.
+- **End-state #4 "silence is surfaced gently" is half-built.** `wm.presence.silence`
+  is *detected* (presence daemon) and *noted in the daily digest*
+  (`reach/src/digest.rs:56 record_silence`), but `digest.rs:12` states plainly the
+  silence flag "does NOT trigger" any standalone delivery. There is no "haven't
+  heard from Mom today" nudge — silence only shows up batched in the digest, which
+  the user may have disabled. The gentle single-nudge the vision promised doesn't fire.
+- **End-state #5 "distress reaches you instantly" has no delivery durability.**
+  `reach/src/daemon.rs` delivers a distress over one transport; AC5 makes a
+  transport error ack `delivered:false` "not a panic, not a silent drop" — but a
+  failed distress delivery is *exactly* the safety case that must not end at a nack.
+  There is no retry and no fallback-transport escalation. A fallen-and-can't-reach-
+  Joe event currently dies as one `delivered:false` ack nobody is watching.
+
+(OQ#3 "distress confirmation vs immediacy" is already RESOLVED — `dialog/src/distress.rs`
+ships `Severity::Hard/Soft`, `classify()`, and the soft-confirm prompt. No PRD needed.)
+
+### Fleet 2 components (all rust-extend → wintermute-reach unless noted)
+
+7. **PRD-reach-inbound-imap** — the real inbound reply channel. An IMAP/maildir
+   poll loop (mirrors `wm-mail`'s `async-imap 0.9`) that turns jsy's email reply
+   into a published `wm.family.reply`, replacing the v1 CLI stub. Security AC: only
+   accept replies whose `From` matches the enrolled jsy address (a spoken reply to
+   Mom is an injection surface). Closes end-state #2.
+8. **PRD-reach-silence-nudge** — a standalone, opt-in, debounced gentle delivery
+   fired on `wm.presence.silence` ("haven't heard from Mom today"), independent of
+   the daily digest. Closes end-state #4.
+9. **PRD-reach-distress-durability** — retry + fallback-transport escalation for
+   distress deliveries only. A distress whose primary transport nacks retries with
+   backoff and escalates to the next configured transport (ntfy/webhook) before it
+   is allowed to ack `delivered:false`. Hardens end-state #5.
+
+### Fleet 2 order
+
+```
+reach-inbound-imap        (independent — closes the reply loop)
+reach-silence-nudge       (independent — closes the silence nudge)
+reach-distress-durability (independent — hardens distress delivery)
+```
+
+All three extend the same crate but touch disjoint modules (inbound transport /
+digest+config / daemon delivery path), so they can build in parallel; a sequential
+build just rebases each onto the prior `version` bump (v0.3.0 → v0.4.0 → v0.5.0).
+None depends on a second machine, so none carries a `[live]` deferred AC except the
+real-IMAP-server smoke (fixture-able with a maildir + a fake-IMAP capture).

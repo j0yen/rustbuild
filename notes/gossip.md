@@ -5800,3 +5800,52 @@ Open questions (HELD, not drafted — need user/state):
     documents both; user picks the canonical one when node 2 actually arrives.
   - secrets backend: sops+age (drafted) is the assumption. If the user prefers
     Vault/agenix the PRD's store half changes; bootstrap half is unaffected.
+
+## 2026-06-06T09:33  /dream  vision-kin (Fleet 2 — closing the open loops)
+Drafted: PRD-reach-inbound-imap.md, PRD-reach-silence-nudge.md, PRD-reach-distress-durability.md
+Vision: visions/kin.md (added "Fleet 2 — closing the open loops" section)
+Seed: bare /dream. Inward self-tooling SATURATED (verified — last dream's note
+  holds); constellation just extended this morning (08:10) so NOT re-touched.
+  Picked kin: an OUTWARD vision whose Fleet-1 daemons all SHIPPED (wintermute-reach
+  v0.2.0, presence, family-enroll, dialog Family/Distress branches) but whose
+  feedback paths are stubbed/missing. 3 of 7 end-states are half-open — drafted the
+  three loop-closers, each cited to a grep of the shipped repo.
+
+Order (all rust-extend → wintermute-reach, disjoint modules, parallel-safe):
+  - reach-inbound-imap  — REAL inbound reply channel (async-imap 0.9 / maildir poll)
+      → publishes wm.family.reply, replacing the `wm-reach reply` v1 CLI stub
+      (main.rs:7, dispatch.rs:54). dialog on_reply→TTS (family.rs:363) already waits
+      for it. Closes end-state #2 "you can reach her back." Security AC: From-allowlist
+      = enrolled caregiver address only (spoken-to-Mom = injection surface).
+  - reach-silence-nudge — standalone gentle "haven't heard from Mom" delivery on
+      wm.presence.silence. Today silence is ONLY a digest-body flag (digest.rs:12
+      "does NOT trigger"), and the digest defaults OFF → a silent day can vanish.
+      Closes end-state #4. Opt-in, debounced per-window, never an alarm.
+  - reach-distress-durability — retry+backoff then fallback-transport escalation
+      (ntfy/webhook are already Cargo features, Cargo.toml:20-21) BEFORE a distress
+      acks delivered:false. Today daemon.rs delivers distress once; a nack ends the
+      safety loop unobserved. Hardens end-state #5. Distress-only; messages unchanged.
+
+OQ#3 ("distress confirm vs immediacy") was ALREADY RESOLVED in dialog/src/distress.rs
+  (Severity::Hard/Soft + classify() + soft-confirm prompt) — did NOT draft it.
+
+Notes for /build:
+  - reach is at v0.2.0; these bump v0.3.0→v0.4.0→v0.5.0 if built sequentially, but
+    they touch disjoint modules (inbound / digest+config / daemon delivery) so a
+    parallel build just rebases each onto the prior minor.
+  - All default-OFF / opt-in except the distress ladder (distress already defaults
+    ON and is pre-filtered by dialog). Keep "no secret/body logged" — every AC has a
+    no-body-logged clause; reach already reads creds from /etc/wintermute/conf.d/.
+  - Live legs are fixture-able: maildir + FakeTransport/FakeRecipient cover the
+    autonomous proof; the real-IMAP-server smoke is the only deferred_acs (inline-int
+    form only — self_deferred_acs_inline_only).
+  - async-imap 0.9 rustls-only precedent is wintermute-mail/Cargo.toml:72 (no native
+    OpenSSL); sigpipe::reset() already in reach.
+
+Open questions (HELD — need jsy, already in vision OQ#1/#2):
+  - Which physical fallback transport on jsy's phone (ntfy self-hosted / gotify /
+    SMS gateway)? distress-durability proves the LADDER with fakes; the deployment
+    choice is jsy's.
+  - Webhook/push inbound (device-reachable-from-outside) deferred — inbound-imap is
+    the headless-safe minimum. A durable on-disk distress outbox (crash-replay) is a
+    noted Fleet-3 follow-on, not drafted.
