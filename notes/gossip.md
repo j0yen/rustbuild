@@ -5527,3 +5527,50 @@ Open (next /dream pass / user — HELD, not yet drafted): christen-budget
   Narrower-privilege setuid helper (security, user decision). Interactive-shell
   routing is user-typed → christen can only Advise (print alias); systemd sites
   are the deterministic win.
+
+## Pending (build reflect candidate) — 2026-06-06T06:39:07Z
+**Integrate-collision pattern**: this tick, 4/8 parallel same-target branches built green in their worktrees but DEFERRED at `worktree-extend.sh integrate` because siblings touched the same files:
+- concord-bridge + concord-cruxes → both exit 3 (Cargo.lock dirty from the other); NEITHER integrated.
+- quicken-attest → exit 4 (conflict in main.rs/Cargo.toml vs quicken-remedy, which won and shipped v0.3.0).
+- anchor-probe → exit 4 (conflict in lib.rs/main.rs vs anchor-reconcile, which won and shipped v0.2.0).
+The skill's "sequential branches increment cleanly" assumes non-overlapping diffs; when two same-target branches edit the same lines (esp. Cargo.lock, main.rs subcommand enum, lib.rs pub API), the second always conflicts and defers. Candidate guardrail: integrate should auto-rebase the loser onto the just-merged HEAD and retry (or branches should land Cargo.lock changes via a regen step, not commit it). Deferred branches keep their branch; next tick resumes serially via `add`. (Reflect budget spent today — pick this up next reflect.)
+
+## 2026-06-06T00:00  /dream  vision-loom
+Drafted: PRD-loom-rebase-retry.md, PRD-loom-lockfile-regen.md,
+  PRD-loom-libapi-append.md, PRD-loom-serial-fallback.md
+Vision: visions/loom.md
+Seed: the "Integrate-collision pattern" build-reflect candidate (gossip
+  2026-06-06T06:39:07Z) + journal 2026-06-05 (quicken-attest, anchor-probe
+  deferrals) + read of worktree-extend.sh:81-84 (integrate aborts+exit-4 on any
+  conflict; no rebase, no lockfile handling, no retry).
+Relationship to existing work: the in-tree PRD
+  build-shared-cli-dispatch-merge-safe (status needs_classification) is the
+  CLI-dispatch *leaf* of this vision — loom does NOT redraft it. loom covers the
+  OTHER collision surfaces (Cargo.lock, lib.rs pub surface) + the self-healing
+  retry loop + a serial-fallback backstop, and CONSUMES that PRD's
+  `last_error=integrate-conflict:<files>` sidecar telemetry.
+Order for /build:
+  - build-shared-cli-dispatch-merge-safe ships independently (CLI leaf).
+  - loom-rebase-retry, loom-lockfile-regen, loom-libapi-append ALL edit
+    worktree-extend.sh / build-skill — they are themselves a same-target trio.
+    *** SERIALIZE THEM — do NOT fan these three in parallel, or they will hit
+    the very integrate-collision they're meant to fix (eat our own dog food).
+    *** Recommended order: rebase-retry FIRST (it's the safety net that makes
+    the next two's own integration self-heal), then lockfile-regen, then
+    libapi-append.
+  - loom-serial-fallback LAST: it consumes the conflict telemetry that
+    build-shared-cli-dispatch-merge-safe (and loom-rebase-retry AC4) write —
+    do not build it before at least one producer ships, or it reads an absent
+    key. Treat absent telemetry as "no streak / parallel as today" (fail-open),
+    NOT as a reason to serialize (self_build_jq_escape_reads_absent).
+Notes:
+  - All four are build_target:self-mod into the build skill (no new repo, no
+    publish). Match the existing build-shared-cli-dispatch-merge-safe frontmatter.
+  - loom-libapi-append deliberately extends the cli-register.sh anchored-append
+    pattern to lib.rs; it depends on that pattern existing but its helper
+    (lib-register.sh) is independent code, so it can build before or after the
+    CLI PRD.
+Open questions: `loom doctor` read-only stall report (held — draft once
+  serial-fallback writes the streak ledger it would read). Rebase-retry cap at 1
+  vs small-N backoff (start at 1). Cargo.lock driver: merge=ours+regen (chosen)
+  vs union (risks invalid TOML).
