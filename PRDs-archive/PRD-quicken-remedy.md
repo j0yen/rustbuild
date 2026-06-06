@@ -4,6 +4,7 @@ Status: Draft v0.1
 build_target: rust-extend
 build_into: /home/jsy/wintermute/quicken
 Vision: visions/quicken.md
+deferred_acs: [8]
 
 ## TL;DR
 
@@ -79,5 +80,3 @@ opt-in.
    memlog group membership via the safe userspace path and a follow-up
    `quicken probe` reports memlog `Live` — verified by hand, since the cloud box
    has no `/dev/memlog`.
-
-deferred_acs: [8]
