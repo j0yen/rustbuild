@@ -5401,3 +5401,60 @@ Open (next /dream pass / user — HELD, not yet drafted): anchor-watch (wm.ancho
   auto-reconciles-on-empty) — held until boot+session coverage proves insufficient. Alternative the
   user may prefer: configure watchman to persist watches instead of a reconciler (current --inetd unit
   doesn't restore; reconciler is the backend-agnostic answer but noting the option).
+
+## 2026-06-05T  /dream  vision-coda  (seed: bare /dream → strongest UNADDRESSED open docket item; quicken took inert-kernel, keel took dead-cloud, anchor took watchman-roots, this session-summary loop was still open)
+Drafted: PRD-coda-sweep.md, PRD-coda-audit.md, PRD-coda-close.md, PRD-coda-boot.md
+Vision: visions/coda.md
+Axis: keel=which brain TIER. anchor=which OBSERVATION roots. coda=did every
+  session get its CLOSING summary. Same "is the footing real + legible" family,
+  different substrate (the ctrace→scribe summary pipeline).
+Motivation (live, measured): `~/.cache/ctrace/sessions/` = 1874 *.ndjson vs 1251
+  *.summary.md → 623 ORPHANED (33%) as of 2026-06-05. Every timer tick today
+  (claude-20260605T210001…T230000) is missing its summary. Cause is documented in
+  ctrace-scribe/README: "Heavy headless sessions are SIGKILLed by cgroup teardown
+  before the [SessionEnd] hook runs." Open docket item `ctrace-sessionend-flake`
+  (first_seen 2026-05-30, still open) is exactly this. The repair engine EXISTS
+  (`scribe backfill`) but only runs when self-review remembers — inconsistently
+  (50 rendered 06-03, 2 on 06-02, 0 on 06-01). coda is the missing TRIGGER +
+  DETECTION + SELF-HEALING layer; it does NOT re-implement rendering.
+Order (STRICT hard dependency, mirrors anchor):
+  coda-sweep FIRST (new repo ~/wintermute/coda, rust-cli; creates workspace +
+    `coda` binary + SessionLog/SummaryState/DebtClass/SweepAction/SweepPlan types
+    + LogStore trait + FakeStore + CodaConfig loader + PURE sweep diff). Do NOT
+    start any rust-extend until sweep has SHIPPED and the repo exists, or
+    extend-validate fails (the rule that bit relay+concord+quicken+keel+anchor).
+  THEN: coda-audit ∥ coda-close (both depend on sweep ONLY, build in PARALLEL) →
+    coda-boot (mixed: systemd timer + SessionStart hook; needs close's --apply).
+Notes for /build:
+  - coda-sweep + coda-audit are PURE-READ / cloud-build-safe: filesystem behind
+    LogStore, FakeStore fixtures, clock + active-log INJECTED into the pure sweep.
+    A test asserts sweep makes ZERO store calls; coda-audit asserts it calls ONLY
+    read methods (logs / active-log resolve), never render.
+  - coda-close defaults PRINT-ONLY; --apply is the ONE live-side-effect path
+    (shells `scribe render` per orphan). Its ONE live AC (close the real backlog)
+    is deferred_acs:[8] — cloud box has no scribe + no session history. Per-log
+    render failure is counted, NOT fatal (one corrupt ndjson must not block 600).
+  - coda-boot is mixed (systemd timer + SessionStart hook + installer). Live ACs
+    deferred_acs:[5,6] (real session / real timer on the laptop). install PRINTS
+    the settings.json hook entry + enable lines, does NOT auto-edit ~/.claude or
+    auto-enable the timer (feedback_classifier_per_command). systemd-analyze verify
+    is the offline gate. Hook backgrounds `coda close --apply --limit 50` and
+    ALWAYS exits 0 (never block session start). KEY INSIGHT: the fix lives in the
+    NEXT session's SessionStart, NOT in the dying session's SessionEnd.
+  - audit/close/boot each require their integration test ENTRY FILE (tests/audit.rs,
+    tests/close.rs, tests/boot.rs) to appear in cargo output (self_orphaned_mock_tests).
+  - coda is INWARD toolkit (sibling of vigil/quicken/keel/anchor/binstale) →
+    publishes as a j0yen repo like the rest of the self-tooling, NOT outward/civic.
+  - sigpipe::reset() first line of main() in the binary (self_sigpipe_panic_toolkit
+    — `coda audit --orphaned-only | head`).
+  - MSRV 1.85, no let-chains (recall baseline-gate discipline).
+  - COORDINATION: once coda-boot is live, self-review's per-run `scribe backfill`
+    step becomes redundant — coda becomes canonical. Don't ship a self-review edit
+    that races coda; gossip before touching the self-review skill's backfill phase.
+Open (next /dream pass / user — HELD, not yet drafted): coda-witness (rust-extend;
+  emit wm.coda.debt to docket, edge-triggered like keel-beacon — but the boot HOOK
+  may be the right place to open the docket key vs a separate probe; decide after
+  boot ships). Retention/prune of summarized ndjson >N days (DESTRUCTIVE, separate
+  concern, user opts in). Should coda-close SUBSUME self-review's backfill entirely
+  vs run alongside (leaning: canonical, coordinate via gossip). Grace-window tuning
+  (started 120s).
