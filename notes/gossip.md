@@ -5977,3 +5977,36 @@ Note for /build (ousia-forge): source the per-class philosophicalGrounding /
   aiGuidance annotation TEXT from this file rather than paraphrasing the paper.
   The 10 formal axioms still come from the paper §5. No PRD modified (hard-rule
   2) — guidance carried via the vision doc, which forge's open-questions defer to.
+
+## 2026-06-08T05:55  /dream  vision-herald  (3 PRDs — distribution layer for ousia)
+Seed (jsy, interactive): "of a what to package a distribute ethical reasoning as a skill."
+Direct follow-on to vision-ousia (drafted 30 min earlier). ousia answers "what is
+  ethical reasoning"; herald answers "how does anyone else GET it."
+Grounded:
+  - Skills here = SKILL.md dirs symlinked into ~/.claude/skills/ from ~/wintermute/
+    (build -> build-skill etc). Fine for the author, UNINSTALLABLE by anyone else.
+  - VERIFIED gap: no wintermute repo ships a .claude-plugin/plugin.json; no j0yen
+    marketplace.json exists. Existing skill tooling (skill-doctor/skill-manifest/
+    wm-skill-edit) only VALIDATES/EDITS installed skills — none PACKAGES for distro.
+  - Target format known: official marketplace.json (222 plugins) = top-level
+    name+owner + plugins[] with source {git-subdir,url,path,ref,sha}. herald emits
+    into that exact shape — no protocol invention.
+  - ousia-guard PRD confirmed on disk (the reasoning engine conscience wraps).
+Drafted: PRD-herald-pack, PRD-herald-market, PRD-herald-conscience.
+Vision: visions/herald.md
+Order: herald-pack → (herald-market ∥ herald-conscience). pack is the gate;
+  conscience ALSO depends on ousia-guard (cross-vision dep — don't ship conscience
+  before the ousia fleet's guard/reason libs land).
+Notes for /build:
+  - herald-pack is capability-agnostic infra (no ousia deps) — buildable now,
+    independent of the ousia fleet. Good early pick.
+  - herald-conscience is build_target: mixed (SKILL.md + shell, not a new crate);
+    build_into ~/wintermute/herald-conscience. It's the FIRST real input to
+    herald-pack — validate them together (AC-5 on both sides).
+  - conscience CI may stub ousia-guard with a recorded fixture, but the wire
+    contract (args + --format json shape) must match the real binary.
+Open questions (in vision doc): build-from-source vs release-fetch in install.sh
+  (starting build-from-source); a herald-attest signing/provenance PRD deferred
+  (needs jsy signing-key decision); marketplace repo home (leaning new public
+  j0yen/wintermute-skills); skill name /conscience vs /ethics vs /ousia (working
+  name /conscience).
