@@ -5967,3 +5967,13 @@ Open questions (in vision doc):
     paper §3.1/§5 directly (sufficient). Ask jsy if the source doc would enrich.
   - A dedicated ousia-conformance PRD (paper §8 is concretely testable) may split
     out of reason's ACs on a later pass.
+
+## 2026-06-08T05:44  /dream  vision-ousia  (open-question resolved)
+jsy pointer: the Federation Model source IS on disk —
+  ~/Notes/federation-utopian-philosophy.md (canonical, 2026-05-19; stale dup at
+  ~/Notes/AtScale/Reference/federation-utopian-philosophy.md). All 10 tenets
+  present verbatim (§3.1 list). Vision open-question updated to RESOLVED.
+Note for /build (ousia-forge): source the per-class philosophicalGrounding /
+  aiGuidance annotation TEXT from this file rather than paraphrasing the paper.
+  The 10 formal axioms still come from the paper §5. No PRD modified (hard-rule
+  2) — guidance carried via the vision doc, which forge's open-questions defer to.

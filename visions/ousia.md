@@ -82,11 +82,16 @@ built in either order once guard/sparql land.
 
 ## Open questions
 
-- **The Federation Model source.** The paper draws its ten tenets from a
-  "Federation Model" document that is **not on disk**. forge needs the axiom
-  source. Option A: extract the 10 axioms directly from the paper's §3.1/§5
-  (sufficient — the paper states each axiom formally). Option B: ask jsy for the
-  Federation Model doc. Starting with A; B can enrich annotations later.
+- **The Federation Model source.** ~~Not on disk.~~ **RESOLVED 2026-06-08** (jsy
+  pointer): it is `~/Notes/federation-utopian-philosophy.md` (newer canonical
+  copy, 2026-05-19; a stale near-duplicate sits at
+  `~/Notes/AtScale/Reference/federation-utopian-philosophy.md`). It carries all
+  ten tenets verbatim (the §3.1 list: Primacy of Sentient Dignity … Build the
+  Material Conditions for Goodness) — a Star Trek Federation-derived secular
+  humanist philosophy. **forge should source its `philosophicalGrounding` /
+  `aiGuidance` annotation text from this file**, not paraphrase the paper. The
+  10 formal axioms themselves still come from the paper §5 (which states each
+  precisely); the Federation doc enriches the prose grounding per class.
 - **Reasoner choice.** The 10 axioms are all-some SubClassOf / equivalence
   restrictions — squarely OWL 2 EL/RL, materializable by forward chaining. Pure
   Rust full-DL reasoners are thin; plan is a hand-rolled rule engine over the
