@@ -6282,3 +6282,54 @@ Open questions (vision doc): checkupdates-without-checkupdates (private-dbpath
   read acceptable, or parse `pacman -Sup` only?); landfall trigger (boot-time
   systemd-user oneshot vs SessionStart hook vs both, deduped by boot-id) — left
   as a deferred `mixed` config follow-on, not baked into the rust-extend.
+
+## 2026-06-08T10:00  /dream  vision-tend  (5 PRDs — fleet git hygiene)
+Seed: bare /dream (interactive, no steer). Inward/outward arcs saturated (~48
+  visions); today's earlier tide pass took the pacman/reboot signal. Strongest
+  REMAINING uncovered recurring signal: the dirty-tree + unpushed-commit list
+  every self-review hand-walks and dumps under "Pending your call" (2026-06-06/
+  -07/-08 reflections, all three). loom is the only git-touching vision and it's
+  strictly /build-internal worktree integration — fleet working-tree hygiene has
+  no owner. Verified live this pass: 13 repos under ~/wintermute dirty-or-ahead;
+  dirt dominated by recurring artifact noise (.build-worktrees/ .cache/
+  __pycache__/ skill/state/ .run-*/) that should be .gitignore'd ONCE; tail of
+  genuine unpushed commits (rollout 1, wintermute-desktop 2, build-skill 1).
+  provfs xattrs confirmed live (user.prov.session=comm:Bun Pool…:pid:…:uid +
+  user.prov.ts) — classify uses them to attribute writer (timer vs human).
+Drafted: PRD-tend-survey, PRD-tend-classify, PRD-tend-gitignore, PRD-tend-push,
+  PRD-tend-report.
+Vision: visions/tend.md
+Order: survey → classify → { gitignore, push } → report.
+Notes for /build:
+  - tend-survey is a NEW rust-cli at ~/wintermute/tend (cargo-install to
+    ~/.cargo/bin). MUST ship FIRST — creates repo + binary + core types
+    (RepoState/DirtPath/FleetReport) + the read-only git readers + walker. Do
+    NOT start any rust-extend until ~/wintermute/tend exists or extend-validate
+    fails (the relay/concord/tide rule). SIGPIPE reset first line of main (pipes
+    to head/jq, per self_sigpipe_panic_toolkit). rustc 1.85, no let-chains.
+  - classify, gitignore, push, report are all rust-extend INTO ~/wintermute/tend.
+    classify extends survey (adds --classify; needs DirtPath). gitignore ⟂ push
+    (both consume the classified survey, independent of each other). report
+    consumes all of them (the self-review bridge).
+  - READ-ONLY / proposal-first throughout. tend NEVER stashes, NEVER commits
+    source, NEVER pushes, NEVER force-pushes. push is proposal-only like
+    tide-window/muster-reap/recourse-contest (prints the git push command, never
+    runs it). AC on survey+push assert the binary's git command set excludes
+    commit|push|add|stash|clean|checkout|reset.
+  - The ONE write path is tend-gitignore --write (opt-in, default off): appends
+    artifact patterns to a repo's .gitignore (reversible tracked-config edit,
+    idempotent). Default invocation writes nothing.
+  - All parsers fixture-driven + offline in cargo test (captured `git status
+    --porcelain=v1 -z` byte strings, rev-list output, xattr strings). No live
+    git mutation in tests → cloud-build-safe.
+Soft deps (additive, not blockers):
+  - classify's provfs provenance is a WEAK signal today (agentns all-zeros →
+    comm:pid:uid fallback, self_agentns_einval_flag_collision). Glob set is
+    authoritative; prov only breaks Unknown ties. Becomes stronger once
+    PRD-agentns-clone-flag-fix lands. Do NOT block classify on agentns.
+  - tend-report --format selfreview mirrors muster verdict --format selfreview /
+    muster-selfreview-bridge — coordinate so self-review splices tend's block
+    rather than re-deriving the git list by hand.
+Open questions (vision doc): walk scope (~/wintermute only vs also ~/.claude/
+  skills + ~/.local/bin); whether tend gitignore --write ships at all (leaning
+  opt-in yes); push autonomy (leaning always-proposal, no --confirm).
