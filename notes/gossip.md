@@ -6383,3 +6383,47 @@ Notes for /build:
 Open questions (vision doc): SessionStart sweep vs a dedicated timer (v0.1 =
   SessionStart only, timer judged overkill given volume); whether to also fold
   orphan-reap into a SubagentStop boundary for long subagent runs.
+
+## 2026-06-08T(third-pass)  /dream  vision-abide
+Seed: bare /dream (interactive, no steer). Third dream pass of 2026-06-08.
+  The strongest recurring carry-forwards were all already owned this same day
+  (pacman→tide, dirty-trees→tend, ctrace-flake→scribe/mend, agentns→assay,
+  recurring-findings-ledger→docket [shipped+live]). The remaining live signal
+  was *inside docket's own data*: two findings the human has explicitly acked
+  in prose (memlog-activation, warden-enforcer-inert) still surface as
+  [open] warn every run, runs_seen:3 — because docket has Open/Escalated/
+  Resolved but NO acknowledged state. Verified unowned: no snooze/ack/park
+  match across docket+warrant visions/PRDs; warrant-docket is a different
+  concern (warrant verdicts as a new producer). assay deliberately parks
+  memlog/warden as "known root cause, no active attestation" — abide is the
+  ledger-state layer, not an attestation.
+Drafted (docket-extend fleet, gives findings an acknowledged lifecycle):
+  - PRD-abide-ack-state      (rust-extend → ~/wintermute/docket)
+  - PRD-abide-digest-quiet   (rust-extend → ~/wintermute/docket)
+  - PRD-abide-selfreview-emit (shell → ~/.claude/skills/self-review)
+Vision: visions/abide.md
+Order: abide-ack-state → abide-digest-quiet → abide-selfreview-emit
+  (strict chain: #2 needs #1's ack columns; #3 needs both #1 and #2).
+Notes for /build:
+  - abide-ack-state and abide-digest-quiet BOTH rust-extend the SAME crate
+    (~/wintermute/docket) — they edit overlapping files (digest.rs, db.rs,
+    cli.rs, model.rs). Build them SEQUENTIALLY, ack-state fully landed before
+    digest-quiet starts, or the edit anchors collide (the relay/tide/scribe
+    same-file rule). Do NOT dispatch them in parallel.
+  - abide-ack-state adds ack as ORTHOGONAL nullable columns, NOT a 4th Status
+    variant — recurrence/escalation logic must stay untouched. ACs assert
+    status/runs_seen/consecutive_runs are unchanged by an ack.
+  - abide-selfreview-emit lives in a DIFFERENT tree (the self-review skill,
+    not the docket crate) so it can't collide with #1/#2; but it's last in the
+    chain — it needs the `ack` command (#1) and the quiet digest (#2) live.
+  - Cargo work: docket is rust-extend; route the build via /cloudbuild per
+    feedback_cloudbuild_over_build. MSRV 1.85, no let-chains
+    (self_recall_baseline_gate_red). Verify `Running` lines for ALL existing
+    docket test files before trusting green (self_orphaned_mock_tests).
+  - HARD INVARIANT: the additive SQLite migration must be idempotent (no-op on
+    a DB that already has the columns) and must never alter existing rows —
+    docket's live DB has real standing findings in it.
+Open questions (vision doc): fingerprint format (lean: opaque string compared
+  verbatim, docket stays domain-agnostic); --runs vs --until-change precedence
+  (lean: whichever fires first); whether an acked crit may go quiet (lean: yes,
+  but digest always shows the acked count so a quieted crit isn't invisible).
