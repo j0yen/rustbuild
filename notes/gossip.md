@@ -6093,3 +6093,54 @@ Open questions (in vision doc): corpus independence can't be FULLY proven
   mechanically (validator checks provenance tags; jsy human spot-check of the
   first cut is a release AC — is that acceptable?); accuracy threshold start
   (drafted ≥0.85, ratchets); v1 corpus size (~60, ≥2/tenet × {allow,flag,deny}).
+
+## 2026-06-08T07:00  /dream  vision-recourse  (5 PRDs — the outward arc's return path)
+Seed: bare /dream (interactive). Inward space saturated (3 prior saturation
+  scans). The outward arc (ousia→tribunal→herald→lattice) is the live frontier,
+  but it is WRITE-ONLY: ousia reasons, tribunal proves (vs jsy's static corpus),
+  herald ships /conscience to strangers' machines — and NOTHING comes back. No
+  receipt of what was decided, no way to contest a wrong verdict, no path for the
+  field's disagreement to reach the axioms. This pass dreams that return path.
+Why real:
+  - herald end-state ships /conscience to a j0yen marketplace; verdicts then happen
+    off-laptop with zero telemetry back. No PRD in any arc vision defines a
+    receipt/contest/feedback channel.
+  - tribunal proves correctness PRE-ship vs a FINITE jsy-authored corpus. Open-world
+    assumption (509 classes) guarantees the field hits uncovered cases. The world is
+    the ultimate held-out set; its answers never reach the answer key.
+  - THE HINGE: a field contest's provenance.author is a downstream HUMAN ⇒
+    != "ousia-axioms" ⇒ a contested case MECHANICALLY satisfies tribunal-corpus's
+    independence guarantee. A field contest is the most honest held-out case there
+    is — the axioms' authors provably could not have written it. Closes the loop
+    that feedback_agent_written_fixtures_tautology (wm-router 100%→73.5%) warns about.
+Drafted: PRD-recourse-receipt, PRD-recourse-contest, PRD-recourse-amend,
+  PRD-recourse-pulse, PRD-recourse-feedback.
+Vision: visions/recourse.md
+Order: receipt → {contest → amend, pulse} → feedback.
+Notes for /build:
+  - recourse-receipt is the ONLY standalone piece — buildable NOW against a
+    checked-in verdict JSON Schema + a recorded guard-stub (tribunal-bench's fixture
+    approach). Everything else keys on its receipt.v1 format. Do NOT wait on ousia.
+  - All five build_into ONE workspace ~/wintermute/recourse (one crate, subcommands
+    receipt/contest/amend/pulse/feedback). rust-cli ×3 + mixed ×2.
+  - CROSS-VISION deps (stub now, wire at AC; do NOT block tribunal/herald):
+    amend consumes tribunal-corpus's action.json/expected.toml/provenance.toml shape
+    + shells to `tribunal corpus validate`/`tribunal gate`; feedback shells to
+    `tribunal gate` + `herald-market` publish. Recorded stubs with the wire contract
+    ASSERTED, same pattern as tribunal-bench vs the guard-stub.
+  - HARD RULES baked into ACs (the fleet's settled safety stance):
+    * contest is a PROPOSAL — reviewer-gated pending.ndjson, NO auto-uphold, NO
+      mutation of corpus/ontology (byte-identical-before/after AC).
+    * amend enforces author=downstream:* (!= ousia-axioms) — the independence hinge.
+    * pulse is AGGREGATE-ONLY + opt-in; --export is the ONLY data-egress path and
+      carries no receipt_id/action_digest/per-action rows (grep AC). Never reads the
+      raw actions/ store.
+    * feedback NEVER auto-publishes; ship --confirm runs `tribunal gate` FIRST and a
+      gate failure blocks the publish (false-ship==0, same spirit as tribunal-gate).
+  - PII discipline: receipts store blake3(action), NEVER the action; raw action is
+    local-only + opt-in (--store-raw). Marker-string-absence AC.
+  - SIGPIPE reset per self_sigpipe_panic_toolkit; rustc 1.85, no let-chains.
+Open questions (vision doc): receipt transport (drafted air-gapped-by-default,
+  nothing phones home); contest identity granularity (opaque per-install id, no PII);
+  third-party reviewer (local corpus fork vs --upstream propose to j0yen); amendment
+  cadence vs ontology stability (batched version cuts, never per-contest).
