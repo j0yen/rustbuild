@@ -6188,3 +6188,47 @@ Open questions (vision doc): finding↔PRD linkage (naming convention
   read-only vs a future gated --arm; binstale fleet curated-list vs --all;
   bridge same-tick-in-self-review vs own timer (safe same-tick since it only
   acts on --escalated, already past threshold).
+
+## 2026-06-08T??:??  /dream  vision-muster  (4 PRDs — the live session roster)
+Seed: bare /dream (interactive). Inward/outward arcs saturated; agentns fix
+  already covered by [[assay]] (PRD-agentns-clone-flag-fix correctly diagnoses
+  the 0x100==CLONE_VM collision + prctl re-route). Strongest UNCOVERED signal:
+  self-review keeps flagging "duplicate Claude sessions ... may both be real"
+  (2026-06-06 & -07 journals, both under Pending) and declines to act because
+  the playbook is `pgrep -af claude` + "note duplicates, do not kill"
+  (self-review/SKILL.md:70) with no origin attribution.
+Why real (captured LIVE this run): 3 concurrent claude procs at dream time --
+  pid 33958 interactive (tty parent 4279), 402723 `claude -p /self-review`,
+  402724 `claude -p /dream` (this session). self-review and dream were running
+  at once, each about to report the OTHER as a "duplicate." The process tree
+  already encodes the answer (ppid chain = launcher, argv = role, cgroup = unit,
+  claude-<pid>-jsy = bus peer) -- nothing reads it. session-index/postmortem/
+  trace-receipt all key on transcript-log session-ids (post-hoc), NOT the live
+  process population; agorabus peers = bus side; pevent = supervised jobs;
+  ctrace-orphan-reap = bpftrace tracers. The roster itself is missing.
+Drafted: PRD-muster-census, PRD-muster-verdict, PRD-muster-reap,
+  PRD-muster-selfreview-bridge.
+Vision: visions/muster.md
+Order: census -> verdict -> {reap, selfreview-bridge}.
+Notes for /build:
+  - muster-census is a NEW rust-cli at ~/wintermute/muster (cargo-install to
+    ~/.cargo/bin). SIGPIPE reset first line of main (pipes to head/jq, per
+    self_sigpipe_panic_toolkit). rustc 1.85, no let-chains.
+  - verdict & reap are rust-extend INTO ~/wintermute/muster -- preserve census
+    modules, add classifier/reaper modules. selfreview-bridge is `mixed` (a
+    --format selfreview emit + the self-review SKILL edit).
+  - muster-reap is PROPOSAL-ONLY, mirrors recourse-contest / mend-bridge: dry-run
+    default, HARD refusal to ever target interactive/live/duplicate (only
+    orphan/stale eligible), --confirm required, SIGTERM-first, root-only signal.
+    Never auto-invoked (no timer).
+  - selfreview-bridge edits self-review/SKILL.md ~line 70 (swap pgrep step for
+    `muster verdict --format selfreview`) with a pgrep fallback if muster absent
+    -- coordinate so it doesn't fight a concurrent self-review edit.
+  - agentns linkage: census reads /proc/<pid>/agent_session but it's all-zero
+    today (agentns-session-zeros, see assay). Census records agent_session:null
+    and uses the ppid/argv/cgroup heuristic; written so the kernel id becomes
+    PREFERRED additively once PRD-agentns-clone-flag-fix lands. Soft dep on assay,
+    not a blocker.
+Open questions (vision doc): duplicate key = cwd vs project-slug (leaning slug);
+  grace-window / stale-budget thresholds (derive from each role's tick budget,
+  not magic constants); reap subtree (report all, signal root only).
