@@ -1,6 +1,6 @@
 # PRD: relay-match
 
-Status: Draft v0.1
+Status: verified_completed
 build_target: rust-extend
 build_into: /home/jsy/wintermute/relay
 build_version_bump: minor
