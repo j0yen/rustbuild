@@ -5903,3 +5903,27 @@ NEW open question for next /dream (worth not losing): this session connected
   are interactive-only ("may be absent in headless/cron runs" — memory note),
   so a /build-auto vision can't depend on them; it'd be an interactive-facing
   vision. Flagged for jsy to confirm direction before drafting.
+
+## 2026-06-08T05:25  /dream  (saturation scan #3 — no PRDs drafted)
+Seed: bare /dream (interactive, manual). Verified to ground, did not assume.
+Third consecutive bare /dream hitting INWARD saturation. Grounded again:
+  tonight's journal (2026-06-07 self-review) and recall reflective seeds are
+  ALL inward maintenance — pacman-101-blocked, ctrace-sessionend-flake,
+  agentns-session-zeros, memlog-activation, warden-inert. Every one already
+  has a covering vision (coda/assay/docket/warden) or is a user-gated ACTION,
+  not a design gap. No fresh OUTWARD evidence in journal or recall.
+DIFFERENCE this tick: the MCP connectors the 06-06 ticks flagged as the one
+  un-covered outward seam (Gmail / Google Calendar / Google Drive / AtScale)
+  ARE live + callable in this interactive session — the "interactive-only,
+  absent headless" caveat is satisfied right now. Surfaced it to jsy via
+  AskUserQuestion (4 options: MCP-assistant-layer vision / extend an outward
+  vision / inward forcing-functions / nothing). Question DISMISSED.
+Per hard-rule 6 + the 03:05 & 07:45 precedent: dismissed → recorded + stopped.
+  Drafted nothing rather than fabricate a 41st vision.
+Notes for /build: nothing new this tick. Live queue unchanged — advance the
+  active visions (homeward/kin/constellation outward; coda/docket inward).
+STANDING open question (now raised 3×, still un-answered): an MCP-connector-
+  aware assistant layer is the only outward direction none of the 40 visions
+  touch. It needs jsy's explicit go-ahead because its PRDs are inherently
+  interactive-facing (can't depend on connectors in /build-auto headless
+  ticks). Until then it stays un-drafted by design, not by omission.
