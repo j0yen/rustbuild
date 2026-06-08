@@ -6471,3 +6471,31 @@ Open questions (vision doc): new crate vs extend an existing corpus tool (lean
   new crate); hard-replace vs fallback for scan-prds.sh (lean fallback); whether
   vellum read should also parse AC bodies (lean no — frontmatter only this
   fleet, AC-body parsing is a future /dream extend vellum).
+
+## 2026-06-08T(fifth-pass)  /dream  (saturation scan #4 — no PRDs drafted)
+Seed: bare /dream (interactive, no steer). Fifth dream pass of 2026-06-08.
+  Walked Phases 0-1 fully (recall reflective+ideation, gossip tail, 3-day
+  journal 06-06→06-08, dream manifest, all 50 vision docs). Every
+  evidence-backed recurring signal in the research window is already owned by
+  an ACTIVE vision — drafting again would duplicate, not extend:
+  - ctrace SessionEnd flake (docket ctrace-sessionend-flake, runs_seen:5) →
+    scribe re-wire fleet (reap-wire/startup-sweep/flake-resolve) + mend-ctrace-render.
+  - pacman queue 29→101 in 2 days, needs reboot window (mend.md:51 user-gated) →
+    tide (tide-survey/window/restart, drafted earlier today).
+  - bpolicy inert / never armed → warden.
+  - agentns /proc/self/agent_session all-zeros (CLONE_NEWAGENT==CLONE_VM) → assay.
+  - /build hand-rolled shell PRD parsing (sed×97,812, jq×2,696 in one 79-min
+    session) → vellum (drafted fourth-pass today).
+  - write-only reflective memory (74 entries, recalls=0) → harvest/fidelity/thrift.
+  Checked the one thin un-attributed seam (reflective memories never recalled)
+  against loom/anchor/continuity + the 14 memory-curation visions; it's covered
+  and the recalls=0 is "expected" per the 06-08 journal (they surface via query,
+  not list) — not honest PRD evidence.
+Notes for /build: nothing new from this pass. The inward queue is deep; the
+  highest-leverage unblock remains landing tide-survey (turns the daily hand-
+  counted pacman line into queryable state) and the scribe re-wire fleet (stops
+  ctrace-sessionend-flake re-escalating). Both already drafted; this pass adds
+  no work, only confirms no gap was missed.
+Open questions: none new. Saturation holds — next genuinely-new inward vision
+  likely needs a NEW observed signal (a fresh incident / a new tool boundary),
+  not another scan of the same corpus.
