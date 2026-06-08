@@ -6333,3 +6333,53 @@ Soft deps (additive, not blockers):
 Open questions (vision doc): walk scope (~/wintermute only vs also ~/.claude/
   skills + ~/.local/bin); whether tend gitignore --write ships at all (leaning
   opt-in yes); push autonomy (leaning always-proposal, no --confirm).
+
+## 2026-06-08T11:30  /dream  vision-scribe (extend — 3 PRDs, SessionStart recovery)
+Seed: bare /dream (interactive, no steer). Fleet saturated (~50 visions);
+  inward/outward arcs covered; today's earlier passes took pacman→tide and
+  dirty-trees→tend. Strongest REMAINING unowned recurring signal: the docket
+  finding `ctrace-sessionend-flake` (runs_seen:5) is STILL open across journals
+  2026-06-06/-07/-08 even though all five scribe v0.1 PRDs are marked SHIPPED.
+Root cause found this pass (verified live): the scribe engine + self-review
+  wiring shipped, but the LIVE HOOK SURFACE was never touched —
+  - `ctrace-session-end.sh` still calls the OLD `summarize-ctrace-session.sh`
+    symlink, not `scribe`. (Already owned by PRD-mend-ctrace-render, visions/
+    mend.md — graceful-exit render. NOT re-drafted here.)
+  - `ctrace-orphan-reap` (built 2026-06-03, has `--apply` that reaps+renders+
+    clears marker) is wired into ZERO hooks. grep-confirmed dead code.
+  - `ctrace-session-start.sh` has NO backfill sweep.
+  So a SIGKILLed heavy /build|/dream session (no exit hook runs at all) only
+  ever gets recovered by the morning self-review. mend-ctrace-render CANNOT fix
+  this — it only helps when an exit hook actually runs.
+Drafted (the ungraceful-death / SessionStart recovery path, complements
+  mend-ctrace-render, does not overlap):
+  - PRD-scribe-reap-wire     (hooks)
+  - PRD-scribe-startup-sweep (hooks)
+  - PRD-scribe-flake-resolve (shell)
+Vision: visions/scribe.md (updated with a 2026-06-08 section)
+Order: scribe-reap-wire → scribe-startup-sweep → scribe-flake-resolve
+  (paired with mend-ctrace-render, which lands the graceful-exit half).
+Notes for /build:
+  - All three are hooks/shell wiring — NO cargo, cloud-build irrelevant. The
+    `scribe` and `ctrace-orphan-reap` binaries already exist; these PRDs add
+    NO new binary, only integrate shipped ones.
+  - scribe-reap-wire MUST ship FIRST. scribe-startup-sweep extends the SAME
+    file (`ctrace-session-start.sh`) at the same insertion point — build it
+    AFTER reap-wire lands or the edit anchors collide (the relay/tide
+    same-file rule). Both edits go into ~/wintermute/dotfiles (the hook script
+    is a symlink into dotfiles/.claude/scripts/).
+  - HARD INVARIANT for both hook PRDs: the existing `claude-build` cgroup guard
+    at the top of ctrace-session-start.sh MUST keep short-circuiting BEFORE the
+    reap/sweep. Never run the root-owned reaper or a backfill inside a
+    claude-build* cgroup (the 2026-06-05 lingering-root-tracer hazard,
+    self_build_jam_leaked_tracer). ACs assert this.
+  - Do NOT touch ctrace-session-end.sh from this fleet — that file belongs to
+    PRD-mend-ctrace-render.
+  - scribe-flake-resolve depends on BOTH hook PRDs AND mend-ctrace-render
+    landing; it's the assay/verify step that greps the wiring live + confirms
+    the day's residual was hook-closed (review backfill rendered 0), then
+    `docket resolve ctrace-sessionend-flake`. Reversible: regresses re-open the
+    finding via the existing ctrace_scribe_backfill playbook.
+Open questions (vision doc): SessionStart sweep vs a dedicated timer (v0.1 =
+  SessionStart only, timer judged overkill given volume); whether to also fold
+  orphan-reap into a SubagentStop boundary for long subagent runs.

@@ -122,3 +122,74 @@ ctrace-orphan-reap                  (independent; pairs with #4)
 - **Backfill cadence**: SessionStart sweep (fast, bounded) vs a periodic
   timer vs self-review-only. v0.1 does SessionStart + self-review; a
   dedicated timer is probably overkill given the volume.
+
+## Update 2026-06-08 — the engine shipped, the symptom didn't die
+
+All five v0.1 components are marked **shipped** in /build's manifest
+(`ctrace-scribe`, `-rollup`, `-selfreview`, `-session-end-resilient`,
+`ctrace-orphan-reap`). The `scribe` and `ctrace-orphan-reap` binaries are
+installed in `~/.local/bin`. And yet `docket` still carries
+`ctrace-sessionend-flake` at **runs_seen: 5** — the symptom this vision
+set out to kill is still firing every night. This is precisely the
+failure `assay`/`mend` exist to catch: PRDs that ship an *artifact*
+without the *integration* that makes it bite.
+
+What actually landed vs. what didn't (verified live this pass):
+
+- ✅ **Engine** (`scribe render|backfill|rollup`) — installed, works.
+- ✅ **self-review wiring** (component #3) — `self-review/SKILL.md`
+  Phase B.5 calls `scribe rollup`/`backfill`; journal shows it rendering
+  2–626 logs per run. This is why `residual` lands at 0 *eventually*.
+- ❌ **Live SessionEnd hook** — `~/.claude/scripts/ctrace-session-end.sh`
+  STILL calls the old `summarize-ctrace-session.sh` symlink, not
+  `scribe`. (Owned now by `PRD-mend-ctrace-render` under visions/mend.md —
+  do not re-draft; it fixes the *graceful* render-on-exit + marker
+  fallback + docket-signal path.)
+- ❌ **SessionStart recovery** — `ctrace-session-start.sh` has **no**
+  backfill sweep, and `ctrace-orphan-reap` is wired into **zero** hooks
+  (grep-confirmed: not referenced by any script in `~/.claude/scripts`
+  or any skill). The binary is dead code.
+
+The gap that keeps the flake alive: **`mend-ctrace-render` can only help
+when a SessionEnd hook actually runs.** The vision's *primary* failure
+mode — a heavy build/dream session **SIGKILLed** by cgroup teardown —
+runs no exit hook at all, graceful or otherwise. The only possible
+recovery for a SIGKILLed session is the *next* SessionStart sweeping up
+the orphaned tracer and rendering its abandoned log. That sweep was
+component #4's promise; it never reached the live hook. So today the
+only thing that closes a SIGKILL gap is the human-run self-review —
+exactly the "only detector is the morning review" state this vision
+opened by decrying.
+
+### Re-wire fleet (drafted 2026-06-08, SessionStart recovery path)
+
+Complements `mend-ctrace-render` (graceful exit), does not overlap it:
+
+- **scribe-reap-wire** (hooks) — wire the already-built
+  `ctrace-orphan-reap --apply` into `ctrace-session-start.sh`, *before*
+  starting the new tracer. Reaps a prior SIGKILLed session's orphaned
+  tracer, renders its abandoned log, clears the stale marker. Pure
+  integration of a shipped binary with zero callers. *Root of this
+  fleet.*
+- **scribe-startup-sweep** (hooks) — extends the same SessionStart hook:
+  after the reap, run `scribe backfill ~/.cache/ctrace/sessions` to close
+  residual holes the reap doesn't (stacked orphans across multiple deaths,
+  logs whose marker was already cleared). Bounded — only renders
+  `*.ndjson` lacking `*.summary.md`. Makes a missing summary self-heal at
+  the next session boundary, independent of self-review. Depends on
+  reap-wire (same insertion point; reap first, then sweep the remainder).
+- **scribe-flake-resolve** (shell) — the assay/verify handoff. Once reap +
+  sweep are wired (and `mend-ctrace-render`'s render-on-exit lands),
+  self-review verifies the wiring is live (greps the hook scripts for the
+  reap + backfill calls) and that the day's `residual==0` was reached by
+  the hook, not the self-review backfill, then `docket resolve
+  ctrace-sessionend-flake`. Stops the finding re-escalating
+  (runs_seen: 5 → resolved). Depends on the other two + coordinates with
+  `mend-ctrace-render` AC5.
+
+### Re-wire fleet order
+
+```
+scribe-reap-wire ──► scribe-startup-sweep ──► scribe-flake-resolve
+  (paired with mend-ctrace-render, which lands the graceful-exit half)
+```
