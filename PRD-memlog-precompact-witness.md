@@ -1,10 +1,29 @@
 # PRD: memlog-precompact-witness — give /dev/memlog a producer and a reader
 
-Status: in_progress
+Status: blocked
 deferred_acs: [6]
+# BLOCKED 2026-06-04: the `memlog` group does not exist on this box
+# (`getent group memlog` is empty) and the upstream dep PRDs
+# (memlog-group-autojoin, memlog-activation-self-review) are archived but
+# still marked Draft v0.1 — the group was never actually created/joined.
+# /dev/memlog is root:root crw-rw----, so BOTH the write path (AC6) AND the
+# read path (AC1 `memlog show` exit-0) hit EACCES. AC1 was mis-scoped as
+# immediately-testable; in practice it shares AC6's group gate.
 # AC6 (live-group survival smoke) is deferred: the memlog group is not yet
-# joined on this box, so /dev/memlog is unwritable. ACs 1-5,7 are built and
-# proven; the write mechanism is verified against a writable stub device.
+# joined on this box, so /dev/memlog is unwritable. ACs 2-5,7 are built and
+# proven (hook fails open, exits 0; second settings.json entry; bash -n
+# clean; 14-day log rotation). AC1's reader is INSTALLED (memlog binary, byte
+# -identical to ~/wintermute/memlog/cli/memlog); only its exit-0 assertion is
+# group-gated.
+#
+# GATE (user/system action required, cannot be self-served by /build because
+# group membership needs a fresh login session):
+#   sudo groupadd memlog
+#   sudo gpasswd -a jsy memlog
+#   sudo chgrp memlog /dev/memlog   (or udev rule; ships via the dep PRDs)
+#   # then log out / log in (or `newgrp memlog`) so the membership applies
+# After that: re-open this PRD, run AC1 (`memlog show --since 1h --format
+# json` exit 0) and AC6 (survival smoke), then archive.
 build_target: mixed
 build_into: /home/jsy
 Vision: visions/onramp.md

@@ -4,6 +4,8 @@ Status: Draft v0.1
 build_target: mixed
 build_into: /home/jsy/wintermute/wintermute-brain
 Vision: visions/constellation.md
+deferred_acs: [1,2,3,4]
+deferred_ac_reasons: {"1":"detect-backend.sh requires live Vega 8 iGPU on 5700U node","2":"llama-server ACL verification requires live Tailscale mesh","3":"throughput measurement requires live 5700U hardware","4":"cgroup isolation requires live systemd on the 5700U node"}
 Supersedes: PRD-constellation-brain-gpu.md (which assumed a discrete Radeon GPU;
   the hardware is a Ryzen 7 5700U APU with no discrete GPU — archive brain-gpu)
 

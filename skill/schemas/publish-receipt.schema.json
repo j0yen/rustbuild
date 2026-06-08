@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "publish-receipt/v1",
+  "title": "Autobuilder publish receipt",
+  "description": "Attests the Stage-6 publish of a slice as its own github.com/j0yen/<slug> repo. Emitted by `autobuilder publish` to target/autobuilder/receipts/publish-receipt.json.",
+  "type": "object",
+  "required": [
+    "schema",
+    "slug",
+    "repo_url",
+    "branch",
+    "head_sha",
+    "readme_generated",
+    "license_generated",
+    "repos_md_updated",
+    "repo_preexisting",
+    "dry_run",
+    "verdict",
+    "captured_at",
+    "receipt_digest"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "publish-receipt/v1" },
+    "slug": { "type": "string", "minLength": 1 },
+    "repo_url": { "type": "string", "minLength": 1 },
+    "branch": { "type": "string", "minLength": 1 },
+    "head_sha": { "type": "string", "minLength": 1 },
+    "readme_generated": { "type": "boolean" },
+    "license_generated": { "type": "boolean" },
+    "repos_md_updated": { "type": "boolean" },
+    "repo_preexisting": { "type": "boolean" },
+    "dry_run": { "type": "boolean" },
+    "verdict": { "type": "string", "enum": ["published", "dry-run"] },
+    "captured_at": { "type": "string" },
+    "receipt_digest": { "type": "string" }
+  }
+}

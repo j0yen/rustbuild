@@ -9,6 +9,7 @@
 **Used by:** `PRD-wintermute-screen-narrate.md` (a11y-first fallback)
 build_target: rust-cli
 build_priority: medium
+deferred_acs: [1, 3, 4, 10]
 
 ---
 

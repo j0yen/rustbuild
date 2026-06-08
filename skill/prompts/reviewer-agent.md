@@ -104,3 +104,14 @@ The numeric IDs in the Block/Concern lists are taxonomy hints for you — name t
 specific finding underneath, not the category.
 
 If `decision == "block"`, the run does not ship. The orchestrator will surface to the user. **Do not flip to `pass` because the user might want to ship anyway** — they can override the gate by writing `target/autobuilder/gate-override.json` themselves, but the receipt is yours and must be honest.
+
+## Calibration logging (Phase A)
+
+After you emit your verdict, the orchestrator appends one line to
+`~/.claude/skills/autobuilder/state/reviewer-calibration.jsonl`:
+`{"ts": <iso8601>, "slug": <slug>, "verdict": <pass|concern|block>, "concern_summary": <one-liner or null>, "shipped": <bool>, "post_ship_revert": null}`.
+This is append-only (one `write()` + fsync per line). In **Phase A** (current),
+a `concern` verdict is advisory: it is logged with `shipped: true` and the build
+proceeds — your honesty is what calibrates the eventual soft/hard-block graduation
+(see SKILL.md "Reviewer calibration & phased graduation"). Do NOT soften a
+`concern` to `pass` to avoid a block; in Phase A `concern` does not block.

@@ -7,6 +7,16 @@
 **build_target:** rust-extend
 **build_into:** /home/jsy/wintermute/wintermute-stt
 **build_version_bump:** minor
+**deferred_acs:** [2, 3, 4]
+**deferred_ac_reasons:**
+  - "AC2: requires a live wm-stt daemon under systemd with the model present and a 60s NRestarts=0 soak — not exercisable inside the autobuilder gate (no daemon/systemd in the build sandbox)."
+  - "AC3: requires real whisper.cpp inference over hello_world.wav with the ~250MB distil-small.en model bytes installed plus a simulated audio fanout — the model is gitignored and inference needs the live pipeline, neither available in the gate."
+  - "AC4: requires a human speaking into a physical mic after a wake event with the full fleet running — inherently live-hardware and cannot be unit-tested."
+**mock_unjustified_for:** [2, 3, 4]
+**mock_justifications:**
+  - "AC2: the deterministic in-process portions (daemon dispatch, topic mapping, state machine) are covered by daemon::tests::* and processor::tests::*; the 60s/NRestarts soak is a manual operator procedure gated in tests/hardware_acs.rs, so no separate mock adds signal."
+  - "AC3: the decode/window-slice/model-load logic is unit-covered (whisper_engine::tests::*, processor::tests::*); a mock of whisper.cpp output would be tautological (it would assert text we hand-wrote), so real transcription is deferred to the manual hardware smoke in tests/hardware_acs.rs."
+  - "AC4: an end-to-end live-mic path has no honest in-process mock — faking a mic capture proves nothing about real STT latency, so it is left as a manual gate documented in tests/hardware_acs.rs."
 **Depends on:** PRD-wintermute-audio-inference (the speech.start/end envelopes that gate STT windows)
 **Codename:** *transcribe* — wm-stt currently echoes a stub; this PRD makes it hear words.
 

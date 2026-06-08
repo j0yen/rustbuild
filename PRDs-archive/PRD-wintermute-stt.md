@@ -10,6 +10,14 @@ build_auto: true
 build_target: rust-cli
 build_priority: high
 deferred_acs: [1, 4, 5, 6, 7, 8]
+mock_unjustified_for: [1, 4, 5, 6, 7, 8]
+mock_justifications:
+  1: "AC1 measures warm whisper.cpp distil-small.en transcription latency on this laptop's real CPU; the inference time is hardware-dependent and a mock bypass of whisper-rs would assert nothing about actual inference speed."
+  4: "AC4 requires a live network call to the Whisper API with real PCM and measures end-to-end round-trip latency; a mock HTTP stub validates only our wiring, not the actual cloud-path latency the AC demands."
+  5: "AC5 tests that a mid-flight cloud request is abandoned gracefully on network drop and the local result emits without duplication; this involves real OS socket teardown behavior that cannot be faithfully reproduced by a stubbed reqwest client."
+  6: "AC6 measures hot-swap of the whisper.cpp model (--reload-model small.en) completing in <5 s without dropping the mic.sock subscription; the timing bound is dominated by whisper.cpp's real model load time, which a mock cannot simulate."
+  7: "AC7 verifies RSS growth <50 MB over a 60-minute real inference run; memory growth is a property of the live whisper-rs binding and allocator, not observable through any in-process fake."
+  8: "AC8 confirms recovery from wm-audio restart by re-subscribing to mic.sock within 5 s; the recovery path exercises real Unix socket teardown and reconnect semantics that a loopback mock does not exercise in the same way."
 
 ---
 

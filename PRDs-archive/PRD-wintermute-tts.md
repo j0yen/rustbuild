@@ -11,6 +11,12 @@ build_auto: true
 build_target: rust-cli
 build_priority: high
 deferred_acs: [1, 3, 5, 7]
+mock_unjustified_for: [1, 3, 5, 7]
+mock_justifications:
+  1: "AC1 measures first-audio latency ≤300 ms from wm.tts.speak to the speaker, which requires real Piper ONNX inference and a live PipeWire stream; a mock renderer cannot produce the hardware timing characteristic the AC validates."
+  3: "AC3 measures pre-cached phrase playback latency ≤50 ms, which depends on real PipeWire enqueue timing to the default sink; a stub that skips the audio subsystem would prove nothing about the actual playback path."
+  5: "AC5 requires a live ElevenLabs WebSocket connection over real broadband to measure first-audio latency ≤400 ms; a loopback stub validates our protocol wiring, not the round-trip latency the AC demands."
+  7: "AC7 verifies RSS growth <30 MB over a 60-minute real streaming run combining Piper inference and PipeWire audio push; memory growth is a live allocator property of the real Piper runtime and pipewire-rs bindings, unmeasurable via mock."
 
 ---
 

@@ -1,0 +1,169 @@
+{
+  "schema": "autobuilder.intent_card.v1",
+  "prd_source": "/home/jsy/wintermute/autobuilder/PRD-cadence-bind-confidant.md",
+  "intent_slug": "confidant",
+  "root_motivation": "I want a single-purpose, weekly desk companion that composes a short letter from the past week's signals and renders it to a 400x300 grayscale PNG suitable for a Waveshare 4.2-inch e-ink panel on a Raspberry Pi Zero 2 W. The letter must be grounded in what actually happened that week, so confidant reads the cadence substrate's `daily` records as primary intake and records each emitted letter as a `weekly` cadence record. v0.2 ships composer + render + cadence-bind plumbing in one slice; the Claude API path, the hardware deployment, and PIR/sleep logic are deferred.",
+  "user_persona": "Joe Yen, solo operator, running confidant locally on his Linux laptop. Invoked weekly (eventually by cron) to compose a letter and produce a Markdown + PNG pair; the PNG is pushed to a desk-side RPi Zero via scp. No multi-user, no network call inside this binary, no daemon.",
+  "unfakeable_metric": {
+    "name": "tests_pass_count",
+    "lower_is_better": false,
+    "harness_command": "cargo test --workspace --no-fail-fast 2>&1 | tail -200",
+    "target": null
+  },
+  "acceptance_criteria": [
+    {
+      "id": "AC1",
+      "level": "MUST",
+      "description": "Workspace builds clean: `cargo build --workspace` succeeds with no warnings under the workspace lint config (clippy pedantic as warn, unsafe denied).",
+      "test": "tests/acceptance_ac1_workspace_builds.rs"
+    },
+    {
+      "id": "AC2",
+      "level": "MUST",
+      "description": "`confidant --help` lists the v0.2 subcommands: compose, signals, render. Each prints its own --help. Unknown subcommand returns nonzero with a clap error.",
+      "test": "tests/acceptance_ac2_cli_help.rs"
+    },
+    {
+      "id": "AC3",
+      "level": "MUST",
+      "description": "`confidant signals` prints a one-line-per-source summary of available signal counts (recall, git, letters archive). Each source is best-effort: missing bin or missing dir results in 0 (never a panic). Output is human-readable text on stdout; with --json the same counts emit as a single JSON object.",
+      "test": "tests/acceptance_ac3_signals.rs"
+    },
+    {
+      "id": "AC4",
+      "level": "MUST",
+      "description": "`confidant compose --out-dir <dir>` writes two files: `<dir>/<YYYY-MM-DD>.md` (the letter prose) and `<dir>/<YYYY-MM-DD>.png` (a 400x300 grayscale PNG). The PNG magic bytes start with the eight-byte sequence 89 50 4E 47 0D 0A 1A 0A. The date defaults to today and is overridable via `--date YYYY-MM-DD`.",
+      "test": "tests/acceptance_ac4_compose_outputs.rs"
+    },
+    {
+      "id": "AC5",
+      "level": "MUST",
+      "description": "Composition is deterministic given the same signal inputs and the same date: invoking `confidant compose --date 2026-05-24 --out-dir <dir>` twice (with cadence intake disabled to keep the test hermetic) produces byte-identical markdown.",
+      "test": "tests/acceptance_ac5_compose_deterministic.rs"
+    },
+    {
+      "id": "AC6",
+      "level": "MUST",
+      "description": "`confidant render <markdown-path> <png-path>` re-renders an existing letter markdown to a 400x300 grayscale PNG. The PNG dimensions are verified by reading back the IHDR width/height from the output bytes.",
+      "test": "tests/acceptance_ac6_render_dimensions.rs"
+    },
+    {
+      "id": "AC7",
+      "level": "MUST",
+      "description": "Cadence intake on (the default when CADENCE_HOME points at a populated substrate): `confidant compose --print-prompt --cadence-intake` shells out to `cadence list daily --since 7d --produced-by daily-receipt --json` and includes a `Daily artifacts this week:` block in the printed prompt, one bullet per record summary. The cadence binary is stubbed in tests via `CADENCE_BIN` env override.",
+      "test": "tests/acceptance_ac7_cadence_intake.rs"
+    },
+    {
+      "id": "AC8",
+      "level": "MUST",
+      "description": "Cadence intake absent: when CADENCE_HOME points at /nonexistent (or the cadence binary fails / is missing), `confidant compose` emits one warning line to stderr (`confidant: cadence intake skipped (...)`) and proceeds to compose without injection and without recording. Exit code 0.",
+      "test": "tests/acceptance_ac8_cadence_absent.rs"
+    },
+    {
+      "id": "AC9",
+      "level": "MUST",
+      "description": "Cadence record: after a successful compose, confidant shells out to `cadence record weekly --produced-by confidant --path <md> --summary <first-line> --sources <ids>` where `<ids>` is the comma-joined ulids of the daily records consumed by intake (empty string when none). The `--no-cadence-record` flag suppresses this step while preserving intake.",
+      "test": "tests/acceptance_ac9_cadence_record.rs"
+    },
+    {
+      "id": "AC10",
+      "level": "MUST",
+      "description": "`--cadence-intake=false` suppresses intake while preserving the record step (when not also suppressed). The two flags are independent.",
+      "test": "tests/acceptance_ac10_flag_independence.rs"
+    },
+    {
+      "id": "AC11",
+      "level": "MUST",
+      "description": "Workspace passes `cargo clippy --workspace -- -D warnings` and `cargo deny check bans licenses sources`. (Full `cargo deny check` is avoided because cargo-deny 0.18.3 errors on a CVSS 4.0 advisory; the three-subset form is the documented workaround.)",
+      "test": "tests/acceptance_ac11_lint_clean.rs"
+    },
+    {
+      "id": "AC12",
+      "level": "SHOULD",
+      "description": "`--cadence-since <duration>` parses a Go-style duration string (`7d`, `24h`, `30m`) and threads it through to the `cadence list` invocation as the `--since` argument. Default is `7d`. Invalid durations produce a clap error.",
+      "test": "tests/acceptance_ac12_cadence_since.rs"
+    }
+  ],
+  "scope": [
+    "Single Rust crate `confidant` with one binary and a thin lib for tests",
+    "Signal gathering from recall list, git log, and ~/.claude/letters/ archive (best-effort each)",
+    "Deterministic template-based letter composition (Claude API path is deferred to v0.3)",
+    "PNG rendering at 400x300 grayscale via ab_glyph + imageproc, with a font-less fallback that emits a blank PNG so the pipeline never panics",
+    "Cadence intake (read `daily` records) and cadence record (write `weekly` record) via shellout to the `cadence` binary; honors CADENCE_HOME and a CADENCE_BIN env override for tests",
+    "CLI surface: compose, signals, render with --json / --print-prompt / --cadence-intake / --no-cadence-record / --cadence-since / --date / --out-dir flags",
+    "Dual MIT/Apache-2.0 license, rust-edition 2024, MSRV 1.85"
+  ],
+  "non_goals": [
+    "Claude API call to compose the letter (v0.3 PRD; v0.2 ships the deterministic template path)",
+    "Hardware deployment to the RPi Zero 2 W (out of scope; the PNG is the bridge)",
+    "Cron scheduling (user wires this in their crontab after install)",
+    "PIR sleep mode, two-way communication, multi-recipient distribution",
+    "Mood ideogram detection beyond simple activity-volume bucketing",
+    "Reading session JSONLs directly (cadence is the intended source)",
+    "Letter quality improvements; this slice is plumbing + render"
+  ],
+  "hard_constraints": {
+    "rust_edition": "2024",
+    "target_kind": "cli",
+    "deny_unsafe": true,
+    "max_deps": null,
+    "msrv": "1.85",
+    "additional": {
+      "license": "MIT OR Apache-2.0",
+      "git_identity_name": "Joe Yen",
+      "git_identity_email": "jyen.tech@gmail.com",
+      "deny_subset": "bans licenses sources",
+      "deny_subset_rationale": "cargo-deny 0.18.3 errors on a CVSS 4.0 advisory; use subset form per user MEMORY",
+      "publish": false,
+      "png_width": 400,
+      "png_height": 300,
+      "default_cadence_since": "7d"
+    }
+  },
+  "five_whys_trace": [
+    {
+      "why": 1,
+      "q": "Why does confidant exist?",
+      "a": "Because the `letter` CLI already produces past-Claude/future-Claude letters that sit invisibly in ~/.claude/recall/session/letters/, and I want a small dedicated e-ink device on my desk that makes one such letter a tangible weekly object. Confidant is the laptop-side composer + renderer; the e-ink device is downstream."
+    },
+    {
+      "why": 2,
+      "q": "Why does v0.2 add cadence intake / record on top of the v0.1 composer slice?",
+      "a": "Because the cadence substrate (PRD-cadence-substrate) just shipped and the daily-receipt bind (PRD-cadence-bind-daily-receipt) is wiring daily records in parallel. Confidant is the first PRD that exercises both directions: it READS daily records from one tier below and WRITES a weekly record to its own tier. Without this bind, the weekly letter is isolated from the daily artifacts even though both are reflective output."
+    },
+    {
+      "why": 3,
+      "q": "Why ship composer + render + cadence-bind in one slice instead of an incremental cadence-bind diff onto a still-untested v0.1?",
+      "a": "Because the hand-built v0.1 shipped without tests (scaffold slice). Rebuilding via autobuilder gives every AC a proof receipt at v0.2, and the cadence-bind PRD's `rust-extend` semantics fold cleanly into the rebuild — the cadence intake module is ~50-80 LOC and shares the same CLI surface as compose."
+    },
+    {
+      "why": 4,
+      "q": "Why deterministic template composition instead of the Claude API call described in PRD-confidant §4?",
+      "a": "Because the API call requires network egress, a stable voice anchor, and a flaky-test mitigation story that doesn't fit the locked harness. v0.2 ships the deterministic template path (signals drop into a known-good scaffold) so every test is hermetic; v0.3 will wire the Claude API behind a feature flag once we have a recording/replay layer."
+    },
+    {
+      "why": 5,
+      "q": "Why a font-less fallback PNG instead of erroring when DejaVu is absent?",
+      "a": "Because the binary is intended for unattended weekly cron runs on whatever machine the user pointed it at. A missing font on a fresh Arch install or a stripped container should not break the weekly cadence; a blank-with-ideogram PNG is a degraded but useful artifact that the user can fix at their leisure."
+    }
+  ],
+  "ambiguities_resolved": [
+    {
+      "question": "The PRD is `rust-extend` against an existing v0.1; should we extend in place or rebuild?",
+      "resolution": "Rebuild. The hand-built v0.1 has 0 tests (user discovered today, 2026-05-27); rebuilding via autobuilder makes every AC proof-receipted at v0.2. The hand-built tree is backed up at /home/jsy/wintermute/confidant-2026-05-27-handbuilt-bak/ for reference."
+    },
+    {
+      "question": "Should cadence intake be on by default or off by default?",
+      "resolution": "On by default. The PRD says 'default: on if substrate exists and contains daily records; off if substrate absent or empty'. Implementation: pass `--cadence-intake` defaults to true; the function silently degrades to off when CADENCE_HOME is missing or the cadence binary fails, emitting one warning line to stderr (AC8)."
+    },
+    {
+      "question": "Should the compose subcommand call the Claude API or use a deterministic template?",
+      "resolution": "Template. Per Why-4: deterministic is the only path that fits the locked harness. The README and CHANGELOG must state v0.3 will add the API path."
+    },
+    {
+      "question": "Should the render subcommand share code with the compose internal render step?",
+      "resolution": "Yes. A shared `render_letter_png(md_text, out_path)` function under src/render.rs is called both by `compose` (after md is written) and by `render` (after reading md from disk). One implementation, two CLI entry points."
+    }
+  ],
+  "created_at": "2026-05-28T03:51:21Z"
+}

@@ -35,7 +35,7 @@ PRD ──► Stage 1: Intake (5-Whys)         ──► intent-card.json
         Stage 2: Scaffold (locked harness) ──► <project>/ tree
         Stage 2.5: Spec-Drift Probe         ──► spec-drift.json (block if PRD names absent CLI verbs)
         Stage 3: Iterate-and-Prove loop    ──► EvidencePack per iter, FailureCapsule on crash
-        Stage 4: Risk Gate (8 receipts)    ──► ready / blocked + diagnostic
+        Stage 4: Risk Gate (9 receipts)    ──► ready / blocked + diagnostic
         Stage 5: Postmortem + Self-Evolve  ──► gated proposal queued for review
 ```
 
@@ -52,6 +52,7 @@ Generate a project where harness is read-only, agent edits only `src/`:
 ├── Cargo.toml, clippy.toml, deny.toml, rust-toolchain.toml
 ├── src/                                  ← agent edits ONLY this
 ├── tests/acceptance_*.rs                 ← one test per AC (read-only)
+├── tests/mocks/ac<N>.rs                   ← mock per hardware-deferred AC (see "Hardware mock convention")
 ├── tests/proptest_invariants.rs          ← read-only
 ├── tests/fuzz/                           ← cargo-fuzz harness
 ├── scripts/run-metrics.sh                ← read-only; emits metrics.json
@@ -133,6 +134,22 @@ LOOP UNTIL all-MUST-ACs-green AND risk-gate-passes OR budget-exhausted:
      implementation, downgrade verdict from advance to concern and
      surface the failure to the next edit-agent iteration. Closes the
      "edit-agent wrote both impl and test" tautology gap.
+ 11. After all hard gates pass (and before the Stage 4 gate), run the
+     semantic AC judge:
+     `ac-judge run --prd <prd_path> --crate-root <crate_dir>`
+     (binary from j0yen/ac-judge; install via that repo's `install.sh`).
+     It pairs each declared AC's English text with the test claiming to
+     verify it and asks an independent model (Sonnet 4.6, a different
+     family from the implementer) two questions: does the test exercise
+     the AC's behavior, and does it assert the AC's invariant or merely
+     restate the impl? Emits `target/autobuilder/ac-semantic-judge.json`
+     (Receipt #9, schema `schemas/ac-semantic-judge.schema.json`). Exits
+     4 if any AC has `behavior_match: no` OR (`assertion_kind:
+     restates-impl` AND `confidence >= 0.7`); that exit is the Stage 4
+     `ac-semantic-judge` block. Requires `$ANTHROPIC_API_KEY` (exits 6
+     without it, no network call). Complements mutation testing: mutation
+     asks "would the test catch a broken impl?"; the judge asks "does the
+     test check the right thing at all?"
 ```
 
 Hard gates (all must pass to advance):
@@ -162,7 +179,7 @@ mutation data is absent (`null` — script skipped or not yet run), treat the
 term as 0 so the score stays defined. Phase 1 weights it; Phase 2 will gate
 on it (per PRD autobuilder-mutation-testing).
 
-### Stage 4 — Risk Gate (8 receipts)
+### Stage 4 — Risk Gate (9 receipts)
 
 | Receipt | Source | Pass condition |
 |---|---|---|
@@ -170,8 +187,9 @@ on it (per PRD autobuilder-mutation-testing).
 | `spec-drift` | Stage 2.5 | `target/autobuilder/spec-drift.json` `summary.drift_count == 0` |
 | `vti-plan` | Stage 2/3 | every changed path routed via `proof-lanes.toml`; confidence ≥ 0.70 |
 | `proof-receipt` | Stage 3 | test/proptest/fuzz/miri/deny green on `HEAD` |
+| `ac-semantic-judge` | Stage 3 step 11 | `target/autobuilder/ac-semantic-judge.json` `passed == true`: every AC verdict has `behavior_match != no` AND not (`assertion_kind == restates-impl` AND `confidence >= 0.7`) |
 | `risk-gate` | Stage 3 | BAD_RUST audit clean (or only `advisory` findings with waivers) |
-| `reviewer-agent` | sub-agent | independent Claude review of `HEAD~N..HEAD` vs intent-card; ∈ `{pass, concern, block}` |
+| `reviewer-agent` | sub-agent | independent Claude review of `HEAD~N..HEAD` vs intent-card; ∈ `{pass, concern, block}`. Verdict appended to `state/reviewer-calibration.jsonl` (see "Reviewer calibration & phased graduation"). **Phase A (current): both `pass` AND `concern` ship — `concern` is logged `shipped: true` and proceeds (advisory). `block` still blocks.** |
 | `rollback-plan` | Stage 2 | every commit `git revert`-clean; steps in `target/autobuilder/rollback.md` |
 | `ci-checks` | Stage 2 | `.github/workflows/` green on a fresh worktree clone |
 
@@ -184,6 +202,38 @@ place to spend the strongest model — its whole purpose is to catch what
 the (possibly cheaper) implementer missed, against the intent-card's
 English ACs rather than the code. Set `model: "opus"` on the Agent/Task
 call that produces the reviewer-agent receipt.
+
+**Reviewer calibration & phased graduation.** Every `reviewer-agent`
+verdict is appended as one line to
+`~/.claude/skills/autobuilder/state/reviewer-calibration.jsonl`
+(append-only JSONL; one `write()` per line, fsync after — durability over
+throughput, fires once per crate ship). Line shape:
+
+```json
+{"ts": "2026-05-28T22:30:00Z", "slug": "foo", "verdict": "concern", "concern_summary": "..", "shipped": true, "post_ship_revert": null}
+```
+
+`post_ship_revert` is `null` at ship; a weekly /self-review sweep updates
+it to `true`/`false` by scanning each shipped repo's git log for revert
+commits in the 7-day window. The verdict gate graduates in three phases,
+calibrated on this log (PRD autobuilder-reviewer-promotion):
+
+- **Phase A (current — ships with this PRD):** `concern` is *advisory*.
+  It is recorded in the calibration log marked `shipped: true` and the
+  build proceeds. No behavior change beyond logging. `block` still blocks;
+  `pass` ships clean.
+- **Phase B (auto-promoted by /self-review once calibration `n >= 30`):**
+  `concern` becomes a *soft-block*. Bypass via PRD frontmatter
+  `reviewer_override: true` + a one-line `reviewer_override_reason:`; the
+  override is recorded in the calibration log. (Override is honored in
+  Phase B only.)
+- **Phase C (auto-promoted once `concern_to_revert_rate >= 0.50` over the
+  last 30 shipped):** `concern` becomes a *hard block* — no frontmatter
+  override.
+
+Phases B and C are SKILL.md edits performed automatically by /self-review's
+`reviewer_promotion_check` playbook when the thresholds trip; they are NOT
+active today. This PRD ships Phase A only.
 
 ### Stage 5 — Postmortem & Self-Evolve
 
@@ -209,6 +259,73 @@ Per-slice steps:
 4. **Update wintermute's `REPOS.md`** with a one-line description and category (pipeline/runtime/memory/session/artist). The bootstrap installer will then pick up the new repo on next `install.sh` run.
 
 The autobuilder companion binary does not yet automate Stage 6; it is a manual convention. A future `autobuilder publish` subcommand may codify this.
+
+## PRD frontmatter the skill reads
+
+Beyond the prose body, autobuilder's intake parser reads structured
+fields from the PRD's YAML-ish frontmatter. The hardware-bound subset:
+
+```
+deferred_acs: [3, 7]
+    # ACs that cannot be verified against real hardware/OS at gate-time
+    # (live audio device, whisper-cpp inference, OS scheduler under load,
+    # systemctl side effects, …). Introduced by PRD-build-deferred-acs.
+    # Deferring is honest about the constraint, but a deferred AC with no
+    # mock has NO behavioral verification wired in. So each deferred AC
+    # must take ONE of the two paths below.
+
+mock_unjustified_for: [3, 7]
+    # The subset of `deferred_acs:` that ALSO can't sensibly be mocked.
+    # Requires a `mock_justifications:` companion entry per listed AC.
+    # An AC listed here with no companion justification is a parser error.
+
+mock_justifications:
+  3: "AC3 verifies hardware fan speed via thermal pressure; no mock can
+      simulate the real PWM signal without recreating the firmware."
+  7: "AC7 requires the OS scheduler under load; a mock would either be a
+      tautology or a different scheduler."
+    # One sentence per AC in `mock_unjustified_for:` explaining why a
+    # mock isn't tractable. Deferring is fine; deferring without an
+    # explanation is not.
+```
+
+### Hardware mock convention
+
+For every AC in `deferred_acs:` but NOT in `mock_unjustified_for:`, the
+crate must ship `tests/mocks/ac<N>.rs` (e.g. `tests/mocks/ac3.rs`). The
+mock test:
+
+- exercises the **same public API surface** the real test would (same
+  call sequence + signatures), so the boundary type-checks as the real
+  path does;
+- runs against a **documented in-crate fake** — a trait impl, channel
+  pair, in-memory device, etc. — not a network or hardware dependency;
+- **asserts the same invariant** the AC's English text declares.
+
+The mock proves the call sequence + signature + invariant *at the type
+level*; a later `cargo test --features=real-hardware` run proves they
+hold *in the world*. Both, not either. This is the discipline the rest
+of the Rust ecosystem uses for hardware-adjacent code (kernel drivers,
+embedded crates, every IO library with a fake-fs feature). The mock
+COMPLEMENTS reality; it does not REPLACE it.
+
+Mock tests run under `cargo test` by default, so they count toward the
+Stage 3 `cargo test --workspace` hard gate and toward /build's
+verified-completed checklist (the OR-clause: an AC passes if it has a
+real passing test, OR a passing `tests/mocks/ac<N>.rs` plus a
+`deferred_acs:` listing, OR a `mock_unjustified_for:` +
+`mock_justifications:` entry). An AC with none of the three is a hard
+fail.
+
+**Lint parity.** Mock test files are subject to the same lint discipline
+as real test files (`unwrap`/`expect`/`panic` = deny per `rules/bad-rust.md`).
+The mock is real Rust, not a magic affordance.
+
+**Scope (v0.1).** Mocks are hand-written — the mock IS the documentation
+of what the boundary looks like, so no auto-generation from a trait. Each
+crate's mocks are local (no cross-crate mock libraries). A
+`hardware-drift.json` receipt comparing mock vs. real-hardware outcomes is
+scaffolded as a follow-on PRD, not invoked by default.
 
 ## Reused skills
 

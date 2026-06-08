@@ -8,6 +8,15 @@
 build_auto: false
 build_target: mixed
 build_into: /home/jsy
+deferred_acs: [1, 2, 3, 4, 6, 7, 10]
+deferred_ac_reasons:
+  1: "boot-gated: requires linux-wintermute kernel CLONE_NEWAGENT for non-zero agent_session in interactive claude"
+  2: "boot-gated: requires linux-wintermute kernel for namespace inheritance to subprocesses"
+  3: "boot-gated: requires linux-wintermute kernel for headless service agentns (non-zero agent_session)"
+  4: "boot-gated: requires linux-wintermute kernel intent_tag procfs read"
+  6: "boot-gated: requires linux-wintermute kernel for kernel-derived sid in session-start hook"
+  7: "boot-gated: requires linux-wintermute kernel (simulate via AGENTNS mock) for fallback path to legacy sid form"
+  10: "user-gated: AC1-AC9 live verification requires jsy running claude post-wintermute-kernel boot"
 
 ---
 

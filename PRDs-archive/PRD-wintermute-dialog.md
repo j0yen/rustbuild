@@ -9,6 +9,11 @@
 build_auto: true
 build_target: rust-cli
 build_priority: high
+deferred_acs: [1, 4]
+mock_unjustified_for: [1, 4]
+mock_justifications:
+  1: "AC1 measures wake-event-to-cancel-ack within 200 ms, a budget dominated by real TTS cancellation propagating through the live Piper/PipeWire output path; an in-process FSM mock asserts our transition logic but not the actual hardware cancel latency the AC bounds."
+  4: "AC4 measures mute/unmute silencing and restoring current TTS plus wake-gating within 200 ms, which depends on real audio-sink gating round-trip latency through PipeWire; a mock would time FSM bookkeeping, not the physical mute path the AC validates."
 
 ---
 

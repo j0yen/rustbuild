@@ -1,8 +1,10 @@
 # PRD: relay-intake
 
-Status: Draft v0.1
+Status: completed
 build_target: rust-extend
 build_into: /home/jsy/wintermute/relay
+build_version_bump: minor
+deferred_acs: [8]
 Vision: visions/relay.md
 
 ## TL;DR

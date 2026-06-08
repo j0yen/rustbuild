@@ -6,6 +6,7 @@
 **build_target:** rust-extend
 **build_into:** /home/jsy/wintermute  # multi-repo; see §3 per-target
 **build_version_bump:** patch
+**deferred_acs:** [3]
 **Depends on:** PRD-wintermute-fleet-agorabus-announce-fix (shipped 2026-05-28T08:05:18Z)
 **Codename:** *aftercough* — the bus stopped reporting `announce_required`, but three daemons still fall over within ~1s of start.
 

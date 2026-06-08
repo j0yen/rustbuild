@@ -9,6 +9,19 @@
 **Used by:** brain image-mode fallback when a11y is empty
 build_target: rust-cli
 build_priority: medium
+deferred_acs: [1, 2, 3, 7, 10]
+deferred_ac_reasons:
+  1: "env-gated — requires live X11 display, a focused Firefox window, and ANTHROPIC_API_KEY to make a real vision API call; no mock justified because the meaningful assertion is the model's natural-language output on a real screen capture."
+  2: "env-gated — requires live X11 display showing a terminal with 'HELLO WORLD' and ANTHROPIC_API_KEY for OCR via vision API; cannot be meaningfully stubbed without the actual capture+inference round-trip."
+  3: "env-gated — requires live X11 display with YouTube open and ANTHROPIC_API_KEY; the `found` boolean comes from the model's vision output which cannot be stubbed without defeating the assertion."
+  7: "env-gated — p95 latency measurement over 20 sequential API calls requires ANTHROPIC_API_KEY and live Anthropic Sonnet endpoint; latency is a network+model property not testable offline."
+  10: "env-gated — full end-to-end round-trip (jsy says 'what does this say?', dialog speaks the answer, <8s) requires live X11 display, jsy's voice setup, and ANTHROPIC_API_KEY; the human-in-the-loop assertion cannot be automated offline."
+mock_unjustified_for: [1, 2, 3, 10]
+mock_justifications:
+  1: "mocking Claude vision output for 'what app is focused' would assert our stub not the model; the AC explicitly tests model comprehension of a real screenshot."
+  2: "OCR-flavored read_text correctness depends on the model reading an actual screen capture; a canned response stub proves nothing about the capture+inference pipeline."
+  3: "find_in_image found:true depends on the model identifying a play button in a real screenshot; stubbing the response bypasses the assertion's intent entirely."
+  10: "end-to-end user experience test (jsy hears the result via dialog) is inherently manual; a mock cannot verify the UX path."
 
 ---
 

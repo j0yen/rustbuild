@@ -10,6 +10,12 @@ build_auto: true
 build_target: mixed
 build_priority: high
 deferred_acs: [1, 2, 5, 8]
+mock_unjustified_for: [1, 2, 5, 8]
+mock_justifications:
+  1: "AC1 requires live AEC: confirming zero false wake-word fires during real TTS playback through real speakers depends on the PipeWire echo-cancel module processing an actual acoustic loop, which no in-process mock can replicate."
+  2: "AC2 measures ≥10 dB noise reduction compared to AEC-only mode, a physical acoustic measurement that requires real microphone input and real keyboard noise; a mock ring-buffer would assert the math we wrote, not the hardware's real attenuation."
+  5: "AC5 verifies false-accept rate on a 60-minute real living-room recording through the live microWakeWord ONNX inference pipeline; a synthetic PCM mock cannot reproduce the spectral characteristics of real ambient speech that determine whether the model fires."
+  8: "AC8 confirms recovery from a real PipeWire service restart (systemctl --user restart pipewire) within 5 s; a mock cannot simulate OS-level socket teardown and the re-negotiation of PipeWire graph nodes."
 
 ---
 

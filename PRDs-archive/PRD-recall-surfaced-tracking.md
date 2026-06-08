@@ -6,6 +6,7 @@
 **Vision:** [visions/fidelity.md](visions/fidelity.md)
 build_target: rust-extend
 build_into: /home/jsy/wintermute/recall
+deferred_acs: [4, 5, 6]
 **Version target:** `recall v0.7.1` (patch — adds column + subcommand
 flag; existing surfaces unchanged). If recall-doctor-claims ships first
 and consumes v0.7.0, this stays at v0.7.1 cleanly.

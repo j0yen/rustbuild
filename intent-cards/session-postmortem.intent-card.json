@@ -1,0 +1,79 @@
+{
+  "schema": "autobuilder.intent_card.v1",
+  "prd_source": "/home/jsy/wintermute/autobuilder/PRD-session-postmortem.md",
+  "intent_slug": "session-postmortem",
+  "created_at": "2026-05-28T15:44:02Z",
+  "root_motivation": "A Claude session writes four streams of evidence — pre-compaction memlog snapshots, provfs-attributed file writes, recall memories, and ctrace syscall events — but they live in four separate substrates keyed loosely on session_id. Surfacing 'what happened in *that* session' today is a four-command join. session-postmortem factors that join into one CLI so per-session forensics, self-review playbooks, and Fleet 2 artifacts (letters, zines) can ask the same question once.",
+  "user_persona": "Joe Yen on wintermute, running Claude Code. Wants `session-postmortem latest` to return a one-page markdown brief of the most recent session for daily review, and `session-postmortem --format json <id>` to feed downstream skills (letter-from-snapshot, conversations-zine). Will use `--brief` from inside /self-review playbooks.",
+  "unfakeable_metric": {
+    "name": "ac_passing_count",
+    "lower_is_better": false,
+    "harness_command": "cargo test --release --tests 2>&1 | grep -E '^test acceptance_' | wc -l",
+    "target": 9
+  },
+  "acceptance_criteria": [
+    {"id": "AC1",  "level": "MUST", "description": "cargo build --release green; target/release/session-postmortem --version matches Cargo.toml version", "test": "tests/acceptance_ac1_build_version.rs"},
+    {"id": "AC2",  "level": "MUST", "description": "session-postmortem --format markdown <id> against tests/fixtures/session-deadbeef/ produces output matching tests/fixtures/session-deadbeef/golden.md (with env overrides --memlog-dir/--ctrace-dir/recall and provq stub paths pointed at the fixture tree)", "test": "tests/acceptance_ac2_markdown_golden.rs"},
+    {"id": "AC3",  "level": "MUST", "description": "--format json produces a single JSON object that validates against schemas/brief.schema.json and round-trips through jq cleanly", "test": "tests/acceptance_ac3_json_schema.rs"},
+    {"id": "AC4",  "level": "MUST", "description": "--format brief yields <=10 lines, all <=120 columns wide, and contains id, intent, duration, exit, top-line counts", "test": "tests/acceptance_ac4_brief_bounds.rs"},
+    {"id": "AC5",  "level": "MUST", "description": "When the ctrace fixture is removed (no ndjson for the session), output includes '## Execve top\\n(no data)' rather than panicking or omitting the section", "test": "tests/acceptance_ac5_missing_signal.rs"},
+    {"id": "AC6",  "level": "MUST", "description": "With fixtures for three sessions in tests/fixtures/multi/ where one died unclean, session-postmortem latest resolves to the most-recent by start time; last-died resolves to the unclean one", "test": "tests/acceptance_ac6_resolve_aliases.rs"},
+    {"id": "AC7",  "level": "MUST", "description": "--out /tmp/p.md writes the brief there with mode 0644 and stdout is empty on success", "test": "tests/acceptance_ac7_out_file.rs"},
+    {"id": "AC8",  "level": "MUST", "description": "--exclude ctrace,memlog produces a brief containing only the recall + provfs sections (no Execve, no Pre-compaction headers)", "test": "tests/acceptance_ac8_include_exclude.rs"},
+    {"id": "AC9",  "level": "MAY",  "description": "[boot+upstream] With PRDs #1-#4 shipped: a tiny end-to-end test (wrapped subshell touches a file under provfs, writes a recall memory, triggers a synthetic memlog event) produces a session-postmortem latest brief whose four signal sections all have non-empty content", "test": "manual:live-fleet-after-upstream-PRDs-ship"},
+    {"id": "AC10", "level": "MUST", "description": "README.md documents subcommands with examples (markdown/json/brief/--out/--exclude); CHANGELOG.md has a v0.1.0 entry", "test": "tests/acceptance_ac10_docs.rs"}
+  ],
+  "scope": [
+    "Binary session-postmortem with positional <session-id> and --format markdown|json|brief, --out, --include, --exclude, --ctrace-dir, --memlog-dir, --version",
+    "Source: src/main.rs (argv + dispatch), src/resolve.rs (alias->canonical id: current|latest|last-died|prefix|hex), src/sources/{mod,memlog,provfs,recall,ctrace}.rs, src/join.rs (Brief struct), src/render/{markdown,json,brief}.rs",
+    "Source resolution: memlog from ~/.claude/memlog/<id>/snap-*.json; provfs via `provq scan ~ --session <id> --format paths`; recall via `recall list --session <id> --format json`; ctrace via `ctrace summary --session-id <id>` (fall back to grepping ndjson under ~/.cache/ctrace/sessions/ if --session-id unsupported)",
+    "Mock fixtures under tests/fixtures/{session-deadbeef,multi}/ providing canned outputs for all four sources plus a golden markdown",
+    "Env override variables: SESSION_POSTMORTEM_MEMLOG_DIR, SESSION_POSTMORTEM_CTRACE_DIR, SESSION_POSTMORTEM_RECALL_BIN, SESSION_POSTMORTEM_PROVQ_BIN — set during tests to point at stub binaries / fixture dirs",
+    "When a signal is absent, emit the section header with '(no data)' rather than dropping it",
+    "Deps strictly: clap, serde_json, chrono, which, anyhow (or thiserror). NO tokio, NO async runtime"
+  ],
+  "non_goals": [
+    "Multi-session aggregation (future session-rollup)",
+    "Interactive UI (markdown to stdout, pipe to pager downstream)",
+    "E-ink rendering, PNG output, HTML",
+    "Replay or re-execute a session",
+    "Writing a recall memory of the postmortem run itself (PRD §6 open question, leaning no for v0.1)",
+    "Owning the ~/brain/postmortems/ path convention — that belongs to a future /postmortem skill that wraps this binary"
+  ],
+  "hard_constraints": {
+    "rust_edition": "2021",
+    "target_kind": "cli",
+    "deny_unsafe": true,
+    "max_deps": 20,
+    "msrv": "1.85",
+    "additional": {
+      "binary_install_path": "~/.local/bin/session-postmortem",
+      "dual_license": "MIT+Apache-2.0",
+      "github_repo": "j0yen/session-postmortem",
+      "depends_on_runtime_tools": "provq,recall,ctrace",
+      "depends_on_runtime_path": "~/.claude/memlog/<session-id>/"
+    }
+  },
+  "five_whys_trace": [
+    {"why": 1, "q": "Why build session-postmortem?",
+     "a": "Today four substrates (memlog, provfs, recall, ctrace) record per-session evidence in four different shapes. Answering 'what did session X actually do' requires four commands and a manual join."},
+    {"why": 2, "q": "Why does that matter?",
+     "a": "Self-review playbooks already do ad-hoc joins (cross-session ctrace aggregate, active ndjson inclusion checks). Each playbook re-invents the join. The cost is proportional to the number of consumers, and Fleet 2 (letter-from-snapshot, conversations-zine) will multiply that cost."},
+    {"why": 3, "q": "Why a CLI rather than a library?",
+     "a": "Both self-review and the Fleet 2 artifacts shell out — they're either bash playbooks or Rust crates that prefer subprocess to dependency-graph entanglement with the four substrate crates. A CLI is the lowest-friction shared surface. The JSON output mode covers the library-like use case via stdin/stdout."},
+    {"why": 4, "q": "Why scaffold ahead of memlog-witness and recall-session-stamp shipping?",
+     "a": "PRD line 11-12 explicitly authorizes this. The join logic is testable against mock fixtures; the only AC that gates on live upstream is AC9. Scaffolding now removes session-postmortem from the critical path of the continuity fleet and lets memlog/recall slot in when ready."},
+    {"why": 5, "q": "Why composition (shell out) over invention (in-process readers)?",
+     "a": "PRD §2.4. Each substrate has its own canonical reader (provq, recall, ctrace). Re-implementing them couples session-postmortem to private storage layouts that may change. Shelling out keeps this tool a thin join and pushes substrate evolution to the substrate crates."}
+  ],
+  "ambiguities_resolved": [
+    {"question": "How does ctrace match session_id when it currently keys by tracer pid?",
+     "resolution": "PRD §2.3 + §6 open question. v0.1 best-effort: try `ctrace summary --session-id <id>` first; on flag-unknown exit, fall back to grepping ndjson files under ~/.cache/ctrace/sessions/ for the session_id literal. AC9 (the only AC that stresses real ctrace data) accepts either path. A future ctrace PRD may add a first-class index."},
+    {"question": "Should --out create parent directories?",
+     "resolution": "No. --out is 'write to this exact path'; mkdir -p is the caller's job. Matches the principle of not owning path conventions (a /postmortem skill will own ~/brain/postmortems/)."},
+    {"question": "Counter source when the session is dead?",
+     "resolution": "PRD §2.3. /proc/<pid>/agent_counters for live processes; persisted snapshot via memlog if dead. v0.1 best-effort: read live if any session-pid is still running, else mark counters '(no data)'. The persisted snapshot path is a memlog-witness deliverable; we don't invent it here."},
+    {"question": "Does AC9 gate ship?",
+     "resolution": "No. AC9 is MAY level (live-fleet-after-upstream) so the verified-completed checklist can pair AC1-AC8 + AC10 (9 ACs) against tests and surface AC9 as deferred until memlog-witness and recall-session-stamp ship."}
+  ]
+}

@@ -9,6 +9,23 @@
   caregiver web UI)
 build_target: rust-cli
 build_priority: medium
+deferred_acs: [1, 2, 3, 4, 5, 6, 7, 8, 10]
+deferred_ac_reasons:
+  "1": "wm-bootstrap /mail HTTP page integration and live SecretService write require a running wm-bootstrap daemon and freedesktop SecretService — not available offline; set-account mock path is tested in acceptance_ac3.rs and acceptance_ac11.rs."
+  "2": "inbox against a real Gmail app-password account requires live IMAP credentials and an active Gmail session; stub mode returns empty messages array (tested offline in acceptance_ac5.rs)."
+  "3": "read {id} returning a real message body with HTML-converted text and live attachment metadata requires a live IMAP session; JSON shape and HTML stripping are tested offline in acceptance_ac6.rs and acceptance_ac8.rs."
+  "4": "send with destructive verbal-confirm flowing through wm-dialog and actual SMTP delivery to a recipient inbox requires a live SMTP session; destructive guard and JSON response shape are tested offline in acceptance_ac7.rs."
+  "5": "search {query} returning ≥1 hit in a primed test account requires a live IMAP server with known mail; no meaningful offline mock for server-side IMAP SEARCH result count."
+  "6": "mark_read flipping the IMAP \\Seen flag on a real server and verifying the subsequent inbox excludes the message requires a live IMAP session; no meaningful offline mock for server-side flag persistence."
+  "7": "delete with verbal confirmation and server-side Trash move requires a live IMAP session; no meaningful offline mock for IMAP MOVE-to-Trash round-trip."
+  "8": "IMAP IDLE producing wm.mail.new within 30s requires a live IMAP server delivering real mail; compile-time and stub coverage in acceptance_ac10.rs."
+  "10": "real voice round-trip (brain → search → dialog read → brain compose → send confirm) requires the full Fleet 1+2 runtime stack (agorabus, wm-brain, wm-dialog) plus live IMAP/SMTP; no meaningful mock for a multi-daemon voice interaction."
+mock_unjustified_for: [5, 6, 7, 10]
+mock_justifications:
+  "5": "IMAP SEARCH result count from a real server cannot be meaningfully mocked — a stub that returns a hardcoded hit would prove nothing about the server-side query path."
+  "6": "IMAP \\Seen flag persistence across a server round-trip cannot be mocked without embedding a real IMAP server; the test would be self-referential."
+  "7": "IMAP MOVE-to-Trash is a server-side operation; a mock that fakes the move proves only that the code calls the right function, not that mail is preserved safely in Trash."
+  "10": "A full voice round-trip spans wm-brain, wm-dialog, agorabus, IMAP, and SMTP — mocking all five subsystems would be tautological and would validate the mock harness rather than the integration."
 
 ---
 
