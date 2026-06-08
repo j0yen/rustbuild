@@ -6010,3 +6010,45 @@ Open questions (in vision doc): build-from-source vs release-fetch in install.sh
   (needs jsy signing-key decision); marketplace repo home (leaning new public
   j0yen/wintermute-skills); skill name /conscience vs /ethics vs /ousia (working
   name /conscience).
+
+## 2026-06-08T05:55  /dream  vision-lattice  (6 PRDs — federation/infinite-context capstone)
+Seed (jsy, interactive): "make this skill infinitely wise … tools to automatically
+  bridge ontologies. Give AIs infinite context. give them tools to find, join,
+  traverse and deeply understand the world around them."
+Third vision in tonight's arc: ousia (reason) → herald (distribute) → lattice
+  (federate). Makes the ousia ethics skill "infinitely wise" by connecting it to
+  the whole BFO ecosystem.
+Grounded HARD in the paper:
+  - §9.2 (line 467): "Because the World Ontology is BFO-grounded, it is
+    interoperable with the over 500 existing BFO-conformant ontologies… can serve
+    as a BRIDGE ontology." §8.2 (line 422) same. The seed is the paper's own §9.2.
+  - Registries named + real: OBO Foundry (500+), CCO (DoD), FIBO, Gene/Disease Ont.
+  - KEY tractability claim (honest): shared BFO upper layer (35 categories) prunes
+    the cross-ontology mapping search space — that's why auto-bridging is feasible
+    where generic ontology matching (OAEI) is hard. Not magic; BFO-anchored.
+  - recall exists = EPISODIC memory (BGE+FTS5). lattice-context = STRUCTURED
+    ontological retrieval. Complementary, kept SEPARATE (not duplicated).
+  - "Infinite context" stated honestly = externalized federated graph + on-demand
+    subgraph retrieval; bounded by the lattice not the window. NOT literal infinity.
+Drafted: PRD-lattice-registry (find), -bridge (bridge — the core), -join (join),
+  -traverse (traverse), -context (∞ context, MCP), -ground (deeply understand).
+Vision: visions/lattice.md
+Order: STRICT pipeline registry → bridge → join → traverse → context → ground.
+  Maps 1:1 to the seed's verbs.
+Notes for /build:
+  - lattice-registry is the ONLY standalone piece (a fetcher/cataloger, no ousia
+    dep) — buildable now. Everything else chains on it + the ousia fleet libs
+    (reason/sparql). Do NOT start bridge/join/traverse before ousia-reason+sparql
+    libs exist.
+  - HARD RULE baked into ACs: NO silent auto-merge of low-confidence bridges.
+    bridge emits confidence+evidence; low ones go to a review proposals file
+    (recall-observe / skill-doctor pattern); join REFUSES unreviewed bridges
+    unless --allow-unreviewed. Reviewer-gated, same as the rest of the fleet.
+  - lattice-ground closes the loop back to herald-conscience: plain-language
+    action → grounded classes → ousia-guard. Output shape is contract-tested
+    against ousia-guard's input.
+Open questions (vision doc): alignment false-positives (mitigated by review gate);
+  external-ontology licensing (FIBO/CCO terms — registry records license, OBO
+  open set first); whether "infinite" stays bounded/fast at scale (deferred
+  lattice-scale PRD until join/traverse expose real numbers); recall vs
+  lattice-context unification (kept separate for now).
