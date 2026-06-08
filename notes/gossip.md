@@ -6144,3 +6144,47 @@ Open questions (vision doc): receipt transport (drafted air-gapped-by-default,
   nothing phones home); contest identity granularity (opaque per-install id, no PII);
   third-party reviewer (local corpus fork vs --upstream propose to j0yen); amendment
   cadence vs ontology stability (batched version cuts, never per-contest).
+
+## 2026-06-08T08:30  /dream  vision-mend  (4 PRDs — the remediation middle)
+Seed: bare /dream (interactive). Inward + outward arcs saturated (recourse
+  closed the outward return path at 07:00 today). Strongest unaddressed signal
+  was the self-review's own chronic escalations — named/counted by `docket`,
+  verified-when-fixed by `assay`, but REMEDIATED by nothing.
+Why real (live docket this pass):
+  - ctrace-sessionend-flake (warn) runs_seen:5 report_count:5 — OWNER-LESS.
+    Hook ~/.claude/scripts/ctrace-session-end.sh silently skips render on a
+    missing/stale marker (|| true swallows all); self-review backfills every run.
+  - warden-enforcer-inert (warn) since 2026-06-03 — OWNER-LESS, carried+acked
+    every run because nothing diagnoses WHY bpolicy reads loaded:false.
+  - binstale: ~/wintermute/binstale is a COMPLETE built repo (5 src modules,
+    verdict taxonomy) but NOT installed → `which binstale` fails → self-review
+    prints "fleet staleness check skipped" every run, and it's not even docketed.
+  - docket itself: agentns-session-zeros open 8 runs / 21-run precedent; counting
+    survival never produced a fix. The escalation threshold is codified but
+    eyeballed — nothing consumes it.
+Drafted: PRD-mend-binstale-wire, PRD-mend-ctrace-render, PRD-mend-warden-doctor,
+  PRD-mend-bridge.
+Vision: visions/mend.md
+Order: binstale-wire / ctrace-render / warden-doctor are independent leaf fixes
+  (ship any order); bridge is independent of the leaves, needs only docket (built).
+Notes for /build:
+  - binstale-wire & warden-doctor are rust-extend into EXISTING repos
+    (~/wintermute/binstale, ~/wintermute/bpolicy) — preserve existing modules.
+  - ctrace-render is `mixed`: spans ~/wintermute/ctrace-scribe (render engine,
+    add idempotent `render-session`) + the hook script. Backfill and exit-render
+    must share ONE render code path.
+  - bridge is a NEW rust-cli ~/wintermute/mend. PROPOSAL-ONLY (mirrors
+    recourse-contest): never auto-builds, never `docket resolve`, never edits an
+    existing PRD; bare `mend bridge` is dry-run. Reads the REAL docket interface
+    (verified live: `docket list --escalated --format json`, record fields
+    key/severity/title/runs_seen/consecutive_runs/report_count/evidence).
+  - All four wire to docket via a `--format docket` emit that pipes to
+    `docket report …`. Each fix's success signal is the finding stopping firing
+    so `docket sweep` can auto-close it (the assay discipline).
+  - SIGPIPE reset per self_sigpipe_panic_toolkit on all (they pipe to head/sh).
+    rustc 1.85, no let-chains.
+Open questions (vision doc): finding↔PRD linkage (naming convention
+  PRD-mend-<key>.md vs a docket `prd:` annotation); warden-doctor strictly
+  read-only vs a future gated --arm; binstale fleet curated-list vs --all;
+  bridge same-tick-in-self-review vs own timer (safe same-tick since it only
+  acts on --escalated, already past threshold).
