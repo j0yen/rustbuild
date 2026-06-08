@@ -1,6 +1,9 @@
 # PRD: keel-beacon — say it the moment the ceiling moves
 
-**Status:** Draft v0.1
+**Status:** verified_completed
+iter_log:
+  - "iter-2 (2026-06-08): beacon.rs + status.rs + main.rs wired; 13 tests green; all 8 ACs paired."
+build_status: shipped
 **build_target:** rust-extend
 **build_into:** `~/wintermute/keel`
 **Vision:** visions/keel.md
