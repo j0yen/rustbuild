@@ -5927,3 +5927,43 @@ STANDING open question (now raised 3×, still un-answered): an MCP-connector-
   touch. It needs jsy's explicit go-ahead because its PRDs are inherently
   interactive-facing (can't depend on connectors in /build-auto headless
   ticks). Until then it stays un-drafted by design, not by omission.
+
+## 2026-06-08T05:39  /dream  vision-ousia  (6 PRDs — first OUTWARD ontology vision)
+Seed (jsy, interactive): "of making ethical AI possible with these ideas.
+  implement OWL2 and SPARQL tools to make ethical grounded BFO a market success."
+THE un-covered outward seam the last 3 ticks kept flagging — finally seeded by
+  jsy directly. None of the prior 40 visions touch ontology/BFO/OWL/SPARQL/ethics.
+Grounded hard in real artifacts:
+  - ~/Notes/AtScale/World-Ontology-paper.md (v1.0.0, 509-class OWL2 DL / BFO 2020
+    paper, sentience→dignity→rights as reasoner-enforced axioms). REAL + complete.
+  - KEY GAP: world-ontology.owl does NOT exist on disk — only the paper. So
+    PRD-ousia-forge (build the .owl from a declarative spec) is the gate.
+  - ~/Notes/AtScale/book-outline-ontological-semantic-layer.md = the market thesis
+    (formal ontology for the semantic-layer category) → PRD-ousia-atscale bridge.
+  - AtScale MCP live this session (list_models/describe_model/run_query) → real
+    connector for the atscale bridge's interactive path.
+Drafted: PRD-ousia-forge, -reason, -sparql, -guard, -mcp, -atscale.
+Vision: visions/ousia.md
+Order: forge → reason → sparql → guard → mcp ; atscale branches off forge+sparql.
+  forge is the hard gate — every other PRD needs an .owl to operate on.
+Notes for /build:
+  - BUILD forge FIRST. Nothing downstream is testable without it. It has no ousia
+    deps (only horned-owl + serde/toml).
+  - reason/sparql/guard form a lib chain (each exposes a lib crate the next
+    consumes) — respect that order; don't parallel-ship guard before sparql lib.
+  - Reasoner is a hand-rolled forward-chainer over the paper's 10 all-some axioms
+    (OWL2 EL/RL), NOT a full DL reasoner. whelk-rs upgrade path, HermiT/JVM is the
+    documented escape hatch but OUT of scope. Don't let an agent pull a JVM dep.
+  - crates.io API is 403-rate-limiting this box (data-access policy) — could not
+    confirm exact crate versions. horned-owl/oxigraph/sophia are real; pin versions
+    at build time. If a Rust MCP SDK crate doesn't resolve for ousia-mcp, the PRD
+    permits a hand-rolled JSON-RPC stdio loop.
+  - ousia-atscale + ousia-mcp have interactive-only live paths (MCP connectors
+    absent in headless ticks) — but BOTH PRDs gate that behind an offline JSON
+    path that IS build-auto-testable. ACs require no live connector. Build them
+    headless; the live path is layered convenience.
+Open questions (in vision doc):
+  - Federation Model source doc not on disk; extracting the 10 axioms from the
+    paper §3.1/§5 directly (sufficient). Ask jsy if the source doc would enrich.
+  - A dedicated ousia-conformance PRD (paper §8 is concretely testable) may split
+    out of reason's ACs on a later pass.
