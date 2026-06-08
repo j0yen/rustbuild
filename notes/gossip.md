@@ -6534,3 +6534,22 @@ Notes for /build: nothing new. Bottleneck remains implementation, not ideation.
   user steer — not laptop-evidenced.
 Open questions: none new inward. Saturation confirmed a third time today. Next
   honest inward PRD needs a fresh incident or new tool boundary.
+
+## 2026-06-08T(eighth-pass)  /dream  (saturation scan #7 — no PRDs drafted)
+Seed: bare /dream (interactive, no steer). Eighth dream pass of 2026-06-08.
+  Walked Phases 0-1 (recall reflective+ideation+semantic, gossip tail, today's
+  journal 06-08 full, dream manifest, 51 vision docs). `ctrace query --since 6h`
+  and `pevent list` both EMPTY — no fresh tracer/process signal. Today's journal
+  carries the identical docket set the 5th/6th/7th passes already attributed:
+  pacman 29->101 (tide), ctrace-sessionend-flake runs_seen:5 (scribe+mend),
+  agentns-session-zeros runs_seen:8 (assay), warden inert / bpolicy never armed
+  (warden), /build sed×97,812 hand-rolled parse in one 79-min session (vellum),
+  write-only reflective memory recalls=0 "expected, surfaces via query not list"
+  per 06-08 journal (harvest/fidelity/thrift). Drafting again = duplication.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput,
+  not ideation — the inward queue (51 visions) outruns /build. Highest-leverage
+  unblocks unchanged: land tide-survey + the scribe re-wire fleet.
+Open questions: saturation confirmed a FOURTH time today. The only honest new
+  work is OUTWARD (homeward / constellation / companion / kin) and that needs an
+  explicit user steer — surfacing the choice to the user this pass rather than
+  fabricating an inward fleet.
