@@ -6232,3 +6232,53 @@ Notes for /build:
 Open questions (vision doc): duplicate key = cwd vs project-slug (leaning slug);
   grace-window / stale-budget thresholds (derive from each role's tick budget,
   not magic constants); reap subtree (report all, signal root only).
+
+## 2026-06-08T08:00  /dream  vision-tide  (4 PRDs — the reboot crossing)
+Seed: bare /dream (interactive, no steer). Inward/outward arcs saturated (~48
+  visions). Strongest UNCOVERED recurring signal: the pacman update queue that
+  self-review reports as "BLOCKED — needs a reboot window" run after run after
+  run (2026-06-06/-07/-08 journals, all under "Pending your call") and never
+  acts on. Queue grew 29→101 in two days. mend.md:51 explicitly tags
+  pacman-kernel-update-blocked as "user-gated reboot, NOT buildable" — and
+  that's the gap: the reboot is human-gated, but EVERYTHING around it
+  (enumerate / what-would-restart-fix / pick-window / verify-fleet-returned) is
+  buildable and entirely untooled. Verified live: checkupdates, needrestart,
+  reflector all ABSENT (command -v → nothing). Kernel skew live: booted
+  7.0.10-wintermute · linux pkg 7.0.9 · queue wants 7.0.11 — rendered nowhere.
+Why distinct from quicken: quicken attests KERNEL-PRIMITIVE liveness (memlog/
+  agentns/bpolicy/provfs, "built but never came alive"); it only mentions
+  `pacman -U pkgrel-11 + reboot` as one memlog remedy string. tide owns the OS
+  UPDATE→REBOOT→VERIFY lifecycle for the whole system — different altitude.
+Drafted: PRD-tide-survey, PRD-tide-restart, PRD-tide-window, PRD-tide-landfall.
+Vision: visions/tide.md
+Order: survey → { restart, window } → landfall.
+Notes for /build:
+  - tide-survey is a NEW rust-cli at ~/wintermute/tide (cargo-install to
+    ~/.cargo/bin). MUST ship FIRST — creates repo + binary + core types
+    (UpdateState/Verdict/RebootClass/KernelSkew) + the read-only pacman reader.
+    Do NOT start any rust-extend until ~/wintermute/tide exists or extend-
+    validate fails (the relay/concord rule). SIGPIPE reset first line of main
+    (pipes to head/jq, per self_sigpipe_panic_toolkit). rustc 1.85, no let-chains.
+  - restart, window, landfall are all rust-extend INTO ~/wintermute/tide.
+    restart ⟂ window (both extend survey, independent of each other). landfall
+    consumes survey's expected-state (adds a `survey --record` flag — the only
+    survey touch).
+  - READ-ONLY / proposal-first throughout. tide NEVER reboots, NEVER runs
+    `pacman -Su`/`systemctl reboot`. The reboot stays human-gated per mend.md:51.
+    tide-window is proposal-only like muster-reap / recourse-contest / mend-bridge
+    (no --apply/--confirm; --plan only PRINTS the command). AC5 on window asserts
+    the binary contains no reboot/pacman-mutate invocation.
+  - pacman read uses the checkupdates pattern: sync to a PRIVATE --dbpath under
+    XDG_CACHE; NEVER touches /var/lib/pacman. Fallback to `pacman -Qu` with
+    stale:true. All parsers fixture-driven + offline in cargo test (no live
+    pacman -Sy in tests) → cloud-build-safe.
+Soft deps (additive, not blockers):
+  - tide-window's "active sessions" input = muster census output; window parses
+    `muster census --format json` if present, else pgrep fallback. Coordinate so
+    window doesn't re-implement the roster muster owns.
+  - tide-landfall's watchman-roots check VERIFIES anchor's reconcile (reports an
+    unwatched root); it does NOT re-watch — keep the reconcile in anchor.
+Open questions (vision doc): checkupdates-without-checkupdates (private-dbpath
+  read acceptable, or parse `pacman -Sup` only?); landfall trigger (boot-time
+  systemd-user oneshot vs SessionStart hook vs both, deduped by boot-id) — left
+  as a deferred `mixed` config follow-on, not baked into the rust-extend.
