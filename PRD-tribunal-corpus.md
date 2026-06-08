@@ -1,6 +1,7 @@
 # PRD: tribunal-corpus — a held-out ethics corpus the axioms did not write
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 build_into: /home/jsy/wintermute/tribunal
 Vision: visions/tribunal.md

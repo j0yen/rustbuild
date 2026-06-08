@@ -1,6 +1,7 @@
 # PRD: ousia-atscale — BFO grounding as a semantic-layer market bridge
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 Vision: visions/ousia.md
 

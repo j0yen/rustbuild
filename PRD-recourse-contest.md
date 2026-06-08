@@ -1,6 +1,7 @@
 # PRD: recourse-contest — a downstream user can dispute a verdict, safely
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 build_into: /home/jsy/wintermute/recourse
 Vision: visions/recourse.md

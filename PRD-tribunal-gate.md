@@ -1,6 +1,7 @@
 # PRD: tribunal-gate — a broken conscience cannot reach another machine
 
 Status: Draft v0.1
+build_priority: high
 build_target: mixed
 build_into: /home/jsy/wintermute/tribunal
 Vision: visions/tribunal.md

@@ -1,6 +1,7 @@
 # PRD: recourse-amend — an upheld field contest becomes a held-out corpus case
 
 Status: Draft v0.1
+build_priority: high
 build_target: mixed
 build_into: /home/jsy/wintermute/recourse
 Vision: visions/recourse.md

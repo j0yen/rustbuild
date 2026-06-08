@@ -1,6 +1,7 @@
 # PRD: lattice-join — merge ontologies + bridges into one federated graph
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 Vision: visions/lattice.md
 

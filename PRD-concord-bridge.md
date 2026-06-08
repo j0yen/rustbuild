@@ -1,6 +1,7 @@
 # PRD: concord-bridge
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-extend
 build_into: /home/jsy/wintermute/concord
 Vision: visions/concord.md

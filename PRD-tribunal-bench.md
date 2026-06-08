@@ -1,6 +1,7 @@
 # PRD: tribunal-bench — run the conscience against the held-out corpus and score it
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 build_into: /home/jsy/wintermute/tribunal
 Vision: visions/tribunal.md

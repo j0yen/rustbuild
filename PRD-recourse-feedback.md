@@ -1,6 +1,7 @@
 # PRD: recourse-feedback — the world's disagreement becomes the next version's wisdom
 
 Status: Draft v0.1
+build_priority: high
 build_target: mixed
 build_into: /home/jsy/wintermute/recourse
 Vision: visions/recourse.md

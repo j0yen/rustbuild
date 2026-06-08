@@ -1,6 +1,7 @@
 # PRD: recourse-receipt — every verdict leaves a durable, PII-free trace
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 build_into: /home/jsy/wintermute/recourse
 Vision: visions/recourse.md

@@ -1,6 +1,7 @@
 # PRD: ousia-guard — deductive ethical gate for agent actions
 
 Status: Draft v0.1
+build_priority: high
 build_target: rust-cli
 Vision: visions/ousia.md
 
