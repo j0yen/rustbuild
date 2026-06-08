@@ -6427,3 +6427,47 @@ Open questions (vision doc): fingerprint format (lean: opaque string compared
   verbatim, docket stays domain-agnostic); --runs vs --until-change precedence
   (lean: whichever fires first); whether an acked crit may go quiet (lean: yes,
   but digest always shows the acked count so a quieted crit isn't invisible).
+
+## 2026-06-08T(fourth-pass)  /dream  vision-vellum
+Seed: bare /dream (interactive, no steer). Fourth dream pass of 2026-06-08.
+  The recurring-findings layer was already fully owned by today's earlier
+  passes (tide/tend/scribe/mend/assay/abide) and the inward space is broadly
+  saturated (recourse vision logged it). The one inward signal none of them
+  touched: /build parses AND edits its own corpus with hand-rolled shell
+  text-munging. Hard evidence from the 2026-06-08 self-review: sed×97,812 +
+  jq×2,696 in ONE 79-minute build session; scan-prds.sh is a ~150-line bash
+  YAML/markdown parser whose own comments admit gaps (deferred_acs inline-only,
+  line 40). Three proven dispatch bugs trace to this layer:
+  self_build_jq_escape_reads_absent, self_build_manifest_join_slug,
+  self_deferred_acs_inline_only.
+Drafted (a typed Rust CLI that owns PRD-frontmatter read/edit + manifest join):
+  - PRD-vellum-read     (rust-cli → NEW crate ~/wintermute/vellum)
+  - PRD-vellum-scan     (rust-extend → ~/wintermute/vellum)
+  - PRD-vellum-amend    (rust-extend → ~/wintermute/vellum)
+  - PRD-vellum-manifest (rust-extend → ~/wintermute/vellum)
+  - PRD-vellum-wire     (shell → build skill + dotfiles)
+Vision: visions/vellum.md
+Order: vellum-read → vellum-scan → vellum-amend → vellum-manifest → vellum-wire
+Notes for /build:
+  - vellum-read builds the crate (lib + `read`); it MUST land first.
+  - scan/amend/manifest all rust-extend the SAME crate and edit overlapping
+    files (main.rs match, lib.rs surface, the parse module). Build them STRICTLY
+    SERIALLY, each fully landed before the next — the relay/tide/scribe/abide
+    same-crate edit-anchor-collision rule. Do NOT dispatch in parallel.
+  - vellum-wire is shell in a DIFFERENT tree (build skill; the hook script is a
+    symlink into ~/wintermute/dotfiles), so it can't collide with the crate
+    PRDs; but it's LAST — needs scan+amend+manifest live to prove parity.
+  - Cargo work: route via /cloudbuild (feedback_cloudbuild_over_build). MSRV
+    1.85, no let-chains (self_recall_baseline_gate_red). sigpipe::reset() first
+    line of main() (self_sigpipe_panic_toolkit). Verify a `Running` line for
+    EVERY test file before trusting green (self_orphaned_mock_tests).
+  - HARD INVARIANT (vellum-wire): the bash parser in scan-prds.sh is NOT
+    deleted — it stays as the degraded fallback (VELLUM_DISABLE=1 / binary
+    absent) so a broken vellum never bricks a /build tick. The cutover is gated
+    on an EMPTY parity diff vs legacy on the live corpus. The existing
+    claude-build cgroup guard must keep short-circuiting BEFORE the vellum exec
+    (self_build_jam_leaked_tracer).
+Open questions (vision doc): new crate vs extend an existing corpus tool (lean
+  new crate); hard-replace vs fallback for scan-prds.sh (lean fallback); whether
+  vellum read should also parse AC bodies (lean no — frontmatter only this
+  fleet, AC-body parsing is a future /dream extend vellum).
