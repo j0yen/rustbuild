@@ -6052,3 +6052,44 @@ Open questions (vision doc): alignment false-positives (mitigated by review gate
   open set first); whether "infinite" stays bounded/fast at scale (deferred
   lattice-scale PRD until join/traverse expose real numbers); recall vs
   lattice-context unification (kept separate for now).
+
+## 2026-06-08T06:30  /dream  vision-tribunal  (4 PRDs — the proof layer for the outward arc)
+Seed: bare /dream (interactive). Inward space saturated (3 prior "saturation
+  scan — no PRDs" ticks); productive frontier is the outward arc seeded this
+  morning. Found its un-dreamt THIRD leg: ousia *reasons*, herald *distributes*,
+  but NOTHING proves the reasoner is right before /conscience ships outward.
+Why real:
+  - herald end-state #4 DEMANDS "an 'ethics skill' isn't shipped broken or
+    unverifiable" — but herald-pack/market/conscience ship only structural
+    skill-doctor/skill-manifest checks. No verdict-correctness check exists.
+  - The tautology already cost this laptop: wm-router safety 100%→73.5% on a
+    held-out set (feedback_agent_written_fixtures_tautology). Per hard-rule-1,
+    /build→/autobuilder writes code AND its tests in one cycle → ousia-guard
+    would grade its own homework. An ETHICS engine is the worst place for that.
+  - ousia vision EXPLICITLY deferred ousia-conformance "to a later /dream pass."
+    This is that pass (rehomed as tribunal-conformance — judge lives OUTSIDE the
+    defendant: new workspace ~/wintermute/tribunal, not inside ousia).
+Drafted: PRD-tribunal-conformance, PRD-tribunal-corpus, PRD-tribunal-bench,
+  PRD-tribunal-gate.
+Vision: visions/tribunal.md
+Order: (conformance ∥ corpus) → bench → gate.
+Notes for /build:
+  - All four build NOW against fixtures/stubs — they do NOT block or delay ousia/
+    herald. conformance vs a vendored fixture .owl; corpus is data + validator;
+    bench vs a recorded guard-stub with the wire contract ASSERTED; gate via
+    --dry-run + documented herald hook.
+  - CROSS-VISION deps (ousia + herald both freshly drafted, UNBUILT):
+    bench consumes ousia-guard's `check --action --format json --explain`
+    contract; conformance consumes ousia-forge's .owl; gate consumes
+    herald-pack's publish flow. Stub/fixture now; real wire-in at each
+    consumer's AC. Don't wait on ousia/herald to start tribunal.
+  - THE GATE IS THE POINT: enforce `tribunal gate` at herald-conscience's
+    PUBLISH AC — false-allow==0 is hard/non-overridable; that is the AC that
+    makes herald end-state #4 true with a mechanism, not a promise.
+  - rust-cli ×3 + mixed ×1, all build_into ~/wintermute/tribunal (one workspace,
+    one crate, four subcommands: conformance/corpus/bench/gate). SIGPIPE reset
+    per self_sigpipe_panic_toolkit. rustc 1.85, no let-chains.
+Open questions (in vision doc): corpus independence can't be FULLY proven
+  mechanically (validator checks provenance tags; jsy human spot-check of the
+  first cut is a release AC — is that acceptable?); accuracy threshold start
+  (drafted ≥0.85, ratchets); v1 corpus size (~60, ≥2/tenet × {allow,flag,deny}).
