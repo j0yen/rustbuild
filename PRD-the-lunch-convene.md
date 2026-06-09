@@ -2,6 +2,7 @@
 
 **Status:** Draft v0.1
 **build_target:** rust-lib
+build_priority: high
 **build_into:** (new repo) `~/wintermute/the-lunch`
 **Vision:** visions/the-lunch.md
 

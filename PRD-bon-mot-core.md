@@ -2,6 +2,7 @@
 
 **Status:** Draft v0.1
 **build_target:** rust-lib
+build_priority: high
 **build_into:** (new repo) `~/wintermute/bon-mot`
 **Vision:** visions/bon-mot.md
 
