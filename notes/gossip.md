@@ -6600,3 +6600,41 @@ Open questions: the only genuinely-new work left is OUTWARD (homeward /
   constellation / companion / kin) and still awaits an explicit user steer — asked
   this pass, not yet given. Saturation now confirmed via the fallow discipline
   rather than ad-hoc prose.
+
+## 2026-06-08T(roundtable)  /dream  vision-roundtable (the Algonquin comes to wintermute)
+Seed: user at the Algonquin Hotel, NYC — site of the Round Table ("Vicious
+  Circle," 1919–1929; Parker, Benchley, Kaufman, Woollcott, Ferber, FPA, and
+  Harold Ross who founded The New Yorker from that room). Steer: "be prolifically
+  inspired, remove all limitations, work on 30 PRDs at a time."
+Insight: wintermute already has a CREATIVE WING — day-haiku, conversations-zine,
+  letters-we-never-sent, self-portrait, ambient, wintermute-music — but every
+  voice works ALONE (write-only solo outputs). The Round Table was the missing
+  thing: not another soloist but the LUNCH TABLE itself — a circle of distinct
+  voices that convene daily, play language games, critique each other sharply,
+  and publish the best of it. roundtable builds that social/critical/playful
+  layer OVER the existing solo outputs.
+Drafted: 1 umbrella vision (roundtable) + 6 sub-visions + 31 PRDs:
+  - vicious-circle (5): personas/review/roast/crown/ledger — the critique ensemble
+  - bon-mot (7): core/sentence/epigram/anagram/telegram/score/transform — wit engine
+  - conning-tower (5): column/contributors/syndicate/constant-reader/back-issues — publish (after FPA's column)
+  - the-lunch (5): convene/seating/menu/minutes/standing-invitation — the daily noon gathering
+  - thanatopsis (5): charades/poker/crossword/murder/parlor-ledger — the games club
+  - newyorker (4): masthead/house-style/issue/cover — bind columns into a periodical (ships last)
+Visions: visions/roundtable.md (umbrella) + visions/{vicious-circle,bon-mot,
+  conning-tower,the-lunch,thanatopsis,new-yorker}.md
+Order: the-lunch + bon-mot are foundations (gather + wit primitives) → vicious-circle
+  consumes both → conning-tower + thanatopsis consume the circle's verdicts →
+  new-yorker binds the columns last.
+Notes for /build: each cluster builds into ONE coherent repo (~/wintermute/<cluster>);
+  the first PRD per cluster is rust-cli/rust-lib (scaffolds the crate + shared types),
+  the rest rust-extend into the same repo. bon-mot-core is a rust-lib the other six
+  bon-mot engines depend on. Wit is DETERMINISTIC-by-default (grammar/template, free,
+  reproducible), Claude API only on --lavish (reuses day-haiku's ureq + ephemeral
+  prompt-cache pattern). Cross-cluster deps reference upstream by slug; thanatopsis
+  gates bon-mot behind an optional cargo feature with a fallback so it builds before
+  bon-mot lands. All binaries require sigpipe::reset() first in main() (known
+  println-coredump issue). the-lunch-standing-invitation ships a noon systemd-user
+  timer modeled on daily-receipt.timer.
+Open questions (decided in-vision): wit tiering = grammar default / --lavish API;
+  convening = one table per day keyed by local date (on-demand --now override);
+  periodical = local-only default (outward deferred).
