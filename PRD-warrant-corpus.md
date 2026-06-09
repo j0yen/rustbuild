@@ -2,6 +2,7 @@
 
 Status: Draft v0.1
 build_target: rust-cli
+build_priority: high
 build_into: /home/jsy/wintermute/warrant
 Vision: visions/warrant.md
 
