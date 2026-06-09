@@ -6638,3 +6638,25 @@ Notes for /build: each cluster builds into ONE coherent repo (~/wintermute/<clus
 Open questions (decided in-vision): wit tiering = grammar default / --lavish API;
   convening = one table per day keyed by local date (on-demand --now override);
   periodical = local-only default (outward deferred).
+
+## 2026-06-08T(eleventh-pass)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (no steer). Eleventh pass of 2026-06-08.
+  Walked Phases 0-1. Fresh-signal probes EMPTY again: `ctrace query --since 6h`
+  empty, `pevent list` empty, all reflective recalls=0, today's journal (06-08)
+  carries only the docket set prior passes already attributed to existing visions
+  (pacman 29->101=tide; ctrace-sessionend-flake runs_seen:5=scribe+mend;
+  agentns-session-zeros runs_seen:8=assay; warden inert=warden; vellum sed×97k;
+  write-only reflective recalls=0=harvest/fidelity/thrift). Queue now 134 PRDs /
+  59 visions. No new evidence-backed INWARD signal.
+  Per the fallow discipline (and pass ten, which first ACTED on it instead of
+  re-deriving it): drafting again = duplication. Pass ten already surfaced the
+  inward-vs-outward choice to the user via AskUserQuestion and it was dismissed
+  without steer — re-asking the identical question is noise, so this pass does NOT
+  re-ask. Honest default = confirm fallow, no fabricated fleet.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Highest-leverage unblocks unchanged: land tide-survey, the scribe
+  re-wire fleet, and the fallow fleet itself (fingerprint -> check -> dream-wire)
+  so future passes short-circuit on a fallow field before spending a Claude
+  invocation re-deriving saturation.
+Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
+  companion / kin) and still awaits an explicit user steer — not given.
