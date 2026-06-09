@@ -6577,3 +6577,26 @@ Open questions: threshold value (default 3, mirrors docket; maybe streak>=2 for
   itself to skip the Claude invocation on a fallow field (bullet in vision, not
   drafted). Outward directions (homeward/constellation/companion/kin) still
   await an explicit user steer — asked this pass.
+
+## 2026-06-08T(tenth-pass)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (interactive, no steer). Tenth pass of 2026-06-08.
+  Walked Phases 0-1. Fresh-signal probes came back EMPTY: `ctrace query --since 6h`
+  empty, `pevent list` empty, all reflective recalls=0, today's journal (06-08)
+  carries the identical docket set every prior pass already attributed to existing
+  visions (pacman 29->101 = tide; ctrace-sessionend-flake runs_seen:5 = scribe+mend;
+  agentns-session-zeros runs_seen:8 = assay; warden inert = warden; vellum sed×97k;
+  write-only reflective recalls=0 "expected, surfaces via query not list" =
+  harvest/fidelity/thrift). No new evidence-backed INWARD signal. Drafting again =
+  duplication — exactly the pathology pass nine's vision-fallow was drafted to catch.
+  This pass is the first to ACT on that discipline instead of re-deriving it: I
+  surfaced the inward-vs-outward choice to the user via AskUserQuestion. User
+  dismissed without steer -> honest default = confirm fallow, no fabricated fleet.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput,
+  not ideation (51 visions / 103 PRDs queued). Highest-leverage unblocks unchanged:
+  land tide-survey + the scribe re-wire fleet + the fallow fleet itself
+  (fingerprint -> check -> dream-wire) so future passes short-circuit on a fallow
+  field instead of spending a Claude invocation re-deriving saturation.
+Open questions: the only genuinely-new work left is OUTWARD (homeward /
+  constellation / companion / kin) and still awaits an explicit user steer — asked
+  this pass, not yet given. Saturation now confirmed via the fallow discipline
+  rather than ad-hoc prose.
