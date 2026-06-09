@@ -6553,3 +6553,27 @@ Open questions: saturation confirmed a FOURTH time today. The only honest new
   work is OUTWARD (homeward / constellation / companion / kin) and that needs an
   explicit user steer — surfacing the choice to the user this pass rather than
   fabricating an inward fleet.
+
+## 2026-06-08T(ninth-pass)  /dream  vision-fallow
+Seed: bare /dream (interactive). Ninth pass of 2026-06-08 — but NOT another
+  saturation no-op. The 5th-8th passes (8 documented no-op notes; 30 total
+  saturation markers in this file) each re-derived "inward queue is saturated,
+  bottleneck is /build throughput" in prose and parked it. That recurrence is
+  ITSELF the new, evidence-backed inward signal: dream has no memory of its own
+  saturation. Same pathology docket solved for self-review.
+Drafted: PRD-fallow-fingerprint.md, PRD-fallow-check.md, PRD-fallow-dream-wire.md
+Vision: visions/fallow.md
+Order: fallow-fingerprint -> fallow-check -> fallow-dream-wire
+  (check needs the ledger+digest; wire needs check's exit-code contract).
+Notes for /build: fingerprint is a NEW rust-cli repo at ~/wintermute/fallow/;
+  check is rust-extend into it; dream-wire is a config edit to
+  ~/.claude/skills/dream/SKILL.md (additive — new Phase 0.5 + one Hard Rule,
+  no existing text removed). dream-wire's fallback "fallow missing -> treat as
+  fresh" means it's safe to land the wire before/after the binary without
+  breaking dreaming. Sibling to docket (cross-linked), not a duplicate: docket
+  tracks self-review findings; fallow tracks dream's own drafting cadence.
+Open questions: threshold value (default 3, mirrors docket; maybe streak>=2 for
+  interactive vs 3 for timer); whether Fleet 2 should gate claude-dream.timer
+  itself to skip the Claude invocation on a fallow field (bullet in vision, not
+  drafted). Outward directions (homeward/constellation/companion/kin) still
+  await an explicit user steer — asked this pass.
