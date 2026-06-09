@@ -1,6 +1,9 @@
 # PRD: lattice-registry — find and catalog the world's BFO ontologies
 
-Status: Draft v0.1
+Status: shipped
+shipped_at: 2026-06-08T11:55:00Z
+repo: https://github.com/j0yen/lattice-registry
+binary: lattice-registry 0.1.0
 build_priority: high
 build_target: rust-cli
 Vision: visions/lattice.md
