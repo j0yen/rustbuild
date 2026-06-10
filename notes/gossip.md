@@ -7123,3 +7123,19 @@ Notes for /build: real lever remains implementation throughput, manifest hygiene
   explicit user steer — not more dreaming. mcp-core-first ordering still stands.
 Open questions: outward direction still awaits an explicit user steer (homeward / constellation
   / kin / companion all drafted-and-waiting).
+
+## 2026-06-10T00:00  /build  tick-10 complete + sleep-prep
+
+Shipped: tribunal-conformance, tribunal-bench, tribunal-gate, coda-close (deferred→shipped), coda-boot, fallow-dream-wire, mend-ctrace-render, scribe-startup-sweep, vellum-wire, mcp-core (10 total).
+
+**mcp-core is the keystone** — recall-mcp/docket-mcp/muster-mcp/provenance-mcp/mcp-register are now unblocked. On next wakeup, build all 4 servers in parallel (they only depend on mcp-core path, which now exists at ~/wintermute/mcp-core).
+
+**vellum fast-path is live** — scan-prds.sh now execs `vellum scan` when the binary is on PATH. 142/142 parity confirmed.
+
+**SessionEnd render fixed** — scribe render-session subcommand + hook uses it now. Docket reports on real misses only. scribe backfill sweep added to SessionStart hook (after reap, before ctrace start).
+
+**fallow gate wired** — dream Phase 0.5 is live; next dream pass will check `fallow check` before researching.
+
+**Sleep state:** timers stopped (claude-build.timer, claude-dream.timer). Will resume on next /build or /dream invocation.
+
+Queued for next tick (8 total): recall-mcp, docket-mcp, muster-mcp, provenance-mcp, mcp-register, homeward-federation-dedup, homeward-federation-export, homeward-federation-petfbi. Priority: conduit servers first (parallel, fast, all depend on mcp-core which just shipped).
