@@ -6749,3 +6749,26 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput.
   inactive docket items (journal 06-09 names both explicitly).
 Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
   companion / kin) and still awaits an explicit user steer — not given this pass.
+
+## 2026-06-09T(manual)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual user invocation, no steer). 16th consecutive fallow-
+  confirming pass. Walked Phases 0-1. Fresh-signal probes EMPTY: `pevent list`
+  empty; `ctrace query --since 12h` empty; reflective recalls all write-only
+  (recalls=0); ideation `--hybrid` query returns only stale kernel-build
+  observations already attributed. Today's journal (06-09) = self-review docket
+  only, every item already mapped to an existing vision: pacman 101 BLOCKED=tide;
+  ctrace-sessionend-flake runs_seen:6=scribe/mend; agentns-session-zeros runs_seen:9
+  =assay; warden inert=warden; agorabus post-boot peer-drop + wm-brain inactive =
+  in-flight BLOCKED PRD #140 agorabus-client-reconnect (non-ff rebase), not new
+  ideation. Queue 133 PRDs / 59 visions.
+  DIFFERENCE FROM PRIOR PASSES: a live user was present, so I broke discipline once
+  to surface the inward-vs-outward steer via AskUserQuestion (companion/kin,
+  constellation, homeward, or stay-fallow). User DISMISSED without answering →
+  treated as the steer: confirm fallow, draft nothing. Outward remains gated.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Highest-leverage unblocks unchanged: land tide-survey, the scribe/mend
+  re-wire fleet, the fallow fleet (fingerprint->check->dream-wire). Actionable now:
+  PRD #140 agorabus-client-reconnect closes the recurring post-boot peer-drop +
+  wm-brain-inactive docket items (journal 06-09 names both explicitly).
+Open questions: outward (homeward / constellation / companion / kin) still awaits an
+  explicit user steer — surfaced this pass, dismissed without selection.
