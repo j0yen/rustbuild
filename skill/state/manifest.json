@@ -1,0 +1,40 @@
+{
+  "prds": [
+    {
+      "slug": "mend-warden-doctor",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/bpolicy",
+      "output_repo_url": "https://github.com/j0yen/bpolicy"
+    },
+    {
+      "slug": "fallow-fingerprint",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/fallow",
+      "output_repo_url": "https://github.com/j0yen/fallow"
+    },
+    {
+      "slug": "fallow-check",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/fallow",
+      "output_repo_url": "https://github.com/j0yen/fallow"
+    },
+    {
+      "slug": "conning-tower-contributors",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/conning-tower",
+      "output_repo_url": "https://github.com/j0yen/conning-tower"
+    },
+    {
+      "slug": "conning-tower-constant-reader",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/conning-tower",
+      "output_repo_url": "https://github.com/j0yen/conning-tower"
+    },
+    {
+      "slug": "conning-tower-back-issues",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/conning-tower",
+      "output_repo_url": "https://github.com/j0yen/conning-tower"
+    }
+  ]
+}
