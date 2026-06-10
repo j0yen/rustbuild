@@ -6846,3 +6846,28 @@ Open questions: link-vs-shell (chose shell-out to installed binaries for decoupl
   confirm vs linking docket-core/recall-io libs); stdio-only transport for v1 (HTTP/SSE
   deferred to a later PRD if a customer-facing use appears); optional ousia-mcp v0.2
   back-port onto mcp-core (left as a vision note, not drafted — ousia-mcp works).
+
+## 2026-06-10T(manual-2)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual user invocation, no steer). First fallow-confirming pass
+  since yesterday's user-steered conduit/MCP fleet (06-10T(manual)). Walked Phases
+  0-1. Fresh-signal probes EMPTY: `pevent list` empty; `ctrace query --since 18h`
+  empty; all 20 reflective recalls write-only (recalls=0); ideation `--hybrid`
+  returns only stale kernel-build observations already attributed. Queue grew
+  133->139 PRDs / 60 visions = exactly the 6 conduit PRDs (mcp-core, recall-mcp,
+  docket-mcp, muster-mcp, provenance-mcp, mcp-register) landing; nothing else moved.
+  Journal 06-09 = self-review docket only, every item maps to an existing vision:
+  pacman 101 BLOCKED=tide; ctrace-sessionend-flake runs_seen:6=scribe/mend;
+  agentns-session-zeros runs_seen:9=assay; warden inert=warden; agorabus post-boot
+  peer-drop + wm-brain inactive = in-flight BLOCKED PRD #140 agorabus-client-
+  reconnect (non-ff rebase), not new ideation. Per fallow discipline: drafting =
+  duplication. NOT re-asking inward-vs-outward (surfaced + dismissed two manual
+  passes ago → treated as steer to stay fallow).
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. The conduit fleet is the freshest unbuilt direction — build mcp-core
+  FIRST (keystone, no external deps beyond serde), then the four servers in
+  parallel, then mcp-register. Other highest-leverage unblocks unchanged: land
+  tide-survey, the scribe/mend re-wire fleet. Actionable now: PRD #140 agorabus-
+  client-reconnect closes the recurring post-boot peer-drop + wm-brain-inactive
+  docket items.
+Open questions: outward (homeward / constellation / companion / kin) still awaits an
+  explicit user steer.
