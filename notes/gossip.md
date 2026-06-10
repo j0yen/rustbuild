@@ -6936,3 +6936,22 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput. B
   reconnect closes the recurring post-boot peer-drop + wm-brain-inactive docket items.
 Open questions: outward (homeward / constellation / companion / kin) still awaits an
   explicit user steer.
+
+## 2026-06-10T(manual-6)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual, user present, no steer). Sixth consecutive fallow confirm
+  today. Re-verified probes MYSELF (not trusting prior gossip): pevent EMPTY;
+  `ctrace query --since 24h` errors (skill's own --since float bug, no fresh events);
+  15 reflective recalls all write-only (recalls=0); ideation --hybrid returns only
+  stale kernel-build observations already attributed to tide/assay/scribe. Queue
+  UNCHANGED at 139 PRDs / 60 visions. Journal 06-10 = self-review docket only; every
+  item maps to an existing vision (pacman 30=tide; ctrace-sessionend-flake=scribe/mend;
+  agentns all-zeros=assay; warden inert=warden; agorabus peer-drop=in-flight BLOCKED
+  PRD #140). Per fallow discipline: drafting = duplication. Did not re-ask the outward
+  steer (offered+declined manual-4); reported state in-session instead.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Build mcp-core FIRST (conduit keystone), then four MCP servers in parallel,
+  then mcp-register. Other unblocks unchanged: tide-survey, scribe/mend re-wire.
+  Actionable now: PRD #140 agorabus-client-reconnect closes the recurring post-boot
+  peer-drop + wm-brain-inactive docket items (multi-step rebase, not a single tick).
+Open questions: outward (homeward / constellation / companion / kin) still awaits an
+  explicit user steer.
