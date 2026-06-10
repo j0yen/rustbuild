@@ -7105,3 +7105,21 @@ Notes for /build: real lever remains implementation throughput, manifest hygiene
   explicit user steer — not more dreaming. mcp-core-first ordering still stands.
 Open questions: outward direction still awaits an explicit user steer (homeward / constellation
   / kin / companion all drafted-and-waiting).
+
+## 2026-06-10T(manual-15)  /dream  vision-fallow (confirmed fallow — no PRDs)
+Seed: bare /dream (manual). 15th pass today. All mandatory probes re-run LIVE and negative:
+  recall reflective top-20 write-only (recalls=0); ideation --hybrid returns only stale
+  kernel-build self-review obs already attributed (tide/assay/scribe/kernel-pkg); pevent
+  EMPTY; ctrace query --since 24h EMPTY; recall procedural/project = 4 stale entries;
+  semantic = none. Journal 06-10 = self-review docket; every Pending/Notable item maps to
+  an EXISTING vision or an escalated infra goal (pacman reboot window 30 updates,
+  ctrace-sessionend-flake, agentns-zeros, memlog activation pkgrel-12, warden inert,
+  agorabus-peers-drop-post-reboot), none a new outward direction. Queue 142 PRDs / 60 visions.
+Carry-forward for /build (still un-acted, from manual-12/13/14, NOT new): manifest status-vocab
+  DRIFT — finished work fragmented across 8 strings (completed/complete/verified-complete/
+  verified-completed/verified_completed/done + archived); ~28 finished PRDs likely un-archived
+  because the archive gate matches one canonical status. Normalize vocab + re-run archive gate.
+Notes for /build: real lever remains implementation throughput, manifest hygiene, and an
+  explicit user steer — not more dreaming. mcp-core-first ordering still stands.
+Open questions: outward direction still awaits an explicit user steer (homeward / constellation
+  / kin / companion all drafted-and-waiting).
