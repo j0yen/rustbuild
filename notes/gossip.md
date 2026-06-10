@@ -6793,3 +6793,25 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput, n
   items (journal 06-09 names both).
 Open questions: outward (homeward / constellation / companion / kin) still awaits an
   explicit user steer.
+
+## 2026-06-09T(manual-3)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual user invocation, no steer). 18th consecutive fallow-
+  confirming pass. Walked Phases 0-1. Fresh-signal probes EMPTY: `pevent list`
+  empty; `ctrace query --since 12h` empty; reflective recalls all write-only
+  (recalls=0); ideation `--hybrid` query returns only stale kernel-build
+  observations already attributed. Queue UNCHANGED at 133 PRDs / 59 visions.
+  Today's journal (06-09) = self-review docket only, every item maps to an
+  existing vision: pacman 101 BLOCKED=tide; ctrace-sessionend-flake runs_seen:6
+  =scribe/mend; agentns-session-zeros runs_seen:9=assay; warden inert=warden;
+  agorabus post-boot peer-drop + wm-brain inactive = in-flight BLOCKED PRD #140
+  agorabus-client-reconnect (non-ff rebase), not new ideation. Per fallow
+  discipline: drafting = duplication. NOT re-asking inward-vs-outward — surfaced
+  two manual passes ago via AskUserQuestion, user dismissed without answering →
+  treated as the steer (stay fallow).
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Highest-leverage unblocks unchanged: land tide-survey, the scribe/mend
+  re-wire fleet, the fallow fleet. Actionable now: PRD #140 agorabus-client-
+  reconnect closes the recurring post-boot peer-drop + wm-brain-inactive docket
+  items (journal 06-09 names both).
+Open questions: outward (homeward / constellation / companion / kin) still awaits an
+  explicit user steer.
