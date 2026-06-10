@@ -140,3 +140,59 @@ top, owner-facing, and exposes the open API.
 - **Stray-hold awareness** — never surface a stray as "adoptable" during its
   legal hold window (3–10 days, per-state); surface it on the found/lost side so
   the owner can reclaim it.
+
+## Federation fleet (drafted 2026-06-10)
+
+Fleet 1 shipped the core: the workspace exists (`~/wintermute/homeward/`, v0.9.0) with
+all six crates built — schema, connectors (RescueGroups + Socrata STRAY), ingest
+(dedup + departure), embed (Python DINOv2 sidecar + Rust client), match, report. The
+"outward federation" open question above ("one report, every channel… not yet thought
+through; left for `/dream extend homeward`") is the un-built frontier this fleet opens.
+
+A federation research pass (2026-06-10, four lost-pet networks + microchip + Facebook +
+interchange standards probed; citations in the PRDs) found the honest reality: **of every
+lost-pet network, only Pet FBI's report widget feed has an open machine interface.** A
+single pull from it federates four networks (Pet FBI + Helping Lost Pets + Lost Dogs of
+America + Lost Cats of America — they share one backing database). Everything else is
+gated or dead:
+
+| Channel | Verdict | Disposition |
+|---|---|---|
+| Pet FBI / HeLP read feed | BUILDABLE-NOW (pull-IN) | **PRD: homeward-federation-petfbi** |
+| Pet FBI / HeLP write | partnership-gated (open-ethos nonprofit; outreach) | gated adapter in **homeward-federation-export**, dry-run until endpoint exists |
+| PawBoost | no third-party API (shelter-inbound only) | manual-only; no PRD |
+| Nextdoor | partnership-approval-gated; no lost-pet write API | manual-only; no PRD |
+| Facebook Groups | **API deprecated by Meta, April 2024** | dead; no PRD |
+| Petco Love Lost / 24PetWatch | closed / shelter-software-gated | no PRD |
+| Microchip (AAHA universal lookup, AKC/AVID/24PW) | HUMAN-ONLY (CAPTCHA web form, bots 403'd) or FTP/SMS-gated | separate honest investigation; no PRD |
+| Open lost-pet interchange standard | none exists (schema.org has no lost/found type) | homeward defines its own JSON-LD in **homeward-federation-export** |
+
+### Federation components (drafted this pass)
+
+- **homeward-federation-petfbi** (rust-extend → homeward-connectors) — a `PetFbiConnector`
+  pulling the Pet FBI/HeLP widget feed IN, normalizing lost/found/sighting reports to
+  `LostReport`/`PetRecord` with honest federated provenance. One connector, four networks.
+- **homeward-federation-dedup** (rust-extend → homeward-ingest) — reconcile federated
+  community found-reports against shelter stray-intakes so one animal isn't double-listed;
+  merge-with-both-provenances, thresholds biased toward false-split. Depends on petfbi.
+- **homeward-federation-export** (rust-extend → homeward-report) — the outbound half, done
+  honestly: a portable JSON-LD `LostReportExport` (no open standard exists, so homeward
+  defines one) + a human-postable flyer + a `Syndicator` trait whose only machine target
+  is a **dry-run-by-default** Pet FBI partner adapter. Gated channels are `ManualOnly`,
+  never fictional transports. Independent of the pull-IN pair.
+
+### Federation order
+
+```
+homeward-federation-petfbi  ─►  homeward-federation-dedup
+homeward-federation-export  (independent — outbound, parallel)
+```
+
+### Still un-dreamt / partnership-asks (not PRDs)
+
+- A Pet FBI/HeLP **partner write** agreement (email + credential) flips the export
+  adapter from dry-run to live with no code change — an outreach, not a build.
+- Nextdoor partner-API access; any Facebook Pages (not Groups) deal — both partnership,
+  both off the critical path.
+- Microchip federation remains "a separate honest investigation" (no open API anywhere;
+  needs registry partnerships, per the original open question above).

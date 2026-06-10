@@ -7004,3 +7004,38 @@ Notes for /build: unchanged. mcp-core FIRST, then 4 MCP servers parallel, then
   mcp-register. tide-survey + scribe/mend re-wire still open. PRD #140 closes the
   post-boot peer-drop + wm-brain-inactive docket items.
 Open questions: outward direction still awaits explicit user steer.
+
+## 2026-06-10T(manual-10)  /dream  vision-homeward (federation fleet — 3 PRDs)
+Seed: bare /dream (manual). NOT fallow — corrected a persistent error in the prior 9
+  fallow notes: those concluded "outward is drafted-and-waiting" by globbing
+  PRD-<vision-slug>-*.md, which matches nothing because PRDs are named by COMPONENT
+  (PRD-wintermute-family-*, PRD-reach-*, PRD-homeward-* archived-after-build). Verified
+  LIVE instead: companion built (voice turn works, AEC @ autobuilder/aec, degrade
+  shipped), kin Fleet-2 PRDs on disk (reach-inbound-imap/silence-nudge/distress-
+  durability), homeward workspace v0.9.0 with all 6 crates BUILT. So the inward+core-
+  outward well really is mapped — past-Claude was right, just for the wrong stated reason.
+Real un-dreamt frontier found: homeward's "outward federation" OQ ("one report, every
+  channel… left for /dream extend homeward"). Ran a federation research pass (4 networks
+  + microchip + FB + interchange standards). Honest verdict: ONLY Pet FBI/HeLP has an
+  open machine feed (pull-IN; federates 4 networks in one connector). PawBoost=shelter-
+  inbound-only, Nextdoor=partnership-gated, Facebook Groups API=DEAD (Meta deprecated
+  Apr 2024), Petco=closed, microchip=CAPTCHA/FTP-gated. No open lost-pet interchange
+  standard exists. So the honest fleet is SMALL — drafting connectors for the gated
+  channels would be fiction (hard rule #6).
+Drafted: PRD-homeward-federation-petfbi.md, PRD-homeward-federation-dedup.md,
+  PRD-homeward-federation-export.md
+Vision: visions/homeward.md (appended a Federation fleet section + a buildability table)
+Order: petfbi (pull-IN connector) ─► dedup (reconcile federated found vs shelter stray);
+  export (outbound, honest) is INDEPENDENT/parallel.
+Notes for /build: all three are rust-extend into /home/jsy/wintermute/homeward (existing
+  workspace). petfbi extends homeward-connectors (impl Connector like rescuegroups/
+  socrata); dedup extends homeward-ingest/src/dedup.rs (mirror departure.rs post-sync
+  pass); export extends homeward-report. NONE adds a fictional transport — export's only
+  machine target is a dry-run-by-default Pet FBI partner adapter that never claims
+  delivery without a real 2xx. Build petfbi before dedup. The petfbi feed JSON shape
+  should be pinned from a real captured response before finalizing serde structs (fixture
+  defines the contract meanwhile).
+Open questions for jsy: (1) Pet FBI/HeLP partner WRITE endpoint is an outreach (email a
+  nonprofit), not a build — want me to draft that ask? (2) commercial-vs-nonprofit
+  posture still gates v2 ML weights (existing homeward OQ). (3) microchip federation
+  remains partnership-only everywhere — no open API exists to build against.
