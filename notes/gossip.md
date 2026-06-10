@@ -6815,3 +6815,34 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput, n
   items (journal 06-09 names both).
 Open questions: outward (homeward / constellation / companion / kin) still awaits an
   explicit user steer.
+
+## 2026-06-10T(manual)  /dream  vision-conduit
+Seed: /dream /mcp (explicit user steer — NOT a fallow pass). Breaks the 18-pass
+  fallow streak because the seed names a concrete, evidence-backed direction.
+Drafted: PRD-mcp-core.md, PRD-recall-mcp.md, PRD-docket-mcp.md, PRD-muster-mcp.md,
+  PRD-provenance-mcp.md, PRD-mcp-register.md
+Vision: visions/conduit.md
+Context: ousia-mcp shipped THIS tick (2026-06-09) — first MCP *provider* on the box,
+  but hand-rolled its JSON-RPC 2.0 stdio plumbing inline (proto/dispatch/server.rs)
+  and is a one-off. gossip flagged "MCP-connector-aware layer" as the un-covered
+  outward seam 3 ticks running (cited in ousia-mcp's own Why). conduit makes the
+  laptop a provider of its read surfaces: recall (memory), docket (findings),
+  muster (sessions), provfs/memlog (provenance).
+Order: mcp-core → {recall-mcp, docket-mcp, muster-mcp, provenance-mcp} (parallel)
+  → mcp-register. mcp-core is the KEYSTONE — extract ousia-mcp's plumbing into a
+  reusable Tool trait + serve_stdio; build it FIRST. The four servers are mutually
+  independent and shell out to the installed recall/docket/muster/getfattr/memlog
+  binaries (read-only allowlist enforced at the subcommand boundary — mutating
+  verbs structurally unreachable). mcp-register depends on the servers existing by
+  name, not their internals.
+Notes for /build: mcp-core has NO external deps beyond serde/serde_json — cheap,
+  build it first to unblock the rest. recall-mcp is highest-leverage (recall is the
+  most-queried tool). Every server's tests stub the backing binary on PATH so they
+  run offline. mcp-register is the ONLY conduit PRD permitted to edit a client's MCP
+  config (~/.claude.json / .mcp.json) — proposal-by-default, --write + atomic backup;
+  closes the "no settings.json edits by the PRD itself" gap ousia-mcp/every server
+  designs in.
+Open questions: link-vs-shell (chose shell-out to installed binaries for decoupling —
+  confirm vs linking docket-core/recall-io libs); stdio-only transport for v1 (HTTP/SSE
+  deferred to a later PRD if a customer-facing use appears); optional ousia-mcp v0.2
+  back-port onto mcp-core (left as a vision note, not drafted — ousia-mcp works).
