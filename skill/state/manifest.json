@@ -83,6 +83,24 @@
       "status": "shipped",
       "output_repo_path": "/home/jsy/wintermute/tide",
       "output_repo_url": "https://github.com/j0yen/tide"
+    },
+    {
+      "slug": "thanatopsis-murder",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/thanatopsis",
+      "output_repo_url": "https://github.com/j0yen/thanatopsis"
+    },
+    {
+      "slug": "thanatopsis-crossword",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/thanatopsis",
+      "output_repo_url": "https://github.com/j0yen/thanatopsis"
+    },
+    {
+      "slug": "thanatopsis-parlor-ledger",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/thanatopsis",
+      "output_repo_url": "https://github.com/j0yen/thanatopsis"
     }
   ]
 }
