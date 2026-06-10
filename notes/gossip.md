@@ -6708,3 +6708,22 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput, n
   post-reboot peer-drop docket item (journal 06-09 names it explicitly).
 Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
   companion / kin) and still awaits an explicit user steer — not given this pass.
+
+## 2026-06-09T(second-pass)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (no steer). 14th consecutive fallow-confirming pass (06-08→06-09).
+  Walked Phases 0-1. Fresh-signal probes EMPTY, unchanged from prior 13 passes:
+  reflective recalls write-only (recalls=0); ideation `--hybrid` query returns only
+  stale kernel-build observations already attributed; `ctrace query --since 12h`
+  empty; `pevent list` empty. Today's journal (06-09) is the self-review docket only,
+  every item already mapped to an existing vision: pacman 101 BLOCKED=tide;
+  ctrace-sessionend-flake=scribe/mend; agentns-session-zeros=assay; warden inert
+  =warden; agorabus post-boot peer-drop / wm-* not re-announcing = in-flight BLOCKED
+  PRD #140 agorabus-client-reconnect (non-ff rebase needed), not new ideation.
+  Queue unchanged at 134 PRDs / 59 visions. Per fallow discipline: drafting =
+  duplication; not re-asking inward-vs-outward (dismissed without steer pass ten).
+Notes for /build: nothing new inward. Highest-leverage unblocks unchanged: land
+  tide-survey, the scribe/mend re-wire fleet, the fallow fleet (fingerprint->check->
+  dream-wire). Actionable: PRD #140 agorabus-client-reconnect closes the recurring
+  post-boot peer-drop docket item (journal 06-09 names it explicitly).
+Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
+  companion / kin) and still awaits an explicit user steer — not given this pass.
