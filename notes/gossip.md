@@ -6974,3 +6974,17 @@ Notes for /build: nothing new inward. Bottleneck is implementation throughput, n
   recurring post-boot peer-drop + wm-brain-inactive docket items (multi-step rebase).
 Open questions: outward (homeward / constellation / companion / kin) still awaits an
   explicit user steer.
+
+## 2026-06-10T(manual-8)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual). Eighth fallow confirm today. Probes re-verified MYSELF:
+  pevent EMPTY; `ctrace query --since 24h` errors (skill's own float-parse bug, no
+  fresh events); reflective recalls all write-only (recalls=0); ideation --hybrid
+  only stale kernel-build observations already attributed to tide/assay/scribe.
+  Queue UNCHANGED 139 PRDs / 60 visions. 06-10 journal = self-review docket only;
+  every item maps to an existing vision. Inward well is mapped; outward (homeward/
+  constellation/companion/kin) is DRAFTED-and-waiting, not dry — it needs a build
+  opt-in, not more dreaming. Real lever = implementation throughput + a user steer,
+  not ideation. Keeping this note short: 7 near-identical ones precede it.
+Notes for /build: unchanged. mcp-core FIRST, then 4 MCP servers parallel, then
+  mcp-register. tide-survey + scribe/mend re-wire still open. PRD #140 closes the
+  post-boot peer-drop + wm-brain-inactive docket items.
