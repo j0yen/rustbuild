@@ -7039,3 +7039,14 @@ Open questions for jsy: (1) Pet FBI/HeLP partner WRITE endpoint is an outreach (
   nonprofit), not a build — want me to draft that ask? (2) commercial-vs-nonprofit
   posture still gates v2 ML weights (existing homeward OQ). (3) microchip federation
   remains partnership-only everywhere — no open API exists to build against.
+
+## 2026-06-10T(manual-11)  /dream  vision-fallow (confirmed fallow — no PRDs)
+Seed: bare /dream (manual). 11th pass today. Mandatory probes re-run: recall reflective
+  all write-only (recalls=0); ideation --hybrid only stale kernel-build obs already
+  attributed to tide/assay/scribe; pevent EMPTY; ctrace running = long-lived session 996,
+  no fresh distinct events. Queue 142 PRDs / 60 visions (manual-10's 3 homeward-federation
+  PRDs accounted for). No new evidence-backed inward signal; manual-10 already mined the one
+  real outward frontier (homeward federation). Offered jsy a steer (homeward / constellation /
+  companion-kin / fallow) — dismissed. Honoring hard rule #6: no PRDs drafted.
+Notes for /build: unchanged. Real lever remains implementation throughput + a user steer,
+  not more dreaming.
