@@ -1,8 +1,10 @@
 # PRD: abide-digest-quiet — acked findings go quiet, never invisible
 
-Status: Draft v0.1
+Status: shipped
 build_target: rust-extend
 build_into: /home/jsy/wintermute/docket
+output_repo_path: /home/jsy/wintermute/docket
+output_repo_url: https://github.com/j0yen/docket
 Vision: visions/abide.md
 
 ## TL;DR
