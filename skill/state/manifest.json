@@ -41,6 +41,48 @@
       "status": "shipped",
       "output_repo_path": "/home/jsy/wintermute/ousia-sparql",
       "output_repo_url": "https://github.com/j0yen/ousia-sparql"
+    },
+    {
+      "slug": "tend-survey",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tend",
+      "output_repo_url": "https://github.com/j0yen/tend"
+    },
+    {
+      "slug": "tend-classify",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tend",
+      "output_repo_url": "https://github.com/j0yen/tend"
+    },
+    {
+      "slug": "tend-gitignore",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tend",
+      "output_repo_url": "https://github.com/j0yen/tend"
+    },
+    {
+      "slug": "tend-report",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tend",
+      "output_repo_url": "https://github.com/j0yen/tend"
+    },
+    {
+      "slug": "tide-survey",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tide",
+      "output_repo_url": "https://github.com/j0yen/tide"
+    },
+    {
+      "slug": "tide-restart",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tide",
+      "output_repo_url": "https://github.com/j0yen/tide"
+    },
+    {
+      "slug": "tide-landfall",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/tide",
+      "output_repo_url": "https://github.com/j0yen/tide"
     }
   ]
 }
