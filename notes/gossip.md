@@ -7050,3 +7050,39 @@ Seed: bare /dream (manual). 11th pass today. Mandatory probes re-run: recall ref
   companion-kin / fallow) — dismissed. Honoring hard rule #6: no PRDs drafted.
 Notes for /build: unchanged. Real lever remains implementation throughput + a user steer,
   not more dreaming.
+
+## 2026-06-10T(manual-12)  /dream  vision-fallow (confirmed fallow — no PRDs)
+Seed: bare /dream (manual). 12th pass today. Probes re-run LIVE: recall reflective all
+  write-only (recalls=0); ideation --hybrid only stale kernel-build obs already attributed
+  to tide/assay/scribe; pevent EMPTY; journal 06-10 = self-review docket, every item maps
+  to an existing vision. Queue 142 PRDs on disk / 60 visions. Offered jsy a steer
+  (fallow / homeward / constellation / build-hygiene) — dismissed. Hard rule #6: no PRDs.
+NEW observation for /build (genuinely new, not in prior fallow notes): build manifest has
+  status-vocabulary DRIFT — completed work is fragmented across 8 strings (completed=9,
+  complete=5, verified-complete=4, verified-completed=4, verified_completed=1, done=1,
+  plus archived=9). ~28 finished PRDs sit un-archived likely because the archive gate
+  only matches one canonical status. Suggest /build normalize status vocab + re-run the
+  archive gate over the completed-ish buckets. This is /build hygiene, not a /dream vision.
+Notes for /build: real lever remains implementation throughput + a user steer, not more
+  dreaming. mcp-core-first ordering from earlier notes still stands.
+Open questions: outward direction still awaits explicit user steer.
+
+## 2026-06-10T(manual-13)  /dream  vision-fallow (confirmed fallow — no PRDs)
+Seed: bare /dream (manual). 13th pass today. All mandatory probes re-run LIVE and negative:
+  recall reflective top-20 all write-only (recalls=0); ideation --hybrid returns only stale
+  kernel-build self-review obs already attributed (tide/assay/scribe/kernel-pkg); pevent
+  EMPTY; ctrace query --since 24h EMPTY (one long-lived session 996, no fresh distinct
+  events); recall procedural/project = 4 stale entries; semantic = none. Journal 06-10 is
+  the self-review docket — every Pending/Notable item maps to an EXISTING vision or an
+  escalated infra goal (pacman reboot window, ctrace-sessionend-flake, agentns-zeros,
+  memlog activation, warden inert), none of which is a new outward direction.
+  Queue unchanged: ~142 PRDs on disk / 60 visions. manual-10's 3 homeward-federation PRDs
+  remain the last evidence-backed frontier mined today.
+Carry-forward for /build (still un-acted, from manual-12, NOT new): manifest status-vocab
+  DRIFT — finished work fragmented across 8 strings (completed/complete/verified-complete/
+  verified-completed/verified_completed/done + archived); ~28 finished PRDs likely un-archived
+  because the archive gate matches one canonical status. Normalize vocab + re-run archive gate.
+Notes for /build: real lever remains implementation throughput, manifest hygiene, and an
+  explicit user steer — not more dreaming. mcp-core-first ordering still stands.
+Open questions: outward direction still awaits an explicit user steer (homeward / constellation
+  / kin / companion all drafted-and-waiting; jsy dismissed the steer prompt in manual-11/12).
