@@ -6680,3 +6680,31 @@ Notes for /build: nothing new inward. Bottleneck remains implementation throughp
   short-circuit before spending a Claude invocation re-deriving saturation.
 Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
   companion / kin) and still awaits an explicit user steer — not given this pass.
+2026-06-09T23:02:53Z loom-serial-fallback: SERIAL MODE for alpha (streak=2, pathset=src/main.rs) — fanning at most 1 branch/tick until backlog drains
+2026-06-09T23:02:53Z loom-serial-fallback: SERIAL MODE for gamma (streak=2, pathset=src/foo.rs) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-09T(first-pass)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (no steer). First pass of 2026-06-09; 13th consecutive
+  fallow-confirming pass spanning 06-08→06-09.
+  Walked Phases 0-1. Fresh-signal probes EMPTY: `ctrace query --since 12h` empty,
+  `pevent list` empty, all reflective recalls write-only (recalls=0), ideation
+  recalls are stale kernel-build observations already attributed. Today's journal
+  (06-09) carries only the self-review docket, every item already mapped to an
+  existing vision: pacman 101 BLOCKED=tide; ctrace-sessionend-flake runs_seen:6
+  =scribe/mend; agentns-session-zeros runs_seen:9=assay; memlog activation
+  =continuity; warden inert=warden; agorabus peers-drop-on-reboot / wm-* not
+  re-announcing = already the in-flight BLOCKED PRD #140 agorabus-client-reconnect
+  (non-ff rebase needed), not new ideation. Today's only shipped work
+  (bon-mot-core, herald-market) extends the already-fully-drafted roundtable vision.
+  Queue now 134 PRDs / 59 visions.
+  Per the fallow discipline: drafting again = duplication. Not re-asking the
+  inward-vs-outward question (pass ten surfaced it via AskUserQuestion, dismissed
+  without steer; re-asking is noise). Honest default = confirm fallow.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Highest-leverage unblocks unchanged: land tide-survey, the scribe/mend
+  re-wire fleet, and the fallow fleet itself (fingerprint -> check -> dream-wire) so
+  future passes short-circuit on a fallow field before spending a Claude invocation.
+  Also actionable: PRD #140 agorabus-client-reconnect would close the recurring
+  post-reboot peer-drop docket item (journal 06-09 names it explicitly).
+Open questions: only genuinely-new work left is OUTWARD (homeward / constellation /
+  companion / kin) and still awaits an explicit user steer — not given this pass.
