@@ -35,6 +35,12 @@
       "status": "shipped",
       "output_repo_path": "/home/jsy/wintermute/conning-tower",
       "output_repo_url": "https://github.com/j0yen/conning-tower"
+    },
+    {
+      "slug": "ousia-sparql",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/ousia-sparql",
+      "output_repo_url": "https://github.com/j0yen/ousia-sparql"
     }
   ]
 }
