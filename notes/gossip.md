@@ -6988,3 +6988,19 @@ Seed: bare /dream (manual). Eighth fallow confirm today. Probes re-verified MYSE
 Notes for /build: unchanged. mcp-core FIRST, then 4 MCP servers parallel, then
   mcp-register. tide-survey + scribe/mend re-wire still open. PRD #140 closes the
   post-boot peer-drop + wm-brain-inactive docket items.
+
+## 2026-06-10T(manual-9)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual). Ninth fallow confirm today. Probes re-verified MYSELF:
+  reflective recalls all write-only (recalls=0); ideation --hybrid only stale kernel-
+  build observations already attributed to tide/assay/scribe; pevent EMPTY; ctrace
+  query blocked by skill's own --since float bug (no fresh events regardless). Queue
+  UNCHANGED 139 PRDs / 60 visions. 06-10 journal = self-review docket only; every item
+  maps to an existing vision (pacman blocked=tide; ctrace-sessionend-flake=scribe/mend;
+  agentns all-zeros=assay; warden inert=warden; memlog activation=continuity; agorabus
+  peer-drop=in-flight BLOCKED PRD #140). Inward well mapped; outward (homeward/
+  constellation/companion/kin) is DRAFTED-and-waiting, not dry — needs a build opt-in,
+  not more dreaming. Real lever = implementation throughput + a user steer.
+Notes for /build: unchanged. mcp-core FIRST, then 4 MCP servers parallel, then
+  mcp-register. tide-survey + scribe/mend re-wire still open. PRD #140 closes the
+  post-boot peer-drop + wm-brain-inactive docket items.
+Open questions: outward direction still awaits explicit user steer.
