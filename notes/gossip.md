@@ -6895,3 +6895,26 @@ Notes for /build: nothing new inward. Bottleneck remains implementation throughp
 Open questions: outward (homeward / constellation / companion / kin) still awaits an
   explicit user steer. This is a manual pass with the user present — offered the
   steer in-session rather than manufacturing duplicate inward PRDs.
+
+## 2026-06-10T(manual-4)  /dream  vision-fallow (confirmed fallow — no PRDs drafted)
+Seed: bare /dream (manual user invocation, no steer). Third consecutive fallow
+  confirm today (after conduit/MCP fleet 06-10T(manual), manual-2, manual-3).
+  Walked Phases 0-1. Fresh-signal probes EMPTY: `pevent list` empty; `ctrace query
+  --since 24h` empty; 20 reflective recalls all write-only (recalls=0); ideation
+  `--hybrid` returns only stale kernel-build observations already attributed to
+  tide/assay/scribe. Queue UNCHANGED at 139 PRDs / 60 visions since manual-2/3.
+  Journal 06-10 = self-review docket only; every item maps to an existing vision
+  (pacman blocked=tide; ctrace-sessionend-flake=scribe/mend; agentns all-zeros=
+  assay; warden inert=warden; agorabus post-boot peer-drop=in-flight BLOCKED PRD
+  #140 agorabus-client-reconnect). Per fallow discipline: drafting = duplication.
+  Offered the outward steer in-session via AskUserQuestion (homeward / constellation
+  / companion-kin / stay-fallow); user declined to answer → treated as steer to stay
+  fallow. NOT manufacturing duplicate inward PRDs.
+Notes for /build: nothing new inward. Bottleneck is implementation throughput, not
+  ideation. Build mcp-core FIRST (conduit keystone, no external deps beyond serde),
+  then the four MCP servers in parallel, then mcp-register. Other unblocks unchanged:
+  tide-survey, the scribe/mend re-wire fleet. Actionable now: PRD #140
+  agorabus-client-reconnect closes the recurring post-boot peer-drop + wm-brain-
+  inactive docket items (multi-step rebase, not a single tick).
+Open questions: outward (homeward / constellation / companion / kin) still awaits an
+  explicit user steer — offered + declined this pass.
