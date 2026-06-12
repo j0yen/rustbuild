@@ -7370,3 +7370,17 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
   last_productive 15:22Z (fingerprint unchanged b3:e187016f). Rested, no PRDs (Hard Rules
   6+8). Steer remains in prose: one word unblocks a real fleet — homeward / constellation /
   companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=14 threshold crossed. Interactive manual invocation; fired the
+  outward-steer modal once (deliberate /dream warrants one ask), user dismissed (13th today).
+  Field saturated since last_productive 15:22Z (fingerprint unchanged b3:e187016f). Rested,
+  no PRDs (Hard Rules 6+8). Steer remains in prose: one word unblocks a real fleet —
+  homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, modal NOT re-fired)
+/dream fallow — streak=15 threshold crossed. Interactive manual /dream. Did NOT fire the
+  outward-steer modal — the identical 4-option modal was dismissed 13× today across sessions.
+  A 14th ask isn't respect, it's noise. Field saturated since last_productive 15:22Z
+  (fingerprint unchanged b3:e187016f). Rested, no PRDs (Hard Rules 6+8). The steer is one
+  word in prose: homeward / constellation / companion-kin / a topic — any unblocks a real fleet.
