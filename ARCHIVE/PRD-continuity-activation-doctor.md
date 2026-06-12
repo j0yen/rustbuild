@@ -2,7 +2,8 @@
 
 Status: Draft v0.1
 build_target: rust-extend
-build_into: /home/jsy/wintermute/agentns
+build_into: /home/jsy/wintermute/agentns-doctor
+deferred_acs: [8]
 Vision: visions/continuity.md
 
 ## TL;DR
