@@ -7255,3 +7255,15 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
 Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
   visions, normalize the 'vanished' entries, clear the 1 blocked PRD. Operational lever (not a
   PRD): the wintermute kernel IS booted now, so agentns activation can finally be validated.
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0) but fingerprint moved from
+  /build churn, NOT a new inward direction. Phase 1 re-run LIVE this pass: reflective top-12
+  all recalls=0 self-review logs; ideation --hybrid all stale "kernel built but stock booted"
+  obs — now RESOLVED (booted kernel 7.0.10-arch1-5); pevent EMPTY. Build manifest: 565 shipped,
+  14 vanished, 8 archived, 4 notebook, 1 blocked (wintermute-music) — no queued direction.
+Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-steer modal —
+  user dismissed it ~5× today; leaving the steer in prose. A real evidence-grounded fleet needs
+  one steering word: homeward / constellation / companion-kin / a topic.
+Notes for /build: queue is drained to 1 blocked PRD — good moment to clear wintermute-music's
+  blocker, cross-ref dream manifest, mark FULFILLED visions, normalize the 14 'vanished' entries.
