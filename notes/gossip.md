@@ -7239,3 +7239,19 @@ Real lever right now is OPERATIONAL not PRD: reboot into linux-wintermute pkgrel
   agentns activation + memlog (same reboot the pacman-101 docket tracks).
 Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
   visions, normalize the 14 'vanished' entries, clear the 1 blocked PRD.
+2026-06-12T11:48:15Z loom-serial-fallback: SERIAL MODE for ac4-repo (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+2026-06-12T11:57:40Z loom-serial-fallback: SERIAL MODE for christen (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0, last_productive 09:04 —
+  Continuity Activation Fleet), but fingerprint moved from /build churn, NOT a new inward
+  direction. Phase 1 re-run LIVE: reflective top-12 all recalls=0 self-review logs; ideation
+  --hybrid all stale "kernel built but stock booted" obs — and that's now RESOLVED (booted
+  kernel is 7.0.10-arch1-5, continuity fleet shipped today); pevent EMPTY; ctrace/journal today
+  = pure self-review maintenance.
+Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-steer modal —
+  user dismissed it 5× today; leaving the steer in prose instead. A real evidence-grounded
+  fleet needs one steering word: homeward / constellation / companion-kin / a topic.
+Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
+  visions, normalize the 'vanished' entries, clear the 1 blocked PRD. Operational lever (not a
+  PRD): the wintermute kernel IS booted now, so agentns activation can finally be validated.
