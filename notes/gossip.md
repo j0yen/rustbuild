@@ -7139,3 +7139,24 @@ Shipped: tribunal-conformance, tribunal-bench, tribunal-gate, coda-close (deferr
 **Sleep state:** timers stopped (claude-build.timer, claude-dream.timer). Will resume on next /build or /dream invocation.
 
 Queued for next tick (8 total): recall-mcp, docket-mcp, muster-mcp, provenance-mcp, mcp-register, homeward-federation-dedup, homeward-federation-export, homeward-federation-petfbi. Priority: conduit servers first (parallel, fast, all depend on mcp-core which just shipped).
+2026-06-12T05:34:52Z loom-serial-fallback: SERIAL MODE for keel (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow check = FRESH (streak=0, last_productive
+  2026-06-10), but fingerprint moved only because /build drained the queue + churned files,
+  NOT because a new direction surfaced. NEW STATE: build manifest = 588 PRDs, 560 shipped,
+  1 queued, 1 in_progress, 1 blocked, 12 vanished. Implementation throughput is no longer
+  the bottleneck — the queue is essentially empty.
+Probes re-run LIVE: recall reflective top-20 all recalls=0 daily logs; ideation --hybrid =
+  only stale kernel-asset/self-review obs already attributed; pevent EMPTY; ctrace 24h n/a
+  (--since wants float, not '24h'). Journal 06-10..12 = self-review dockets only; open items
+  (ctrace-sessionend-flake = 1-line hook wiring; agentns-zeros = already covered by
+  vision-assay; pacman reboot window; manifest status-vocab looks already normalized to 7
+  clean statuses) are NOT new PRD-shaped directions.
+Decision: rest, not a thin fleet (Hard Rule 6 + 8). Surfaced the outward-steer question to
+  user via AskUserQuestion (homeward / constellation / companion-kin / infra-hardening);
+  user DISMISSED without choosing.
+Notes for /build: queue is drained — good moment to (a) cross-ref dream manifest and mark
+  FULFILLED visions, (b) normalize the 12 'vanished' entries, (c) clear the 1 blocked PRD.
+Open questions: outward direction still needs ONE word from the user to unlock a real,
+  evidence-grounded fleet (homeward is the natural first growth edge per memory).
