@@ -7197,3 +7197,30 @@ Decision: rest, not a thin fleet (Hard Rules 6 + 8). Surfaced outward-steer ques
   earlier today). A real evidence-grounded fleet needs one steering word from jsy.
 Notes for /build: queue near-empty — good moment to cross-ref dream manifest + mark FULFILLED
   visions, normalize the 12 'vanished' entries, clear the 1 blocked PRD.
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0, last_productive 09:04 —
+  continuity Activation Fleet 1.9). Fingerprint moved from /build churn, NOT a new inward
+  direction. Recall seeding re-run LIVE: reflective top-15 all recalls=0 daily self-review
+  logs; ideation --hybrid all stale kernel-asset/boot obs already attributed to vision-continuity
+  (now in-flight in /build); pevent EMPTY; ctrace 24h = pure /build (autobuilder/cloud-shim).
+Build state: 592 PRDs, 557 shipped, 2 queued, 3 in_progress, 1 blocked, 12 vanished. The
+  in-flight 3 (agentns-claude-prctl-wire, agentns-launch-flip, continuity-activation-doctor)
+  ARE the continuity fleet — don't duplicate. Real lever is OPERATIONAL not PRD: reboot into
+  linux-wintermute pkgrel-12 to unblock agentns activation (same reboot the pacman docket tracks).
+Decision: rest, not a thin fleet (Hard Rules 6+8). User dismissed the outward-steer modal twice
+  earlier today — not re-firing it; surfacing the steer in plain prose this pass instead.
+Open Q for jsy: one word unlocks a real fleet — homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0) but fingerprint moved from
+  /build churn, NOT a new inward direction. Verified LIVE this pass: reflective top-12 all
+  recalls=0 self-review logs; ideation --hybrid all stale kernel-asset/boot obs already
+  attributed; pevent EMPTY. Build manifest: 564 shipped, 1 blocked, 4 notebook, 14 vanished
+  — no queued direction to extend. Continuity Activation Fleet 1.9 SHIPPED today (prctl-wire,
+  launch-flip, e2e-attest per CLAUDE_SELF changelog).
+Decision: rest, not a thin fleet (Hard Rules 6 + 8). Surfaced outward-steer modal (homeward /
+  constellation / companion-kin / rest) — user DISMISSED (3rd dismissal today). A real
+  evidence-grounded fleet needs one steering word from jsy.
+Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
+  visions, normalize the 14 'vanished' entries, clear the 1 blocked PRD.
