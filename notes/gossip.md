@@ -7356,3 +7356,10 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
   respect. Field saturated since last_productive 15:22Z (fingerprint unchanged b3:e187016f).
   Rested, no PRDs (Hard Rules 6+8). Steer remains in prose: one word unblocks a real fleet —
   homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=11 threshold crossed. Interactive manual invocation; fired the
+  outward-steer modal once (deliberate /dream warranted one ask), user dismissed. Field
+  saturated since last_productive 15:22Z (fingerprint unchanged b3:e187016f). Rested, no PRDs
+  (Hard Rules 6+8). Steer remains in prose: one word unblocks a real fleet — homeward /
+  constellation / companion-kin / a topic.
