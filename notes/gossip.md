@@ -7329,3 +7329,9 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
 /dream fallow — streak=6 threshold crossed; fired outward-steer modal (interactive), user
   dismissed again (7th today). Rested, no PRDs. Field saturated since last_productive 15:22.
   A real fleet still needs one steering word: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=7 threshold crossed; fired outward-steer modal (interactive, fresh
+  session claude-331034), user dismissed again (8th today). Rested, no PRDs. Field saturated
+  since last_productive 15:22. A real fleet still needs one steering word: homeward /
+  constellation / companion-kin / a topic.
