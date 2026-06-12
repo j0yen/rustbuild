@@ -141,6 +141,40 @@ Order: secrets FIRST (Headscale's keys + mesh enrollment + the bus creds all liv
 it) → headscale (consumes secrets, refines mesh) ‖ voice-role (independent; refines
 provision). All three `build_target: shell`, siblings of the base constellation set.
 
+## Day-2 operations layer (added 2026-06-12 by /dream — the live-fleet layer)
+
+The base + hardening fleets stand up, connect, secure, and coordinate nodes —
+but **every acceptance test is an offline structural gate** (`tests/*-check.sh`
+assert config shape without a live second node). The fleet has never been
+*operated*. These four close that gap: they make a real running fleet
+**observable**, prove a node **actually joined** end-to-end, and keep the fleet
+**coherent when the hub blinks** — the day-2 concerns that only appear once the
+machinery is real. Each is grounded in a concrete seam found live 2026-06-12:
+
+- **constellation-status** — `dispatch.rs` runs a capability heartbeat that
+  samples local hardware and writes a NATS KV node registry — but **nothing reads
+  it for a human**. `mesh status.sh` only pings MagicDNS names. There is no single
+  view of *which nodes are up, their role, load, heartbeat-age, and queue depth*.
+  A `wm-busbridge status` reader turns the live KV into one fleet dashboard.
+- **constellation-join-check** — every test under `constellation/tests/` is an
+  offline `*-role-check.sh` structural gate. None of them prove a freshly
+  provisioned node **actually joined**: mesh reachable + a `wm.fleet.*` event
+  round-tripped through the hub + secrets decrypt + brain route live. This is the
+  first end-to-end *live* acceptance — the test a new node runs to earn membership.
+- **constellation-hub-failover** — `cloud-hub.md` says the on-hub ollama is the
+  "degraded path only," but **nothing triggers the degrade**. When the cloud hub
+  (NATS + API-brain reach) goes unreachable, the laptop should detect it, emit
+  `wm.fleet.hub.down`, fall back to local-only, buffer fleet events, and auto-rejoin
+  + flush on `wm.fleet.hub.up`. The brain ladder has tiers but no hub-liveness watcher.
+- **constellation-fleet-doctor** — there are seven separate `*-check.sh` scripts and
+  no single "is the fleet healthy, and if not, which layer broke" entrypoint. A
+  `constellation doctor` composes mesh + bus + secrets + brain + dispatch probes and
+  **localizes the broken seam** (the assay/quicken ethos applied to the fleet).
+
+Order: status + fleet-doctor are independent read-only views (build any time);
+join-check consumes status's KV read; hub-failover is independent (watcher daemon).
+All slot onto shipped base components — no new base work required.
+
 ## Components (one bullet per PRD)
 
 - **constellation-provision** — Ansible control plane + local pacman repo for the
