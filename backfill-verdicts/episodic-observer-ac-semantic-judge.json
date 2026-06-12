@@ -1,0 +1,91 @@
+{
+  "schema": "autobuilder.ac_semantic_judge.v1",
+  "prd_source": "/tmp/episodic-observer-prd.md",
+  "crate_root": "/home/jsy/wintermute/episodic-observer",
+  "model": "claude-sonnet-4-6",
+  "prompt_version": "v0.1",
+  "generated_at": "2026-06-12T08:41:29Z",
+  "passed": true,
+  "verdicts": [
+    {
+      "ac_id": "AC1",
+      "test_path": "tests/acceptance_ac1.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.95,
+      "reasoning": "The test directly verifies the AC's stated properties: it runs the `episode observe <jsonl-path>` subcommand with a fixture JSONL file, asserts exit code 0, and asserts stdout is empty — exactly matching the AC's requirements of no panic, exit 0, and no stdout output when there are no detector matches."
+    },
+    {
+      "ac_id": "AC2",
+      "test_path": "tests/acceptance_ac2.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.9,
+      "reasoning": "The test verifies the AC's structural requirements for `--dry-run`: it checks that stdout is a JSON array with candidates containing `{detector, subject, body, evidence: [{session, turn, excerpt}]}`. However, it does not test the second part of the AC (that without `--dry-run` the CLI emits nothing on stdout), which is a gap."
+    },
+    {
+      "ac_id": "AC3",
+      "test_path": "tests/acceptance_ac3.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.97,
+      "reasoning": "The test directly verifies all properties stated in the AC: it runs `episode detectors`, checks exit code 0, parses stdout line-by-line, and asserts all three required detector names (`revert`, `user-redirect`, `retry-with-tweak`) are present as individual lines."
+    },
+    {
+      "ac_id": "AC4",
+      "test_path": "tests/acceptance_ac4.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The test verifies the excerpt content and that turn index exists, and checks the negative case, which aligns with the AC. However, it doesn't assert `detector: \"user-redirect\"` at the top-level candidate level (only searches by it), doesn't verify the candidate has a `detector` field equal to `\"user-redirect\"` explicitly, and doesn't test all required redirect keywords (only `no`) or the '2 turns' window constraint."
+    },
+    {
+      "ac_id": "AC5",
+      "test_path": "tests/acceptance_ac5.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The test verifies the detector name is 'revert', that evidence has 2 entries, and that the path '/foo.rs' appears in both evidence and body, but it does not assert that both turn indices are present in the evidence (the AC specifies 'both turn indices in evidence'), nor does it verify the within-5-turns constraint is specifically enforced."
+    },
+    {
+      "ac_id": "AC6",
+      "test_path": "tests/acceptance_ac6.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The test verifies the detector name, presence of two evidence excerpts, and that both commands appear in the excerpts, which aligns with the AC's requirements. However, it does not explicitly verify the '3 turns' constraint (the turn gap is tested implicitly with for_turn values 1 and 3), nor does it verify the Jaccard similarity threshold requirement (≥0.5) or that the first exit code is non-zero and second is zero as distinct assertions — these are embedded in the fixture data rather than tested as invariants."
+    },
+    {
+      "ac_id": "AC7",
+      "test_path": "tests/acceptance_ac7.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The test verifies that --max-memories 2 caps output at 2 candidates (surplus dropped silently) and that exit code is 0 implicitly (no status check). However, it doesn't explicitly verify exit code 0 on cap-reached, doesn't test the default cap of 5 being enforced (only that 3 < 5 pass through), and the fixture only has 3 candidates so the cap-reached-stops-emitting scenario is only partially exercised."
+    },
+    {
+      "ac_id": "AC8",
+      "test_path": "tests/acceptance_ac8.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.9,
+      "reasoning": "The test directly verifies the AC's core invariant: that the `subject` field equals `project:<basename of cwd>` when run from a named project directory. It creates a directory named 'the-test-project', runs the binary from that directory, and asserts the emitted candidate's subject is 'project:the-test-project'. The fallback case (`project:unknown`) is not tested, making coverage partial, but the primary behavior is correctly verified."
+    },
+    {
+      "ac_id": "AC9",
+      "test_path": "tests/acceptance_ac9.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.82,
+      "reasoning": "The test directly verifies the AC's described behaviors: missing file path yields exit code 2 with non-empty stderr diagnostic, malformed CLI args (unknown subcommand) yield exit code 2, and malformed JSONL mid-stream results in continued processing with exit code 0. These assertions check observable properties matching the AC's invariants rather than being tautological."
+    },
+    {
+      "ac_id": "AC10",
+      "test_path": "tests/acceptance_ac10.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.82,
+      "reasoning": "The test directly verifies both AC10 properties: byte-identical stdout across two runs (idempotency) and deterministic ordering sorted by detector name. It runs the actual CLI binary twice and compares outputs, then parses the JSON to check the sorted detector name ordering."
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "autobuilder.ac_semantic_judge.v1",
+  "prd_source": "/tmp/agorabus-prd-for-judge.md",
+  "crate_root": "/home/jsy/wintermute/agorabus",
+  "model": "claude-sonnet-4-6",
+  "prompt_version": "v0.1",
+  "generated_at": "2026-06-12T08:39:57Z",
+  "passed": true,
+  "verdicts": [
+    {
+      "ac_id": "AC1",
+      "test_path": "tests/acceptance_ac1.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.9,
+      "reasoning": "The test directly verifies all key AC1 behaviors: socket file existence, socket file mode 0600, parent directory mode 0700, and accepting at least one client connection. These are property checks against the running system, not tautological assertions."
+    },
+    {
+      "ac_id": "AC2",
+      "test_path": "tests/acceptance_ac2.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.95,
+      "reasoning": "The test directly verifies both paths described in the AC: (a) a valid announce message receives {\"ok\":true}, and (b) a non-announce first message (publish op) receives {\"ok\":false,\"error\":\"announce_required\"}. These assertions check observable protocol behavior, not implementation internals."
+    },
+    {
+      "ac_id": "AC3",
+      "test_path": "tests/acceptance_ac3.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.92,
+      "reasoning": "The test directly verifies the AC by (a) checking the library returns a peers array with all required fields (session_id, pid, cwd, intent, last_heartbeat) and (b) running the actual CLI command `agorabus peers --socket <path>` and verifying it returns a JSON array containing the expected peers with session_id fields, matching the AC description precisely."
+    },
+    {
+      "ac_id": "AC4",
+      "test_path": "tests/acceptance_ac4.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.9,
+      "reasoning": "The test directly verifies the AC's described behaviors: it sends a heartbeat message with 'op':'heartbeat' and 'tool' field, checks the daemon acknowledges it and updates peer state (last_tool), then waits past the configured timeout and verifies the peer is pruned from the peers list while the connection is still open (confirming pruning is heartbeat-age-based, not disconnect-based)."
+    },
+    {
+      "ac_id": "AC5",
+      "test_path": "tests/acceptance_ac5.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.92,
+      "reasoning": "The test directly verifies the AC's core properties: a subscriber using prefix 'shared.' receives exactly the two matching publishes ('shared.lock-hint' and 'shared.discovery') and not the non-matching one ('session.x.intent'), with events delivered as discrete JSON objects per line on the subscriber's socket. The assertions check topic prefix filtering, correct topic values, and sender identity."
+    }
+  ]
+}

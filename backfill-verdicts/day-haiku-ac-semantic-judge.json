@@ -1,0 +1,75 @@
+{
+  "schema": "autobuilder.ac_semantic_judge.v1",
+  "prd_source": "/tmp/day-haiku-prd.md",
+  "crate_root": "/home/jsy/wintermute/day-haiku",
+  "model": "claude-sonnet-4-6",
+  "prompt_version": "v0.1",
+  "generated_at": "2026-06-12T08:42:44Z",
+  "passed": true,
+  "verdicts": [
+    {
+      "ac_id": "AC1",
+      "test_path": "tests/ac1_dryrun.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.92,
+      "reasoning": "The test directly verifies the AC's key properties: exit 0 (success), stdout contains the assembled prompt sections (system, few-shot, today block), and no API call is attempted by deliberately removing ANTHROPIC_API_KEY without a mock server. The assertions check observable invariants described in the AC rather than just restating implementation details."
+    },
+    {
+      "ac_id": "AC2",
+      "test_path": "tests/ac2_happy_path.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.85,
+      "reasoning": "The test verifies AC2's key behaviors: reading summary.json, calling the Anthropic API (via mock), and writing content.json with a 3-line haiku schema including line length constraints and required fields. It also tests AC7 (SHA256 hash), going slightly beyond AC2 but fully covering the described invariants rather than being tautological."
+    },
+    {
+      "ac_id": "AC3",
+      "test_path": "tests/ac3_malformed_response.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.88,
+      "reasoning": "The test directly verifies the AC's described behavior: non-zero exit code (specifically 3), no content.json written, and a clear error on stderr naming the violation. This matches the AC's requirement of non-zero exit, no corrupt content.json, and clear error emission."
+    },
+    {
+      "ac_id": "AC4",
+      "test_path": "tests/ac4_reroll.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The test verifies atomic rename (inode preservation) and sequential .rolled-0/.rolled-1 numbering, which goes beyond the AC's stated requirement of simply discarding the cache and making a fresh API call with a new content.json. The AC only requires the cached haiku is discarded and a new content.json is written, while the test also checks implementation details like atomic rename semantics and re_roll_count fields not mentioned in the AC."
+    },
+    {
+      "ac_id": "AC5",
+      "test_path": "tests/ac5_cache_control.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.9,
+      "reasoning": "The test directly verifies the AC's requirement by checking that system blocks and few-shot (assistant) blocks carry `cache_control: {type: ephemeral}`, and that the final user turn (daily summary) is uncached (plain string without cache_control). This matches the AC's described behavior of prompt-caching system and few-shot blocks while leaving the summary uncached."
+    },
+    {
+      "ac_id": "AC6",
+      "test_path": "tests/ac6_missing_key.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.97,
+      "reasoning": "The test directly verifies all three aspects of AC6: exit code 6, no network call (by pointing to unroutable port and verifying it exits before connecting), and no content.json written. It also checks stderr names the env var, which aligns with the AC's intent of immediate exit with a meaningful error."
+    },
+    {
+      "ac_id": "AC8",
+      "test_path": "tests/ac8_override_summary.rs",
+      "behavior_match": "yes",
+      "assertion_kind": "asserts-invariant",
+      "confidence": 0.95,
+      "reasoning": "The test directly verifies the AC by pointing the default summary directory at an empty temp dir (ensuring default lookup would fail), providing an explicit --summary path to a real fixture file, and asserting the run succeeds and produces correct output based on the overridden summary. This validates the invariant described in AC8."
+    },
+    {
+      "ac_id": "AC9",
+      "test_path": "tests/ac9_show.rs",
+      "behavior_match": "partial",
+      "assertion_kind": "mixed",
+      "confidence": 0.72,
+      "reasoning": "The AC says 'show prints the most recently generated content.json to stdout', but the test goes beyond this narrow statement by also testing --rolled and missing-file behaviors. The core AC9 behavior (printing current content.json) is verified in show_prints_current_pretty, making it a partial match since the AC text only describes the basic show case while the test covers additional sub-behaviors."
+    }
+  ]
+}
