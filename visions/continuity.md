@@ -2,7 +2,7 @@
 
 **Authored by:** /dream (Claude Opus 4.7), with jsy
 **Created:** 2026-05-25
-**Updated:** 2026-05-28 (kernel boot validated; Fleet 1.5 lives in `visions/onramp.md`)
+**Updated:** 2026-06-12 (Activation Fleet 1.9 drafted — kernel fix on disk, never booted; see bottom)
 **Status:** active
 **Fleet 1 drafted:** 5 PRDs (kernel→userspace bridge for session continuity)
 **Fleet 1.5:** see `visions/onramp.md` — 4 PRDs for kernel-tier production-readiness (post-install + Claude launch wrap + richer provfs fallback + deferred xattr stamp)
@@ -223,3 +223,48 @@ Draft after Fleet 1 ships ≥3 of 5 components. Bullets only here:
   this explicitly.
 - **User decisions pending:** opt-in per PRD (build_auto:false on all
   five); rename/merge/split decisions in Open Questions above.
+
+## Activation Fleet (Fleet 1.9) — drafted 2026-06-12
+
+**The diagnosis that motivates it.** Fleet 1's components all shipped, but the
+chain is **dead** because of one unbooted kernel and one unfinished launcher.
+Measured live 2026-06-12 on `7.0.10-arch1-5-wintermute`:
+
+- `cat /proc/self/agent_session` → 32 zeros (12th+ consecutive self-review
+  finding; docket `agentns-session-zeros`).
+- The kernel **fix is already on disk**: `pacman -Q linux-wintermute` →
+  `7.0.10.arch1-12`; `/boot/vmlinuz-linux-wintermute` installed 06-12 01:43;
+  `apply-agentns.py` carries the `PR_SET_AGENT_NS` prctl dispatch. But the
+  **running** kernel is pkgrel-**5** → a `prctl(PR_SET_AGENT_NS)` probe returns
+  EINVAL today. **Reboot pending**, not a code gap.
+- `agentns-claude` **still synthesizes** — its source's `kernel_has_agent_ns()`
+  branch prints "iter-2 has not wired CLONE_NEWAGENT" and returns a fake id; the
+  prctl create call was never written.
+- `~/.zshrc`'s `claude()` passes `--no-unshare` and the launcher isn't even
+  installed in `~/.local/bin`, so every session runs unwrapped regardless.
+
+So Fleet 1 is a built engine with no ignition. This fleet is the ignition.
+
+| # | PRD | Target | Builds |
+|---|---|---|---|
+| 1 | `PRD-agentns-claude-prctl-wire.md` | rust-extend (agentns-claude) | iter-3: real `prctl(PR_SET_AGENT_NS)` + intent tag + read-back of the kernel's own id; deletes the `pending-unshare` synth stub; graceful EINVAL→synth fallback. **The load-bearing new code.** |
+| 2 | `PRD-agentns-launch-flip.md` | mixed (agentns-claude) | install + `setcap cap_sys_admin+ep`; drop `--no-unshare` from the launch path; headless (`/build`,`/dream`) parity. Successor to the futile archived `claude-agentns-wrap`. |
+| 3 | `PRD-continuity-activation-doctor.md` | rust-extend (agentns) | `agentns-doctor activation`: one go/no-go over running-vs-installed-pkgrel + prctl probe + launcher wiring + downstream stamp; names the blocking layer + remedy; SessionStart banner. Closes the 12-run "cause unknown" docket. The scoreboard — build early. |
+| 4 | `PRD-continuity-e2e-attest.md` | rust-cli (continuity-attest) | capstone: drive a real wrapped session through all four signals, assert they agree on one id; writes a durable receipt. Flips `session-postmortem` AC9 and this vision's end-state 1–5 from drafted to **verified**. |
+
+**Order:** 1 → 2 → (reboot into pkgrel ≥ 12) → 4. #3 develops in parallel (it
+only reads the others' artifacts) and is the observable scoreboard for the rest.
+
+**Boot gating:** every PRD's non-live ACs build now against the pre-reboot
+pkgrel-5 kernel (the EINVAL path is deterministic); only the `[boot]` ACs
+(prctl-wire AC7, launch-flip AC6, activation-doctor AC8, e2e-attest AC8) gate on
+the reboot the pacman docket already tracks. When e2e-attest AC8 passes, mark
+this vision's end-state "verified <date>" and resolve `agentns-session-zeros`
+with a link to the receipt.
+
+**Relationship to `onramp` + `assay`:** `assay-agentns` proved *why* unshare
+fails (CLONE_VM collision); `PRD-agentns-clone-flag-fix` shipped the kernel
+prctl fix; `onramp`'s `claude-agentns-wrap` is futile (unshare-based) and is
+**superseded** by this fleet's #2. This fleet is the userspace + activation last
+mile that makes the proven-and-built kernel surface actually reach a live
+session.

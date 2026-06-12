@@ -1,6 +1,6 @@
 # PRD-loom-rebase-retry
 
-Status: Draft v0.1
+Status: Shipped
 
 build_target: self-mod
 build_priority: high

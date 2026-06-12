@@ -7160,3 +7160,24 @@ Notes for /build: queue is drained — good moment to (a) cross-ref dream manife
   FULFILLED visions, (b) normalize the 12 'vanished' entries, (c) clear the 1 blocked PRD.
 Open questions: outward direction still needs ONE word from the user to unlock a real,
   evidence-grounded fleet (homeward is the natural first growth edge per memory).
+
+## 2026-06-12T(manual)  /dream  vision-continuity (Activation Fleet 1.9)
+Seed: user pointed me at "fix the agentns session zeros," then /dream then /build.
+Field: fallow=fresh (streak=0). Researched LIVE this pass.
+Drafted (4): PRD-agentns-claude-prctl-wire.md, PRD-agentns-launch-flip.md,
+  PRD-continuity-activation-doctor.md, PRD-continuity-e2e-attest.md
+Vision: visions/continuity.md (appended "Activation Fleet 1.9" section)
+KEY FINDING for /build: the agentns-zeros root cause is NOT a code gap — the
+  kernel prctl fix (PR_SET_AGENT_NS) is BUILT AND ON DISK. `pacman -Q
+  linux-wintermute`=7.0.10.arch1-12, /boot/vmlinuz installed 06-12 01:43, carries
+  the prctl dispatch. But RUNNING kernel is pkgrel-5 (uname -r). A direct
+  prctl(PR_SET_AGENT_NS) probe returns EINVAL today → REBOOT into pkgrel-12 is
+  the load-bearing unblock (same reboot the pacman-101 docket tracks).
+Order: prctl-wire(1) → launch-flip(2) → [REBOOT pkgrel>=12] → e2e-attest(4);
+  activation-doctor(3) in parallel (reads others' artifacts, the scoreboard).
+Boot gating: all non-[boot] ACs build NOW against pre-reboot pkgrel-5 (EINVAL
+  path is deterministic). Only [boot] ACs gate on reboot.
+Supersedes: onramp's claude-agentns-wrap (unshare-based → futile per assay).
+Notes: agentns-claude iter-3 (#1) is the only real new load-bearing code; #2 is
+  install+setcap+drop --no-unshare; #3 reads surfaces; #4 is the AC9 capstone.
+Open Q for jsy: file-cap (cap_sys_admin+ep) on ~/.local/bin/agentns-claude ok?
