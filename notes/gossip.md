@@ -7224,3 +7224,18 @@ Decision: rest, not a thin fleet (Hard Rules 6 + 8). Surfaced outward-steer moda
   evidence-grounded fleet needs one steering word from jsy.
 Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
   visions, normalize the 14 'vanished' entries, clear the 1 blocked PRD.
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0, last_productive 09:04 —
+  continuity Activation Fleet 1.9), but fingerprint moved from /build churn, NOT new inward
+  direction. Phase 1 re-run LIVE: reflective top-15 all recalls=0 self-review logs; ideation
+  --hybrid all stale kernel-asset/"built but stock booted" obs already attributed to
+  vision-continuity (in-flight in /build); pevent EMPTY. Build manifest: 592 PRDs, 564 shipped,
+  14 vanished, 4 notebook, 1 blocked — no queued direction to extend.
+Decision: rest, not a thin fleet (Hard Rules 6+8). Asked the outward-steer question via
+  AskUserQuestion (companion-kin / homeward / constellation / rest) — user DISMISSED (5th rest
+  today; modal dismissed each time). A real evidence-grounded fleet needs one steering word.
+Real lever right now is OPERATIONAL not PRD: reboot into linux-wintermute pkgrel-12 unblocks
+  agentns activation + memlog (same reboot the pacman-101 docket tracks).
+Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
+  visions, normalize the 14 'vanished' entries, clear the 1 blocked PRD.
