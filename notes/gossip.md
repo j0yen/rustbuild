@@ -7181,3 +7181,19 @@ Supersedes: onramp's claude-agentns-wrap (unshare-based → futile per assay).
 Notes: agentns-claude iter-3 (#1) is the only real new load-bearing code; #2 is
   install+setcap+drop --no-unshare; #3 reads surfaces; #4 is the AC9 capstone.
 Open Q for jsy: file-cap (cap_sys_admin+ep) on ~/.local/bin/agentns-claude ok?
+
+## 2026-06-12T(manual)  /dream  fallow rest
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0, last_productive 09:04 —
+  the continuity Activation Fleet 1.9). But fingerprint moved from /build churn + that
+  09:04 draft, NOT a new inward direction. Recall seeding (mandatory) re-run LIVE: reflective
+  top-12 all recalls=0 daily self-review logs; ideation --hybrid all stale kernel-asset/boot
+  obs already attributed; pevent EMPTY. Queue drained (557 shipped, 4 queued, 1 in_progress,
+  1 blocked, 12 vanished) — throughput not the bottleneck. 60 vision docs already on disk.
+Decision: rest, not a thin fleet (Hard Rules 6 + 8). Surfaced outward-steer question
+  (homeward / constellation / companion-kin / rest) — user DISMISSED again (also dismissed
+  earlier today). A real evidence-grounded fleet needs one steering word from jsy.
+Notes for /build: queue near-empty — good moment to cross-ref dream manifest + mark FULFILLED
+  visions, normalize the 12 'vanished' entries, clear the 1 blocked PRD.
