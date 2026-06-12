@@ -7292,3 +7292,40 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
   one steering word: homeward / constellation / companion-kin / a topic.
 Notes for /build: queue near-drained — good moment to cross-ref dream manifest, mark FULFILLED
   visions, normalize the 'vanished' entries, clear the 1 blocked PRD (wintermute-music).
+
+## 2026-06-12T(manual)  /dream  rest pass (no PRDs)
+Seed: bare /dream (manual, interactive). fallow=fresh (streak=0) but fingerprint moved from
+  /build churn, NOT a new inward direction. Phase 1 re-run LIVE this pass: reflective top-12 all
+  recalls=0 self-review logs; ideation --hybrid all stale "kernel built but stock booted" obs —
+  RESOLVED (7.0.10-arch1-5 booted, continuity fleet + assay-quicken-bridge shipped today, 127
+  tests green); pevent EMPTY; today's journal pure /build+verify maintenance.
+Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-steer modal —
+  user dismissed it 6×+ today; surfacing the steer in prose. A real evidence-grounded fleet
+  needs one steering word: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-12T(manual)  /dream  fallow rest
+/dream fallow — field unchanged (streak=2); rested
+2026-06-12T16:31:51Z loom-serial-fallback: SERIAL MODE for bon-mot (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=3 threshold crossed; fired outward-steer modal (interactive), user
+  dismissed. Rested, no PRDs. A real fleet still needs one steering word: homeward /
+  constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=4 threshold crossed; fired outward-steer modal (interactive), user
+  dismissed again. Rested, no PRDs. A real fleet still needs one steering word: homeward /
+  constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=5 threshold crossed; fired outward-steer modal (interactive), user
+  dismissed again (6th today). Rested, no PRDs. Field saturated since last_productive 15:22.
+  A real fleet still needs one steering word: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=6 threshold crossed; fired outward-steer modal (interactive), user
+  dismissed again (7th today). Rested, no PRDs. Field saturated since last_productive 15:22.
+  A real fleet still needs one steering word: homeward / constellation / companion-kin / a topic.
