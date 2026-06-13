@@ -8090,3 +8090,60 @@ Open questions (in vision): mic/ALSA produce-side gap on wm-audio (two procs
   can't hold the capture device — separate fd-passing PRD or accept <100ms
   audio gap?); claim_key per daemon (derive vs fleet.toml override); proof
   freshness (hash-bound, drafted).
+
+## 2026-06-13T(manual)  /dream  vision-scion
+Seed: bare /dream (interactive). User dismissed the steer question →
+  made the call from evidence. fallow check = FRESH (streak=0,
+  last_productive 18:33 today). Picked a fresh arc (not changeover/plumb/
+  persona-work/homeward/rollout — all freshly covered).
+Drafted: PRD-scion-verdict.md, PRD-scion-reconcile.md, PRD-scion-truth.md
+Vision: visions/scion.md (NEW)
+Root signal: `adopt scan`'s freshness verdict is FALSE BY CONSTRUCTION.
+  derive_verdict (adopt/src/scan.rs:291) flags installed-stale on
+  `installed_ts < src_commit_ts`. The build pipeline does `cargo install`
+  THEN `git commit`, so a correctly-built binary is written seconds
+  BEFORE the commit it descends from → `its < sts` always true → permanent
+  false "0h stale". Measured live: bon-mot-anagram (13s), bon-mot-epigram
+  (5s), changeover (33s) — none behind, all "stale". The docket has
+  re-parked adopt-scan-stale-binaries (84→16) run after run on this noise,
+  burying any genuinely-behind binary.
+  The fix half-exists: vest-incremental shipped a SourceFingerprint
+  InstallMarker (adopt/src/marker.rs:57,189 — git rev-parse HEAD) that
+  records WHICH COMMIT a binary was built from, but it's consumed ONLY to
+  skip reinstalls in `apply`. `adopt scan`'s verdict never reads it. AND
+  no markers exist yet ($XDG_STATE_HOME/adopt/markers/ is absent, 0 files).
+Order: scion-verdict → scion-reconcile → scion-truth.
+  - scion-verdict (rust-extend adopt): verdict consults the marker —
+    installed-current iff marker fingerprint == committed HEAD; clock
+    comparison demoted to no-marker fallback; adds freshness_basis to JSON.
+    One-function fix; correct the moment any marker exists.
+  - scion-reconcile (rust-extend adopt): NEW `adopt reconcile` mints a
+    marker for every installed-but-unmarked binary that's provably not
+    behind — WITHOUT a rebuild. Load-bearing: without it scion-verdict
+    falls back to the broken clock for all 16 legacy installs. Markers
+    carry origin=reconcile-seed (vs install) for honesty.
+  - scion-truth (rust-extend adopt): reframe `adopt report`'s docket
+    finding on the lineage verdict — count only marker≠HEAD as "behind",
+    split unmarked into adopt-unmarked-installs, auto-resolve at zero.
+Notes for /build:
+  - All three EXTEND ~/wintermute/adopt (no new crate). They'll land in
+    sequence on the same tree (scan.rs/types.rs for verdict; new cli
+    subcommand + marker origin field for reconcile; report.rs for truth).
+    Expect minor sequential merges; build in order.
+  - MUST reuse marker::compute_fingerprint for BOTH the scan-side read and
+    the reconcile-side write — a marker written by one function and read
+    by another will never agree. This is the single most important impl
+    invariant.
+  - derive_verdict is currently `const fn`; scion-verdict makes it a
+    regular fn (marker IO isn't const). Keep the fallback arm byte-identical.
+  - All hermetic: temp git repos + XDG_STATE_HOME override; no live fleet,
+    no network. MSRV 1.85, no let-chains, sigpipe::reset already in main.
+  - Distinct from vest (operational adoption integrity) and plumb (probe
+    epistemics) and changeover (daemon restart) — scion is the freshness
+    *oracle correctness* layer. Shares the marker with vest-incremental;
+    shares hash-proof intent with changeover-autoapply (open Q3 in vision).
+Open questions (in vision): dirty-tree semantics (compare vs committed
+  HEAD, uncommitted out of scope); embedded-in-binary provenance as the
+  eventual rigorous form (build.rs stamp, deferred); whether changeover-
+  autoapply consumes scion's marker or needs a running-daemon binary-hash
+  proof (resolve when autoapply is built).
