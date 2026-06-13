@@ -8205,3 +8205,53 @@ Open questions (in vision): absolute vs relative stuck threshold; whether
   a fixture-confirmed-probe-defect finding should auto-ack (probably not —
   visibility is the point); litmus-as-scripts vs its own crate (start as
   scripts next to docket-bind-selftest.sh).
+
+## 2026-06-13T(manual)  /dream  vision-fixpoint
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0,
+  last_productive 20:05). escalate=false; made the call from evidence.
+Drafted: PRD-fixpoint-cron-reconcile.md, PRD-fixpoint-verify-resolution.md,
+  PRD-fixpoint-dirty-reconcile.md, PRD-fixpoint-converge-ledger.md
+Vision: visions/fixpoint.md (NEW)
+Root signal: scion shipped the lineage-marker machinery (verdict/reconcile/
+  truth, all archived today) but the live fleet is UNCHANGED — `adopt scan`
+  shows clock-fallback:16, zero markers minted. Phase-1 found three measured
+  reasons the cure never reaches the patient + a 4th nobody would notice:
+  (1) adopt-cron.service runs `apply`+`report` but NEVER `reconcile` — so
+      markers are never minted autonomously; apply reinstalls forever
+      (hamster wheel). Verified via `systemctl --user cat adopt-cron.service`.
+  (2) `adopt reconcile` SKIPS dirty working trees (all bon-mot-* skipped in
+      --dry-run); ~30 dirty repos → permanent clock-fallback residue.
+  (3) `adopt verify` lumps all 16 under one `SourceNewer` bucket, hiding the
+      4 genuinely-behind daemons (wm-audio 8d, wm-dialog 7d, wm-tts 6d,
+      wm-reach 2d) among 12 "0d newer" clock-noise installs.
+  (4) Nothing tracks convergence: 84/84(06-11)→16/16(06-13) passed unremarked.
+Order:
+  - fixpoint-cron-reconcile (CONFIG, ship FIRST, independent): add
+    `adopt reconcile --execute` before `apply` in adopt-cron.service. Pure
+    unit edit + daemon-reload. AC4 proves live effect (lineage count > 0
+    after a manual cron run). Immediate convergence, no rebuild.
+  - fixpoint-verify-resolution (rust-extend adopt): split SourceNewer into
+    -sameday(≤1d)/-behind(≥2d). Independent. Gives a true denominator.
+  - fixpoint-dirty-reconcile (rust-extend adopt): seed marker from committed
+    HEAD for dirty trees whose binary matches HEAD; else classify
+    dirty-blocked (not silent clock-fallback). Shares scion marker internals.
+  - fixpoint-converge-ledger (rust-extend adopt): per-run convergence record
+    + `adopt converge` + fixpoint-not-converging docket finding. DEPENDS ON
+    verify-resolution for the `behind` count.
+Notes for /build:
+  - fixpoint-cron-reconcile is config-only (edits ~/.config/systemd/user/
+    adopt-cron.service) — no cargo, no network. Land it first; it's the
+    highest-leverage single line and proves itself on the next cron tick.
+  - The 3 rust-extend PRDs all extend ~/wintermute/adopt (currently v0.9.0
+    post scion-truth). Reuse scion's fingerprint/marker code; DO NOT fork it.
+    red-baseline reality: bar = compiles + cargo test green. MSRV 1.85, no
+    let-chains, sigpipe::reset already in main.
+  - converge-ledger depends on verify-resolution's SourceNewer-behind bucket;
+    if built first it falls back to total-not-current (documented degrade).
+  - Distinct from scion (built the verdict+actuator) and from litmus (probe
+    correctness): fixpoint is whether the actuator actually RUNS to a
+    measured zero. scion gave adopt the right answer; fixpoint makes adopt
+    converge and prove it.
+Open questions (in vision): dirty-tree marker safety (seed-from-HEAD vs
+  classify-only); sameday threshold 1d-clock vs lineage-strict; ledger as
+  standalone file vs docket time-series; reconcile before vs after apply.
