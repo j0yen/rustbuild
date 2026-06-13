@@ -7499,3 +7499,47 @@ Open questions in vision:
   - What name does Jocelyn call the assistant? Joe's call.
   - Digest consent cadence — daily push vs. pull? (WM_FAMILY_DIGEST_TIME exists in family-enroll config)
   - Work-machine detection (hostname-based chezmoi templates — constellation-appearance can extend later)
+
+## 2026-06-12T(manual)  /dream  vision-harbor (NEW vision)
+Seed: user explicit — "how do i upgrade to a permanent box?" → chose Option A
+  (permanent cheap hub + keep ephemeral ccx53 bursts). 528 UP events in cost.log
+  confirm the burst pattern is heavily used; tooling is destroy-only by construction.
+Drafted: PRD-harbor-hub.md, PRD-harbor-cache.md, PRD-harbor-mirror.md,
+  PRD-harbor-bridge.md, PRD-harbor-thrift.md, PRD-harbor-route.md
+Vision: visions/harbor.md
+Order:
+  - harbor-hub (rust-extend → constellation-burst-builder) — KEYSTONE, ship first;
+    adds get_server/reuse to provider.rs + `wm-burst hub up|down|status` + persisted
+    hub.json identity. Everything else consumes the standing hub.
+  - harbor-cache ‖ harbor-mirror ‖ harbor-bridge ‖ harbor-thrift — all consume the
+    hub, mutually independent.
+    · harbor-cache (shell) — MinIO/S3 shared sccache backend on the hub; cold→warm.
+    · harbor-mirror (shell) — bare git mirror; in-DC pod clones + WIP fallback remote.
+    · harbor-bridge (shell) — NATS + wm.fleet.hub.{up,down,heartbeat} landing pad.
+    · harbor-thrift (rust-extend) — separate standing cost from burst cost; `wm-burst cost`.
+  - harbor-route (shell → cloudbuild.sh) — LAST; needs hub up + cache reachable.
+    Makes /cloudbuild default to the warm hub, burst only when cold, --ephemeral opt-out.
+Notes for /build:
+  - 3 PRDs rust-extend the SAME build_into (constellation-burst-builder): harbor-hub,
+    harbor-thrift. Serialize within a tick / use worktree-extend shared-target pattern.
+    harbor-hub MUST land before harbor-thrift (thrift consumes harbor-hub's HUB-UP/HUB-DOWN
+    cost.log lines + hub.json).
+  - The 3 shell PRDs (cache/mirror/bridge) write scripts into constellation-burst-builder/
+    scripts/ and a cloudbuild.sh edit (route). They depend on harbor-hub's hub.json schema
+    existing but are otherwise standalone shell — fast.
+  - All shell PRDs ship offline `*-check.sh` acceptance gates (no live hub needed to pass),
+    matching the constellation day-2 offline-gate convention.
+  - build_auto omitted per Hard Rule 1 (every PRD is buildable).
+Relationship to constellation:
+  - harbor is the near-term concrete slice of constellation-cloud. harbor-bridge stands up
+    the NATS + wm.fleet.hub.* landing pad that constellation-bus's agorabus↔NATS keystone
+    connects to later, and that constellation-status / constellation-hub-failover already
+    assume as an event source (nothing currently emits wm.fleet.hub.*). No overlap.
+Open questions (in vision):
+  - Box class: ARM cx22 (cheapest, sccache scheduler-only) vs x86 cpx11 (can also be an
+    x86 build-server matching the burst pods). Leaning cpx11. Joe's call.
+  - sccache-dist (distributed compilation) vs shared S3 cache (MinIO on hub). Leaning
+    shared-cache-first — ~90% of the win, far simpler.
+  - hub down safety: the hub becomes stateful (warm cache + WIP mirror); teardown must
+    refuse-by-default / snapshot first. harbor-hub requires --yes; harbor-thrift warns-only
+    on over-cap (never auto-destroys a stateful hub).
