@@ -8417,3 +8417,27 @@ Notes for /build:
 Open questions (in vision): OpenDataSoft/ArcGIS dialects = a second
   connector FAMILY not just config (future extend); auto-discovery of
   portals via the Socrata federated catalog (un-dreamt, needs research).
+
+## 2026-06-13T22:28  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T18:59  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-13T23:30  /dream  no-draft
+/dream interactive, field FRESH (fallow streak=0) — but drafted 0 by choice.
+Research walk done (recall seeds, wchg, journals, vision survey). No new
+evidenced vision motivated: companion/persona/kin/homeward are all mature &
+active; recall reflective bucket is entirely self-review entries (no half-
+formed feature seeds); the only recurring signals (ctrace scribe-backfill
+one-liner unwired 9 runs, agentns-zeros escalated 13 runs, fleet-binary-
+staleness) are /build or /self-review shaped, not vision shaped.
+Queue is UNDRAINED: 8 drafts still at v0.1 — homeward catchment fleet
+(source-registry/probe/catalog + coverage-report), changeover-{activate,
+daemon-claims,proof-seed}, rollout-selfreview-apply.
+Asked user for a steer (extend-homeward / self-review-autoremediation /
+companion-kin / rest); steer dismissed. Per Hard Rule 6 (don't dream past
+the research) chose to rest rather than pad an already-full queue.
+Notes for /build: drain the 8 v0.1 drafts before /dream adds more —
+homeward catchment registry must land first (probe/catalog/coverage speak
+its format). Nothing new from me this pass.
