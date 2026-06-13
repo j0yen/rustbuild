@@ -7860,3 +7860,51 @@ Notes for /build:
     Do not ship before the three rollout extends land + verify.
 Open questions (in vision): lifting the "immutable" escalate-don't-apply
   self-review guardrail needs Joe's explicit approval.
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-13T(manual)  /dream  vision-vest (new)
+Seed: bare /dream (interactive). fallow check = fresh (streak=0,
+  fingerprint moved at 12:35Z). Phase-1 chased the recurring
+  `adopt-scan-stale-binaries: 84/84 not-current` self-review finding to
+  its root and found a cluster, not one bug:
+  1. adopt-cron 02:42 run installed ac-judge to `/home/jsy/~/.local/bin/`
+     — a LITERAL tilde dir, off PATH. `--root ~/.local` reached cargo
+     unexpanded; cargo joined it to cwd. 4.7M junk tree left at
+     `/home/jsy/~/` (du -sh confirmed, all mtime Jun 13 02:43). No guard,
+     no cleanup exists.
+  2. `adopt apply` runs `cargo install --force` on every stale artifact
+     every 6h regardless of source change — unit accounting: 3min33s CPU,
+     1.1G mem peak for a run that adopted ONE binary then aborted.
+  3. adopt's only failure signal is one opaque string ("install exited 0
+     but --version/--help failed", apply.rs:248-265) — flattens
+     wrong-prefix / off-PATH / build-fail / smoke-fail / source-newer
+     into one verdict, so "84/84" carries zero diagnostic info.
+  4. systemd user PATH = /usr/local/bin:/usr/bin — excludes ~/.local/bin
+     and ~/.cargo/bin (show-environment). adopt works around it by
+     probing convention dirs; other user units can't.
+Drafted: PRD-vest-root-guard.md, PRD-vest-verify.md,
+  PRD-vest-incremental.md, PRD-vest-path.md
+Vision: visions/vest.md (new)
+Order: root-guard → verify → incremental ; vest-path independent (config).
+Notes for /build:
+  - root-guard, verify, incremental all rust-extend ~/wintermute/adopt
+    (same crate). SERIALIZE / worktree-isolate their cycles — all three
+    touch apply.rs and reuse scan.rs path helpers. Ship root-guard FIRST
+    (verify reuses its WrongPrefix detection; incremental's "current"
+    marker is only meaningful once installs reach the real prefix).
+  - vest-path is config-only (one environment.d drop-in), no code dep,
+    ship anytime. NOTE its activation needs daemon-reexec + re-login;
+    PRD says do NOT force a re-login.
+  - verify writes per-reason docket slugs (adopt-stale-<reason>) — pairs
+    with the docket vision's escalation; do not collapse back to one slug.
+Open questions (in vision): (1) should `adopt doctor --clean` ever rm the
+  junk tree autonomously, or only twin-checked? PRD ships conservative
+  twin-checked form; full autonomous rm stays user-gated. (2) incremental
+  marker location (state-dir vs binary metadata). (3) whether the tilde
+  bug is already fixed by the 03:33 adopt rebuild — irrelevant to
+  root-guard's value (prevents recurrence + cleans existing debris).
