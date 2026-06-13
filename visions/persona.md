@@ -196,3 +196,73 @@ serialize / worktree-isolate within a /build tick — shared build target.
 Open: the assistant's actual name remains Joe's call (Open question #1 above);
 `persona-deploy-jocelyn` ships the mechanism and a documented placeholder, not
 the decision.
+
+## The work persona deserves the elder's enforcement arc (drafted 2026-06-13, second dream pass)
+
+The elder persona (Jocelyn) is now complete *and* hardened: `forbidden_terms`
+went from prompt advice → `persona-redline` runtime enforcement → `persona-redline-eval`
+independent number → `persona-deploy-doctor` drift watch. Four layers, all shipped
+2026-06-13.
+
+The work persona got only the first artifact. `~/wintermute/persona-work/` shipped
+`CLAUDE_WORK.md` + `install.sh` + `validate.sh` (commit 558f961). But its scope rules
+are exactly where `forbidden_terms` was *before* `persona-redline`: **prompt advice with
+no runtime guarantee, no measured number, no drift watch.** Read on the live box
+2026-06-13, `CLAUDE_WORK.md` states hard, enforceable rules — "Never commit to j0yen
+personal repos", "No cross-publishing between joeyen-atscale and j0yen", "No auto-publish.
+No autonomous GitHub repo creation", "No voice features. No agorabus. No family reach",
+"Do not run /build or /dream skills", "No force push" — yet nothing on the work machine
+*enforces* any of them. They reach the agent only as text it may or may not honor. A
+technophobe hearing "computer" and a work box pushing to `j0yen` are the same failure
+class: a stated boundary that the running system never actually held.
+
+The primitives to close this already exist on this box and were validated today:
+
+- **`answerable check --action <X> --attr k=v` against `redline.toml`** (answerable
+  v0.5.0; `answerable-redline` shipped 2026-06-12) — exit 0=allow / 1=flag / 2=redline.
+  This is the action-side analogue of `persona-redline`'s reply scan. A work-scope
+  `redline.toml` + a Claude Code `PreToolUse` hook routing risky actions (`git push` to
+  a j0yen remote, `gh repo create`, a voice/agorabus daemon launch, `/build`·`/dream`)
+  through `answerable check` turns CLAUDE_WORK.md's prose into a runtime gate.
+- **`answerable values-drift`** (v0.4.0) — already watches `CLAUDE_SELF.md` Values +
+  Boundaries for REMOVED/WEAKENED bullets against a git baseline. The work-persona doctor
+  composes it with `persona-work/validate.sh` exactly as `persona-deploy-doctor` composes
+  `wmd persona profile diff`.
+
+This is the same arc, one rung at a time, for the half of the sister project the user
+named first and that has the least protection.
+
+### Components (work-persona enforcement frontier)
+
+- **persona-work-redline** (hooks + config) — author the work-scope `redline.toml`
+  encoding CLAUDE_WORK.md's hard rules, plus a `PreToolUse` hook that classifies a
+  pending action and calls `answerable check`, blocking (exit-2) personal-scope actions
+  on the work box. The advisory becomes a gate. Foundation of this frontier.
+- **persona-work-eval** (mixed) — an independent held-out corpus of *naturalistically
+  phrased* work-inappropriate actions (NOT copied from the redline rules — tautology
+  guard [[feedback_agent_written_fixtures_tautology]]), driven through the guard,
+  reporting a real block rate. Honest SKIP when persona-work isn't the installed
+  identity. Closes [[feedback_verify_before_concluding]] for the work side.
+- **persona-work-doctor** (shell) — periodic drift check on the work box: CLAUDE_WORK.md
+  still the installed identity (`validate.sh`), Values/Boundaries not weakened
+  (`answerable values-drift`), the work `redline.toml` still present and the hook still
+  wired. Mirrors `persona-deploy-doctor` for the work half; ties to [[freshness]].
+
+### Order (work-persona frontier)
+
+```
+persona-work-redline ──► persona-work-eval     (eval measures the guard the redline builds)
+                     └─► persona-work-doctor    (doctor watches the guard + the file)
+```
+
+persona-work-redline is the foundation — there is nothing to measure or watch until the
+gate exists. eval and doctor both depend on it and are independent of each other.
+
+### Honest caveat
+
+These deploy to Joe's AtScale laptop, a machine this dream cannot see. Like persona-work
+itself, they are *authored and tested here* (answerable, the redline policy, the hook
+logic, and the doctor's checks all run and are fixture-tested on the wintermute box) and
+*installed there*. Every PRD must run green on this box against fixtures and SKIP honestly
+when the work identity is not the one actually installed — never false-green by assuming
+the work machine's state.

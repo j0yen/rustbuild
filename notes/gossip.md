@@ -7999,3 +7999,44 @@ Notes for /build:
 Open questions (in vision): lint granularity (tools AND path vs OR, --strict);
   whether lint failures feed the B.5 quarantine or stay a standalone audit;
   source-anchor format for sync (line vs #anchor — drafted to support both).
+
+## 2026-06-13T(manual)  /dream  vision-persona (extend: work-persona enforcement arc)
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0,
+  last_productive 16:32 today = the plumb extend). Picked a different arc than
+  plumb/homeward/rollout (all freshly covered): the work-laptop persona, named
+  in [[project_persona_sister_project]] as a future /dream seed and in
+  visions/persona.md as "still entirely unbuilt" — except it's now half-built.
+Phase-1 live inspection: the elder persona (Jocelyn) got FOUR hardening layers
+  shipped 2026-06-13 (forbidden-vocab → persona-redline runtime enforce →
+  persona-redline-eval held-out number → persona-deploy-doctor drift watch).
+  The work persona got only the first artifact: ~/wintermute/persona-work/
+  shipped CLAUDE_WORK.md + install.sh + validate.sh (commit 558f961). Its scope
+  rules ("Never commit to j0yen", "no auto-publish", "no voice/agorabus/family",
+  "no /build /dream", "no force push") are PROMPT ADVICE with no runtime gate,
+  no measured number, no drift watch — exactly where forbidden_terms sat before
+  persona-redline. The enforcement primitives already exist and were validated
+  today: `answerable check --policy redline.toml` (v0.5.0, action-side gate) and
+  `answerable values-drift` (v0.4.0, watches CLAUDE_SELF.md Values/Boundaries).
+Drafted: PRD-persona-work-redline.md, PRD-persona-work-eval.md,
+  PRD-persona-work-doctor.md
+Vision: visions/persona.md (new section "The work persona deserves the elder's
+  enforcement arc")
+Order: persona-work-redline (foundation: the gate) → {persona-work-eval,
+  persona-work-doctor} (both depend on the gate, independent of each other).
+Notes for /build:
+  - All three EXTEND ~/wintermute/persona-work/ (build_into set); redline is
+    mixed (hooks + config), eval is mixed, doctor is shell. None are Rust
+    builds — they CONSUME shipped answerable (check/values-drift), not extend it.
+  - persona-work-redline is the good first pick: authors redline-work.toml +
+    a PreToolUse hook that routes git-push/repo-create/force-push/voice-launch/
+    /build·/dream through `answerable check`.
+  - HARD CAVEAT baked into every PRD: these deploy to Joe's AtScale laptop, a
+    machine /dream cannot see. Each must run green on THIS box against fixtures
+    and SKIP honestly (never false-green) when the work identity isn't the one
+    installed — this wintermute box is the expected SKIP case for the eval.
+  - Tautology guard is explicit in persona-work-eval: corpus must be phrased
+    independently of redline-work.toml's match expressions ([[feedback_agent_written_fixtures_tautology]]),
+    and a build-time check fails on substring-copies.
+Open questions (in vision): work-machine detection (manual copy + install vs
+  chezmoi if constellation ships); persona bleed when Joe asks the personal box
+  about AtScale work (vision answer: leave it — personal box keeps its identity).
