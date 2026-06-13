@@ -7543,3 +7543,55 @@ Open questions (in vision):
   - hub down safety: the hub becomes stateful (warm cache + WIP mirror); teardown must
     refuse-by-default / snapshot first. harbor-hub requires --yes; harbor-thrift warns-only
     on over-cap (never auto-destroys a stateful hub).
+
+## 2026-06-13T05:48  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-12T(manual)  /dream  vision-docket (Fleet 2 — adoption forcing function)
+Seed: bare /dream (interactive, manual). fallow check = fresh (streak reset;
+  today was a heavy /build day so the fingerprint moved). Verified to ground.
+Drafted: PRD-adopt-scan.md, PRD-adopt-docket-report.md,
+  PRD-adopt-self-review-bind.md, PRD-adopt-apply.md
+Vision: visions/docket.md — UPDATED, added "Fleet 2 — the adoption forcing
+  function" (durable update, did not replace).
+Why now (not a new vision — honoring the 3 prior dreams' explicit steer):
+  - Gossip 2026-06-06 03:05 / 07:45 + 2026-06-08 05:25 all concluded the
+    install/arming ACTIONS (binstale never installed, warden inert, memlog
+    staged) are "a forcing-function PRD under docket … Reconsider if they
+    keep aging." They aged 6 days. This is that reconsideration, under docket.
+  - LIVE Phase-1 proof: `rollout` built 2026-06-03 09:45, committed, 1 unpushed,
+    NOT on PATH (absent ~/.local/bin AND ~/.cargo/bin) — unadopted 9 days. The
+    tool that fixes fleet staleness is itself the unadopted thing. The 4 voice
+    daemons (wm-audio/dialog/tts/stt) are behind-head NOW and would be fixed by
+    `rollout apply` if rollout were installed. warden inert too.
+  - `binstale check <PID>` operates on a RUNNING process (exit 2 if not found);
+    it structurally CANNOT see a CLI that was never installed and never runs.
+    Distinct axis from vigil/binstale. No overlap.
+Order:
+  adopt-scan (rust-cli, new repo ~/wintermute/adopt/ → ~/.local/bin/adopt) — ship first.
+   ├─ adopt-docket-report (rust-extend adopt) — reports verdicts to docket; FIRST
+   │    non-self-review producer (docket open-Q #4 coming due; docket v0.5.0 live).
+   │    └─ adopt-self-review-bind (shell → self-review SKILL.md B.5) — retires the
+   │         hand-written "rollout plan needed / binstale never installed" prose.
+   └─ adopt-apply (rust-extend adopt) — the MUTATING half; non-daemon CLI installs,
+        --dry-run default, daemons delegated to rollout. Closes the loop.
+Notes for /build:
+  - adopt-scan is standalone rust-cli — ship it first; everything consumes its
+    `adopt scan --format json` verdict contract.
+  - adopt-docket-report + adopt-self-review-bind depend on the LIVE docket report
+    contract (shipped v0.5.0, `docket report --run --key --title --evidence`) —
+    no docket changes needed.
+  - adopt-docket-report, adopt-apply both rust-extend the SAME repo (adopt) — same
+    serialize-within-tick / worktree-extend caution as other shared-target fleets.
+  - adopt-apply default is dry-run; --execute required for mutation; non-daemon only
+    unless --with-daemons (which shells to `rollout install`, never re-implements it).
+  - No overlap with vigil-install-restart: that's daemons-running-stale-bytes;
+    adopt is plain-CLIs-never-on-PATH. Complementary halves of "close the loop at
+    the install site."
+Open question for jsy (in vision): should adopt-self-review-bind call `apply`
+  (autonomous safe non-daemon installs, per "always commit no caps") or only
+  `report` until you confirm the autonomy posture? Drafted report-only as the
+  default; apply stays gated.
