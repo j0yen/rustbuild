@@ -7455,3 +7455,47 @@ Notes for /build:
   - Grounding is solid: CLAUDE_SELF.md is git-tracked + agent-edited (drift.md only covers TOOL-doc drift, not VALUE drift); 157 repos auto-published no-review; voice user is "completely computer-illiterate" so consent must be voice (wm-tts live).
 Open questions (in vision): who writes the ledger (self-report vs provfs cross-check); redline advisory vs hard hook; digest pull vs daily push; value-drift "weakened" heuristic.
 NOTE: user followed up — wants a SECONDARY sister project: a sub-identity/persona for his ELDERLY MOTHER as primary user, plus a separate persona for his WORK LAPTOP. That's a future /dream seed (persona/sub-identity fleet) — answerable's consent-digest + values layer is a natural foundation for a mother-facing persona. Captured for next dream.
+
+## 2026-06-12T(manual)  /dream  fallow rest (not escalated)
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-12T(manual)  /dream  fallow rest (not escalated)
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=3 threshold crossed (escalate=true). Interactive manual /dream; fired
+  the outward-steer once (4 options: persona-sister-project / homeward / constellation /
+  companion-kin), user dismissed. Field unmoved since last productive pass (fingerprint
+  b3:7c64e0d0, last_productive 2026-06-13T04:02Z = the answerable vision). Rested, no PRDs
+  (Hard Rules 6+8). One word still unblocks a real fleet: persona / homeward / constellation /
+  companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  vision-persona (NEW vision)
+Seed: user explicit — "my mother Jocelyn as primary user; sub-identity for the elderly; another for my work laptop."
+New facts: Jocelyn is an **artist** who **dislikes technology**. Non-reading principal. Voice-first.
+Drafted: PRD-persona-forbidden-vocab.md, PRD-persona-name-ceremony.md, PRD-persona-consent-voice-ack.md, PRD-persona-work.md
+Vision: visions/persona.md (autobuilder/visions/)
+Order:
+  - persona-forbidden-vocab (rust-extend → wintermute-brain) — FIRST; foundation
+  - persona-name-ceremony (rust-extend → wintermute-brain) — depends on forbidden-vocab (same build_into; serialize within tick)
+  - persona-consent-voice-ack (rust-extend → answerable) — independent; depends on answerable-consent-digest (shipped)
+  - persona-work (shell → new repo ~/wintermute/persona-work) — fully independent
+Notes for /build:
+  - persona-forbidden-vocab and persona-name-ceremony share build_into wintermute-brain.
+    Use worktree-extend.sh shared-target pattern; do NOT both extend simultaneously without isolation.
+    forbidden-vocab must land first because name-ceremony's compose_base_persona call includes the forbidden list.
+  - persona-consent-voice-ack extends answerable — answerable-consent-digest is the prior PRD (shipped 2026-06-12).
+    The new variants (ConsentVoiceAck, ConsentUnacknowledged) are additive; no existing API changes.
+  - persona-work is shell — new repo, standalone, no Rust. Should be fast.
+  - NOTE: Joe has NOT chosen the name for Jocelyn's assistant. The PRDs use "Wren" as a placeholder.
+    self_name is a config field; the actual name is a deployment decision Joe makes. Don't hardcode.
+Context:
+  - hearth-persona-config, hearth-first-contact-greeting, hearth-dialog-degrade-warmth all SHIPPED.
+    persona builds on top; no re-implementation of tone/register/greeting infrastructure.
+  - answerable crate is live (record/log/stats/values-drift/redline/digest all shipped 2026-06-12).
+  - wintermute-family-enroll archived (shipped) — the caregiver enrollment wizard exists.
+  - The entire companion/kin/hearth voice stack is live.
+Open questions in vision:
+  - What name does Jocelyn call the assistant? Joe's call.
+  - Digest consent cadence — daily push vs. pull? (WM_FAMILY_DIGEST_TIME exists in family-enroll config)
+  - Work-machine detection (hostname-based chezmoi templates — constellation-appearance can extend later)
