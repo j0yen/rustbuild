@@ -98,3 +98,101 @@ probe → warmswap → autoapply.
 - **Proof freshness.** How stale can a `changeover probe` proof be before
   autoapply distrusts it? Tie to the daemon's binary hash (proof invalid
   once the exe changes) vs a wall-clock TTL? Drafted to hash-bound.
+
+## Fleet 2 — activation: the warm-swap is built but dormant (drafted 2026-06-13)
+
+`/dream extend changeover`, bare interactive seed. Fleet 1
+(`probe`/`warmswap`/`autoapply`) all **shipped** 2026-06-13 — yet the
+journal that same evening *still* parks `fleet-binary-staleness` on
+"daemon restarts drop subscribers; requires explicit approval." The
+machinery exists and the fleet is still stale. This pass found why: the
+warm-swap is **decorative**, switched off at three points, and nothing
+ever closed the loop. Same spirit as [[quicken]] — "a built primitive
+that never came alive isn't built" — but the axis here is the rollout
+*actuator* and its producer-side prerequisites, not kernel primitives.
+
+Caught live this pass (verbatim probes, 2026-06-13):
+
+- **No daemon acquires a claim.** `warmswap.rs` waits for the *successor*
+  to appear as an `agorabus claim list <path>` holder before stopping the
+  predecessor. But `grep -rl claim_acquire` across
+  `~/wintermute/wintermute-{audio,stt,tts}/src` → **0 files**;
+  `wintermute-dialog`'s two `claim` hits are FSM-internal (transcript
+  claiming), not the agorabus lease. So no successor ever becomes a
+  holder → `wait_for_claim_holders` times out → warm-swap falls back to
+  the exact hard restart it was built to replace. All four daemons depend
+  on `agorabus = { path = "../agorabus" }`, whose client already exposes
+  `claim_acquire` — the API is right there, unused.
+- **No proof ledger exists.** `~/.config/rollout/proofs.json` is absent.
+  `rollout apply --auto` (v0.7.0) refuses every daemon without a fresh
+  green proof, and nothing has ever run `changeover probe` →
+  `rollout record-proof`. The gate is permanently red because it was
+  never seeded.
+- **The cron never fires apply.** `self-review/SKILL.md` (lines 303, 852,
+  864) makes "never run `rollout apply` autonomously" an *immutable*
+  guardrail, justified by the *hard-restart* reality warm-swap was built
+  to eliminate. The reconciliation is already drafted as the **blocked**
+  `PRD-rollout-selfreview-apply.md` (classifier-blocked pending jsy's
+  explicit approval) — Fleet 2 does not redraft it; it depends on it.
+
+The fix is not more mechanism — it is **producer-side participation plus
+seeding plus activation**: teach the daemons to hold their claim, mint
+the first green proof, then turn the autonomous loop on with live
+post-swap verification that voice actually survived.
+
+### Components (Fleet 2)
+
+- **changeover-claim-guard** (rust-extend `~/wintermute/agorabus`):
+  an RAII `ClaimGuard` on the client — `client.hold_claim(path, ttl)`
+  acquires the lease, auto-renews before the TTL, and releases on drop
+  (and on SIGTERM via a shutdown hook). The reusable primitive the four
+  daemons and any future peer share. Ships first; pure lib + fixture
+  tests, no daemon surgery.
+
+- **changeover-daemon-claims** (mixed rust-extend → the four
+  `wintermute-{audio,dialog,stt,tts}` crates): each daemon, on startup
+  after bus connect, holds `agorabus://daemon/<unit>` via the guard and
+  releases on graceful shutdown. This is the load-bearing change that
+  makes warm-swap real — without it the proof can never go green. The
+  pattern is identical across all four; /build may fan out per-crate.
+  Depends on claim-guard.
+
+- **changeover-proof-seed** (rust-extend `~/wintermute/rollout`):
+  a `rollout prove --daemon <unit>` convenience that runs `changeover
+  probe`, feeds its JSON to `record-proof`, and a low-frequency
+  systemd-user timer that keeps the ledger fresh (re-proving when a
+  daemon's binary hash changes). Mints the first green entry per daemon.
+  Depends on daemon-claims (the proof only goes green once a real
+  warm-swap loses zero events).
+
+- **changeover-activate** (rust-extend `~/wintermute/rollout` + config):
+  the systemd-user timer that runs probe → record-proof → `apply --auto`
+  (warm-swap only, turn-aware quiet window from v0.5.0), gated on
+  `ROLLOUT_AUTO_ENABLED=1`, followed by **live post-swap verification** —
+  assert all four daemons re-hold their claims and a synthetic voice turn
+  round-trips, recording a receipt. Depends on proof-seed and on the
+  blocked `PRD-rollout-selfreview-apply.md` reaching jsy's approval.
+
+### Order (Fleet 2)
+
+claim-guard → daemon-claims → proof-seed → activate.
+claim-guard and daemon-claims are the producer half (make warm-swap
+real); proof-seed mints the green ledger; activate turns the loop on.
+activate must not ship before `PRD-rollout-selfreview-apply.md` is
+unblocked — until then it lands the timer in a `ROLLOUT_AUTO_ENABLED=0`
+dormant posture (proves itself in `--dry-run`, never restarts).
+
+### Open questions (Fleet 2)
+
+- **Mic-handoff still unsolved** (carried from Fleet 1): wm-audio owns the
+  ALSA capture device; claim-guard closes the bus window but two
+  processes still can't both hold the mic. Accept a sub-100ms audio gap on
+  wm-audio specifically, or a separate SCM_RIGHTS fd-passing PRD? Left out
+  until `changeover probe` quantifies the audio-specific gap post-claims.
+- **Claim TTL vs renew cadence**: what TTL balances "successor can acquire
+  quickly after predecessor dies" against "renew traffic on a quiet bus"?
+  Drafted to TTL=30s, renew at 10s, but probe should tune it.
+- **Should proof-seed live in rollout or changeover?** `rollout` already
+  owns `record-proof`; `changeover` owns `probe`. Drafted into rollout so
+  one binary runs the whole prove cycle, but a `changeover prove` that
+  shells to `rollout record-proof` is equally defensible.

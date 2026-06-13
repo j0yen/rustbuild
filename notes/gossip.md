@@ -8255,3 +8255,48 @@ Notes for /build:
 Open questions (in vision): dirty-tree marker safety (seed-from-HEAD vs
   classify-only); sameday threshold 1d-clock vs lineage-strict; ledger as
   standalone file vs docket time-series; reconcile before vs after apply.
+
+## 2026-06-13T21:00  /dream  vision-changeover (Fleet 2 — activation)
+Drafted: PRD-changeover-claim-guard.md, PRD-changeover-daemon-claims.md,
+  PRD-changeover-proof-seed.md, PRD-changeover-activate.md
+Vision: visions/changeover.md (extended — Fleet 2 appended)
+Finding: Fleet 1 (probe/warmswap/autoapply) all SHIPPED today, yet the
+  same evening's journal STILL parks fleet-binary-staleness. Warm-swap is
+  decorative — switched off at three points:
+  (1) NO daemon acquires an agorabus claim. warmswap.rs waits for the
+      successor to become a claim holder before stopping the predecessor;
+      grep claim_acquire over wintermute-{audio,stt,tts}/src = 0 files
+      (dialog's 2 hits are FSM transcript-claiming, not the bus lease).
+      So the poll always times out → warm-swap falls back to hard restart.
+  (2) ~/.config/rollout/proofs.json does NOT exist. apply --auto (v0.7.0)
+      refuses every daemon without a fresh green proof; nobody ever ran
+      changeover probe → rollout record-proof.
+  (3) self-review SKILL.md (303/852/864) makes "never rollout apply"
+      immutable, citing the hard-restart reality warm-swap eliminates.
+Order: claim-guard → daemon-claims → proof-seed → activate.
+  - claim-guard (rust-extend agorabus, ship FIRST): RAII ClaimGuard +
+    auto-renew + release-on-drop. Pure lib, fixture tests, no daemon
+    surgery. All four daemons already dep on agorabus path crate.
+  - daemon-claims (mixed, the four wintermute-{audio,dialog,stt,tts}):
+    hold agorabus://daemon/<unit> for lifetime, release on SIGTERM. THE
+    load-bearing change — proof can't go green without it. /build may fan
+    out per-crate; build_into names wintermute-audio canonical.
+  - proof-seed (rust-extend rollout): `rollout prove --daemon <unit>`
+    runs probe→record-proof; +changeover-prove.timer keeps ledger fresh
+    (hash-bound). Mints the first green entries. Depends on daemon-claims.
+  - activate (mixed, rollout + config): `rollout cycle` =
+    prove→apply --auto (warm-swap only, turn-aware)→LIVE post-swap verify
+    (claims re-held + voice turn round-trips) + receipt. Ships DORMANT
+    (ROLLOUT_AUTO_ENABLED=0, dry-run) — never restarts until unblocked.
+Notes for /build:
+  - claim-guard + daemon-claims are the producer half; ship those two and
+    warm-swap stops being decorative even before the loop turns on.
+  - activate DEPENDS on the already-blocked PRD-rollout-selfreview-apply.md
+    (classifier-blocked SKILL.md guardrail edit, needs jsy approval). Do
+    NOT redraft it; activate ships dormant until it lands.
+  - red-baseline reality across all four: bar = compiles + cargo test
+    green. MSRV 1.85, no let-chains. agorabus is the path dep version 0.9.
+Open questions (in vision): mic/ALSA handoff still unsolved (wm-audio
+  can't double-hold the capture device — sub-100ms audio gap or SCM_RIGHTS
+  fd-pass?); claim TTL vs renew cadence (drafted 30s/10s); proof-seed in
+  rollout vs changeover (drafted rollout).
