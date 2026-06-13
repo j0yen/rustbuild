@@ -7908,3 +7908,49 @@ Open questions (in vision): (1) should `adopt doctor --clean` ever rm the
   marker location (state-dir vs binary metadata). (3) whether the tilde
   bug is already fixed by the 03:33 adopt rebuild — irrelevant to
   root-guard's value (prevents recurrence + cleans existing debris).
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-13T(manual)  /dream  vision-homeward (extend: deliver fleet)
+Seed: bare /dream (interactive). fallow check = FALLOW (streak=3, threshold
+  crossed, escalate=true). User declined the outward-steer menu; I steered to
+  homeward (the outward-facing vision) and probed for real buildable surface
+  rather than rest-or-draft-thin.
+Phase-1 live inspection of ~/wintermute/homeward found the honest frontier the
+  operate fleet left: the embedding sidecar is NEVER CALLED by any daemon.
+  - EmbedClient (homeward-ingest/src/embed_client.rs) is a complete /enroll
+    /query /health client but is DEAD CODE — no EmbedClient::new / .enroll(
+    / .query( anywhere in the workspace outside its own file.
+  - homeward-match fuses a CALLER-SUPPLIED visual_scores map (report.rs:28)
+    that nothing ever computes → visual half of the matcher is inert.
+  - homeward-reportd's match path is STUBBED: make_stub_report +
+    make_stub_candidate(0.9), photos:vec![] (reportd.rs:260-261,309-369).
+    Owner submits real --photo (bytes read reportd.rs:128); it goes nowhere
+    near the matcher.
+  - homeward-report depends on NEITHER homeward-match NOR the embed client.
+  This is [[project_voice_input_null_detectors]] at fleet scale.
+Drafted: PRD-homeward-deliver-embed-client.md, PRD-homeward-deliver-enroll.md,
+  PRD-homeward-deliver-query.md, PRD-homeward-deliver-attest.md
+Vision: visions/homeward.md (deliver-fleet section appended)
+Order: embed-client → (enroll ∥ query) → attest.
+Notes for /build:
+  - SHIP embed-client FIRST. It adds a new workspace member crate
+    (homeward-embed-client) and deletes homeward-ingest/src/embed_client.rs,
+    re-exporting via `pub use`. enroll + query both add a dep on it.
+  - enroll (rust-extend homeward-ingest) and query (rust-extend
+    homeward-report) are INDEPENDENT once embed-client lands — parallelizable,
+    different crates, no shared file. enroll touches main.rs+new enroll.rs;
+    query touches reportd.rs + report Cargo.toml.
+  - attest is `mixed` (drives Python sidecar + Rust bins) and depends on BOTH
+    wires. It needs a provisioned DINOv2 (embed-provision, already shipped);
+    if the model can't be provisioned it MUST report SKIPPED, never false-green
+    (tautology guardrail [[feedback_agent_written_fixtures_tautology]]).
+  - query removes make_stub_report/make_stub_candidate — confirm no reportd
+    path emits a fabricated score after the build.
+Open questions (in vision): stale-gallery removal on departure (enroll PRD
+  notes full removal wire may be a follow-on); whether attest belongs as a
+  `homeward attest` subcommand vs a deploy/ script.

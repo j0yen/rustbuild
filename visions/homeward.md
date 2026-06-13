@@ -260,3 +260,69 @@ sole `rust-extend` of `homeward-report`.
 - A real relay credential to flip alert-delivery from dry-run to live (outreach).
 - Public/remote exposure of the report API (a deliberate, gated decision; localhost
   by default until then).
+
+## Deliver fleet (drafted 2026-06-13)
+
+Fleets 1 (core), 2 (federation), and 3 (operate) shipped the parts and stood the
+daemons up. Phase-1 live inspection (2026-06-13) of `~/wintermute/homeward` v0.9.x
+found the honest frontier that operate left: **the embedding sidecar is never
+actually called by any daemon.** homeward owns a complete async embed client and a
+complete fusion matcher, but the wires between them are stubs:
+
+- `EmbedClient` (`homeward-ingest/src/embed_client.rs`) — a full `/enroll`,
+  `/query`, `/health` client for the Python DINOv2 sidecar — is **defined and
+  never called.** Grep across the workspace: no `EmbedClient::new`, no `.enroll(`,
+  no `.query(` outside the definition file. It is dead code.
+- `homeward-match` fuses a **caller-supplied** visual-similarity score
+  (`report.rs:28` — `visual_scores` keyed by `canonical_id`; `lib.rs:75`). Nothing
+  in the owner path ever computes or supplies those scores, so the fusion runs
+  geo+date only — the visual half of the matcher is inert.
+- `homeward-reportd`'s match path is **stubbed**: `cmd_match` builds
+  `make_stub_report(...)` + `make_stub_candidate(0.9)` ("stub for CLI pipeline
+  demonstration", `reportd.rs:260-261,309-369`, `photos: vec![]`). The owner
+  submits a real `--photo` (bytes are read at `reportd.rs:128`) and it goes
+  nowhere near the matcher.
+- `homeward-report` depends on **neither** `homeward-match` **nor** the embed
+  client (empty grep over its `Cargo.toml`). The owner photo → embed `/query` →
+  visual scores → match fusion → ranked shortlist chain has no wire end-to-end.
+
+This is [[project_voice_input_null_detectors]] at fleet scale: every part exists,
+the connections between them are placeholders. The deliver fleet wires them, on
+both sides (gallery + owner), and proves it end-to-end on the bundled fixtures.
+
+### Deliver components (drafted this pass)
+
+- **homeward-embed-client** (rust-extend → new workspace crate) — lift
+  `embed_client.rs` out of `homeward-ingest` into a small shared
+  `homeward-embed-client` crate so both ingest (enroll) and report (query) can
+  call the sidecar without report pulling in the ingest daemon. Foundation.
+- **homeward-deliver-enroll** (rust-extend → homeward-ingest) — wire the ingest
+  daemon to call `/enroll` on every new/changed intake photo so the gallery the
+  matcher queries is actually populated; honest no-op when the sidecar is absent.
+- **homeward-deliver-query** (rust-extend → homeward-report) — replace reportd's
+  `make_stub_report`/`make_stub_candidate` with the real flow: stored
+  `LostReport` photo → `/query` → `visual_scores` → `homeward-match` fusion → a
+  real ranked shortlist. Removes the last owner-facing stub.
+- **homeward-deliver-attest** (mixed → homeward) — an end-to-end smoke that stands
+  the sidecar up, enrolls the bundled `eval-smoke/gallery`, submits the
+  `eval-smoke/query` fixture through `homeward-reportd`, and asserts the correct
+  individual ranks top with measured latency. The "made to deliver" capstone.
+
+### Deliver order
+
+```
+homeward-embed-client ─► homeward-deliver-enroll ─┐
+                      └─► homeward-deliver-query  ─┴─► homeward-deliver-attest
+```
+
+embed-client is the foundation both wires need. enroll (gallery) and query
+(owner) are independent and parallelizable once it lands. attest depends on both
+— it can only prove the round-trip once both halves are wired.
+
+### Still un-dreamt after deliver (outreach, not builds)
+
+- A live PetFace held-out accuracy number (research-gated dataset = manual
+  download).
+- A real email-relay credential to flip alert-delivery from dry-run to live.
+- A Pet FBI/HeLP partner write agreement to flip the export adapter live.
+- Public/remote exposure of the report API (a deliberate, gated decision).
