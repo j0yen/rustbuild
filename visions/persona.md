@@ -60,6 +60,12 @@ When persona is fulfilled:
 4. Joe's work Claude has its own identity: professional, scoped to AtScale
    work, never auto-publishing to personal repos, never activating voice
    features or family connections. Two boxes, two selves, no bleed.
+5. The personas are not merely *buildable* — they are *live and proven*. The
+   Jocelyn identity is assembled into the running `brain.toml` with a warm name
+   Joe chose, redline enforcement actually active, and an independent held-out
+   number showing the running model does not leak technology vocabulary to her.
+   A deployed persona that nobody has activated or measured is a drawer of parts,
+   not a companion.
 
 ## Components (one bullet per PRD)
 
@@ -135,3 +141,58 @@ Rust and no dependency on the others.
    answer is: wintermute's identity — there's no context switching on the
    personal machine. That's probably correct; leave it unaddressed unless Joe
    raises it.
+
+## Deployment — the second frontier (drafted 2026-06-13)
+
+The mechanism layer is complete and *verified live this session*: every
+component above is shipped, and `redline::enforce()` is genuinely wired into
+the daemon reply→TTS path (`wintermute-brain/src/daemon.rs:2277`), not merely
+present. But the running deployment has none of it. Checked 2026-06-13 on the
+live box:
+
+- `~/.config/wintermute/brain.toml` `[persona]` still reads
+  `self_name = "wintermute"`, `register = "warm-elder"`, **no
+  `forbidden_terms`, no `[persona.introduction]`, no `redline`**. The
+  `wmd persona profile apply jocelyn --write` mechanism (which would write the
+  whole jocelyn block, backing up to `brain.toml.bak`) has never been run.
+- `redline` therefore defaults to `RedlineAction::Off` — the wired guarantee is
+  dormant. The forbidden-vocab list reaches the model only as prompt advice,
+  exactly the gap `persona-redline` was built to close, because nothing
+  activated it.
+- No independent number exists for leak rate. The `redline.rs` tests are
+  author-written exact-match unit cases (`scan_exact_match_returns_hit`, …) —
+  see [[feedback_agent_written_fixtures_tautology]]. Nobody has driven the
+  *running local-3b model* on Jocelyn-style prompts and counted leaks.
+
+This frontier turns the parts into a companion. Four PRDs:
+
+- **persona-deploy-jocelyn** (shell) — idempotent installer that assembles the
+  live elder deployment: applies the jocelyn profile, sets the warm `self_name`
+  Joe chose (the preset placeholder `"jocelyn"` names the assistant after the
+  *principal* — wrong; the installer parameterizes the real name), flips
+  `redline` from `Off` to active `SafePhrase`, restarts wm-brain, and verifies
+  `persona profile diff jocelyn` reconciles. Reversible via `brain.toml.bak`.
+- **persona-redline-eval** (mixed) — an independent held-out corpus of
+  naturalistic technophobe-trigger prompts (NOT drawn from `redline.rs` tests),
+  driven through the live model, reporting a real pre/post leak rate. Honest
+  skip-with-message when no model is present. Closes [[feedback_verify_before_concluding]].
+- **persona-redline-regenerate** (rust-extend `wintermute-brain`) — adds the
+  `Regenerate` variant that `redline.rs:39` documents as deferred "future
+  work": re-issue the model request with a hardened addendum naming the leaked
+  term, falling back to `SafePhrase` only if regeneration also leaks. Makes the
+  guarantee graceful instead of a jarring canned phrase.
+- **persona-deploy-doctor** (shell) — periodic drift check: live `[persona]`
+  still matches the jocelyn profile, redline still active, self_name still the
+  chosen warm name. Surfaces persona drift the way self-review surfaces fleet
+  staleness; ties to [[freshness]].
+
+Order: `persona-deploy-jocelyn` is the foundation (activating redline is what
+makes the eval meaningful). `persona-redline-eval` and `persona-deploy-doctor`
+both depend on the deployment existing. `persona-redline-regenerate` is an
+independent `wintermute-brain` extend; the eval should re-run against it once
+shipped. Both brain-extends (regenerate, and the earlier redline/profile) must
+serialize / worktree-isolate within a /build tick — shared build target.
+
+Open: the assistant's actual name remains Joe's call (Open question #1 above);
+`persona-deploy-jocelyn` ships the mechanism and a documented placeholder, not
+the decision.

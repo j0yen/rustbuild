@@ -7761,3 +7761,59 @@ Notes for /build:
 Open questions (carried to vision): live PetFace number = manual dataset download
   (research-gated, not a build); real relay credential to flip alert-delivery live =
   outreach; public exposure of report API = deliberate gated decision (localhost default).
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  vision-persona (extend: deployment)
+Seed: bare /dream (interactive). fallow check = fresh (streak=0) — but the
+  fingerprint only moved from a 10:35 self-review reindex, not a new idea.
+  Steer menu offered; user dismissed → I made the call: persona deployment,
+  the strongest genuinely-live fully-buildable thread from today.
+Reconciled live (2026-06-13): the persona MECHANISM is complete and VERIFIED
+  WIRED — redline::enforce() really is called in the daemon reply→TTS path
+  (wintermute-brain/src/daemon.rs:2277), and persona-work shipped a real
+  artifact (~/wintermute/persona-work/ with CLAUDE_WORK.md+install+validate).
+  So this pass is NOT mechanism or wiring — it is DEPLOYMENT + PROOF. The
+  live ~/.config/wintermute/brain.toml [persona] still reads self_name=
+  "wintermute" with NO forbidden_terms, NO introduction, NO redline → every
+  shipped guarantee is dormant because nobody ran `wmd persona profile apply`.
+Drafted: PRD-persona-deploy-jocelyn.md, PRD-persona-redline-eval.md,
+  PRD-persona-redline-regenerate.md, PRD-persona-deploy-doctor.md
+Vision: visions/persona.md (new "Deployment — the second frontier" section +
+  end-state #5)
+Key evidence each PRD cites (Phase-1 live):
+  - deploy-jocelyn (shell): live [persona] has none of the safety fields;
+    apply mechanism (main.rs:476, .bak backup) never invoked; redline default
+    Off (redline.rs:39); jocelyn preset's self_name="jocelyn" is a WRONG
+    placeholder (names the assistant after the principal) → installer
+    parameterizes the real warm name, refuses "jocelyn" without an override.
+  - redline-eval (mixed): redline.rs tests are author-written exact-match —
+    tautological per [[feedback_agent_written_fixtures_tautology]]; no leak
+    rate exists for the running local-3b. Held-out corpus, real number,
+    honest SKIP when no model ([[feedback_verify_before_concluding]]).
+  - redline-regenerate (rust-extend brain): redline.rs:39 documents a
+    Regenerate variant as deferred "future work"; today enforce() only
+    substitutes a canned phrase (jarring). Add bounded regenerate-once.
+  - deploy-doctor (shell): brain.toml hand-editable + Off-by-default redline
+    → drift is silent; `wmd persona profile diff jocelyn` is the primitive,
+    wrap it in a periodic check. Mirrors fleet-staleness; ties [[freshness]].
+Order: deploy-jocelyn (foundation — activates redline so eval is meaningful)
+  → eval + doctor (both depend on deployment existing). redline-regenerate is
+  an independent brain extend; eval should re-run once it ships.
+Notes for /build:
+  - redline-regenerate is the 3rd wintermute-brain rust-extend in this fleet —
+    SERIALIZE / worktree-isolate brain extends within a tick (shared target).
+  - the three shell/mixed PRDs (deploy-jocelyn, redline-eval, deploy-doctor)
+    are independent new repos; can ship in any order, no brain rebuild.
+  - eval + doctor both shell out to `wmd` for scan/diff parity — do NOT
+    reimplement matching; eval must SKIP (exit 0, "SKIP:") not false-green
+    when no model is present.
+  - deploy-jocelyn and deploy-doctor install systemd-user units but do NOT
+    auto-enable them (no surprise services; same posture as homeward-orchestrate).
+Open questions (carried to vision): the assistant's actual NAME is still Joe's
+  call (vision Open Q#1) — PRDs ship the mechanism + a documented placeholder,
+  never the decision.
+
+## 2026-06-13T(manual)  /dream  fallow-record
+fallow record --drafted 4 --seed user-prompt --note persona
