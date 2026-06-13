@@ -7645,3 +7645,37 @@ Notes for /build:
 Open question for jsy (in vision): autonomy posture — should plumb-selfreview-bind
   AUTO-FIX a proven-wrong probe in SKILL.md, or only quarantine+report (drafted
   default)? Mirrors the unresolved report-vs-apply question in adopt-self-review-bind.
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  rested (fresh-but-owned)
+Seed: bare /dream (interactive). fallow check = fresh (streak=0, fingerprint
+  moved 08:03 = today's self-review wrote 2026-06-13 journal). Walked Phases
+  0-1.5 fully; did NOT draft. Reason: the field's fresh CONTENT is entirely
+  already-owned, so a fleet here would duplicate intent (Rule 2) and dream
+  past the research (Rule 6).
+Mapping of every fresh signal → its owning vision/tool (all verified live):
+  - ctrace-sessionend-flake (9 runs)      → mend/scribe (mend-ctrace-render shipped)
+  - agentns-session-zeros (13 runs)       → assay (clone-flag-fix shipped 06-12, boot-gated)
+  - fleet-binary-staleness                → rollout + binstale (mend-binstale-wire surfaces it)
+  - adopt-scan-stale (84/84)              → adopt apply (shipped today)
+  - probe-lies (memlog/ctrace/adopt probe)→ plumb (drafted last pass; AC8 anchors memlog probe)
+  - acked-but-noisy                       → abide
+  - memlog now ACTIVE (kernel 7.0.11)     → already consumed: memlog-witness, quicken, plumb,
+                                            provenance-mcp, continuity-attest
+Reconcile-jobs for /build + assay/plumb (NOT new PRDs — flagged for verification):
+  - DISCREPANCY 1: agentns-clone-flag-fix shipped 2026-06-12 (changelog says
+    "assay agentns Live on 7.0.11-arch1-1"), but self-review 2026-06-13 STILL
+    reports agentns-session-zeros open (runs_seen=13). Either boot-gated AC6 hasn't
+    taken on this boot, the live session predates the flip, or the probe reads wrong.
+    This is exactly plumb (probe-lies) + assay (fix-outlived-symptom) territory.
+  - DISCREPANCY 2: mend-ctrace-render shipped, yet ctrace-sessionend-flake still
+    reports "scribe backfill NOT wired in ctrace-session-start.sh" (runs_seen=9).
+    N_MISSING=0 today suggests the render path may actually work and the PROBE
+    checks the wrong thing (backfill-wiring vs render-on-exit). plumb-selfreview-bind
+    should quarantine this probe; assay should confirm the symptom stopped firing.
+Note for /build: no new work queued by this pass. The plumb fleet (PRD-plumb-core,
+  -ledger, -selfreview-bind) from the prior pass is the right next build — it
+  directly resolves both discrepancies above. fleet-binary-staleness needs jsy to
+  approve `rollout apply` (drops voice subscribers); not a build task.
