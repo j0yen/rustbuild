@@ -7954,3 +7954,48 @@ Notes for /build:
 Open questions (in vision): stale-gallery removal on departure (enroll PRD
   notes full removal wire may be a follow-on); whether attest belongs as a
   `homeward attest` subcommand vs a deploy/ script.
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  vision-plumb (extend: trustworthy calibrator)
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0,
+  last_productive 15:34 today). Rather than re-extend homeward (just got a
+  4-PRD deliver fleet at 15:34), probed the plumb arc that shipped TODAY
+  (plumb-core + plumb-ledger + plumb-selfreview-bind).
+Phase-1 live inspection of ~/.config/plumb/probes.toml found the calibrator
+  audits its probes but never audits ITSELF — three live gaps:
+  - TAUTOLOGY: ctrace-backfill-wired verdict=`grep -q "scribe backfill" <hook>`
+    and oracle=`grep -qE "scribe.backfill|..." <hook>` — same tool, SAME FILE.
+    Config comment literally says "slightly different grep pattern on the same
+    file." Agreement proves nothing. This is [[feedback_agent_written_fixtures_tautology]]
+    living inside the layer built to prevent it.
+  - COVERAGE: `plumb list`=3 probes; SKILL.md B.5 has many playbooks
+    (fleet-staleness, agorabus, warden, ctrace-resolve…). No command reports
+    the gap; vision end-state ("every B.5 probe registered") is unmeasured.
+  - DRIFT: every probes.toml verdict is a hand-copy of a SKILL.md probe
+    ("The BROKEN probe from SKILL.md:186"). plumb-selfreview-bind fixes
+    SKILL.md:186 → registered verdict still holds broken form → plumb
+    calibrates stale logic.
+Drafted: PRD-plumb-independence.md, PRD-plumb-coverage.md, PRD-plumb-sync.md
+Vision: visions/plumb.md (extend section appended)
+Order: all three rust-extend ~/wintermute/plumb, INDEPENDENT subcommands
+  (lint / coverage / sync) over the existing Registry+probes.toml contract —
+  fully parallelizable, ship in any order.
+Notes for /build:
+  - All three are rust-extend into ~/wintermute/plumb (v0.2.0, edition 2021,
+    MSRV 1.85, clap-derive, no let-chains). Each adds ONE new subcommand +
+    one new module (lint.rs / coverage.rs / sync.rs). No cross-PRD shared
+    file beyond registry.rs (sync adds an optional `source` field to
+    ProbeEntry — additive, backward-compatible).
+  - plumb-independence carries LIVE PROOF (ctrace probe must flag, memlog
+    must pass) — highest value, good first pick.
+  - plumb-sync touches registry.rs (new optional field) AND ships an updated
+    probes.toml with `source` pointers; if it lands alongside the others,
+    expect a trivial merge on Cargo/registry. None of the three conflict on
+    a subcommand.
+  - SIGPIPE-safe required (sigpipe::reset first line of main —
+    [[self_sigpipe_panic_toolkit]]); plumb already does this, keep it.
+Open questions (in vision): lint granularity (tools AND path vs OR, --strict);
+  whether lint failures feed the B.5 quarantine or stay a standalone audit;
+  source-anchor format for sync (line vs #anchor — drafted to support both).

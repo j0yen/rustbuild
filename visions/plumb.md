@@ -141,3 +141,95 @@ close note, a verdict, or a running binary. plumb answers the question
 underneath: **is the instrument that produced the reading itself
 trustworthy?** It does not replace them; it removes the assumption they
 silently rely on.
+
+---
+
+## Extend: a calibrator you never audited is itself an unchecked instrument (2026-06-13)
+
+The first plumb fleet shipped (plumb-core + plumb-ledger +
+plumb-selfreview-bind, all 2026-06-13). plumb now pairs each registered
+probe with an oracle, gates B.5 promotion, and tracks trust. But the
+recursion stops one level too soon: **nothing audits the registry
+itself.** Three live gaps, each caught by reading the shipped
+`~/.config/plumb/probes.toml` against the system:
+
+- **The oracle can be a tautology.** The `ctrace-backfill-wired` probe's
+  verdict is `grep -q "scribe backfill" <file>` and its oracle is
+  `grep -qE "scribe.backfill|..." <file>` — *the same tool reading the
+  same file*. The config comment even admits it: "use a slightly
+  different grep pattern on the same file." A verdict and oracle that can
+  only fail together prove nothing on agreement — this is
+  [[feedback_agent_written_fixtures_tautology]] living inside the
+  calibration layer that exists to prevent exactly that. plumb measured
+  the probe but never measured whether its own oracle was independent.
+
+- **Coverage is unknown and small.** `plumb list` returns 3 probes;
+  self-review B.5 has many playbooks (memlog, ctrace-resolve,
+  fleet-binary-staleness, warden, agorabus, autobuilder-gate-promote, …).
+  The vision end-state says *every verdict-expressible B.5 probe* has a
+  registered oracle. There is no command that reports the gap, so "are
+  the watchers all registered?" is answered by hand each pass — exactly
+  the manual audit plumb was built to retire.
+
+- **The registered verdict drifts from the live probe.** Each
+  `probes.toml` verdict is a hand-copy of a SKILL.md probe (the comments
+  say so: "The BROKEN probe from SKILL.md:186"). Once
+  plumb-selfreview-bind fixes SKILL.md:186, the registered verdict still
+  holds the broken version — plumb then calibrates *stale logic* and its
+  agreement verdict is meaningless. Nothing checks that the registered
+  verdict still matches the live probe it claims to mirror.
+
+### Extend components (PRD-sized)
+
+4. **plumb-independence** — rust-extend plumb. `plumb lint [--all|<id>]`:
+   for each probe, extract a coarse *mechanism signature* from verdict and
+   oracle (binaries invoked + file paths touched) and flag a probe whose
+   verdict and oracle share the same mechanism — same primary tool AND
+   same target path — as `tautological`. JSON + human output, nonzero
+   exit when any probe is tautological. Seeded proof: `ctrace-backfill-wired`
+   must flag (both grep the same file); `memlog-active` must pass (getent
+   vs id -nG/stat).
+
+5. **plumb-coverage** — rust-extend plumb. `plumb coverage`: parse the
+   self-review SKILL.md B.5 playbook IDs (and the `plumb_gate`
+   probe→playbook table) and cross-reference against registered probe
+   IDs; report `registered`, `unregistered` (playbook with a
+   verdict-expressible condition but no probe), and `orphan` (probe with
+   no playbook). JSON + summary count. This makes the end-state
+   measurable: "N of M B.5 detectors are calibrated."
+
+6. **plumb-sync** — rust-extend plumb. `plumb sync [--all|<id>]`: for
+   each probe whose `probes.toml` entry carries a `source` pointer
+   (new optional field: `source = "<file>:<anchor>"`), read the live
+   probe text at that anchor and compare its normalized command against
+   the registered `verdict`. Report `in-sync | drifted | source-missing`.
+   Catches the post-fix staleness where SKILL.md is repaired but the
+   registered verdict still mirrors the broken form.
+
+### Extend order
+
+```
+plumb-independence ┐
+plumb-coverage     ├─ all rust-extend plumb, independent subcommands, parallelizable
+plumb-sync         ┘
+```
+
+All three add a separate subcommand over the existing `Registry` /
+`probes.toml` contract; none depends on another. Ship in any order.
+plumb-independence carries live proof (the ctrace probe) so it is the
+highest-value of the three.
+
+### Extend open questions (for jsy)
+
+- **Mechanism-signature granularity.** Should `plumb lint` flag on
+  *same binary OR same path* (stricter, more false-positives) or *same
+  binary AND same path* (drafted default — the ctrace case trips it,
+  memlog doesn't)? Drafted AND; a `--strict` flag could widen it.
+- **Should `plumb lint` failures feed the B.5 quarantine** the way a
+  `check` disagreement does, or only block at registration time? Drafted
+  as a standalone audit (CI/self-review-reportable) for now; wiring lint
+  into the gate is a follow-on once the heuristic earns trust.
+- **`source` anchor format for plumb-sync.** `file:line` is brittle
+  across edits; `file:#anchor-comment` is more durable but requires
+  adding anchors to SKILL.md. Drafted to support both and prefer a
+  named anchor when present.
