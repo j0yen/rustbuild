@@ -8359,3 +8359,61 @@ Open questions (in vision): probe cadence vs power/heat on the 4-core box
   "are you listening?" reassurance verb (rust-extend wintermute-dialog
   Health branch) — left undrafted pending the FSM Health-branch shape;
   next /dream pass.
+
+## 2026-06-13T21:45  /dream  vision-homeward (catchment fleet)
+Drafted: PRD-homeward-source-registry.md, PRD-homeward-source-probe.md,
+  PRD-homeward-source-catalog.md, PRD-homeward-coverage-report.md
+Vision: visions/homeward.md (extended — "Catchment fleet" section)
+Seed: bare /dream, interactive. Field FRESH (fallow streak=0) but inward
+  infra space is SATURATED — 10 PRDs already queued (pulse×4 just landed
+  21:30 + changeover/fixpoint/rollout), and every convergence vision
+  (docket/fixpoint/changeover/rollout) is already active. Drafting more
+  inward would deepen an undrained queue. Asked user for steer; they
+  dismissed → picked the most distinct OUTWARD vision with no PRDs in the
+  current queue, so this doesn't add to the infra backlog.
+Finding: homeward's 4 shipped fleets (core/federation/operate/deliver) all
+  WIRED the pipeline; none WIDENED its mouth. Socrata sources are
+  compile-time `&'static str` const fns (socrata.rs:78) hand-listed in
+  main.rs:24 as [austin,dallas,sonoma,long_beach]. Adding any of the
+  "hundreds more" STRAY portals the vision names = edit Rust + recompile.
+  Coverage is the literal point of homeward (more sources = more reunions)
+  and it's gated behind a developer. ConnectorRegistry (registry.rs) is a
+  runtime name→connector map but nothing populates it from a file.
+Order: source-registry → source-probe → source-catalog
+                       └─► coverage-report (independent of probe/catalog)
+  - source-registry (rust-extend homeward-connectors, ship FIRST): make
+    SocrataConfig/ColumnMap serde-loadable from sources.toml via
+    HOMEWARD_SOURCES; fall back to the 4 built-ins when unset. Foundation —
+    the file format both probe and catalog speak. Owned String alongside
+    the const fn built-ins; keep SocrataConnector::new seam unchanged.
+  - source-probe (rust-extend homeward-connectors): `probe <domain>
+    <dataset_id>` hits SODA columns.json + $limit=1, confirms a
+    STRAY-bearing intake_type column (value-match, not name-guess), emits a
+    GREEN paste-ready [[socrata]] block (annotated confirmed/guessed) or a
+    RED verdict + nonzero exit. Tests use RECORDED fixtures, no live net.
+    Depends on registry (emits its format).
+  - source-catalog (mixed → homeward): commit deploy/sources.toml (4
+    built-ins migrated byte-equivalent + ≥2 new probe-GREEN cities) +
+    deploy/CATCHMENT.md + a parse/load test + default HOMEWARD_SOURCES in
+    env.sample & orchestrate wrapper. The data deliverable that widens
+    catchment. Depends on registry (format) + probe (validation).
+  - coverage-report (rust-extend homeward-connectors): `coverage` reports
+    per-source {last_success, record/stray counts, metro, LIVE/STALE/
+    SILENT/UNREACHABLE} + catchment holes; honest `unknown` when no store.
+    The operator's actual-coverage map (complements catalog's intended map
+    + orchestrate's `homeward health`). Depends on registry only.
+Notes for /build:
+  - All four rust-extend homeward-connectors EXCEPT catalog (mixed).
+    registry must land first (probe/catalog/coverage all speak its format).
+    probe + coverage are parallel-safe once registry lands (disjoint
+    subcommands); catalog needs probe's GREEN output to author entries.
+  - Red-baseline bar = compiles + cargo test green. MSRV 1.85, no
+    let-chains, sigpipe::reset already first in main. toml+serde may need
+    adding to homeward-connectors/Cargo.toml (present elsewhere in wsp).
+  - NO live network in any test — record SODA fixtures
+    ([[feedback_agent_written_fixtures_tautology]]: but here fixtures are
+    upstream HTTP captures, not self-authored oracles; the probe's verdict
+    logic is what's under test, fed real recorded municipal responses).
+Open questions (in vision): OpenDataSoft/ArcGIS dialects = a second
+  connector FAMILY not just config (future extend); auto-discovery of
+  portals via the Socrata federated catalog (un-dreamt, needs research).

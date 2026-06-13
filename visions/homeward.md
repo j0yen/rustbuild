@@ -326,3 +326,77 @@ embed-client is the foundation both wires need. enroll (gallery) and query
 - A real email-relay credential to flip alert-delivery from dry-run to live.
 - A Pet FBI/HeLP partner write agreement to flip the export adapter live.
 - Public/remote exposure of the report API (a deliberate, gated decision).
+
+## Catchment fleet (drafted 2026-06-13)
+
+Fleets 1–4 (core, federation, operate, deliver) built and wired the whole
+pipeline: a photo submitted by an owner now runs end-to-end through embed →
+match → ranked shortlist, proven on fixtures. But Phase-1 live inspection
+(2026-06-13) of `~/wintermute/homeward` found the funnel's **mouth is nailed
+shut at four cities**, and coverage is the entire point of the vision (more
+sheltered-pet sources = more reunions; end-state #1–#2):
+
+- **Sources are compile-time constants.** `SocrataConfig` and
+  `SocrataColumnMap` are structs of `&'static str`; `SocrataConfig::austin()`
+  is a `const fn` (`socrata.rs:78`). Adding any of the "hundreds more" STRAY
+  portals the vision names (Bloomington, and every Socrata/OpenDataSoft
+  municipal animal-services dataset) means **editing Rust and recompiling.**
+- **The registry is hand-listed.** `main.rs:24` builds the connector set from a
+  literal `[austin(), dallas(), sonoma(), long_beach()]`. `ConnectorRegistry`
+  is a runtime name→connector map, but nothing populates it from a file.
+- **Onboarding a portal is manual archaeology.** Each `SocrataColumnMap` was
+  hand-derived by reading one dataset's column docs. Nothing probes a candidate
+  `{domain, dataset_id}` to tell you whether it even carries a STRAY intake-type
+  column or which columns map to what.
+- **No catchment map.** An operator running homeward cannot see which sources
+  are live, which have never returned a record, or which US metros have no feed
+  at all — so coverage holes stay invisible.
+
+None of the four shipped fleets widened the funnel; they wired the pipe behind
+it. This fleet makes **adding a sheltered-pet source a config/data operation,
+not a recompile** — and gives the operator a map of where homeward can and
+cannot yet bring a pet home.
+
+### Catchment components (drafted this pass)
+
+- **homeward-source-registry** (rust-extend → homeward-connectors) — make
+  `SocrataConfig`/`SocrataColumnMap` deserializable from a `sources.toml` and
+  load the connector set from `HOMEWARD_SOURCES` at startup, falling back to the
+  four built-ins. Owned `String` config alongside the `const fn` built-ins.
+  Foundation; everything else needs it.
+- **homeward-source-probe** (rust-extend → homeward-connectors) — a
+  `homeward-connectors probe <domain> <dataset_id>` subcommand that hits the SODA
+  metadata/`$limit=1` endpoint, detects a STRAY-bearing intake-type column +
+  the required columns, and emits a *draft* `sources.toml` entry or an honest red
+  verdict. Turns onboarding into probe → review → commit. Depends on registry.
+- **homeward-source-catalog** (mixed → homeward) — a committed, validated
+  `sources.toml` seed catalog of known-good municipal STRAY feeds (the four
+  built-ins + the next tier), each entry carrying its probe verdict +
+  last-validated date, plus a parse-and-load test. The data deliverable that
+  actually widens catchment. Depends on registry (format) + probe (validation).
+- **homeward-coverage-report** (rust-extend → homeward-connectors) — a
+  `homeward-connectors coverage` subcommand reporting per-source {last-success,
+  record count, STRAY count, declared metro} and flagging catchment holes
+  (registered-but-never-succeeded; named metro with no feed). The operator's
+  map. Depends on registry; independent of probe/catalog.
+
+### Catchment order
+
+```
+homeward-source-registry ─► homeward-source-probe ─► homeward-source-catalog
+                        └─► homeward-coverage-report  (independent of probe/catalog)
+```
+
+registry is the foundation (the file format both probe and catalog speak).
+probe validates candidate portals into catalog entries. coverage-report reads
+the registry and the live store; it needs only the registry.
+
+### Still un-dreamt after catchment
+
+- OpenDataSoft + ArcGIS Open Data portals use a different query dialect than
+  Socrata/SODA; a second connector family (not just config) widens catchment
+  past Socrata-only municipalities — a future `/dream extend homeward` pass once
+  the Socrata catalog is exhausted.
+- Auto-discovery of new portals (crawl the Socrata federated catalog for
+  animal-intake datasets) rather than hand-fed `{domain, dataset_id}` — research
+  whether the catalog API exposes enough to filter to STRAY feeds.
