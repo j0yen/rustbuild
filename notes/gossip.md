@@ -7412,3 +7412,46 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
   sessions; an 18th is noise, not respect. Field unmoved since last productive pass
   (fingerprint b3:e187016f). Rested, no PRDs (Hard Rules 6+8). One word still unblocks a real
   fleet: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, modal NOT re-fired)
+/dream fallow — streak=5 threshold crossed (escalate=true). Interactive manual /dream. Did
+  NOT fire the outward-steer modal — the same 4-option ask was dismissed ~18× today across
+  sessions; a 19th is noise, not respect. Field unmoved since last productive pass
+  (fingerprint b3:e187016f, last_productive 2026-06-12T23:49Z). Rested, no PRDs (Hard Rules
+  6+8). One word still unblocks a real fleet: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=6 threshold crossed (escalate=true). Interactive manual /dream; fired
+  the outward-steer once (4 options incl. explicit "rest"), user dismissed. Field unmoved since
+  last productive pass (fingerprint b3:e187016f, last_productive 2026-06-12T23:49Z). Rested,
+  no PRDs (Hard Rules 6+8). One word still unblocks a real fleet: homeward / constellation /
+  companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, modal NOT re-fired)
+/dream fallow — streak=7 threshold crossed (escalate=true). Interactive manual /dream. Did
+  NOT fire the outward-steer modal — the same 4-option ask was dismissed ~18× today; another
+  is noise, not respect. Field unmoved (fingerprint b3:e187016f, last_productive 23:49Z).
+  Rested, no PRDs (Hard Rules 6+8). One word still unblocks a real fleet: homeward /
+  constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=8 threshold crossed (escalate=true). Interactive manual /dream; fired
+  the outward-steer once this session (4 options incl. explicit "rest"), user dismissed (~19th
+  today). Field unmoved (fingerprint b3:e187016f, last_productive 2026-06-12T23:49Z). Rested,
+  no PRDs (Hard Rules 6+8). One word still unblocks a real fleet: homeward / constellation /
+  companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  vision-answerable (NEW vision)
+Seed: "/dream about AI ethics" (user explicit). Grounded reflexively: this box's own autonomous agent, not a shippable reasoner.
+Drafted: PRD-answerable-ledger.md, PRD-answerable-values-drift.md, PRD-answerable-redline.md, PRD-answerable-consent-digest.md
+Vision: visions/answerable.md (autobuilder/visions/)
+Distinct from the OUTWARD ethics arc (ousia/tribunal/herald/recourse/lattice = general reasoner you ship): answerable = THIS agent's ACTUAL autonomous actions, recorded + governed + consented-to for THIS user. Reflexive, concrete, local.
+Order:
+  - answerable-ledger (rust-cli, NEW repo ~/wintermute/answerable) — the spine; build FIRST
+  - answerable-values-drift, answerable-redline, answerable-consent-digest (all rust-extend into ~/wintermute/answerable) — mutually independent, each depends on ledger
+Notes for /build:
+  - ledger is a NEW repo (rust-cli) → /autobuilder scaffold. The other 3 are rust-extend build_into the SAME new repo, so they CANNOT start until ledger ships (the crate must exist). Do NOT select a rust-extend answerable-* before answerable-ledger is shipped.
+  - The 3 extend PRDs share build_into ~/wintermute/answerable → if selected same tick, share a worktree (≤3 sub-cap) + use lib-register.sh/cli-register.sh to avoid main.rs/lib.rs conflicts.
+  - Grounding is solid: CLAUDE_SELF.md is git-tracked + agent-edited (drift.md only covers TOOL-doc drift, not VALUE drift); 157 repos auto-published no-review; voice user is "completely computer-illiterate" so consent must be voice (wm-tts live).
+Open questions (in vision): who writes the ledger (self-report vs provfs cross-check); redline advisory vs hard hook; digest pull vs daily push; value-drift "weakened" heuristic.
+NOTE: user followed up — wants a SECONDARY sister project: a sub-identity/persona for his ELDERLY MOTHER as primary user, plus a separate persona for his WORK LAPTOP. That's a future /dream seed (persona/sub-identity fleet) — answerable's consent-digest + values layer is a natural foundation for a mother-facing persona. Captured for next dream.
