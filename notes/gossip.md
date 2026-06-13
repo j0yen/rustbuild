@@ -7595,3 +7595,53 @@ Open question for jsy (in vision): should adopt-self-review-bind call `apply`
   (autonomous safe non-daemon installs, per "always commit no caps") or only
   `report` until you confirm the autonomy posture? Drafted report-only as the
   default; apply stays gated.
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-13T(manual)  /dream  vision-plumb (probe-correctness — floor under the verification arc)
+Seed: bare /dream (interactive, manual). fallow check = fresh (streak=0,
+  fingerprint moved 06:35). Verified to source before drafting.
+Drafted: PRD-plumb-core.md, PRD-plumb-ledger.md, PRD-plumb-selfreview-bind.md
+Vision: visions/plumb.md
+Why now: the strongest *unaddressed* fresh signal was not a missing fix
+  and not a false close-note — it was a self-review DETECTION PROBE that
+  returns a reading the system's real state contradicts. Three live cases,
+  three failure modes:
+  - memlog probe (self-review/SKILL.md:186): `getent group memlog && echo
+    yes` captures the multiline group line + "yes", so `[ "$X" = yes ]` at
+    :200 fails → reports memlog INACTIVE while it's ACTIVE. Today's journal
+    (2026-06-13) flags this verbatim. CONFIRMED IN SOURCE this pass.
+  - ctrace-wiring probe (SKILL.md:644): journal 2026-06-12 "probe was wrong
+    — said wiring absent when it exists". A false-absent carried for runs.
+  - adopt-report probe: journal 2026-06-13 "adopt report subcommand not
+    implemented; manually reported to docket" — verdict assumed a missing
+    capability.
+  Existing verification arc (assay/warrant/tribunal/recourse/vigil) all sit
+  one layer too HIGH: each trusts the instrument that took the reading.
+  plumb is the floor — an independent ground-truth oracle per probe.
+Distinct from adopt (Fleet 2): adopt is "shipped artifact never installed";
+  plumb is "self-review's own probe lies". No overlap.
+Order:
+  plumb-core (rust-cli, new repo ~/wintermute/plumb/ → ~/.local/bin/plumb) — ship first.
+   ├─ plumb-ledger (rust-extend plumb) — append-only calibration history + trust verdict.
+   └─ plumb-selfreview-bind (shell → self-review B.5) — gate findings through plumb check;
+        quarantine disagreeing/uncalibrated; fix the live memlog probe as proof.
+Notes for /build:
+  - plumb-core is standalone rust-cli; ship first. Everything consumes its
+    `plumb check --format json` contract. MSRV 1.85, no let-chains; SIGPIPE
+    reset first line of main (per the toolkit lesson).
+  - plumb-ledger + plumb-selfreview-bind both consume core; ledger and bind
+    are independent of EACH OTHER (bind quarantines on a single check even
+    before trust history exists). plumb-ledger rust-extends the SAME repo as
+    core — same serialize-within-tick / worktree caution as other shared-target fleets.
+  - plumb-selfreview-bind edits self-review/SKILL.md — coordinate if any other
+    self-review-binding PRD (adopt-self-review-bind) is mid-build on the same file.
+  - core AC8 is a regression anchor: `plumb check memlog-active` MUST return
+    disagree on this laptop until bind's memlog fix flips it to agree.
+Open question for jsy (in vision): autonomy posture — should plumb-selfreview-bind
+  AUTO-FIX a proven-wrong probe in SKILL.md, or only quarantine+report (drafted
+  default)? Mirrors the unresolved report-vs-apply question in adopt-self-review-bind.
