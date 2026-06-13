@@ -8300,3 +8300,62 @@ Open questions (in vision): mic/ALSA handoff still unsolved (wm-audio
   can't double-hold the capture device — sub-100ms audio gap or SCM_RIGHTS
   fd-pass?); claim TTL vs renew cadence (drafted 30s/10s); proof-seed in
   rollout vs changeover (drafted rollout).
+
+## 2026-06-13T21:30  /dream  vision-pulse
+Drafted: PRD-pulse-hearing-probe.md, PRD-pulse-watch.md,
+  PRD-pulse-deaf-escalation.md, PRD-pulse-silence-gate.md
+Vision: visions/pulse.md (NEW)
+Seed: bare /dream, interactive. Field fresh (fallow streak=0). Picked the
+  companion/kin domain after confirming the inward "make built things live"
+  space is saturated (vest/adopt/scion/fixpoint/changeover/assay/continuity
+  all overlap; the 8 remaining on-disk PRDs are all changeover/fixpoint/
+  rollout). companion + kin are BOTH fully shipped (voice TURN live since
+  2026-06-04; wintermute-reach v0.5.0, presence, family-enroll all built).
+Finding: every safety guarantee in companion+kin assumes the device can
+  still HEAR, and nothing watches that assumption. A deaf box (wm-audio
+  wedged / mic gone / detector silently stopped / model dir clobbered) is
+  indistinguishable from a quiet healthy one — and kin's silence-nudge
+  (reach/src/silence_nudge.rs) fires "haven't heard from Mom" on
+  wm.presence.silence, which it CANNOT tell apart from "can't hear Mom."
+  The one alert that fires points the wrong way. rouse shipped the local
+  on-demand hearing check (wm-audio selftest, selftest.rs:56 exit_code)
+  but it publishes no wm.health envelope and runs on no cadence.
+Order: hearing-probe → watch → {deaf-escalation, silence-gate}.
+  - hearing-probe (rust-extend wintermute-audio, ship FIRST): wm-audio
+    selftest --emit publishes a wm.health.hearing envelope (companion-
+    degrade/almanac shape; almanac daemon.rs:147 is the precedent). Adds
+    NO new inference — wraps the existing selftest real-path check +
+    any_model_present() (selftest.rs:204). Independent.
+  - watch (rust-extend wintermute-presence): cadenced HEARING/DEGRADED/DEAF
+    state machine, K-consecutive-fail debounce, per-window persistence of
+    hearing_confirmed_in_window beside existing presence state, emits
+    wm.health.hearing.fail on the DEAF edge + .ok on recovery. Keyed to
+    presence's existing waking-hours window. Depends on hearing-probe.
+  - deaf-escalation (rust-extend wintermute-reach): subscribe .fail →
+    deliver via run_distress_ladder() (distress_delivery.rs:41 — retry +
+    fallback transport, same durable path as kin distress), debounced one-
+    alert-per-outage, recovery note on .ok. NO Claude-API dependency (a
+    down brain may itself look like deafness). Depends on watch + shipped
+    reach transport.
+  - silence-gate (rust-extend wintermute-reach): gate silence_nudge.rs on
+    hearing_confirmed_in_window — nudge fires only when device provably
+    heard; deaf/ambiguous window suppressed (deaf-escalation owns it).
+    Pure correctness fix, no new opt-in. Depends on watch + deaf-escalation.
+Notes for /build:
+  - All four extend SHIPPED crates and reuse shipped primitives (selftest,
+    run_distress_ladder, presence window/state). Reuse, don't reinvent —
+    no second inference path, no new transport.
+  - deaf-escalation + silence-gate both extend wintermute-reach, disjoint
+    modules (new escalation path vs silence_nudge.rs) — parallel-safe;
+    sequential just rebases the version bump.
+  - wm.health.hearing is a plain agorabus string — keep identical across
+    audio(publish)/presence(consume+re-emit)/reach(consume). No shared crate.
+  - Red-baseline: bar = compiles + cargo test green. MSRV 1.85, no
+    let-chains, sigpipe::reset already in each main. agorabus path dep 0.9.
+Open questions (in vision): probe cadence vs power/heat on the 4-core box
+  (fixture-probe cheap, --live reserved for on-demand); DEGRADED-vs-DEAF
+  band + K threshold want a real deployment to tune; should Mom hear about
+  her own deaf device (TTS still works when ears don't). Component 5 — the
+  "are you listening?" reassurance verb (rust-extend wintermute-dialog
+  Health branch) — left undrafted pending the FSM Health-branch shape;
+  next /dream pass.
