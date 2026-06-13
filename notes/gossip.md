@@ -8040,3 +8040,53 @@ Notes for /build:
 Open questions (in vision): work-machine detection (manual copy + install vs
   chezmoi if constellation ships); persona bleed when Joe asks the personal box
   about AtScale work (vision answer: leave it — personal box keeps its identity).
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T17:58  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-13T(manual)  /dream  vision-changeover
+Seed: bare /dream (interactive). fallow check = FRESH (state=fresh, streak=0,
+  last_productive 17:03 today = plumb extend). Picked a fresh arc, not
+  plumb/persona-work/homeward/rollout (all freshly covered).
+Drafted: PRD-changeover-probe.md, PRD-changeover-warmswap.md,
+  PRD-changeover-autoapply.md
+Vision: visions/changeover.md (new — there was no rollout *vision* doc; this
+  is the dream layer over the rollout tool)
+Root signal: every self-review 2026-06-08→13 parks fleet-binary-staleness on
+  "daemon restarts drop subscribers; requires explicit approval." The blocker
+  is ASSERTED, never MEASURED. wm-audio/dialog/tts/stt all behind-head and
+  un-rollable. rollout/src/restart.rs = hard `systemctl --user restart` +
+  poll_healthcheck (no overlap). agorabus ALREADY has the fix primitives:
+  ClaimAcquire/ClaimRelease TTL lease + DrainNotice + reconnect_subscribe —
+  nothing uses them for peer restarts.
+Order: probe → warmswap → autoapply.
+  - changeover-probe (NEW rust-cli ~/wintermute/changeover/): measure the
+    deafness window + events lost across a real rollout restart. SHIP FIRST,
+    independent. Per [[feedback_verify_before_concluding]] measure before
+    fixing — maybe systemd restart is already <50ms for some daemons.
+  - changeover-warmswap (rust-extend ~/wintermute/rollout/): overlap-start
+    successor, ClaimAcquire the daemon's lease, then stop predecessor. Builds
+    on EXISTING agorabus claim primitive — no agorabus surgery. Only worth
+    building if probe shows a lossy window.
+  - changeover-autoapply (rust-extend ~/wintermute/rollout/): proof ledger
+    (~/.config/rollout/proofs.json) bound to the daemon's binary hash; gate
+    `rollout apply --auto` on a fresh green proof. Ships INERT
+    (auto_enabled=false default) so building it doesn't start restarting the
+    live fleet.
+Notes for /build:
+  - probe ships standalone (new crate). warmswap + autoapply both EXTEND the
+    existing rollout crate — they'll likely land in sequence on the same tree;
+    autoapply adds record-proof + autogate.rs, warmswap adds warmswap.rs +
+    RestartStrategy::WarmSwap. Minor merge if both land same tick.
+  - All three hermetic: live-fleet/bus paths behind #[ignore]; cargo test
+    must stay green without touching the real fleet. MSRV 1.85, no let-chains,
+    sigpipe::reset first line of main ([[self_sigpipe_panic_toolkit]]).
+  - Do NOT auto-roll the live voice fleet as a side effect of building these.
+    autoapply is gated inert by design; warmswap's live swap is #[ignore].
+Open questions (in vision): mic/ALSA produce-side gap on wm-audio (two procs
+  can't hold the capture device — separate fd-passing PRD or accept <100ms
+  audio gap?); claim_key per daemon (derive vs fleet.toml override); proof
+  freshness (hash-bound, drafted).
