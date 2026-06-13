@@ -196,3 +196,67 @@ homeward-federation-export  (independent — outbound, parallel)
   both off the critical path.
 - Microchip federation remains "a separate honest investigation" (no open API anywhere;
   needs registry partnerships, per the original open question above).
+
+## Operate fleet (drafted 2026-06-13)
+
+Fleets 1 (core) and 2 (federation) shipped the *parts*: `~/wintermute/homeward`
+v0.9.3 is six crates + a Python embed sidecar that compile, ship binaries
+(`homeward-ingestd run`, `homeward-reportd serve`, `homeward-connectors`,
+`homeward-match`, `homeward-embed-svc`), and have **never been run together**.
+Phase-1 live inspection (2026-06-13) found the honest frontier is not a missing
+feature — it is that homeward is a **library fleet that has never been operated,
+provisioned, proven, or made to deliver**:
+
+- **No deployment.** `find` for any compose/`.service`/Dockerfile in the repo hit
+  only `.venv`. Three daemons meant to talk to each other have nothing standing
+  them up, wiring their shared env, supervising them, or health-checking them.
+- **The model is never provisioned.** `embedder.py:74` loads DINOv2 lazily via
+  `from_pretrained` (silent download, no offline mode, no warmup); no proof it has
+  ever embedded a real photo end-to-end with a measured latency. Same shape as the
+  `wm-stt` stub→whisper gap ([[project_voice_input_null_detectors]]).
+- **The eval never ran.** `eval.py` is a complete held-out harness that published
+  no number and enforces its own disjoint-split warning only in prose. Honest
+  accuracy is the vision's non-negotiable ([[feedback_agent_written_fixtures_tautology]]).
+- **Alerts never deliver.** `alerts.rs` generates+dedups `MatchAlert`s with a
+  brokered `contact_token` but has no transport — end-state #5 ("alert fires within
+  minutes") is an object in a store, not a notification an owner receives.
+
+### Operate components (drafted this pass)
+
+- **homeward-orchestrate** (shell) — systemd-user units + a `homeward up/down/
+  status/health` wrapper + an env contract that stand the three daemons up as one
+  supervised `homeward.target`. Independent; the foundation for running anything.
+- **homeward-embed-provision** (mixed → homeward) — deterministic DINOv2 prefetch
+  + offline mode + a real enroll→query smoke on a bundled CC-licensed fixture that
+  proves the index discriminates and records measured latency. Independent.
+- **homeward-eval-harness** (mixed → homeward) — make `eval.py` runnable
+  (`homeward-embed eval`), enforce gallery/query individual-disjointness *in code*
+  (raise, not warn), ship a correctness fixture that proves the harness arithmetic,
+  and commit `EVAL.md` documenting the real number + the PetFace manual path.
+  Independent of orchestrate; benefits from embed-provision but builds standalone.
+- **homeward-alert-delivery** (rust-extend → homeward-report) — a `Deliverer`
+  trait (dry-run default, honest like the `Syndicator`), an email-relay adapter
+  keyed by the brokered token (disabled→dry-run until a relay credential exists),
+  an append-only delivery ledger, and the wiring that fires delivery on alert
+  generation. Independent.
+
+### Operate order
+
+```
+homeward-orchestrate     (foundation — stands the fleet up)
+homeward-embed-provision ─► homeward-eval-harness   (eval benefits from a warmed model)
+homeward-alert-delivery  (independent — rust-extend homeward-report)
+```
+
+All four are independent enough to ship in any order; the only soft edge is
+eval-harness reusing the warmed model from embed-provision. orchestrate is
+shell-only; embed-provision/eval-harness are mixed Python; alert-delivery is the
+sole `rust-extend` of `homeward-report`.
+
+### Still un-dreamt after operate
+
+- A live PetFace held-out number (research-gated dataset = manual download, not a
+  build) — the harness will be ready; obtaining the data is an outreach.
+- A real relay credential to flip alert-delivery from dry-run to live (outreach).
+- Public/remote exposure of the report API (a deliberate, gated decision; localhost
+  by default until then).

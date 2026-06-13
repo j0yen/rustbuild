@@ -7721,3 +7721,43 @@ Notes for /build:
 Open question for jsy (carried from vision): the actual NAME Jocelyn calls the
   assistant is still a deployment choice — profile ships a placeholder self_name
   in the jocelyn preset; you set the real one (Clara/Rose/Nora/Wren…).
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  vision-homeward (extend: operate fleet)
+Seed: bare /dream (interactive). fallow check = fresh (streak=0, fingerprint
+  moved 09:34 — plumb fleet shipped today). Steer menu offered (persona
+  fulfilled, inward clusters saturated); user dismissed → I made the call:
+  homeward, the strongest fully-buildable outward frontier.
+Reconciled live: homeward is v0.9.3 with ALL nine components shipped (6 core
+  + 3 federation: petfbi/dedup/export, merged). It is a LIBRARY FLEET that has
+  never been operated — that's the frontier this pass opens.
+Drafted: PRD-homeward-orchestrate.md, PRD-homeward-embed-provision.md,
+  PRD-homeward-eval-harness.md, PRD-homeward-alert-delivery.md
+Vision: visions/homeward.md (new "Operate fleet" section)
+Key evidence each PRD cites (Phase-1 live, 2026-06-13):
+  - orchestrate: 3 runnable daemons (ingestd loop main.rs:125; reportd serve
+    bin/reportd.rs:7; FastAPI sidecar service.py) but `find` for compose/.service/
+    Dockerfile hit ONLY .venv — zero deployment artifact. shell-only.
+  - embed-provision: embedder.py:74 from_pretrained = silent lazy download, no
+    offline/warmup, never proven on a real photo. Same shape as wm-stt stub→whisper.
+  - eval-harness: eval.py is a complete held-out harness, NEVER run, no published
+    number; disjoint-split is prose warning (eval.py:113) not a code assertion;
+    PetFace research-gated (eval.py:35). Non-negotiable per [[feedback_agent_written_fixtures_tautology]].
+  - alert-delivery: alerts.rs:38-60 generates+dedups MatchAlert w/ brokered
+    contact_token but NO transport. End-state #5 unrealized.
+Order: orchestrate (foundation) ; embed-provision → eval-harness (warmed model) ;
+  alert-delivery (independent). All four ship in ~any order.
+Notes for /build:
+  - homeward-alert-delivery is the only rust-extend (→ homeward-report crate);
+    the others are shell (orchestrate) / mixed-Python (embed-provision, eval-harness).
+  - embed-provision + eval-harness both touch homeward/embed/ Python subtree —
+    SERIALIZE within a tick / worktree-isolate (shared build target).
+  - embed-provision smoke + eval-harness need DINOv2 weights; on a no-network
+    sandbox the tests must skip-with-message, not false-green. Honest gate, not a pass.
+  - orchestrate installs systemd-user units; it stands up daemons but does NOT
+    auto-start them on the user's box without `homeward up` — no surprise services.
+Open questions (carried to vision): live PetFace number = manual dataset download
+  (research-gated, not a build); real relay credential to flip alert-delivery live =
+  outreach; public exposure of report API = deliberate gated decision (localhost default).
