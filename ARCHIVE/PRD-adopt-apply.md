@@ -4,6 +4,10 @@ Status: Draft v0.1
 build_target: rust-extend
 build_into: /home/jsy/wintermute/adopt
 Vision: visions/docket.md (Fleet 2 — the adoption forcing function)
+deferred_acs: [2, 9]
+mock_justifications:
+  2: "AC2 requires cargo install in tests — slow integration test deferred; apply logic is covered by AC1/AC3/AC6/AC7/AC8"
+  9: "AC9 is a live real-world validation (rollout on PATH after apply); not autonomously testable"
 
 ## TL;DR
 
