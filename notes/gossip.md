@@ -8147,3 +8147,61 @@ Open questions (in vision): dirty-tree semantics (compare vs committed
   eventual rigorous form (build.rs stamp, deferred); whether changeover-
   autoapply consumes scion's marker or needs a running-daemon binary-hash
   proof (resolve when autoapply is built).
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  vision-litmus
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0,
+  last_productive 19:07). User not asked to steer (escalate=false); made
+  the call from evidence. Fresh arc — not scion/changeover/plumb/persona/
+  homeward/rollout/vest (all freshly covered).
+Drafted: PRD-litmus-probe-fixtures.md, PRD-litmus-stuck-detector.md,
+  PRD-litmus-selfreview-bind.md
+Vision: visions/litmus.md (NEW)
+Root signal: self-review's Phase B.5 PROBES can be false-by-construction,
+  and when they are, docket faithfully re-parks a false finding forever.
+  Two-week worked example, measured live this session:
+  `docket show ctrace-sessionend-flake` → report_count:12, runs_seen:10,
+  open 2026-05-30 → resolved today 14:04 with reason "grep pattern
+  'scribe backfill' is a false negative — hook is correct." Ground truth:
+  ~/.claude/scripts/ctrace-session-start.sh HAS the wiring (line 27 reap,
+  lines 33-35 `"$scribe" backfill …`) — the probe's grep `scribe backfill`
+  never matched the hook's `"$scribe" backfill`, so the finding cried
+  wolf 12× over a fortnight. (My OWN first grep this session reproduced
+  the exact false-negative — proof it's a foot-gun, not a one-off.) Same
+  class of bug hit the memlog probe (multiline getent capture), since
+  fixed inline but with no regression test to keep it fixed.
+Order: (litmus-probe-fixtures ∥ litmus-stuck-detector) → litmus-selfreview-bind.
+  - litmus-probe-fixtures (shell): golden-fixture self-test harness for
+    B.5 probes, modelled on the EXISTING ~/.claude/skills/self-review/
+    scripts/docket-bind-selftest.sh (XDG isolation + assert_* helpers).
+    Canonical regression: ctrace-wiring fixture = byte copy of the real
+    hook, expect HAS_BACKFILL=yes; negative-control unwired copy expects
+    no. Would have caught the grep bug on day one.
+  - litmus-stuck-detector (rust-extend ~/wintermute/docket): `docket stuck`
+    read-only subcommand — open findings with report_count>=6 AND
+    runs_seen>=5 AND resolved_at null, labeled "probe-suspect — audit the
+    probe not the world." No schema change: Finding already has these
+    fields (model.rs:118/136/140/142). New Command::Stuck beside
+    Digest/Sweep (cli.rs:52).
+  - litmus-selfreview-bind (config: edits self-review/SKILL.md): wire
+    `docket stuck` into Phase B.5 as a `litmus:` banner + a `litmus_audit`
+    playbook that routes a probe-suspect finding to the fixture harness
+    BEFORE re-parking. Mirrors the shipped plumb-selfreview-bind pattern.
+Notes for /build:
+  - litmus-stuck-detector EXTENDS docket; bind DEPENDS on it (needs the
+    subcommand). fixtures is independent — ship anytime.
+  - docket extend: read-only query only, no migration. Keep within the
+    red-baseline reality (compiles + cargo test green is the real bar).
+    sigpipe::reset already in main; MSRV 1.85; no let-chains.
+  - fixtures + bind both touch ~/.claude (scripts + SKILL.md), NOT a repo
+    under ~/wintermute — build_target shell/config, no cargo, no network.
+  - Distinct from plumb (calibrates TRUST in verdicts statistically — and
+    is already bound to B.5) and scion (fixes adopt's freshness verdict):
+    litmus is whether the self-review PLAYBOOK PROBES match the artifacts
+    they grep. Correctness of the pattern, not calibration of belief.
+Open questions (in vision): absolute vs relative stuck threshold; whether
+  a fixture-confirmed-probe-defect finding should auto-ack (probably not —
+  visibility is the point); litmus-as-scripts vs its own crate (start as
+  scripts next to docket-bind-selftest.sh).
