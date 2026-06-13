@@ -299,8 +299,95 @@ vigil-selfreview-concurrent-guard    (shell; independent — serialize on SKILL.
   (pre/post pid, binary provenance ts, peer-count delta, elapsed) so a
   rollout is auditable. Draft after the first real `rollout apply`.
 
+## Fleet 5 — the last mile: actually drive rollout against the live systemd fleet (drafted 2026-06-13)
+
+Fleet 1 built the detector (`binstale`) and the orchestrator (`rollout`).
+Fleet 4 made *install imply restart* (`rollout install`, systemd-aware).
+Yet `fleet-binary-staleness` has stayed **open for run after run** —
+wm-audio/dialog/tts/stt behind-head on 2026-06-11/12/13. The reason is
+not detection and not safety; it is that **the orchestrator half is
+inert**. Caught live this pass:
+
+1. **`rollout` refuses every daemon because `fleet.toml` was never
+   authored.** `rollout plan --only wm-audio` →
+   `fleet.toml error: cannot read ~/.config/rollout/fleet.toml`
+   (`find ~/.config -name fleet.toml*` is empty). This is vision Open
+   Question #1 — "discuss the canonical launch path per daemon before
+   `rollout apply` runs" — never resolved, so the config never got
+   written, so the tool sits unusable.
+
+2. **`rollout apply` uses the wrong restart model for this fleet.**
+   `restart.rs` does build → `install_cmd` → SIGTERM old pid →
+   `launch_cmd` → healthcheck — designed for hand-launched daemons
+   (`launch_cmd = "agorabus serve &"`). But the live fleet is
+   **systemd-managed**: `wm-audio|dialog|stt|tts.service` all
+   `ExecStart=%h/{.cargo,.local}/bin/wm-… start`, with `Restart=always`
+   drop-ins ([[self_agorabus_restart_kills_voice]]). A manual SIGTERM
+   *races systemd's own restart*, and `launch_cmd` spawns a daemon
+   systemd doesn't track. Meanwhile `rollout install` (Fleet 4)
+   **already** has the correct systemd path (`install.rs`: reverse
+   unit-map + `systemctl --user restart <unit>`) — the `apply` path just
+   never learned it.
+
+3. **The precise window guard is finally buildable.** Fleet 2 deferred
+   `rollout-window-guard` because it needed "a reliable turn-in-progress
+   signal" from continuity-of-conversation. That signal now exists:
+   `wm.dialog.turn.{user,system}` and `wm.brain.session.{start,end}` are
+   live event names in `wintermute-dialog`/`wintermute-brain` source.
+   `health.rs` still uses only a coarse `--window` time sample. (It also
+   excludes `wm-audio` from `VOICE_SET_PATTERN` — but wm-audio is the
+   mic pipeline; restarting it drops input mid-turn too.)
+
+Fleet 5 closes the last mile so the recurring escalation finally has a
+one-command, window-guarded, systemd-correct cure.
+
+1. **rollout-fleet-gen** (`rust-extend` → `~/wintermute/rollout/`) — a
+   `rollout fleet-gen` subcommand that *derives* a candidate `fleet.toml`
+   from live state (binstale scan × `~/.config/systemd/user/*.service`
+   ExecStart map), writes `fleet.toml.proposed` + a diff, never the live
+   file. Resolves Open Q#1 with a tool instead of a hand-edit. Foundation
+   — without a fleet.toml, `apply` can't run.
+
+2. **rollout-apply-systemd** (`rust-extend` → `~/wintermute/rollout/`) —
+   teach the `apply`/`restart.rs` path to honour a recipe that names a
+   systemd unit and restart via the same `systemctl --user restart` logic
+   `install.rs` already owns, instead of SIGTERM+launch. Serialize its
+   /build cycle with PRD 3 (both touch the rollout crate).
+
+3. **rollout-window-guard-turnaware** (`rust-extend` →
+   `~/wintermute/rollout/`) — replace the coarse `--window` sample with a
+   precise guard that subscribes to `wm.dialog.turn.*` /
+   `wm.brain.session.*` and refuses to restart a voice daemon (extend the
+   set to include `wm-audio`) while a turn/session is in flight. This is
+   Fleet 2's deferred `rollout-window-guard`, now unblocked.
+
+4. **rollout-selfreview-apply** (`shell` → self-review `SKILL.md`) — once
+   1–3 land, change the `fleet-binary-staleness` Pending pre-fill from
+   `rollout plan --only <d>` to the window-guarded
+   `rollout apply --only <d> --window` — **still human-run, never
+   autonomous**. Note: SKILL.md:830 calls the escalate-don't-apply
+   guardrail "immutable"; this PRD changes only *which command is
+   suggested for the human to run*, not who runs it — but it needs Joe's
+   explicit nod (see Open Questions).
+
+**Order (Fleet 5):**
+
+```
+rollout-fleet-gen                  (foundation; authors the missing config)
+   └──► rollout-apply-systemd      (apply honours systemd units)
+        └──► rollout-window-guard-turnaware  (serialize w/ apply-systemd on the crate)
+             └──► rollout-selfreview-apply    (shell; needs 1–3 shipped + verified)
+```
+
 ## Open questions
 
+- **Lifting the "immutable" self-review guardrail (Fleet 5 PRD 4).**
+  `SKILL.md:830` declares "self-review never runs `rollout apply`
+  autonomously … this guardrail is immutable." Fleet 5 PRD 4 keeps
+  *autonomous* application forbidden but changes the pre-filled command a
+  human runs from `rollout plan` to a window-guarded `rollout apply`.
+  This is a deliberate posture change to a block the SKILL marks
+  immutable — **needs Joe's explicit approval before /build ships it.**
 - **Per-daemon launch recipe**: `rollout` must know how each daemon is
   (re)launched. `pevent list` is empty (the bus daemon is *not*
   pevent-supervised), and `install.sh` uses `cargo install --path .`

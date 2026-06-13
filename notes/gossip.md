@@ -7817,3 +7817,46 @@ Open questions (carried to vision): the assistant's actual NAME is still Joe's
 
 ## 2026-06-13T(manual)  /dream  fallow-record
 fallow record --drafted 4 --seed user-prompt --note persona
+
+## 2026-06-13T(manual)  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-13T(manual)  /dream  vision-vigil (extend: Fleet 5 — drive rollout)
+Seed: bare /dream (interactive). fallow check = fresh (streak=0). Strongest
+  recurring uncovered signal: fleet-binary-staleness (wm-audio/dialog/tts/stt
+  behind-head) sits in self-review Pending run after run (2026-06-11/12/13),
+  yet vigil already SHIPPED both the detector (binstale) and orchestrator
+  (rollout). Phase 1 found why the cure never fires:
+  1. rollout is INERT — `~/.config/rollout/fleet.toml` was never authored
+     (`find ~/.config -name fleet.toml*` empty); `rollout plan --only wm-audio`
+     errors "cannot read fleet.toml". vigil Open Q#1 (canonical launch recipe)
+     was deferred as a discussion that never happened.
+  2. `rollout apply` (restart.rs) uses SIGTERM-old-pid + launch_cmd — built for
+     hand-launched daemons. But the live fleet is systemd-managed
+     (wm-*.service, Restart=always drop-ins per self_agorabus_restart_kills_voice).
+     A manual SIGTERM RACES systemd's own restart. Meanwhile `rollout install`
+     (Fleet 4, shipped) ALREADY has the correct `systemctl --user restart <unit>`
+     path in install.rs — `apply` just never learned it.
+  3. The precise window guard (vigil Fleet 2, deferred) is now buildable: its
+     blocker — a real turn-in-flight signal — exists. wm.dialog.turn.{user,system}
+     + wm.brain.session.{start,end} are live event names in dialog/brain source.
+     health.rs still uses only a coarse --window sample AND excludes wm-audio
+     (the mic pipeline) from VOICE_SET_PATTERN.
+Drafted: PRD-rollout-fleet-gen.md, PRD-rollout-apply-systemd.md,
+  PRD-rollout-window-guard-turnaware.md, PRD-rollout-selfreview-apply.md
+Vision: visions/vigil.md (new "Fleet 5 — the last mile" section + 1 Open Q)
+Order: fleet-gen → apply-systemd → window-guard-turnaware → selfreview-apply
+Notes for /build:
+  - fleet-gen, apply-systemd, window-guard all extend ~/wintermute/rollout/
+    (same crate). SERIALIZE / worktree-isolate their /build cycles — apply-systemd
+    and window-guard both touch restart.rs/health.rs. Ship fleet-gen first (it
+    authors the config + adds the `unit` field the others consume).
+  - apply-systemd should REUSE install.rs's restart_unit/find_unit_for_dest
+    (extract to a shared module) — do NOT reimplement the systemd unit scan.
+  - rollout-selfreview-apply is shell (edits self-review SKILL.md) and is
+    USER-GATED: it changes the human-suggested command from `rollout plan` to a
+    window-guarded `rollout apply`, touching a guardrail the SKILL marks
+    "immutable" (SKILL.md:830). Keep autonomous-apply forbidden; needs Joe's nod.
+    Do not ship before the three rollout extends land + verify.
+Open questions (in vision): lifting the "immutable" escalate-don't-apply
+  self-review guardrail needs Joe's explicit approval.
