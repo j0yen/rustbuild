@@ -7384,3 +7384,31 @@ Decision: rest, not a thin fleet (Hard Rules 6+8). Did NOT re-fire the outward-s
   A 14th ask isn't respect, it's noise. Field saturated since last_productive 15:22Z
   (fingerprint unchanged b3:e187016f). Rested, no PRDs (Hard Rules 6+8). The steer is one
   word in prose: homeward / constellation / companion-kin / a topic — any unblocks a real fleet.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=16 threshold crossed. Deliberate manual /dream; fired the outward-steer
+  once (plain-language, not the stock 4-option modal), user dismissed (16th today). Field
+  saturated since last_productive 15:22Z (fingerprint unchanged b3:e187016f). Rested, no PRDs
+  (Hard Rules 6+8). The steer is one word: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (not escalated)
+/dream fallow — streak=1, escalate=false (field reset; last_productive 23:49Z, fingerprint
+  unchanged b3:e187016f). Interactive /dream but did NOT fire the steer modal — dismissed ~16×
+  today; re-asking is noise. Rested, no PRDs (Hard Rules 6+8). One steering word still unblocks
+  a fleet: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (not escalated)
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, steer dismissed)
+/dream fallow — streak=3 threshold crossed. Interactive manual /dream; fired the outward-steer
+  once (4-option, honest framing), user dismissed (~17th today). Field unmoved since last
+  productive pass (fingerprint b3:e187016f). Rested, no PRDs (Hard Rules 6+8). One word still
+  unblocks a real fleet: homeward / constellation / companion-kin / a topic.
+
+## 2026-06-12T(manual)  /dream  fallow rest (escalated, modal NOT re-fired)
+/dream fallow — streak=4 threshold crossed (escalate=true). Interactive manual /dream. Did
+  NOT fire the outward-steer modal — the same 4-option ask was dismissed ~17× today across
+  sessions; an 18th is noise, not respect. Field unmoved since last productive pass
+  (fingerprint b3:e187016f). Rested, no PRDs (Hard Rules 6+8). One word still unblocks a real
+  fleet: homeward / constellation / companion-kin / a topic.
