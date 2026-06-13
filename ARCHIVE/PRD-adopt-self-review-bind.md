@@ -80,3 +80,25 @@ factors probes into helper scripts, a small wrapper under the skill's
    shows the probe, run against the current laptop, would surface at
    least `adopt:rollout` (the live 9-day-unadopted artifact) as a
    Pending item.
+
+## Iter log
+
+### 2026-06-13 — wiring committed, dry-verification run
+
+- Playbook `adopt_scan_probe` added to Phase B.5 of
+  `~/.claude/skills/self-review/SKILL.md` via commit `53954c6`
+  ("adopt-self-review-bind: wire adopt scan into Phase B.5").
+  Insertions: 60 lines. All structural ACs (1–4, 6) satisfied inline.
+  No wrapper script added (AC5 vacuously satisfied — probe is inline).
+
+- **AC7 dry verification** (2026-06-13): `adopt scan --format json`
+  run against current laptop state:
+  - `rollout`: `not-installed` → fix_cmd:
+    `cargo install --path /home/jsy/wintermute/rollout --root ~/.local`
+  - Also surfaced: `ac-judge` (installed-stale), `apipe` (not-installed),
+    `agentns-claude`/`agentns-doctor`/`wm-busbridge` (installed-stale),
+    and others. AC7 criterion met: `adopt:rollout` surfaces as a Pending
+    item.
+
+- `verified-completed.sh` run with `--paired 1,2,3,4,5,6,7`:
+  all 7 ACs classified PAIRED, `missing: []`. Gate passes.
