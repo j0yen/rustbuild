@@ -63,38 +63,54 @@ When persona is fulfilled:
 
 ## Components (one bullet per PRD)
 
-- **persona-forbidden-vocab** — extend `PersonaConfig` in `wintermute-brain`
-  with `forbidden_terms: Vec<String>`, composed into the system prompt as a
-  firm instruction. Ships a `jocelyn` preset (defaults populated, fully
-  overridable). Foundation for the Jocelyn deployment.
-- **persona-name-ceremony** — extend `wintermute-brain`: on first-ever boot,
-  the assistant introduces itself by `self_name` and waits for a voice
-  acknowledgment before transitioning to the regular `FirstEver` greeting.
-  `introduction_mode: Off | FirstEverBoot | Explicit`. Explicit mode also
-  responds to `wm.persona.introduce` bus topic.
-- **persona-consent-voice-ack** — extend `answerable`: `answerable digest
-  --speak --wait-ack` subscribes to `wm.stt.final` after speaking, waits for
-  an affirmative word, records `consent-voice-ack` or `consent-unacknowledged`
-  in the ledger. The voice substitute for a signature.
+**Shipped (verified live 2026-06-13):**
+
+- **persona-forbidden-vocab** — ✅ SHIPPED (`wintermute-brain` v0.20.0).
+  `forbidden_terms: Vec<String>` on `PersonaConfig`, composed into the system
+  prompt (`src/lib.rs:237`). Ships a `jocelyn` preset.
+- **persona-name-ceremony** — ✅ SHIPPED (`src/introduction.rs`).
+  `IntroductionMode::{Off,FirstEverBoot,Explicit}`, `compose_introduction_text`,
+  ack timeout; Explicit responds to `wm.persona.introduce` (wired in
+  `src/daemon.rs`).
+- **persona-consent-voice-ack** — ✅ SHIPPED (`answerable` v0.5.0).
+  `digest --speak --wait-ack`, records `consent-voice-ack` /
+  `consent-unacknowledged`.
+
+**Drafted 2026-06-13 (this dream pass):**
+
+- **persona-redline** — extend `wintermute-brain`: output-side enforcement of
+  `forbidden_terms`. Today the list is *prompt-only advice* (`src/lib.rs:237`);
+  nothing scans the generated reply before TTS, and the default tier is
+  `local-3b` (most likely to leak). `src/redline.rs` scans the reply, and on a
+  hit either regenerates once or substitutes a safe phrase — the advisory
+  prompt becomes a runtime guarantee.
+- **persona-profile** — extend `wintermute-brain`: a named profile registry +
+  `wm-brain persona {list,show,diff,apply}`. Today persona is scattered knobs in
+  `brain.toml`; the live config has no `forbidden_terms` and no intro mode at
+  all. One named declaration (`jocelyn`, `default`) materializes a complete,
+  consistent `[persona]` block — `persona apply jocelyn` instead of a dozen
+  manual TOML edits.
 - **persona-work** — a shell target that writes Joe's work-laptop identity:
   `CLAUDE_WORK.md` with professional register, `joeyen-atscale` scope, no
-  auto-publish, no voice, no family reach. An install script that drops it
-  as `~/.claude/CLAUDE_SELF.md` on the work machine.
+  auto-publish, no voice, no family reach. An idempotent, reversible install
+  script that drops it as `~/.claude/CLAUDE_SELF.md` on the work machine.
+  (The last of the original four components; still entirely unbuilt.)
 
 ## Order
 
 ```
-persona-forbidden-vocab ──► persona-name-ceremony    (both extend wintermute-brain)
+[shipped] forbidden-vocab ──► persona-redline      (redline enforces the shipped list)
+                          └─► persona-profile       (profile composes the shipped fields)
+[shipped] name-ceremony ─────► persona-profile      (profile binds the shipped intro mode)
 
-persona-consent-voice-ack                             (extends answerable, independent)
-
-persona-work                                          (shell, fully independent)
+persona-work                                        (shell, fully independent)
 ```
 
-persona-forbidden-vocab is the foundation for name-ceremony because the
-ceremony speaks using the composed persona (which includes the forbidden list).
-The other two are independent — answerable-consent-voice-ack extends a different
-repo; persona-work is a shell/config target with no Rust.
+persona-redline and persona-profile both extend `wintermute-brain` and both
+build on the shipped forbidden-vocab/name-ceremony surfaces; they are
+independent of each other (profile's `redline` field is optional/defaulted so it
+builds with or without redline). persona-work is a shell/config target with no
+Rust and no dependency on the others.
 
 ## Open questions
 

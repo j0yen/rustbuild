@@ -7679,3 +7679,45 @@ Note for /build: no new work queued by this pass. The plumb fleet (PRD-plumb-cor
   -ledger, -selfreview-bind) from the prior pass is the right next build — it
   directly resolves both discrepancies above. fleet-binary-staleness needs jsy to
   approve `rollout apply` (drops voice subscribers); not a build task.
+
+## 2026-06-13T(manual)  /dream  vision-persona (extend)
+Seed: bare /dream (interactive), steered to persona after the inward
+  self-maintenance field came up fresh-but-owned again (plumb fleet shipped
+  today resolves the open probe-lies discrepancies). User dismissed the
+  steer menu; picked persona — the user-originated sister project (Jocelyn,
+  his mother, primary user).
+Reconciled: 3 of persona's 4 original components are SHIPPED but were never
+  PRD files and aren't all in the changelog — verified live in code this pass:
+  - persona-forbidden-vocab  → wintermute-brain v0.20.0, src/lib.rs:184/237
+  - persona-name-ceremony    → src/introduction.rs (Off/FirstEverBoot/Explicit)
+                               + wm.persona.introduce wired in src/daemon.rs
+  - persona-consent-voice-ack→ answerable v0.5.0, digest --speak --wait-ack
+Drafted: PRD-persona-redline.md, PRD-persona-profile.md, PRD-persona-work.md
+Vision: visions/persona.md (Components section updated: shipped vs drafted)
+Order:
+  forbidden-vocab(shipped) ──► persona-redline   (enforce the list on OUTPUT)
+                           └─► persona-profile    (compose the scattered fields)
+  name-ceremony(shipped) ─────► persona-profile   (bind the shipped intro mode)
+  persona-work                                    (shell, fully independent)
+Key evidence each PRD cites (Phase-1, live this pass):
+  - redline: forbidden_terms is PROMPT-ONLY (src/lib.rs:237, sole non-test use);
+    NO output scan before TTS; default tier is local-3b (qwen2.5:3b) = most
+    likely to leak an instructed-against word. One slipped "computer" breaks
+    the technophobe-companion illusion the whole vision protects.
+  - profile: live ~/.config/wintermute/brain.toml [persona] has NO
+    forbidden_terms and NO intro mode — the Jocelyn identity exists in presets
+    + tests but was never assembled into a deployment. `jocelyn` preset covers
+    one field only (forbidden list). Adds wm-brain persona {list,show,diff,apply}.
+  - work: ~/.claude/CLAUDE_WORK.md does not exist; CLAUDE_SELF.md is a symlink
+    into ~/dotfiles wired for the personal box. Last unbuilt original component.
+Notes for /build:
+  - persona-redline + persona-profile both rust-extend ~/wintermute/wintermute-brain
+    — SERIALIZE within a tick / worktree-isolate (shared build target, same
+    caution as other wintermute-brain extend fleets). They are independent of
+    EACH OTHER; either can ship first.
+  - persona-work is shell-only, fully independent, can ship anytime.
+  - profile's `redline` field is optional/defaulted → profile builds whether or
+    not redline shipped first.
+Open question for jsy (carried from vision): the actual NAME Jocelyn calls the
+  assistant is still a deployment choice — profile ships a placeholder self_name
+  in the jocelyn preset; you set the real one (Clara/Rose/Nora/Wren…).
