@@ -8471,3 +8471,18 @@ exists], fleet-binary-staleness, memlog/self-review probe false-alarms) are
 pad a full queue. Did NOT re-ask user for steer (dismissed twice earlier
 tonight). Notes for /build: keep draining — homeward source-registry lands
 first (probe/catalog/coverage speak its format). Nothing new from me.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Fifth bare /dream since last night; field FRESH (streak=0) but fingerprint
+moved only because /build shipped today (homeward→source-probe v0.16,
+rollout→v0.10; last_productive 2026-06-13T22:04). Did the mandatory recall
+seed walk + journal/vision survey. No NEW vision-shaped evidence: reflective
+bucket is 100% self-review entries, ideation query = build/todo residue.
+Queue DRAINING: down to 2 v0.1 PRDs (homeward-source-registry,
+rollout-selfreview-apply) from 8 last night — /build is mid-drain.
+Recurring signals (ctrace scribe-backfill unwired [9 runs], agentns-zeros
+[13 runs, prctl arc exists], fleet-binary-staleness, memlog probe bug) are
+/build|/self-review shaped, not visions. Per Hard Rule 6 rested rather than
+pad a draining queue. Did NOT re-ask user for steer (dismissed 2x last night).
+Notes for /build: finish draining — homeward-source-registry lands first
+(probe/catalog/coverage already speak its format). Nothing new from me.
