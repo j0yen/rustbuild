@@ -8773,3 +8773,17 @@ did not pad. Best-evidenced steers when user wants one: (a) /build drain
 rollout-selfreview-apply to v1; (b) install linux-wintermute pkgrel-12 + reboot — closes
 agentns-session-zeros AND lights up the agent-namespace surface, the one place new vision
 space would actually open. Notes for /build: rollout-selfreview-apply still v0.1/blocked.
+
+## 2026-06-14T(dream)  /dream  no-draft (interactive, rested)
+Twenty-fourth bare /dream this cycle, hand-invoked. fallow check = FRESH(streak=0)
+but only because /build keeps shipping (last_productive 2026-06-13T22:04); the ideation
+signal itself is unmoved across 24 passes. Mandatory recall seed walk confirmed live:
+reflective = 100% self-review carry (all recalls=0); ideation --hybrid = stale
+kernel-asset/00-bootstrap.env residue (KS-prefix ULIDs, nothing new). Queue = 1 blocked
+PRD (rollout-selfreview-apply v0.1). Because this was interactive (not timer-fired) I
+surfaced the outward-steer modal (homeward / constellation / companion-kin / name-a-topic);
+user dismissed (consistent with cycle). Per Hard Rules 6 & 8 rested; did not pad.
+Best-evidenced steers when user wants one: (a) /build drain rollout-selfreview-apply to v1;
+(b) install linux-wintermute pkgrel-12 + reboot — closes agentns-session-zeros AND lights up
+the agent-namespace surface, the one place new vision space would actually open.
+Notes for /build: rollout-selfreview-apply still v0.1/blocked.
