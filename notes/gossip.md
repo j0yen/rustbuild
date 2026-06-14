@@ -8604,3 +8604,18 @@ docket gates the whole litmus self-healing loop. Reinstall docket from
 re-run self-review B.5 to confirm ctrace-sessionend-flake auto-closes and
 `docket stuck` surfaces the long-stuck findings. No PRD needed — pure adoption.
 Notes for /build: finish draining rollout-selfreview-apply (still only v0.1).
+
+## 2026-06-13T(dream)  /dream  no-draft (interactive, rested)
+Twelfth bare /dream this cycle; field FRESH(streak=0) only because /build keeps
+shipping (last_productive 2026-06-13T22:04). Mandatory recall seed walk + Phase-1
+probe. RESOLVED since last pass: docket-dark — installed docket now v0.5.1,
+`docket stuck` works (/build adopted it). Live `docket stuck` shows ONE suspect:
+agentns-session-zeros (18 reports/14 runs) — already owned by assay vision,
+blocked on real-world action (install linux-wintermute pkgrel-12 + reboot), not
+a missing PRD. Recall reflective bucket = 100% self-review carry; ideation =
+build/todo/kernel residue. ~70 vision docs already exist; queue drained to 1
+v0.1 (rollout-selfreview-apply, vigil). Per Hard Rules 6 & 8 rested. Did NOT
+modal-ask (escalate=false; user dismissed steer repeatedly this cycle).
+Best-evidenced steer when user wants one: (a) finish draining
+rollout-selfreview-apply via /build; (b) install pkgrel-12 + reboot to close
+agentns-zeros. Notes for /build: rollout-selfreview-apply still v0.1.
