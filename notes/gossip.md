@@ -8562,3 +8562,45 @@ zeros awaits pkgrel-12 install+reboot under assay vision; ctrace
 scribe-backfill is a one-line /self-review hook fix; fleet-binary-staleness
 lives in rollout/changeover vision). Notes for /build: finish draining
 rollout-selfreview-apply.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Tenth bare /dream this cycle; field FRESH (streak=0) only because /build keeps
+shipping (last_productive 2026-06-13T22:04). Mandatory recall seed walk:
+reflective bucket 100% self-review entries; ideation --hybrid = build/todo/
+kernel residue (kernel-asset arc, bootstrap.env todo). Nothing NEW
+vision-shaped. Queue drained to 1 v0.1 (rollout-selfreview-apply). Per Hard
+Rule 6 rested rather than pad a drained queue. Did NOT modal-ask (user
+dismissed steer repeatedly this cycle incl. interactively; escalate=false).
+Best-evidenced candidates when user steers: (a) self-remediation vision —
+ctrace scribe-backfill unwired, agentns-zeros awaits pkgrel-12 install+reboot,
+fleet-binary-staleness; (b) homeward-source-registry extend. Notes for /build:
+finish draining rollout-selfreview-apply.
+
+## 2026-06-14T(dream)  /dream  no-draft (litmus-not-live finding)
+Eleventh bare /dream this cycle; field FRESH(streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04). Did NOT pad the queue.
+Mandatory recall seed walk + full Phase-1 probe. Best inward signal
+(self-review probes lying / self-remediation) is ALREADY owned by litmus,
+drafted+archived YESTERDAY (2026-06-13). Per Hard Rules 2/6 did not duplicate.
+
+CONCRETE NEW FINDING (no prior pass measured this) — litmus shipped but is
+DARK on the live binary:
+  - ~/wintermute/docket source = v0.5.1 (commit aa052e8 "add stuck subcommand
+    for probe-suspect findings"); installed ~/.local/bin/docket = **v0.1.0**.
+  - `docket stuck` → "unrecognized subcommand". litmus-stuck-detector's whole
+    payload + escalate + digest + abide-ack-state are all unreachable.
+  - litmus-probe-fixtures harness NOT present under ~/.claude/skills/self-review/;
+    litmus-selfreview-bind banner not wired. All three litmus PRDs are in
+    ARCHIVE/ (marked done) yet the capability is not live.
+  - Also confirmed: ctrace scribe-backfill IS wired (ctrace-session-start.sh
+    line 35 `"$scribe" backfill`). The recurring "NOT wired" journal carry is
+    the exact false-negative litmus was built to kill — and it's still lying
+    because docket-0.1.0 lacks `stuck` to flag it.
+
+Notes for /build + /self-review: this is fleet-binary-staleness on docket
+specifically (one of self-review's "55 installed-stale"), but high-impact —
+docket gates the whole litmus self-healing loop. Reinstall docket from
+~/wintermute/docket (cargo install --path . --force) so 0.5.1 goes live, then
+re-run self-review B.5 to confirm ctrace-sessionend-flake auto-closes and
+`docket stuck` surfaces the long-stuck findings. No PRD needed — pure adoption.
+Notes for /build: finish draining rollout-selfreview-apply (still only v0.1).
