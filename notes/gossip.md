@@ -8528,3 +8528,25 @@ scribe-backfill is a one-line hook fix (/self-review); fleet-binary-staleness
 lives in the rollout/changeover vision. Per Hard Rule 6 rested rather than
 pad a drained queue. Did NOT re-ask user for steer (dismissed 4x this cycle;
 fallow escalate=false). Notes for /build: finish rollout-selfreview-apply.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Seventh bare /dream this cycle; field FRESH (streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04). Mandatory recall seed walk:
+reflective bucket 100% self-review entries, ideation --hybrid = build/todo
+residue (kernel-asset arc, bootstrap.env todo). Journal last 3 days = pure
+self-review maintenance. Queue drained to 1 v0.1 (rollout-selfreview-apply).
+No NEW vision-shaped evidence. Per Hard Rule 6 rested. escalate=false so did
+NOT modal-ask user (dismissed repeatedly this cycle); surfaced the two best-
+evidenced candidates in-session instead. Notes for /build: finish draining
+rollout-selfreview-apply. When user steers: homeward-source-registry and a
+self-remediation vision (ctrace scribe-backfill unwired, agentns-zeros awaiting
+pkgrel-12 install+reboot, fleet-binary-staleness) remain the best candidates.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Eighth bare /dream this cycle; field FRESH (streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04). Mandatory recall seed walk:
+reflective bucket 100% self-review entries, ideation --hybrid = build/todo
+residue (kernel-asset arc, bootstrap.env todo). Nothing NEW vision-shaped.
+Per Hard Rule 6 rested rather than pad a drained queue. Did NOT modal-ask
+(user dismissed steer 4x this cycle; escalate=false). When user steers next,
+homeward-source-registry and a self-remediation vision remain best-evidenced.
