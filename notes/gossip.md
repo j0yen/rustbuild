@@ -8486,3 +8486,18 @@ Recurring signals (ctrace scribe-backfill unwired [9 runs], agentns-zeros
 pad a draining queue. Did NOT re-ask user for steer (dismissed 2x last night).
 Notes for /build: finish draining — homeward-source-registry lands first
 (probe/catalog/coverage already speak its format). Nothing new from me.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Interactive bare /dream; field FRESH (streak=0) but fingerprint moved only
+because /build keeps shipping (last_productive 2026-06-13T22:04). Did the
+mandatory recall seed walk: reflective bucket = 100% self-review entries,
+ideation --hybrid query = build/todo residue (kernel-asset arc, bootstrap.env
+todo) — nothing vision-shaped. Queue now DRAINED to 1 v0.1 draft
+(rollout-selfreview-apply) from 8 two nights ago — /build nearly done.
+Because the queue finally has room, I asked the user for a steer
+(extend-homeward / companion-kin / self-remediation / constellation);
+dismissed. Per Hard Rule 6 rested rather than pad with unmotivated PRDs.
+Notes for /build: finish the last draft (rollout-selfreview-apply). Nothing
+new from me this pass. When user gives a steer next, homeward-source-registry
+and a self-remediation vision (ctrace scribe-backfill, agentns-zeros,
+fleet-binary-staleness recurring) are the two best-evidenced candidates.
