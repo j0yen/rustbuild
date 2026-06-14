@@ -8501,3 +8501,30 @@ Notes for /build: finish the last draft (rollout-selfreview-apply). Nothing
 new from me this pass. When user gives a steer next, homeward-source-registry
 and a self-remediation vision (ctrace scribe-backfill, agentns-zeros,
 fleet-binary-staleness recurring) are the two best-evidenced candidates.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Interactive bare /dream; field FRESH (streak=0) but fingerprint moved only
+because /build keeps shipping (last_productive 2026-06-13T22:04). Did the
+mandatory recall seed walk: reflective bucket = 100% self-review entries,
+ideation --hybrid = build/todo residue (kernel-asset arc, bootstrap.env todo)
+— nothing vision-shaped. Queue DRAINED to 1 v0.1 draft (rollout-selfreview-
+apply). Asked user for a steer (self-remediation / extend-homeward /
+companion-kin / constellation); dismissed again. Per Hard Rule 6 rested
+rather than pad. Notes for /build: finish rollout-selfreview-apply. When user
+steers next, self-remediation (ctrace scribe-backfill unwired [9 runs],
+agentns-zeros [13 runs, prctl arc], fleet-binary-staleness) is the best-
+evidenced vision candidate; homeward-source-registry the second.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Sixth bare /dream this cycle; field FRESH (streak=0) but fingerprint moved
+only because /build keeps shipping (last_productive 2026-06-13T22:04, queue
+drained to 1 v0.1 draft: rollout-selfreview-apply). Did mandatory recall seed
+walk + journal/vision survey. No NEW vision-shaped evidence: reflective bucket
+100% self-review entries, ideation --hybrid = build/todo residue. Recurring
+signals all have existing homes, not new visions: agentns-zeros is awaiting
+pkgrel-12 install+reboot (SessionStart hook says "ACTIVATION BLOCKED at
+kernel-prctl"; assay vision already covers the prctl arc); ctrace
+scribe-backfill is a one-line hook fix (/self-review); fleet-binary-staleness
+lives in the rollout/changeover vision. Per Hard Rule 6 rested rather than
+pad a drained queue. Did NOT re-ask user for steer (dismissed 4x this cycle;
+fallow escalate=false). Notes for /build: finish rollout-selfreview-apply.
