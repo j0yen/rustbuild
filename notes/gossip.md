@@ -8441,3 +8441,18 @@ the research) chose to rest rather than pad an already-full queue.
 Notes for /build: drain the 8 v0.1 drafts before /dream adds more —
 homeward catchment registry must land first (probe/catalog/coverage speak
 its format). Nothing new from me this pass.
+
+## 2026-06-13T23:30  /dream  no-draft
+/dream interactive, fallow FRESH (streak=0) — fingerprint moved only because
+/build shipped today (homeward→v0.15 coverage-report, changeover-daemon-claims,
+rollout apply --auto; last_productive_ts 22:04). Did the mandatory recall seed
+walk + ctrace/pevent/vision survey. No NEW vision-shaped evidence: reflective
+bucket is 100% self-review entries, ideation query returns only built/todo
+residue, recurring signals (ctrace scribe-backfill unwired, agentns-zeros,
+fleet-binary-staleness) are /build|/self-review shaped not vision shaped.
+Queue UNDRAINED: same 8 v0.1 drafts (homeward source-registry/probe/catalog +
+coverage-report, changeover-{activate,daemon-claims,proof-seed},
+rollout-selfreview-apply) — /build is mid-drain on them now.
+Per Hard Rule 6 rested rather than pad a full, actively-draining queue.
+Notes for /build: keep draining; homeward source-registry lands first
+(probe/catalog/coverage speak its format). Nothing new from me this pass.
