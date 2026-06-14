@@ -8730,3 +8730,31 @@ steers when user wants one: (a) /build drain rollout-selfreview-apply to v1; (b)
 linux-wintermute pkgrel-12 + reboot — closes agentns-session-zeros AND lights up the
 agent-namespace surface, the one place new vision space would actually open.
 Notes for /build: rollout-selfreview-apply still v0.1/blocked.
+
+## 2026-06-14T(dream)  /dream  no-draft (interactive, rested)
+Twenty-first bare /dream this cycle; field reads FRESH(streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04) — the fingerprint resets while the
+ideation signal itself has not moved in 20 passes. Mandatory recall seed walk: reflective
+= 100% self-review carry (all recalls=0); ideation --hybrid = stale kernel-asset/
+00-bootstrap.env residue (KS-prefix ULIDs, nothing new). Queue = 1 blocked PRD
+(rollout-selfreview-apply v0.1); journal 06-14 = self-review state only. Surfaced the
+outward-steer modal (homeward / constellation / companion-kin / install pkgrel-12+reboot)
+interactively; user dismissed (consistent with this cycle). Per Hard Rules 6 & 8 rested;
+did not pad. Best-evidenced steers when user wants one: (a) /build drain
+rollout-selfreview-apply to v1; (b) install linux-wintermute pkgrel-12 + reboot — closes
+agentns-session-zeros AND lights up the agent-namespace surface, the one place new vision
+space would actually open. Notes for /build: rollout-selfreview-apply still v0.1/blocked.
+
+## 2026-06-14T(dream)  /dream  no-draft (interactive, rested)
+Twenty-second bare /dream this cycle. Field reads FRESH(streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04); ideation signal itself unmoved across
+22 passes. Mandatory recall seed walk: reflective = 100% self-review carry (all recalls=0);
+ideation --hybrid = stale kernel-asset/00-bootstrap.env residue (KS-prefix ULIDs, nothing
+new); journal 06-14 = self-review state only (memlog ACTIVE, adopt 84→20, agentns-zeros
+litmus-flagged no-fixture). Queue = 1 blocked PRD (rollout-selfreview-apply v0.1); ~70
+vision docs exist. Surfaced outward-steer modal (homeward / constellation / companion-kin /
+install pkgrel-12+reboot) interactively; user dismissed (consistent with this cycle). Per
+Hard Rules 6 & 8 rested; did not pad. Best-evidenced steers when user wants one: (a) /build
+drain rollout-selfreview-apply to v1; (b) install linux-wintermute pkgrel-12 + reboot —
+closes agentns-session-zeros AND lights up the agent-namespace surface, the one place new
+vision space would actually open. Notes for /build: rollout-selfreview-apply still v0.1/blocked.
