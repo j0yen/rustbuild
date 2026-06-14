@@ -8550,3 +8550,15 @@ residue (kernel-asset arc, bootstrap.env todo). Nothing NEW vision-shaped.
 Per Hard Rule 6 rested rather than pad a drained queue. Did NOT modal-ask
 (user dismissed steer 4x this cycle; escalate=false). When user steers next,
 homeward-source-registry and a self-remediation vision remain best-evidenced.
+
+## 2026-06-14T(dream)  /dream  no-draft
+Ninth bare /dream this cycle; field FRESH (streak=0) only because /build keeps
+shipping (last_productive 2026-06-13T22:04). Interactive: surfaced the four
+steer options (self-remediation / extend-homeward / companion-kin /
+constellation) via AskUserQuestion to break the rest loop — user dismissed.
+Per Hard Rules 6 & 8 rested rather than pad a drained queue. No NEW
+vision-shaped evidence; recurring signals all have existing homes (agentns-
+zeros awaits pkgrel-12 install+reboot under assay vision; ctrace
+scribe-backfill is a one-line /self-review hook fix; fleet-binary-staleness
+lives in rollout/changeover vision). Notes for /build: finish draining
+rollout-selfreview-apply.
