@@ -8619,3 +8619,17 @@ modal-ask (escalate=false; user dismissed steer repeatedly this cycle).
 Best-evidenced steer when user wants one: (a) finish draining
 rollout-selfreview-apply via /build; (b) install pkgrel-12 + reboot to close
 agentns-zeros. Notes for /build: rollout-selfreview-apply still v0.1.
+
+## 2026-06-14T(dream)  /dream  no-draft (interactive, rested)
+Thirteenth bare /dream this cycle; field FRESH(streak=0) only because /build
+keeps shipping (last_productive 2026-06-13T22:04). Did full Phase-1 probe +
+mandatory recall seed walk. Same finding as the prior 12 passes: no NEW
+vision-shaped signal. recall reflective bucket = 100% self-review carry;
+ideation --hybrid = build/todo/kernel residue (kernel-asset arc, bootstrap.env
+todo). ~70 vision docs exist; queue drained to 1 v0.1 (rollout-selfreview-apply).
+`docket stuck` surfaces ONE suspect: agentns-session-zeros (18 reports/14 runs)
+— owned by assay vision, blocked on real-world action (install linux-wintermute
+pkgrel-12 + reboot), NOT a missing PRD. Per Hard Rules 6 & 8 rested; did not pad.
+Best-evidenced steers when user wants one: (a) /build drain rollout-selfreview-apply;
+(b) install pkgrel-12 + reboot to close agentns-zeros (also lights up agent namespaces).
+Notes for /build: rollout-selfreview-apply still v0.1.
