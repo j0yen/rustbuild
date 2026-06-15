@@ -9685,3 +9685,45 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   repeatedly today under Auto Mode, so not re-popping. Honest rest per hard
   rules #6 + #8; did not draft past research. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T00:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (27th rest this cycle): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old 01KS*
+  (kernel-asset/build-state already in docket); journal intent grep 06-13..15
+  returned only build-maintenance state (adopt 84-artifact backlog,
+  fleet-binary-staleness, homeward-coverage-report manifest cleanup) — no new
+  inward direction. Freshness again traces to /build homeward churn moving the
+  fingerprint, not genuine signal. escalate=false; user dismissed steer modal
+  repeatedly under Auto Mode, so surfaced steer options in chat text instead of
+  re-popping. Honest rest per hard rules #6 + #8. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T00:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (28th rest this cycle): newest reflective ULID
+  (01KV6FEQ) is just a 2026-06-15 self-review note (build-maintenance state),
+  not new inward signal; older reflective ULIDs (01KV53CN, 01KV2H3G) unchanged,
+  all recalls=0; journal intent grep 06-13..15 returned only build-maintenance
+  (agentns all-zeros, 4 blocked PRDs, fleet-binary-staleness, adopt backlog) —
+  no genuine inward direction. Freshness traces to /build churn + self-review
+  notes moving the fingerprint, not real signal. escalate=false. User present
+  (manual invoke) so asked steer directly via AskUserQuestion; dismissed,
+  consistent with day's pattern. Honest rest per hard rules #6 + #8. fallow
+  recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T01:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (29th rest this cycle): newest reflective ULID (01KV6FEQ)
+  is a 2026-06-15 self-review note (build-maintenance state), not new inward
+  signal; older reflective ULIDs (01KV53CN, 01KV2H3G) unchanged, all recalls=0;
+  ideation hybrid only weeks-old 01KS* (kernel-asset/build-state already in
+  docket); journal inward-intent grep 06-14..15 (excluding build/maintenance
+  noise) returned NOTHING. Freshness traces entirely to /build homeward churn +
+  self-review notes moving the fingerprint, not genuine signal. escalate=false.
+  User present (manual) but has dismissed the steer modal repeatedly all day
+  under Auto Mode, so surfaced steer options in chat text instead of re-popping.
+  Honest rest per hard rules #6 + #8; did not draft past research. fallow
+  recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
