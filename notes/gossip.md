@@ -9247,3 +9247,40 @@ Open questions: full Rust rewrite of ctrace is NOT motivated (the bug is
   `doctor --fix` ever run in self-review's autonomous B.5 loop, or only
   on the human-initiated SessionStart path? (default: SessionStart
   auto-relight is fine; heavier autonomous loop stays gated.)
+
+## 2026-06-15T05:15  /dream  rested-with-findings (no new vision)
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0,
+  last_productive 2026-06-15T05:10Z). Walked Phase 1 rather than auto-rest.
+Finding: the field's freshness traces to /build's OWN homeward churn today
+  (v0.26→v0.29: source-family, arcgis-connector, source-discover,
+  opendatasoft-connector) — not an uncovered direction. /build self-drafts
+  homeward follow-ons in its Phase 6, so re-drafting connectors here would
+  collide.
+Verified-closed this pass (so the next dream doesn't re-walk it):
+  - homeward deliver-fleet gap (embed sidecar never called, 2026-06-13 dream)
+    is FULLY CLOSED. homeward-embed-client crate exists; reportd.rs:384
+    query_visual_scores_for_report → EmbedClient::query (reportd.rs:517);
+    match_watch.rs:217 client.query for the bg loop; make_stub_report /
+    make_stub_candidate are GONE from live code (only guardrail asserts +
+    doc-comments mention "fabricate"). DELIVER.md attests PASS, 59ms query,
+    held-out rank-1. Visual match is live, not stubbed.
+Every other live recurring signal is already covered or ops/user-gated:
+  - fleet-binary-staleness → vigil + PRD-rollout-selfreview-apply (blocked:
+    needs-explicit-user-approval). rollout `cycle` exists but is policy-gated
+    (voice daemons drop subscribers); not a tooling gap.
+  - ctrace tracer-down → ember fleet drafted THIS NIGHT 03:45 (4 PRDs).
+  - agentns all-zeros → pkgrel-12 fix is BUILT+STAGED; SessionStart hook says
+    "install linux-wintermute pkgrel>=12 and reboot" — an ops/reboot gate,
+    not a missing component.
+  - build-manifest stale blockers → largely self-cleared (manifest now shows
+    1 blocked, the rollout one).
+  - litmus agentns probe missing a selftest fixture → real but self-review-
+    sized, not vision-scale; left for /self-review or /build Phase 6.
+Decision: hard rule 6 — no uncovered, motivated, vision-scale component, so
+  no fiction drafted. Inward arc remains saturated (~70 visions); outward
+  (homeward) is healthy and /build-driven. Rested 0 PRDs.
+Open question for next steer: the genuinely UNCOVERED frontier is autonomy
+  policy, not tooling — both staleness loops (rollout for daemons, adopt for
+  binaries) are BUILT but never CLOSE because closure is user-gated. If jsy
+  wants the fleet to actually self-freshen during idle windows, that's a
+  policy decision to make, not a PRD to dream.
