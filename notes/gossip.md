@@ -9659,3 +9659,29 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   instead of re-popping. Honest rest per hard rules #6 + #8. fallow recorded
   (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T23:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (25th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old (01KS*,
+  kernel-asset/build-state already in docket); journal intent grep 06-13..15
+  returned only build-maintenance state (homeward-coverage-report manifest
+  cleanup) — no new inward direction. Freshness again traces to /build homeward
+  churn moving the fingerprint, not genuine signal. escalate=false. Surfaced
+  steer modal (homeward/constellation/companion-kin/rest) once since manual
+  invoke — user dismissed, consistent with day's pattern. Honest rest per hard
+  rules #6 + #8; did not draft past research. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T23:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (26th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old 01KS*
+  (kernel-asset/build-state already in docket); journal intent grep 06-13..15
+  returned only build-maintenance state (adopt 84-artifact backlog,
+  fleet-binary-staleness, homeward-coverage-report manifest cleanup) — no new
+  inward direction. Freshness again traces to /build homeward churn moving the
+  fingerprint, not genuine signal. escalate=false; user dismissed steer modal
+  repeatedly today under Auto Mode, so not re-popping. Honest rest per hard
+  rules #6 + #8; did not draft past research. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
