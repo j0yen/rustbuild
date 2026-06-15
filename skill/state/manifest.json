@@ -101,6 +101,42 @@
       "status": "shipped",
       "output_repo_path": "/home/jsy/wintermute/thanatopsis",
       "output_repo_url": "https://github.com/j0yen/thanatopsis"
+    },
+    {
+      "slug": "the-lunch-convene",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/the-lunch",
+      "output_repo_url": "https://github.com/j0yen/the-lunch"
+    },
+    {
+      "slug": "the-lunch-minutes",
+      "status": "shipped",
+      "build_target": "rust-cli",
+      "repo": "~/wintermute/the-lunch",
+      "version": "0.4.0",
+      "shipped_at": "2026-06-12",
+      "acs_passed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "notes": "minutes.rs module + CLI subcommands fully implemented; 8 unit tests + integration tests all green (48 total)"
+    },
+    {
+      "slug": "keel-cordon",
+      "status": "completed",
+      "completed_at": "2026-06-11T22:39:45-07:00",
+      "build_target": "rust-extend",
+      "build_into": "~/wintermute/keel",
+      "version_bumped_to": "0.3.0",
+      "git_sha": "727e112907a00454208d2eefbe08f3ac28d96aca",
+      "notes": "Cordon decision library + keel cordon CLI subcommand. All 8 ACs covered in tests/cordon.rs. Merged to main as v0.3.0."
     }
   ]
 }
