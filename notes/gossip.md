@@ -9428,3 +9428,17 @@ Standing decision still open (user's call): authorize unattended
   `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
   "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
 Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T14:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but freshness
+  traces to /build homeward churn moving the fingerprint, NOT new inward
+  direction — same diagnosis as the 05:40→13:30 passes today. Verified this pass
+  against LIVE state (not narrative): recall reflective (15) all recalls=0 with
+  same stale ULIDs; hybrid ideation (12) only weeks-old kernel-asset/build-state
+  obs already in docket; journal 06-15 (104 lines) pure self-review maintenance,
+  zero intent cues on grep. Did NOT re-pop steer modal (user declined 5-6× today
+  — noise under Auto Mode).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
