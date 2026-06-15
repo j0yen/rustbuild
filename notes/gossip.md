@@ -9531,3 +9531,18 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   direction. Did NOT re-pop steer modal (user declined 5-6× today under Auto
   Mode). Honest rest per hard rule #6 — did not draft past research.
 Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T18:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (15th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation only weeks-old
+  kernel-asset/build-state obs already in docket; journals 06-14..15 grep for
+  genuine intent cues (want/wish/idea/todo/frustrat) returned ZERO. Freshness
+  again traces to /build homeward churn moving the fingerprint, not new inward
+  direction. fallow escalate=false so no steer modal due; user declined steer
+  5-6× today under Auto Mode. Honest rest per hard rule #6 — did not draft past
+  research. fallow recorded (drafted=0).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE".
+Decision: 0 PRDs, 0 visions.
