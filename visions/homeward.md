@@ -400,3 +400,84 @@ the registry and the live store; it needs only the registry.
 - Auto-discovery of new portals (crawl the Socrata federated catalog for
   animal-intake datasets) rather than hand-fed `{domain, dataset_id}` — research
   whether the catalog API exposes enough to filter to STRAY feeds.
+
+## Reach fleet (drafted 2026-06-14)
+
+Fleets 1–5 (core, federation, operate, deliver, catchment) built the pipeline and
+made *adding a Socrata source* a config operation (`homeward-source-registry` loads
+`deploy/sources.toml`; `homeward-source-probe` onboards a `{domain, dataset_id}`;
+`homeward-coverage-report` maps the holes). But Phase-1 live inspection of
+`~/wintermute/homeward` v0.24.0 (2026-06-14) confirms the catchment fleet's own
+parting note — **the funnel is still Socrata-only**:
+
+- `grep -rl 'Socrata|OpenDataSoft|ArcGIS' homeward-connectors/src` returns
+  `socrata.rs`, `rescuegroups.rs`, `petfbi.rs` — and **nothing** for OpenDataSoft
+  or ArcGIS. Three connector families exist; the two that cover the *other half* of
+  US municipal open-data portals do not.
+- `deploy/sources.toml` is `[[socrata]]` arrays only (`socrata.column_map.*`). A
+  city whose animal-services dataset lives on an OpenDataSoft portal or an Esri
+  ArcGIS Hub Feature Service is **unreachable at any config** — the loader has no
+  family for it. `probe.rs` hits SODA metadata endpoints exclusively.
+- The catchment fleet named exactly this gap as un-dreamt: *"OpenDataSoft + ArcGIS
+  Open Data portals use a different query dialect than Socrata/SODA; a second
+  connector family (not just config) widens catchment past Socrata-only
+  municipalities"* and *"auto-discovery of new portals … rather than hand-fed
+  `{domain, dataset_id}`."*
+
+Coverage is the entire point (end-state #1–#2: more sources → more reunions). The
+catchment fleet widened *how* sources are added; this fleet widens *which kinds of
+source can be added at all*, and closes the manual-discovery gap. The `Connector`
+trait (`connector.rs` — `poll(Cursor) -> Vec<PetRecord>` + `provenance` +
+`cadence_hint`) is the clean seam: each new family is one more `impl Connector`,
+no pipeline change downstream.
+
+### Reach components (drafted this pass)
+
+- **homeward-source-family** (rust-extend → homeward-connectors) — grow
+  `deploy/sources.toml` and the registry loader to parse `[[opendatasoft]]` and
+  `[[arcgis]]` table-arrays alongside `[[socrata]]`, each into a family-tagged
+  config the registry dispatches to the right connector constructor. Existing
+  `[[socrata]]` entries load unchanged (back-compat). Foundation — both new
+  connectors need a way to be named in the catalog.
+- **homeward-opendatasoft-connector** (rust-extend → homeward-connectors) — an
+  `OpenDataSoftConnector` implementing `Connector` against the documented ODS
+  Explore API v2.1 (`/api/explore/v2.1/catalog/datasets/{id}/records?where=…&
+  order_by=…&limit=…`, ODSQL `where` dialect, `record.timestamp` watermark for the
+  `Cursor`), normalizing animal-intake rows to `PetRecord`. Includes ODS-family
+  recognition in `probe`. Depends on source-family.
+- **homeward-arcgis-connector** (rust-extend → homeward-connectors) — an
+  `ArcGisConnector` against the ArcGIS REST Feature Service query API
+  (`/FeatureServer/0/query?where=…&outFields=*&f=geojson&resultOffset=…`,
+  `EditDate`/`last_edited_date` watermark, `resultOffset` paging) for the many US
+  shelters published on Esri Hub. Includes ArcGIS-family recognition in `probe`.
+  Depends on source-family; independent of opendatasoft.
+- **homeward-source-discover** (rust-extend → homeward-connectors) — a
+  `homeward-connectors discover [--families …] [--metro …]` subcommand that crawls
+  the Socrata federated catalog API (`api.us.socrata.com/api/catalog/v1?q=animal
+  +intake&only=dataset`) and the ODS catalog discovery endpoint to emit a ranked
+  list of *candidate* `{family, domain, dataset_id}` for `probe` to validate —
+  turning "hand-fed dataset ids" into "discover → probe → review → commit." Honest:
+  emits candidates, never auto-commits a source. Depends on source-family (the
+  candidate shape it speaks).
+
+### Reach order
+
+```
+homeward-source-family ─► homeward-opendatasoft-connector ─┐
+                       ├─► homeward-arcgis-connector       ─┤
+                       └─► homeward-source-discover         ┘
+```
+
+source-family is the foundation (the catalog format all three new pieces speak).
+The two connectors and discover are mutually independent once it lands — three
+parallel branches off one foundation.
+
+### Still un-dreamt after reach
+
+- Geo/PostGIS-backed catchment so coverage holes are a *map of metros*, not a list
+  of sources — a visualization/data concern beyond connectors.
+- A scheduler that raises a source's cadence when it's actively returning STRAY
+  intakes and backs off silent ones (adaptive per-family) — `cadence_hint` exists
+  but the orchestrator treats it as static.
+- Non-US open-data portals (UK `data.gov.uk`, EU ODS instances) — the vision is
+  US-framed; international reach is a deliberate scope decision, not a build.

@@ -9151,3 +9151,47 @@ Notes for /build: reconcile + session-truth + digest-bind are clean rust-extend 
   build/dream skill repos (build_into resolves via the ~/.claude/skills/* symlinks).
 Open questions: reconcile match window (±10min default); does reconcile run autonomously
   (self-review B.5 playbook) or on-demand only; phantom < omission in severity.
+
+## 2026-06-14T(dream)  /dream  fallow — field unchanged (streak=1); rested
+
+## 2026-06-14T(dream)  /dream  fallow — field unchanged (streak=2); rested
+
+## 2026-06-14T(dream)  /dream  fallow — streak=3 threshold crossed; surfaced steer, user dismissed; rested
+
+## 2026-06-14T(dream)  /dream  vision-homeward (Reach fleet)
+Seed: timer/live momentum — fallow=FRESH streak=0 (fingerprint churns because
+/build keeps shipping homeward; v0.24.0 owner-notify webhook landed today). NOT a
+rested pass: Phase-1 live inspection found a concrete, evidence-backed catchment
+gap the vision itself flagged as un-dreamt.
+Finding: homeward reaches Socrata-dialect municipal feeds ONLY. `grep -rl
+'Socrata|OpenDataSoft|ArcGIS' homeward-connectors/src` = socrata/rescuegroups/petfbi;
+NOTHING for OpenDataSoft or ArcGIS. `deploy/sources.toml` is `[[socrata]]` arrays
+only; probe.rs hits SODA endpoints exclusively. Catchment fleet's own "still
+un-dreamt" named exactly this (2nd connector family + catalog auto-discovery).
+Drafted 4 PRDs extending visions/homeward.md (Reach fleet — "widen which KINDS of
+source can be added at all"), all rust-extend → ~/wintermute/homeward (v0.24.0):
+  - PRD-homeward-source-family          — grow sources.toml + registry loader to
+      parse [[opendatasoft]]/[[arcgis]] alongside [[socrata]]; family-tagged
+      dispatch; [[socrata]] back-compat is an AC. FOUNDATION.
+  - PRD-homeward-opendatasoft-connector — OpenDataSoftConnector impl Connector vs
+      ODS Explore API v2.1 (ODSQL where, record.timestamp watermark) + probe
+      --family opendatasoft. Depends on source-family.
+  - PRD-homeward-arcgis-connector       — ArcGisConnector impl Connector vs ArcGIS
+      Feature Service /query (EditDate epoch-ms watermark, resultOffset paging) +
+      probe --family arcgis. Depends on source-family; independent of ODS.
+  - PRD-homeward-source-discover        — `discover` subcommand crawls Socrata
+      federated catalog + ODS catalog discovery → ranked {family,domain,dataset_id}
+      candidates for probe to validate. discover proposes, probe disposes (writes
+      nothing). Depends on source-family.
+Order: source-family ─► {opendatasoft-connector | arcgis-connector | source-discover}
+  (3 parallel branches off one foundation).
+Notes for /build: all 4 are clean rust-extend into ~/wintermute/homeward
+  (workspace denies unwrap/expect/panic outside tests — use ?/Result; MSRV 1.85,
+  no let-chains). The `Connector` trait (homeward-connectors/src/connector.rs:
+  poll(Cursor)->Vec<PetRecord> + provenance + cadence_hint) is the seam; each new
+  family is additive, no downstream change. source-family MUST ship first — it
+  defines the catalog format the other three speak. Tests use recorded
+  catalog/records fixtures, never live APIs (deterministic).
+Open questions: probe is folded INTO each connector PRD (per-family recognition)
+  rather than a separate cross-cutting PRD — reasonable? ArcGIS has no federated
+  catalog so discover covers socrata+ods only (documented limit, not a silent gap).
