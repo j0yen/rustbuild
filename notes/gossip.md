@@ -9124,3 +9124,30 @@ agentns gate re-confirmed: installed linux-wintermute = 7.0.11.arch1-1 (pkgrel 1
 Per Hard Rules 6 & 8 rested; did not pad, did not re-pop the dismissed modal. Only genuinely
 new vision space remains gated on a user action: install pkgrel-12 + reboot. Else: /dream
 extend homeward (live /build momentum, v0.22.0 today) or constellation, or name a topic.
+
+## 2026-06-14T(dream)  /dream  vision-answerable (Fleet 2)
+Seed: user — `/dream about ethical AI` (directed; fallow=FRESH streak=0). NOT a rested
+pass: the topic surfaced a concrete, evidence-backed gap. Fleet 1 (answerable) shipped
+completely (ledger/values-drift/redline/consent-digest, repo v0.5.0) — but Phase-1 live
+inspection found the accountability spine is NOT load-bearing:
+  - ledger.jsonl = 49 lines, ALL self-test (last 5 dup values-drift from 06-13)
+  - grep -c answerable build/SKILL.md = 0; /build pushed homeward 22× today, recorded 0
+  - every line session:0000…0 (agentns dark, pkgrel-1 booted not >=12)
+Drafted 5 PRDs extending visions/answerable.md (Fleet 2 — "the audit trail must audit itself"):
+  - PRD-answerable-reconcile         [rust-extend ~/wintermute/answerable] — cross-check
+      ledger vs ground truth (git pushes/gh repo-creates/CLAUDE_SELF.md git log); omissions+phantoms
+  - PRD-answerable-wire-build        [shell, build_into ~/wintermute/build-skill] — wire
+      answerable-emit.sh into /build publish/push/self-mod/Phase6 (self-report path never existed)
+  - PRD-answerable-wire-dream        [shell, build_into ~/wintermute/dream-skill] — same for
+      /dream Phase 3 draft + Phase 5 push
+  - PRD-answerable-session-truth     [rust-extend] — fallback session id (agorabus peer /
+      provfs comm:pid:uid) when agentns all-zeros; adds session_kind field (back-compat)
+  - PRD-answerable-digest-reconcile-bind [rust-extend, depends-on reconcile] — fold reconcile
+      verdict into spoken consent digest so the non-reading principal hears the agent's honesty gap
+Order: reconcile → digest-reconcile-bind; wire-build / wire-dream / session-truth independent.
+Notes for /build: reconcile + session-truth + digest-bind are clean rust-extend into
+  ~/wintermute/answerable (v0.5.0, strict clippy unwrap/expect/panic=deny — no unwrap in non-test).
+  digest-reconcile-bind needs reconcile shipped first. The two wire-* PRDs are self-mods to the
+  build/dream skill repos (build_into resolves via the ~/.claude/skills/* symlinks).
+Open questions: reconcile match window (±10min default); does reconcile run autonomously
+  (self-review B.5 playbook) or on-demand only; phantom < omission in severity.
