@@ -82,25 +82,28 @@ When persona is fulfilled:
   `digest --speak --wait-ack`, records `consent-voice-ack` /
   `consent-unacknowledged`.
 
-**Drafted 2026-06-13 (this dream pass):**
+**Shipped (verified live 2026-06-15 — all PRDs archived):**
 
-- **persona-redline** — extend `wintermute-brain`: output-side enforcement of
-  `forbidden_terms`. Today the list is *prompt-only advice* (`src/lib.rs:237`);
-  nothing scans the generated reply before TTS, and the default tier is
-  `local-3b` (most likely to leak). `src/redline.rs` scans the reply, and on a
-  hit either regenerates once or substitutes a safe phrase — the advisory
-  prompt becomes a runtime guarantee.
-- **persona-profile** — extend `wintermute-brain`: a named profile registry +
-  `wm-brain persona {list,show,diff,apply}`. Today persona is scattered knobs in
-  `brain.toml`; the live config has no `forbidden_terms` and no intro mode at
-  all. One named declaration (`jocelyn`, `default`) materializes a complete,
-  consistent `[persona]` block — `persona apply jocelyn` instead of a dozen
-  manual TOML edits.
-- **persona-work** — a shell target that writes Joe's work-laptop identity:
-  `CLAUDE_WORK.md` with professional register, `joeyen-atscale` scope, no
-  auto-publish, no voice, no family reach. An idempotent, reversible install
-  script that drops it as `~/.claude/CLAUDE_SELF.md` on the work machine.
-  (The last of the original four components; still entirely unbuilt.)
+- **persona-redline** — ✅ SHIPPED (`wintermute-brain`, `src/redline.rs`).
+  Output-side enforcement of `forbidden_terms`: scans the generated reply before
+  TTS and regenerates-once / substitutes a safe phrase on a hit. The advisory
+  prompt is now a runtime guarantee. (Companion: persona-redline-regenerate,
+  persona-redline-eval — both shipped/archived.)
+- **persona-profile** — ✅ SHIPPED (`wintermute-brain`, `src/profile.rs`).
+  Named profile registry + `wm-brain persona {list,show,diff,apply}`; one named
+  declaration materializes a complete `[persona]` block.
+- **persona-work** — ✅ SHIPPED. `CLAUDE_WORK.md` lives at
+  `~/wintermute/persona-work/CLAUDE_WORK.md` (professional register,
+  `joeyen-atscale` scope, no auto-publish, no voice, no family reach), with the
+  work-persona enforcement frontier also shipped: persona-work-redline (PreToolUse
+  guard + work `redline.toml`), persona-work-eval (held-out block-rate corpus),
+  persona-work-doctor (drift check). The deployment frontier (persona-deploy-jocelyn,
+  persona-deploy-doctor) shipped too.
+
+**Status: persona is effectively fulfilled.** Every drafted PRD is in `ARCHIVE/`.
+What remains is not a missing component but an *activation/measurement* act on the
+real Jocelyn device (End-state #5) — the held-out leak number must be taken on the
+running `brain.toml`, which is a deployment/ops step, not a dreamable PRD.
 
 ## Order
 

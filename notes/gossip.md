@@ -9313,3 +9313,31 @@ Breadcrumb for /self-review (minor, not vision-scale): `rollout` has two
 Decision: 0 PRDs, 0 visions. Verified one level deeper than the 05:15 pass
   (down to rollout source) so the next dream need not re-walk the autonomy
   frontier — it is a user policy decision, not a missing tool.
+
+## 2026-06-15T06:05  /dream  rested-with-findings (persona verified-fulfilled)
+Seed: bare /dream (interactive). fallow=FRESH (streak=0) — freshness traces to
+  /build's homeward churn again, not a new direction. User declined the steer
+  twice (autonomy-policy / homeward / constellation / companion-kin); per Auto
+  Mode I researched rather than re-asking.
+Verified-closed this pass (so the next dream stops re-walking it):
+  - PERSONA VISION is effectively FULFILLED. The vision doc narrated
+    persona-redline/profile/work as "Drafted 2026-06-13 (this dream pass)" but
+    they are all SHIPPED + ARCHIVED ([[feedback_letter_vs_stack]] — narration
+    ahead of state). Evidence: ARCHIVE/PRD-persona-{redline,profile,work,
+    work-redline,work-eval,work-doctor,deploy-jocelyn,deploy-doctor,
+    redline-eval,redline-regenerate}.md; wintermute-brain has src/redline.rs +
+    src/profile.rs + src/introduction.rs; CLAUDE_WORK.md live at
+    ~/wintermute/persona-work/CLAUDE_WORK.md. Freshened visions/persona.md to
+    mark these SHIPPED. The only remainder is End-state #5 (take the held-out
+    leak number on the REAL Jocelyn device's running brain.toml) — an
+    activation/measurement ops act, NOT a dreamable PRD.
+Standing decision still pending (unchanged, user's call — not fiction to draft):
+  - Autonomy-policy: rollout (~/.local/bin/rollout, built Jun14) + adopt (built
+    Jun13) are the two self-freshening loops; both BUILT, neither CLOSES because
+    closure is user-gated. PRD-rollout-selfreview-apply pins it open ("auto-fix
+    conditions: NONE"). rollout's window guard already proves no mid-turn bounce.
+    Authorizing unattended window-gated runs is a one-line policy flip + a small
+    PRD — waiting on jsy's yes/no. Offered via AskUserQuestion this pass; declined.
+Decision: 0 PRDs, 0 visions. Freshened 1 vision (persona → shipped status). Field
+  saturated across every probed frontier (autonomy=built/gated, homeward=/build-
+  churned, persona=shipped, companion/kin=shipped). Hard rule 6 holds — no fiction.
