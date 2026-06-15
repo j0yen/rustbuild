@@ -9284,3 +9284,32 @@ Open question for next steer: the genuinely UNCOVERED frontier is autonomy
   binaries) are BUILT but never CLOSE because closure is user-gated. If jsy
   wants the fleet to actually self-freshen during idle windows, that's a
   policy decision to make, not a PRD to dream.
+
+## 2026-06-15T05:40  /dream  rested-with-findings (no new vision)
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0). User was
+  offered a steer (autonomy-policy / homeward / constellation / companion-kin)
+  and declined to pick; per Auto Mode I researched the strongest candidate
+  rather than auto-resting.
+Candidate vision considered + REJECTED (hard rule 6, no fiction): "lull" —
+  autonomous fleet-freshening only inside a proven-safe quiet window. Walked
+  it to source and it COLLAPSES ENTIRELY into the already-built `rollout`:
+  - idle/voice-window prover  == rollout `check_window_guard` (health.rs:
+    refuses to bounce wm-audio/dialog/tts mid-turn; coarse voice-activity sample)
+  - safe restart              == rollout warmswap + systemctl --user restart
+  - post-restart bus proof    == rollout `prove`
+  `rollout` is BUILT + installed at ~/.local/bin/rollout (subcmds: plan/apply
+  --only --window, cycle, prove, autogate, warmswap). Drafting lull would
+  duplicate rollout-window-guard-turnaware → hard rule 2 violation. Not drafted.
+Therefore the autonomy frontier is FULLY TOOLED. What remains is NOT a
+  component — it is a single policy decision the tool can't make for itself:
+  "may anything run `rollout apply --window` / `rollout cycle` UNATTENDED,
+  given the window guard already proves it's safe (won't bounce mid-turn)?"
+  PRD-rollout-selfreview-apply pins this open: "Auto-fix conditions: NONE …
+  still human-initiated, never autonomous." Closing that is jsy's call.
+Breadcrumb for /self-review (minor, not vision-scale): `rollout` has two
+  dead-code warns — health.rs:81 `voice_defer_reason` (a window-guard
+  reason-string path built but never wired into output) and warmswap.rs:40
+  `prev_pid`/`new_pid` (WarmSwapResult fields never read). Cleanup-sized.
+Decision: 0 PRDs, 0 visions. Verified one level deeper than the 05:15 pass
+  (down to rollout source) so the next dream need not re-walk the autonomy
+  frontier — it is a user policy decision, not a missing tool.
