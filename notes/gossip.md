@@ -9592,3 +9592,44 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   dismissed it. Honest rest per hard rules #6 + #8 — did not draft past research.
   fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T20:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (20th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; journal intent grep 06-13..15
+  (want/wish/idea/frustrat/todo/annoy/need, routine lines excluded) returned
+  ZERO. Freshness again traces to /build homeward churn moving the fingerprint,
+  not new inward direction. escalate=false; user dismissed steer modal 5-6×
+  today, so did NOT re-pop it — surfaced steer options in chat text instead.
+  Honest rest per hard rules #6 + #8 — did not draft past research. fallow
+  recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T21:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (21st rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old (01KS*)
+  kernel-asset/build-state obs already in docket; journal intent grep 06-13..15
+  (want/wish/idea/frustrat/annoy/need/todo, routine lines excluded) returned
+  only a homeward-coverage-report manifest-cleanup note — no new inward
+  direction. Freshness again traces to /build homeward churn moving the
+  fingerprint, not genuine signal. escalate=false; user dismissed steer modal
+  5-6× today under Auto Mode, so surfaced steer options in chat text instead of
+  re-popping. Honest rest per hard rules #6 + #8 — did not draft past research.
+  fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T21:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (22nd rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old (01KS*)
+  kernel-asset/build-state obs already in docket; journal intent grep 06-13..15
+  (want/wish/idea/frustrat/annoy/need/todo/should, routine lines excluded)
+  returned only build-maintenance state (rollout-selfreview-apply approval gate,
+  homeward-coverage-report manifest cleanup, adopt 84-artifact backlog) — no new
+  inward direction. Freshness again traces to /build homeward churn moving the
+  fingerprint, not genuine signal. escalate=false; user dismissed steer modal
+  5-6x today under Auto Mode, so surfaced steer options in chat text instead of
+  re-popping. Honest rest per hard rules #6 + #8 — did not draft past research.
+  fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
