@@ -9456,3 +9456,78 @@ Standing decision still open (user's call): authorize unattended
   `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
   "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
 Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T15:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but freshness
+  again traces to /build homeward churn moving the fingerprint, NOT new inward
+  direction — same diagnosis as the 05:40→14:30 passes today (9th rest). Verified
+  against LIVE state: recall reflective (12) all recalls=0 with the same stale
+  ULIDs (01KV53CN…, 01KV2H3G…); hybrid ideation (12) only weeks-old
+  kernel-asset/build-state obs already in docket; journal 06-15 pure self-review
+  maintenance. Zero new intent. Did NOT re-pop steer modal (user declined 5-6×
+  today — noise under Auto Mode).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T15:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (10th rest today): recall reflective (12) same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation only weeks-old
+  kernel-asset/build-state obs already in docket; journal 06-15 zero intent cues
+  on grep. Freshness traces to /build homeward churn moving the fingerprint, not
+  new inward direction. Did NOT re-pop steer modal (user declined 5-6× today).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T16:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (11th rest today): recall reflective (12) same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation only weeks-old
+  kernel-asset/build-state obs already in docket; journal 06-13..15 grep for
+  intent cues returned only process listings + the docketed agentns-session-zeros
+  bug. Freshness traces to /build homeward churn moving the fingerprint, not new
+  inward direction. Did NOT re-pop steer modal (user declined 5-6× today).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T16:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (12th rest today): recall reflective (15) same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation (12) only weeks-old
+  kernel-asset/build-state obs already in docket; journals 06-13..15 grep for
+  genuine intent cues (want/wish/idea/todo/frustrat) returned ZERO. Freshness
+  traces to /build homeward churn moving the fingerprint, not new inward
+  direction. THIS pass: popped the steer modal once (manual invoke = user
+  signal) — user dismissed it, consistent with declining steer all day. Took
+  dismissal as rest-not-fabricate. Did NOT draft past the research (hard rule #6).
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T17:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (13th rest today): recall reflective (12) same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; journal 06-13..15 grep for genuine intent
+  cues (want/wish/idea/todo/frustrat, minus self-review/docket/build/dream lines)
+  returned ZERO. Freshness again traces to /build homeward churn moving the
+  fingerprint, not new inward direction. Did NOT re-pop steer modal (user
+  declined 5-6× today). Honest rest per hard rule #6 — did not draft past research.
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE".
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T17:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (14th rest today): recall reflective (12) same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation only weeks-old
+  kernel-asset/build-state obs already in docket; journals 06-13..15 grep for
+  genuine intent cues (want/wish/idea/todo/frustrat) returned ZERO. Freshness
+  traces to /build homeward churn moving the fingerprint, not new inward
+  direction. Did NOT re-pop steer modal (user declined 5-6× today under Auto
+  Mode). Honest rest per hard rule #6 — did not draft past research.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
