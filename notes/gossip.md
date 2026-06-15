@@ -9195,3 +9195,55 @@ Notes for /build: all 4 are clean rust-extend into ~/wintermute/homeward
 Open questions: probe is folded INTO each connector PRD (per-family recognition)
   rather than a separate cross-cutting PRD — reasonable? ArcGIS has no federated
   catalog so discover covers socrata+ods only (documented limit, not a silent gap).
+
+## 2026-06-15T03:33  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-15T03:03  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-14T(dream)  /dream  fallow — streak=3 threshold crossed; surfaced steer, user dismissed; rested
+
+## 2026-06-15T03:45  /dream  vision-ember (the tracer keeps its own flame)
+Seed: reflection — self-review's `ctrace-tracer-down` has been an
+unresolved "pending your call" item in EVERY journal 2026-06-09 →
+2026-06-14. Caught live this Phase 1: `ctrace status` → running:false,
+`~/.cache/ctrace/tracer.pid` is root:root (Jun 13 09:34), tracer down ~6
+days. Root cause read out of ~/.local/bin/ctrace (115-line Python):
+bpftrace runs under `sudo` (L60) → state trapped root-owned; liveness is
+mere PID-existence with `PermissionError ⇒ alive` (L41-43); `stop`'s
+unlink crashes on a root-owned pidfile (L104). The docket-prefilled cure
+`sudo chown jsy …` needs a human at a sudo prompt and never runs.
+Drafted 4 PRDs (visions/ember.md):
+  - PRD-ember-tracer-ownership   — reap dead-but-root-owned pidfile via
+      `sudo -n rm` fallback (same primitive the tool already uses);
+      stop's unlink PermissionError-safe; pidfile user-owned after start.
+      FOUNDATION. build_target: shell, build_into ~/.local/bin/ctrace.
+  - PRD-ember-liveness-truth     — running_pid() verifies IDENTITY
+      (/proc/<pid>/comm==bpftrace + cmdline has session.bt), not mere
+      existence; deletes the `PermissionError ⇒ alive` lie; reaps
+      stale/foreign pidfiles. Depends on ownership (shares reaper). shell.
+  - PRD-ember-doctor             — `ctrace doctor [--fix]`: JSON verdict
+      (healthy/down/stale-pidfile/root-owned-trap/foreign-pid) + curative
+      --fix. The one guarded idempotent command self-review can call.
+      Depends on ownership+liveness. shell.
+  - PRD-ember-selfheal-hook      — swap ctrace-session-start.sh's bare
+      `ctrace start` (L75) for `ctrace doctor --fix`; trapped pidfile
+      heals at session start. CAPSTONE — closes the recurring docket
+      item. build_target: hooks, build_into ~/.claude/scripts/ctrace-session-start.sh.
+Order: ownership → liveness-truth → doctor → selfheal-hook (linear;
+  each independently shippable in order — ownership alone already cures
+  the week-long manual finding).
+Notes for /build: all four are NON-Rust (Python script + bash hook
+  patches), build_target shell/hooks — no cargo, no /cloudbuild. The
+  privileged primitive across the fleet is a single `sudo -n rm -f` of a
+  ctrace-owned state file (strictly less than the `sudo -n bpftrace`/
+  `sudo -n kill` ctrace already triggers) — no new trust surface. Tests
+  use fixture pidfiles (seed a root-owned/dead/foreign PID), never a real
+  reboot. AC ember-selfheal-hook#6 is observational (confirm against the
+  next self-review journal), not a unit fixture.
+Open questions: full Rust rewrite of ctrace is NOT motivated (the bug is
+  ~10 lines) — left as a vision open-question, not a PRD. Should
+  `doctor --fix` ever run in self-review's autonomous B.5 loop, or only
+  on the human-initiated SessionStart path? (default: SessionStart
+  auto-relight is fine; heavier autonomous loop stays gated.)
