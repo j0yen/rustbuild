@@ -9741,3 +9741,55 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   surfaced steer options in chat text rather than re-popping. Honest rest per
   hard rules #6 + #8; did not draft past research. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T02:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (31st rest this cycle): recall reflective newest ULID
+  (01KV6FEQ) is a 2026-06-15 self-review note (build-maintenance state), not
+  inward signal; 01KV53CN + 01KV2H3G unchanged, all recalls=0; ideation hybrid
+  only weeks-old 01KS* (kernel-asset/build-state, already docketed); journal
+  inward-intent grep 06-13..15 (build/maintenance noise excluded) returned
+  NOTHING. Freshness traces entirely to /build homeward churn moving the
+  fingerprint, not genuine signal. escalate=false. User present (manual) so
+  offered outward steer via AskUserQuestion (homeward/constellation/
+  companion-kin/rest); dismissed, consistent with day's pattern. Honest rest per
+  hard rules #6 + #8; did not draft past research. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T02:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (32nd rest this cycle): recall reflective newest 3 ULIDs
+  (01KV6FEQ, 01KV53CN, 01KV2H3G) are unchanged 2026-06-15 build-maintenance
+  self-review notes, all recalls=0; freshness traces entirely to /build homeward
+  churn moving the fingerprint, not genuine inward signal. escalate=false. User
+  present (manual invoke) so offered outward steer via AskUserQuestion
+  (homeward/constellation/companion-kin/rest); dismissed, consistent with day's
+  pattern. Honest rest per hard rules #6 + #8; did not draft past research.
+  fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T16:10  /dream  vision-inoculate
+Seed: user — `/dream of infecting AIs with ethics` (manual, interactive).
+  fallow=FRESH (streak=0); seeded with a real topic, so drafted (not a rest).
+Drafted: PRD-inoculate-core.md, PRD-inoculate-inject.md,
+  PRD-inoculate-carrier-check.md, PRD-inoculate-attest.md,
+  PRD-inoculate-spread.md, PRD-inoculate-immune.md
+Vision: visions/inoculate.md
+Gap found (verified live): `answerable` governs only the MAIN LOOP. The build
+  skill references CLAUDE_SELF.md only for changelog + defaults parsing — it
+  NEVER injects Values/Boundaries into the parallel subagents it spawns (up to
+  30/tick). So the most autonomous code on this box runs with task-only prompts
+  and no ethical spine. inoculate makes the ethic a versioned/hashable "strain"
+  and transmits it: vertical (spawn-time inject), horizontal (agorabus gossip),
+  attested (strain hash on every answerable action), immune (non-lowerable floor
+  under persona overlays). Distinct from outward arc (ousia/tribunal/herald) and
+  from answerable (single-box spine).
+Order: core → {inject, carrier-check, attest[ext answerable], spread[ext
+  inoculate, needs agorabus], immune[ext wintermute-brain]}. core ships first;
+  the five are mutually independent after.
+Notes for /build: inoculate-core is a NEW repo (rust-cli, ~/wintermute/inoculate)
+  — ship it before the rust-extend PRDs that build_into it. inoculate-inject is
+  a self-mod of the build+dream SKILL.md (needs self-push). inoculate-attest
+  extends answerable; inoculate-immune extends wintermute-brain.
+Open questions: sign the strain (signet-style) for tamper-evident spread?
+  un-inoculated subagent — flag vs hard-gate (start: flag).
