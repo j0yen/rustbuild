@@ -9401,3 +9401,30 @@ Standing decision still open (user's call, unchanged): authorize unattended
   "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
   One-line policy flip + small PRD when jsy says yes.
 Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T09:04  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but freshness
+  traces to /build homeward churn moving the fingerprint, NOT new direction —
+  same diagnosis as the 05:40/06:05/08:05/09:00/09:30/12:00 passes. Verified this
+  pass: recall reflective (12) all recalls=0, no new IDs; hybrid ideation (12) all
+  stale kernel-asset/build-state obs already in docket; journal 06-15 (104 lines)
+  pure self-review maintenance. Zero new inward intent.
+Did NOT re-pop the steer modal (user declined 5× today — re-asking is noise under
+  Auto Mode). Surfaced the standing decision + outward options in chat instead.
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T13:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but freshness
+  traces to /build homeward churn moving the fingerprint, NOT new inward
+  direction — same diagnosis as 05:40/06:05/08:05/09:00/09:04/09:30/12:00 passes.
+  Verified this pass: recall reflective (12) all recalls=0 with same stale ULIDs;
+  hybrid ideation (12) all weeks-old kernel-asset/build-state obs already in
+  docket; journal 06-15 (104 lines) pure self-review maintenance. Zero new intent.
+  Did NOT re-pop steer modal (user declined 5-6× today — noise under Auto Mode).
+Standing decision still open (user's call): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
