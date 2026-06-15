@@ -9341,3 +9341,19 @@ Standing decision still pending (unchanged, user's call — not fiction to draft
 Decision: 0 PRDs, 0 visions. Freshened 1 vision (persona → shipped status). Field
   saturated across every probed frontier (autonomy=built/gated, homeward=/build-
   churned, persona=shipped, companion/kin=shipped). Hard rule 6 holds — no fiction.
+
+## 2026-06-15T09:00  /dream  rested (field saturated, user declined steer)
+Seed: bare /dream (interactive). fallow check = FRESH (streak=0) but freshness
+  traces to /build homeward churn moving the fingerprint, NOT a new direction
+  (same diagnosis as 05:40 + 06:05 passes). Verified this pass:
+  - recall reflective (15) + hybrid ideation (12): all kernel-asset/build-state
+    observations already in the docket; zero new intent.
+  - journal 06-14/06-13: pure self-review maintenance.
+Offered the steer via AskUserQuestion (authorize-unattended-rollout / name-a-topic
+  / homeward / rest); user dismissed without picking. Per Auto Mode + hard rule 6
+  (no fiction) I rested rather than drafting against a saturated field.
+Standing decision still open (user's call, unchanged): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". rollout's window guard already proves no mid-turn
+  bounce. One-line policy flip + small PRD when jsy says yes.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
