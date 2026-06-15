@@ -9557,3 +9557,38 @@ Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
   today under Auto Mode, so did NOT re-pop the steer modal. Honest rest per hard
   rule #6 — did not draft past research. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T19:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (17th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old
+  kernel-asset/build-state obs already in docket; journal intent grep 06-13..15
+  (want/wish/idea/frustrat/todo, routine lines excluded) returned ZERO.
+  Freshness again traces to /build homeward churn moving the fingerprint, not
+  new inward direction. escalate=false so no steer modal due; user declined
+  steer 5-6× today under Auto Mode. Honest rest per hard rules #6 + #8.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T19:30  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (18th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; ideation hybrid only weeks-old
+  kernel-asset/build-state obs already in docket; journal intent grep 06-14..15
+  (want/wish/idea/frustrat/todo, routine lines excluded) returned ZERO.
+  Freshness again traces to /build homeward churn moving the fingerprint, not
+  new inward direction. Surfaced steer modal (interactive manual invoke);
+  user dismissed it. Honest rest per hard rules #6 + #8 — did not draft past
+  research. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T20:00  /dream  rested (field saturated, manual invoke)
+Seed: bare /dream (interactive, manual). fallow=FRESH (streak=0) but verified
+  against LIVE state (19th rest today): recall reflective same stale ULIDs
+  (01KV53CN, 01KV2H3G) all recalls=0; hybrid ideation only weeks-old (01KS*)
+  kernel-asset/build-state obs already in docket; journal intent grep 06-13..15
+  (want/wish/idea/frustrat/todo, routine lines excluded) returned ZERO.
+  Freshness again traces to /build homeward churn moving the fingerprint, not
+  new inward direction. Surfaced steer modal (interactive manual invoke); user
+  dismissed it. Honest rest per hard rules #6 + #8 — did not draft past research.
+  fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
