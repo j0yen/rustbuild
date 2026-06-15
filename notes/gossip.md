@@ -9357,3 +9357,18 @@ Standing decision still open (user's call, unchanged): authorize unattended
   "auto-fix conditions: NONE". rollout's window guard already proves no mid-turn
   bounce. One-line policy flip + small PRD when jsy says yes.
 Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
+
+## 2026-06-15T09:30  /dream  rested (field saturated, manual invoke, user declined steer)
+Seed: bare /dream (interactive, manual not timer). fallow=FRESH (streak=0) but
+  freshness traces to /build homeward churn moving the fingerprint, not new
+  direction (same diagnosis as 05:40/06:05/09:00 passes). Verified this pass:
+  recall reflective (15) + hybrid ideation (12) = all kernel-asset/build-state
+  observations already in docket; journals 06-14/06-13 pure self-review;
+  06-15 journal empty. Zero new intent.
+Offered steer via AskUserQuestion (authorize-unattended-rollout / homeward /
+  constellation / companion-kin); user dismissed without picking — 4th decline.
+Standing decision still open (user's call, unchanged): authorize unattended
+  `rollout apply --window` / `rollout cycle` — PRD-rollout-selfreview-apply pins
+  "auto-fix conditions: NONE". Window guard already proves no mid-turn bounce.
+  One-line policy flip + small PRD when jsy says yes.
+Decision: 0 PRDs, 0 visions. fallow recorded (drafted=0).
