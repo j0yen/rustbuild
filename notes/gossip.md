@@ -9930,3 +9930,18 @@ Seed: bare /dream. fallow=FRESH (streak=0, escalate=false) but verified LIVE per
   streak=0, so did not re-prompt. Honest rest per hard rules #6+#8. fallow
   recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-15T  /dream  rest (interactive, manual)
+Seed: bare /dream. fallow=FRESH (streak=0, escalate=false) but verified LIVE per
+  standing rule (fresh ≠ inward signal): reflective recall top-3
+  (01KV6FEQ/01KV53CN/01KV2H3G) byte-identical to the last 5+ rest passes; read
+  01KV6FEQ = self-review maintenance note (evidence=[], confidence=0.6 — the
+  self-review signature). Hybrid ideation query returned only weeks-old 01KS*
+  kernel-asset/build-maintenance memories, all already addressed. Journal
+  2026-06-13..15 is pure maintenance (disk 86%, agentns EINVAL, fleet-binary-
+  staleness, 37 dirty repos). Freshness = /build churn moving the fingerprint,
+  not a new inward signal. inoculate fleet shipped; open questions deferred to
+  constellation transport — not buildable now. User dismissed outward-steer on
+  prior 5+ passes and streak=0, so did not re-prompt. Honest rest per hard
+  rules #6+#8. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
