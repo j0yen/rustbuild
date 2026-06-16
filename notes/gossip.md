@@ -10062,3 +10062,44 @@ Notes for /build:
 
 Open questions (in vision doc): calculated/derived measures (composed-process GDC),
   batch mode over a directory of models, AtScale write-back (pending AtScale API).
+
+## 2026-06-16T  /dream  (rested)
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T  /dream  vision-doxa (Fleet 1)
+Seed: jsy — "/dream of extending ousia to all knowledge and philosophies"
+
+fallow OVERRIDE (again): state=fallow streak=2 escalate=false, but the fingerprint
+  (b3:6548f2...) is the one recorded ~15 min ago after the ousia-atscale pass; the
+  inward ledger hadn't moved. User gave an explicit, ambitious NEW topic fallow can't
+  see. Proceeded per the same "explicit user steer vs stale inward field" reasoning.
+
+Seed split honestly:
+  - "all knowledge" = already lattice's job (federate 500+ BFO domain ontologies;
+    lattice Fleet 2 dreamed earlier today). Did NOT duplicate — doxa references lattice
+    for scenario facts.
+  - "all philosophies" = genuinely uncovered. ousia hardwires ONE philosophy (Federation
+    humanism) into ousia-forge/spec/roles.toml class axioms. doxa pluralizes it.
+
+Drafted (new repo ~/wintermute/doxa; reuses ousia-forge/reason/guard as engines):
+  PRD-doxa-moral-core.md   — shared framework-neutral moral TBox (rust-cli, new repo)
+  PRD-doxa-frameworks.md   — consequentialism / deontology / virtue-ethics as axiom modules
+  PRD-doxa-reason.md       — per-framework verdict over a scenario ABox (reuses ousia-reason)
+  PRD-doxa-compare.md      — agreement/conflict matrix across frameworks (consensus vs dilemma)
+  PRD-doxa-guard.md        — pluralist allow/flag/deny by explicit policy (unanimity/majority/
+                             framework:/lexical:); reuses ousia-guard
+
+Order: moral-core → frameworks → reason → {compare, guard}
+
+Distinct from neighbors: tribunal verifies ONE stance; herald/recourse ship/appeal it;
+  concord de-escalates HUMAN conflict; roundtable is creative critique. None formalize
+  multiple ethical frameworks for deductive comparison. Verified by reading their TL;DRs.
+
+Notes for /build: moral-core is rust-cli new-repo (gate). frameworks+reason+compare+guard
+  are rust-extend into ~/wintermute/doxa (shared target → worktree-extend.sh). doxa is a
+  thin orchestrator; the OWL/reasoning lifting stays in ousia-forge/ousia-reason/ousia-guard
+  — PRDs explicitly say don't re-implement.
+
+Open questions (in vision): Fleet 2 frameworks (Kant strict, Rawls, Aristotle eudaimonia,
+  care ethics, Stoic, Confucian, Buddhist, Ubuntu); scenario authoring ergonomics;
+  commensurability limits of the "neutral" core; meta-ethics explicitly out of scope.
