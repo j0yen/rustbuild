@@ -10146,3 +10146,40 @@ Real interfaces cited (verified 2026-06-15):
 
 Open questions: weekly vs monthly issue cadence (default weekly); publish issues outward
   or keep local (default local, per umbrella); should digest feed daily-receipt JSON.
+
+## 2026-06-16T05:38  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-15T23:00  /dream  vision-ousia-mqo (AtScale federation pipeline)
+Seed: user — "organize ousia and related work especially the federation layer;
+  wire into mqo-mcp server."
+
+User choices: standalone bridge repo (joeyen-atscale/ousia-mqo); semantic
+  cross-cluster diff + grounded NL binding as primary values.
+
+Research confirmed (2026-06-15):
+  - ousia-atscale annotate emits {model_catalog, model_schema, model_table,
+    overlay_version, annotations: {name: {philosophicalGrounding: {iri, label,
+    rationale}, domainModule, aristotelianDefinition: {genus, differentia}}}}
+  - lattice-ground resolve is on $PATH (v0.1.0)
+  - mqo-mcp subprocess protocol: stdin JSON {"tool","args"} → stdout {"ok","data"}
+  - mcp-cross-cluster-diff is structural (column-name matching only)
+
+Drafted (new repo joeyen-atscale/ousia-mqo):
+  PRD-ousia-mqo-ground.md  — Grounder lib + ousia-mqo ground CLI (gate, new repo)
+  PRD-ousia-mqo-diff.md    — semantic cross-cluster diff by BFO IRI (not column name)
+  PRD-ousia-mqo-bind.md    — NL phrase → BFO class → grounded AtScale candidates
+  PRD-ousia-mqo-mcp.md     — subprocess dispatcher + ToolPaths registration for mqo-mcp-server
+
+Order: ground → {diff, bind} → mcp (mcp links all three libs, no subprocess calls to own CLIs)
+
+Notes for /build:
+  ground is rust-cli new-repo (gate; creates joeyen-atscale/ousia-mqo).
+  diff/bind/mcp are rust-extend into ~/wintermute/ousia-mqo (shared target → worktree-extend.sh).
+  The subprocess protocol for mcp matches mqo-mcp's ToolPaths exactly per ARCHITECTURE.md.
+  ousia-atscale and lattice-ground must be on $PATH when the server runs — PRD says so.
+  Do NOT create a separate j0yen/ousia-mqo — this one belongs under joeyen-atscale.
+
+Open questions: Should ousia-mqo-mcp be registered in mqo-mcp-server's ToolPaths by
+  a PR to joeyen-atscale/mqo-mcp, or just via docs? Defer to the MCP PRD's docs approach
+  and let the user wire it in once the binary is on PATH.
