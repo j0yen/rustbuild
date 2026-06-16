@@ -10585,3 +10585,53 @@ Open questions: (1) does the auto-lane self-drain run unattended? Default NO —
   not a vercmp; until decided, kernel item hard-routes to approval. (3) overlap
   with fixpoint's adopt loop is by-design no-double-action: if fixpoint already
   drains an item, survey sees it fresh and won't list it.
+
+## 2026-06-16T13:09  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T06:39  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-16T13:30  /dream  fallow
+/dream fallow — streak=3 threshold crossed; surfaced outward-steer to user (interactive), no steer chosen; rested. Needs user topic (homeward / constellation / companion-kin / named seed) on next pass.
+
+## 2026-06-16T00:00  /build  ballast-survey
+ballast-survey v0.3.0 shipped — README.md added, REPOS.md updated, PRD archived; ballast-cloudaware extension already landed as v0.2.0, archived.
+
+## 2026-06-16T14:15  /dream  vision-ballast (extend)
+Drafted (4 PRDs — closing the ballast loop):
+  PRD-ballast-contract-repair.md — KEYSTONE. rust-extend INTO ballast-guard.
+    Fix the verified guard↔survey skew: guard.rs:141 calls `ballast-survey
+    --json --candidates` but survey v0.3.0 dropped --candidates → every SLO
+    pass aborts ("unexpected argument '--candidates'"). Drop the dead flag,
+    parse survey's stable JSON, add a contract test. Until this lands the
+    whole shipped fleet is inert.
+  PRD-ballast-pilot.md — shell/config. Ships default ~/.config/ballast/guard.toml
+    (water marks 90/85/80, mode=report) + ballast-guard.service + .timer +
+    JSONL event-sink + idempotent install/uninstall. Closes end-state #4
+    (defend SLO autonomously). REAPING STAYS OPT-IN: installer never sets
+    mode=enforce.
+  PRD-ballast-trend.md — rust-cli (j0yen/ballast-trend). Snapshot successive
+    survey JSON into a bounded ring; diff for per-path bytes/day; rank
+    fastest-growing; project ETA-to-high-water. Answers end-state #5 "what
+    keeps re-growing" — self-review can only guess today.
+  PRD-ballast-digest.md — rust-cli (j0yen/ballast-digest). Fuse survey + trend
+    + guard event log into one ranked block self-review pastes instead of its
+    "suggest du -sh" prose (disk-side twin of shipped drydock-digest).
+Vision: visions/ballast.md (extended, not replaced — appended "closing the loop")
+Order: contract-repair → pilot (needs working guard) → trend (independent,
+  can parallel) → digest (consumes trend + pilot's guard events).
+Why now: disk climbed 86%→92%→96% across 2026-06-14/15/16 unattended while the
+  full reap toolkit sat idle. Verified live: ballast-guard run errors on
+  --candidates; no claude-ballast.timer; no guard.toml; 210G target/ (recall
+  13G active, brain 13G fossil).
+Notes for /build: contract-repair is rust-extend build_into
+  ~/wintermute/ballast-guard — keep the SLO exit-code contract (0/2/3/4 in
+  guard.rs:3-7) and the reap dry-run/--apply gate UNCHANGED; this PRD fixes
+  plumbing only, must not widen the deletion surface. ballast-pilot must NOT
+  cron-wire reaping — mode=report default, enforce is jsy's one-line opt-in
+  (mirrors drydock-apply discipline). trend/digest are read-only, no deletion,
+  --now for deterministic tests, no wall-clock in lib code.
+Open questions: warm active-repo targets (recall 13G) stay untouched by design
+  (reaping forces cold rebuild on CPU-only box). Whether to ever offer a
+  cargo-clean-for-stale-active reclaim is left in the vision doc, not drafted.

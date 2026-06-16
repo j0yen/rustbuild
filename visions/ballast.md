@@ -80,3 +80,55 @@ signal. reap is the keystone deletion path. guard composes the two under an SLO.
   classify-and-report only, never reap, until proven safe.
 - Where is the high-water default? Start advisory (report only) at 85%, reap at
   90%, target 80% — but these belong in a config file, not hard-coded.
+
+## Extension — 2026-06-16: closing the loop (the fleet shipped but doesn't run)
+
+All four original PRDs shipped (survey/cloudaware/reap/guard binaries are on
+`$PATH`). But the autonomous SLO loop the end-state promises is **inert in
+practice**, and the disk kept climbing — **86% → 92% → 96% across
+2026-06-14/15/16** — while the toolkit sat idle. Three verified gaps:
+
+1. **The guard is broken by version skew.** `ballast-guard run` calls
+   `ballast-survey --json --candidates` (`ballast-guard/src/guard.rs:141`), but
+   survey v0.3.0 dropped `--candidates`; every pass aborts with "unexpected
+   argument '--candidates'". End-state #4 cannot happen because the guard can't
+   take step one. The guard already parses survey's `--json` schema
+   (`guard.rs:162-193`) — it just passes a dead flag.
+2. **Nothing winds the guard up.** No `claude-ballast.timer`, no
+   `~/.config/ballast/guard.toml` (both verified absent). The watcher has no
+   cadence and no policy file; end-state #4 ("defends an SLO autonomously")
+   is unreachable until something schedules it.
+3. **We measure stock, never flow.** Survey says what's big *now*; nothing
+   records the derivative. End-state #5 explicitly wants "what keeps
+   re-growing," but self-review can only *guess* ("build targets are the likely
+   culprit") because no time-series exists.
+
+**Extension components (PRD-sized):**
+
+- **ballast-contract-repair** — KEYSTONE for this extension. rust-extend INTO
+  ballast-guard: drop the removed `--candidates` flag, derive candidates from
+  survey v0.3.0's stable JSON, add a contract test so the next schema bump fails
+  red instead of bricking the guard. Nothing else runs until this lands.
+- **ballast-pilot** — shell/config: default `guard.toml` (water marks from the
+  open question above; `mode = "report"` so a fresh install observes before it
+  ever deletes), `ballast-guard.service` + `.timer` with a JSONL event-sink,
+  idempotent install/uninstall. Closes end-state #4. Reaping stays jsy-opt-in
+  via `mode = "enforce"`.
+- **ballast-trend** — rust-cli: snapshot successive survey runs into a bounded
+  ring, diff for per-path bytes/day growth, rank fastest-growing, project
+  ETA-to-high-water. Answers end-state #5's "what keeps re-growing."
+- **ballast-digest** — rust-cli: fuse latest survey + trend report + guard event
+  log into one ranked block self-review pastes instead of its `du` suggestion
+  (the disk-side counterpart to the shipped drydock-digest).
+
+**Extension order:** contract-repair → pilot (needs a working guard) →
+trend (independent of pilot; can build in parallel) → digest (consumes trend
++ guard events from pilot).
+
+**Updated open question:** the 210G of `target/` is dominated by *active* repos
+(recall 13G, brain 13G fossil, audio 11G). cloudaware/reap handle the fossils;
+warm-but-huge active targets remain by design untouched (reaping them forces a
+cold rebuild on a CPU-only box). Should ballast ever offer a `cargo clean`-style
+reclaim for active targets untouched > N days, or is that permanently jsy's
+manual call? Left as an open question — not drafted, since the vision scopes to
+fossils and never reaps working state.
