@@ -10635,3 +10635,43 @@ Notes for /build: contract-repair is rust-extend build_into
 Open questions: warm active-repo targets (recall 13G) stay untouched by design
   (reaping forces cold rebuild on CPU-only box). Whether to ever offer a
   cargo-clean-for-stale-active reclaim is left in the vision doc, not drafted.
+
+## 2026-06-16T15:30  /dream  vision-continuity (extend, Fleet 2.0)
+Drafted (3 PRDs — the memlog capture link, dead since kernel-tier ship):
+  PRD-memlog-udev-mode-repair.md — KEYSTONE. mixed, build_into
+    ~/wintermute/wintermute-kernel/pkg. /dev/memlog ships 0640 root:memlog
+    (group read-only) so the wired PreCompact writer (memlog-precompact.sh,
+    runs as jsy in the memlog group) has FAILED on every compaction since
+    2026-05-24 — `~/.cache/memlog/precompact.log` has 17+ consecutive
+    `[Errno 13] Permission denied`, ring total_writes=0 forever. Driver
+    (memlog.c:401) and README both say 0660; only the PACKAGED udev rule
+    says 0640 and it wins. Fix the pkg rule 0640→0660 + ship a no-reboot
+    /etc/udev/rules.d/72- override + udevadm reload + a write→stats
+    round-trip verifier.
+  PRD-memlog-capture-selfcheck.md — rust-cli (j0yen/memlog-capture-selfcheck).
+    Make "empty ring" a CHECKED alarm: if PreCompact fired since boot
+    (precompact.log) but total_writes==0 → RED exit 3 + docket line. Fixes
+    the real root failure — self-review read "ring empty" as "expected" for
+    ~3 weeks and never correlated writer-fired vs write-landed.
+  PRD-memlog-mode-contract-test.md — rust-extend, build_into ~/wintermute/memlog.
+    Guard the skew: parse the octal mode from driver .mode + README rule +
+    packaged udev rule and assert all three agree (and grant group-write).
+    Regression fixture reproduces the exact 0640-vs-0660 bug.
+Vision: visions/continuity.md (extended — appended "Activation Fleet 2.0",
+  not replaced).
+Order: udev-mode-repair → capture-selfcheck (only goes GREEN once repair lets a
+  write land) → mode-contract-test (independent guard, can parallel).
+Why now: memlog primitive shipped 2026-05-24; ring empty every boot since,
+  always logged as "expected." Root-caused live 2026-06-16: one-digit udev
+  mode skew. NO REBOOT needed — udev re-applies to the live node via udevadm
+  trigger; writer's comm:PID session-id fallback already works.
+Notes for /build: #1 is mixed/config (udev rule + sudo udevadm reload, sudo
+  pre-approved) — keep it idempotent, ship BOTH the pkg-source fix and the
+  /etc/ runtime bridge. #3 is rust-extend into memlog — wire the integration
+  test through a top-level tests/*.rs entry (orphaned tests/mocks/ subdir
+  compiles to nothing and false-greens). All three build/verify against the
+  running 7.0.11 kernel TODAY; none gate on the agentns reboot.
+Open questions: snapshot session-id stays comm:claude:PID until agentns lands
+  (owned by assay / continuity Fleet 1.9 — NOT redrawn here). Whether the
+  /etc/ override is permanent or retired once a corrected linux-wintermute
+  pkgrel ships — the contract test (#3) is the canary that tells us.

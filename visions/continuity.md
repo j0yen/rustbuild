@@ -2,7 +2,7 @@
 
 **Authored by:** /dream (Claude Opus 4.7), with jsy
 **Created:** 2026-05-25
-**Updated:** 2026-06-12 (Activation Fleet 1.9 drafted — kernel fix on disk, never booted; see bottom)
+**Updated:** 2026-06-16 (Activation Fleet 2.0 drafted — memlog capture link dead since kernel-tier ship; one-digit udev mode skew; see bottom)
 **Status:** active
 **Fleet 1 drafted:** 5 PRDs (kernel→userspace bridge for session continuity)
 **Fleet 1.5:** see `visions/onramp.md` — 4 PRDs for kernel-tier production-readiness (post-install + Claude launch wrap + richer provfs fallback + deferred xattr stamp)
@@ -268,3 +268,73 @@ prctl fix; `onramp`'s `claude-agentns-wrap` is futile (unshare-based) and is
 **superseded** by this fleet's #2. This fleet is the userspace + activation last
 mile that makes the proven-and-built kernel surface actually reach a live
 session.
+
+## Activation Fleet (Fleet 2.0 — memlog capture) — drafted 2026-06-16
+
+**The diagnosis that motivates it.** Fleet 1.9 chases the *agent_session id*
+link (agentns reboot pending). This fleet is the **orthogonal, already-bootable**
+link that has been silently broken since the kernel tier shipped on 2026-05-24:
+**nothing has ever entered `/dev/memlog`.** Every self-review since reads
+"memlog: active · ring empty (0 writes recorded)" and interprets it as *expected*
+— it is not. Measured live 2026-06-16 on `7.0.11-arch1-1-wintermute`:
+
+- `memlog stats` → `total_writes 0`, `records_in_ring 0` — the ring is empty on
+  a 4-day uptime, and has been empty on every uptime since the device first
+  appeared (`/dev/memlog` ctime 2026-06-12 22:52).
+- A PreCompact writer **is wired** and **does fire**: `~/.claude/settings.json`
+  `PreCompact` → `~/.claude/scripts/memlog-precompact.sh`; its own log
+  `~/.cache/memlog/precompact.log` records **36 firings**, of which the last 17+
+  are all `FAIL(1): memlog: [Errno 13] Permission denied: '/dev/memlog' — add
+  yourself to the 'memlog' group or run as root.`
+- jsy **is** in the `memlog` group (`id` confirms). The failure is not group
+  membership — it is the **device node mode**. `/dev/memlog` is
+  `crw-r----- root memlog` = **0640**: group has read but **not write**.
+
+**The one-digit skew.** Three sources of truth disagree on the device mode, and
+the wrong one wins:
+
+| Source of truth | mode | correct? |
+|---|---|---|
+| kernel driver `~/wintermute/memlog/driver/memlog.c:401` `.mode = 0660` | 0660 (group rw) | ✓ |
+| `~/wintermute/memlog/README.md:47` documented udev rule | 0660 | ✓ |
+| **installed** `/usr/lib/udev/rules.d/70-linux-wintermute-memlog.rules` (from `~/wintermute/wintermute-kernel/pkg/linux-wintermute-memlog.rules`) | **0640** | ✗ |
+
+The driver's `devnode` callback would create the node `0660`, but the packaged
+udev rule (owned by `linux-wintermute 7.0.11.arch1-1`) re-applies `0640` and
+strips group-write. A single digit in one packaged file has kept the entire
+continuity memlog pipeline — writer → `/dev/memlog` → witness daemon →
+postmortem — inert for its whole life, and no probe ever caught it because
+"empty ring" was always read as benign.
+
+**Why this fleet, why now.** Unlike Fleet 1.9, this needs **no reboot**: udev
+rules re-apply to a live device via `udevadm trigger`, and the writer's
+session-id fallback (`comm:claude:PID`) already yields *something* even while
+`/proc/self/agent_session` stays zero. So capture can go live today; when the
+agentns reboot lands, snapshots simply upgrade from `comm:PID` keys to stable
+128-bit ids for free.
+
+| # | PRD | Target | Builds |
+|---|---|---|---|
+| 1 | `PRD-memlog-udev-mode-repair.md` | mixed (kernel pkg) | KEYSTONE. Correct the packaged rule `0640→0660` (matches driver + README); ship a higher-priority `/etc/udev/rules.d/` runtime override + `udevadm` reload so the fix lands without a kernel reinstall; verifier asserts `0660` **and** a real round-trip write→`memlog stats` increment. Until this lands, every snapshot is lost. |
+| 2 | `PRD-memlog-capture-selfcheck.md` | rust-cli (`memlog-capture-selfcheck`) | Make "empty ring" a **checked, alarming** condition instead of "expected." Probe: if the PreCompact hook fired since boot (`precompact.log` entries newer than `uptime -s`) but `memlog stats total_writes == 0`, emit RED + a docket-consumable finding. Directly fixes the "read empty as benign 10× runs" failure that masked this for weeks. |
+| 3 | `PRD-memlog-mode-contract-test.md` | rust-extend (`~/wintermute/memlog/`) | Guard the skew so it can't silently return across kernel bumps: a test that parses the octal mode from all three sources of truth (driver `.mode`, README rule, packaged udev rule) and asserts they agree. Mirrors the `apply-agentns.py` anchor-durability philosophy — durable against version churn, not a one-shot diff. |
+
+**Order:** 1 → 2 (selfcheck only goes green once repair lets a write land) →
+3 (independent guard; can parallel 1–2). #1 is the load-bearing unblock; #2 is
+the scoreboard that proves capture is live and stays the alarm if it regresses.
+
+**Boot gating:** none. All three build and verify against the running
+`7.0.11` kernel today. The only degraded surface is the snapshot **key**
+(`comm:PID` until the Fleet-1.9 agentns reboot promotes it to a 128-bit id) —
+tracked as an open question below, owned by Fleet 1.9 / `assay`, **not** redrawn
+here.
+
+**Open questions (Fleet 2.0):**
+- Snapshot session-id is `comm:claude:PID` until agentns lands (Fleet 1.9).
+  Acceptable for capture-now; postmortem join keys will firm up post-reboot.
+  Do **not** draft an agentns fix here — it is owned by `assay` / Fleet 1.9.
+- Should the runtime `/etc/udev/rules.d/` override be permanent, or removed once
+  a corrected `linux-wintermute` pkgrel ships? Leaning: ship both (pkg fix is
+  durable, `/etc/` override is the no-reboot bridge); the contract test (#3)
+  becomes the canary that tells us when the pkg fix has landed and the override
+  is redundant.
