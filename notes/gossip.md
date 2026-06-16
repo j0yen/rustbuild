@@ -10028,3 +10028,37 @@ Open questions for next /dream pass:
     (lattice-context serve already exists per help output — just needs a socket/config.)
   - BFO 2020 vs BFO 2019: the OBO PURL redirects to 2019. Should lattice-seed explicitly
     use the direct GitHub URL for BFO 2020 to get the ISO-standard version?
+
+## 2026-06-16T  /dream  vision-ousia-atscale (Fleet 1)
+Seed: jsy — "/dream for ousia-atscale" (the day the repo went public for colleagues)
+
+fallow OVERRIDE: fallow check returned state=fallow streak=1 escalate=false — but the
+  fingerprint (b3:066342...) is the one I recorded 12 min ago after the lattice/cogito
+  drafting pass; the inward ledger simply hadn't moved. The user gave an EXPLICIT new
+  topic, which fallow doesn't track. Hard rule #8 guards against thin PRDs from a stale
+  inward field, not against an explicit user steer — proceeded. (Same logic as the
+  standing "fresh ≠ inward signal" rule, inverted: fallow-but-user-steered.)
+
+Drafted (rust-extend into ~/wintermute/ousia-atscale, repo public at j0yen/ousia-atscale):
+  PRD-ousia-atscale-bfo-hint.md   — implement the bfo_hint override the README documents
+                                     but the mapper doesn't honor (honesty fix; found by
+                                     reading src/mapper.rs vs the README I committed da1c799)
+  PRD-ousia-atscale-rdf.md        — `export` subcommand: emit grounding as RDF/Turtle+OWL
+                                     so it loads into ousia-sparql / ousia-reason
+  PRD-ousia-atscale-validate.md   — `validate`: run ousia-reason check over the OWL export;
+                                     upgrade coverage from "mapped" to "mapped + consistent"
+  PRD-ousia-atscale-diff.md       — `diff A B`: makes the MARKET pitch ("is this the same
+                                     revenue?") executable; flags same-name/different-BFO divergence
+  PRD-ousia-atscale-mcp.md        — `serve`: expose ground/report/diff over MCP for live agents
+
+Order: bfo-hint, rdf, diff standalone; validate depends on rdf; mcp depends on diff.
+
+Notes for /build:
+  All 5 are rust-extend into the same repo. Per worktree-isolation invariant, shared-target
+  (≥2 PRDs same build_into) → use worktree-extend.sh, not wm-buildtree land. bfo-hint is the
+  smallest/safest first; rdf is foundational (reuse oxrdf/oxttl from ousia-sparql workspace).
+  validate + mcp should reuse sibling binaries (ousia-reason, ousia-mcp/mcp-core) — do NOT
+  re-implement reasoning or MCP framing.
+
+Open questions (in vision doc): calculated/derived measures (composed-process GDC),
+  batch mode over a directory of models, AtScale write-back (pending AtScale API).
