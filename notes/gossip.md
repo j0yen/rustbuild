@@ -10183,3 +10183,44 @@ Notes for /build:
 Open questions: Should ousia-mqo-mcp be registered in mqo-mcp-server's ToolPaths by
   a PR to joeyen-atscale/mqo-mcp, or just via docs? Defer to the MCP PRD's docs approach
   and let the user wire it in once the binary is on PATH.
+2026-06-16T06:24:56Z loom-serial-fallback: SERIAL MODE for ousia-atscale (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-15T23:30  /dream  vision-mqo-tools (new tools for mqo-mcp server)
+Seed: user — "of tools for the atscale mqo-mcp server."
+NOTE: fallow=fallow streak=1 (escalate=false). OVERRIDE per explicit-user-steer
+  rule — user named a concrete topic the ledger can't see. Recorded here.
+
+Research (2026-06-15, via gh api on joeyen-atscale/mqo-mcp):
+  - Current server tools (mqo-mcp-server/src/mcp.rs): list_models, describe_model,
+    search_columns, query_multidimensional, next_page, list_clusters, health_status,
+    diff_clusters, recommend_chart, build_vega_spec, build_bi_asset, compose_dashboard
+    + server-side handle ops (topk visible).
+  - 50-crate workspace grepped: NO crate matches time|unit|anom|templ|linea.
+    These 5 are genuine gaps.
+
+Drafted (5 standalone joeyen-atscale repos, matching the existing mcp-* tool pattern;
+  each = flag CLI + `serve` subprocess mode speaking {"tool","args"}→{"ok","data"}):
+  PRD-mqo-time-intelligence.md — derive YoY/QoQ/rolling/MTD-QTD-YTD MQOs from a base MQO
+  PRD-mqo-unit-guard.md        — block unit/format-incompatible measure combos (value-semantics firewall)
+  PRD-mqo-anomaly-scan.md      — zscore/iqr/mad outlier scan over a result rowset (rows stay server-side)
+  PRD-mqo-lineage.md           — "how was this computed" tree from BoundMqo/decision/compiled
+  PRD-mqo-template.md          — parameterized saved MQOs (list/show/instantiate)
+
+Order: all 5 independent (each consumes documented mqo-spec MQO/BoundMqo shapes).
+  Build any order/parallel. Value-descending: time-intel → unit-guard → anomaly → lineage → template.
+
+Notes for /build: ALL are rust-cli new-repos under joeyen-atscale (NOT j0yen). mqo-mcp is
+  NOT cloned locally, so build_into paths are ~/wintermute/<slug> for the new repo working
+  dir; each is fixture-driven + cluster-free in tests (no AtScale instance needed).
+  IMPORTANT: mqo-spec is the source of truth for MQO/BoundMqo JSON — each PRD ships a minimal
+  fixture matching the documented shape but the real schema must be confirmed against mqo-spec
+  at build time (clone joeyen-atscale/mqo-mcp or vendor mqo-spec if exact shape needed).
+  Wiring into mqo-mcp-server is via ToolPaths subprocess OR pulling the crate into the workspace
+  — user's call; each `serve` mode is ready either way.
+
+Distinct from neighbors: time-intel ≠ next-query-proposer (derives time comparison, not adjacency
+  follow-ups); unit-guard ≠ param-validator (value semantics, not grounding) ≠ mqoguard-* (units,
+  not structural compat); anomaly-scan ≠ result-profiler (outliers, not shape); lineage ≠
+  causal-tracer (single-result derivation, not deltas); template = wholly new.
+
+Sibling vision: visions/ousia-mqo.md (BFO semantic grounding into the same server) dreamed earlier today.
