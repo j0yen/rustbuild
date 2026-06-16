@@ -10816,3 +10816,21 @@ Notes for /build: this is the KEYSTONE of Fleet 6 — build it LAST (after the
   order: lint → ai-coverage → synonym-seed → grounding-advisor → author-check.
   The four tools must expose a library API (not just a binary) for author-check
   to call — ensure each has a lib.rs with the core logic callable from Rust.
+
+## 2026-06-16T09:39  /dream  (fallow)
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T17:15  /dream+build  mqo-eval (LLM-free eval harness)
+Seed: jsy — "we need a new version of mcp-eval but without anthropic API dependencies"
+Constraint: private joeyen-atscale repo (joeyen-atscale/mqo-eval).
+
+Context: joeyen-atscale/mcp-eval uses LiteLLM to drive NL questions through an LLM
+  (Anthropic/OpenAI/Gemini) which calls MCP tools, then grades via PGWire oracle.
+  Blocking: no ANTHROPIC_API_KEY on this box, api.anthropic.com inaccessible.
+
+mqo-eval replaces the LLM driver with mqo-agent (deterministic, shipped Fleet 3).
+Same question YAML input, same PGWire oracle grading path, no API key. Also exposes
+--agent '<cmd>' override so mqo-textsql-baseline can be swapped in as control arm.
+
+Drafted 1 PRD: PRD-mqo-eval.md → joeyen-atscale/mqo-eval (PRIVATE).
+Handed to /autobuilder immediately.
