@@ -10800,3 +10800,19 @@ Notes for /build: all 8 are j0yen/ repos (NOT AtScaleInc, NOT joeyen-atscale —
   All fixture-driven, cluster-free. grounding-advisor consumes ousia-atscale annotate
   JSON output shape (document this clearly in the PRD; build must vendoring/fixture
   that shape for tests).
+
+## 2026-06-16T17:00  /dream  vision-atscale-ai-strategy (Fleet 6.5 — author-check orchestrator)
+Seed: jsy — "/dream mqo-author-check" after asking "is there a playbook for this?"
+
+Drafted 1 PRD:
+  PRD-mqo-author-check.md  — pre-publish quality gate: chains lint + ai-coverage +
+    synonym-seed + grounding-advisor as library deps (not subprocesses) into one
+    `mqo-author-check run --model <m.json>` command. Outputs prioritized action
+    list. --ci exits 1 on error-severity findings (CI-gate pattern from
+    mqo-semantic-regression). --format json/html. serve mode.
+
+Notes for /build: this is the KEYSTONE of Fleet 6 — build it LAST (after the
+  four tools it wraps are shipped) so it can link them as library crates. Build
+  order: lint → ai-coverage → synonym-seed → grounding-advisor → author-check.
+  The four tools must expose a library API (not just a binary) for author-check
+  to call — ensure each has a lib.rs with the core logic callable from Rust.
