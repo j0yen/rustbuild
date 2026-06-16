@@ -10258,3 +10258,55 @@ Distinct from neighbors: binding-confidence ≠ param-validator (graded vs binar
 
 Three mqo fleets now queued: mqo-tools (5) + ousia-mqo (4) + mqo-trust (5) = 14 PRDs aimed at
   the same server.
+
+## 2026-06-15T22:30  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T05:35  /dream  vision-atscale-ai-strategy (META-vision + Fleet 1)
+Seed: jsy — "/dream a vision for AtScale's AI strategy and roadmap".
+Audience (jsy): BOTH — company-strategy thesis that doubles as the build roadmap.
+CONSTRAINT (jsy): nothing written to the AtScaleInc company repo. New repos target
+  the personal j0yen/ namespace, consume only public mqo-spec/ousia-atscale shapes.
+NOTE: fallow=fallow streak=2 (escalate=false). OVERRIDE per explicit-user-steer rule.
+
+This is a META-vision: it names the thesis ("the semantic layer is the trust
+substrate for agentic BI") and organizes the EXISTING AtScale fleets into a
+5-pillar roadmap — SPEAK (mqo-mcp), ANALYZE (mqo-tools), TRUST (mqo-trust),
+GROUND (ousia-atscale/ousia-mqo/lattice), PROVE (rosetta) — then adds the
+missing cross-cutting pillar: MEASURE (prove the thesis is true).
+
+Live-MCP evidence (list_models, 2026-06-16): same internet_sales model on BOTH
+BigQuery + Snowflake catalogs (engine-parity is testable); internet_sales vs
+internet_sales_no_pii variants (PII governance is real); Tasty Bytes imported
+from a Power BI/Snowflake Cortex Analyst .pbit (AtScale is in the NL-analytics
+arena); search_columns is keyword-only (semantic retrieval gap).
+
+Drafted Fleet 1 — the MEASURE pillar (5 standalone j0yen rust-cli, flag CLI +
+serve subprocess mode, fixture-driven, cluster-free):
+  PRD-mqo-bench.md              — KEYSTONE: NL→metric binding accuracy harness +
+                                  golden set; turns the whole thesis into a number
+  PRD-mqo-catalog-embed.md      — semantic (BGE, offline) catalog retrieval beyond
+                                  keyword search_columns; raises binding accuracy
+  PRD-mqo-engine-parity.md      — runtime numeric-parity proof across engines
+                                  (BigQuery vs Snowflake same model)
+  PRD-mqo-aggregate-advisor.md  — agent cost/aggregate-awareness (AtScale's core
+                                  acceleration differentiator, invisible to AI today)
+  PRD-mqo-semantic-regression.md— CI gate: fail build when a model change breaks
+                                  the agent-facing metric contract (incl. dropped PII)
+
+Order: all 5 build independently. Priority by strategic leverage:
+  bench → catalog-embed → engine-parity → aggregate-advisor → semantic-regression.
+  mqo-bench first — every other pillar's "X raises accuracy" claim is measurable
+  once the harness + golden set exist; bench's golden fixture is reusable by the rest.
+
+Notes for /build: repos are j0yen/<slug> (NOT joeyen-atscale, NOT AtScaleInc) per
+  jsy's explicit constraint this pass — if you'd rather align with the sibling
+  mqo-* fleets under joeyen-atscale, that's jsy's call, but NEVER AtScaleInc/*.
+  mqo-catalog-embed reuses recall's local BGE embedder (offline, no API).
+  mqo-bench's golden set is hand-authored from the 3 live models (Tasty Bytes,
+  Internet Sales, TPC-DS); a raw-table text-to-SQL control answer key is a
+  follow-on, so the v1 "+N% vs text-to-SQL" delta is partial until then.
+
+Open questions (in the vision): golden-set source (hand-authored vs trace-harvested);
+  raw-table baseline (in-repo control vs external Spider/BIRD); whether MEASURE is
+  the base pillar or the headline-number top of the roadmap.
