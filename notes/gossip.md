@@ -10722,3 +10722,81 @@ Notes for /build: subtree-census is the gate — it adds the `subtree` JSON bloc
 Open questions: worker-generation rot threshold (lean: any deleted-exe is rot;
   worker-count needs a tuned threshold, start >3). Whether subtree-reap is moot
   post-fix — no, it cleans the pre-fix backlog (1054's 21) the fix can't undo.
+
+---
+
+## 2026-06-16T09:20Z  /build  memlog-capture-selfcheck shipped
+
+Shipped `memlog-capture-selfcheck` v0.1.0 — detects the "firing-but-empty" failure class
+that masked the udev memlog bug for 3 weeks.
+
+- 4 verdicts: capturing/untested/firing-but-empty/memlog-missing; exits 0/0/3/4
+- 28 tests pass (13 unit + 7 AC + 3 proptest invariants + 2 doc)
+- Pure verdict function with ISO-8601 parser; no wall-clock in logic
+- Built on Hetzner Cloud (ccx53→cpx42), 2 cloud iterations
+- Published: https://github.com/j0yen/memlog-capture-selfcheck
+- Binary: ~/.local/bin/memlog-capture-selfcheck
+- REPOS.md updated (self-review/observability section)
+
+## 2026-06-16T16:45  /dream  vision-atscale-ai-strategy (Fleets 5+6 — NARRATE + AUTHOR)
+Seed: jsy — "cogito and doxa are not relevant for AtScale. Create something that is."
+NOTE: fallow=fallow streak=1 (escalate=false). OVERRIDE per explicit-user-steer rule.
+
+Context: Fleets 1-4 are FULLY SHIPPED (mqo-textsql-baseline, demo-runner, scorecard,
+  trace-harvest, agent, access-policy, session-budget, decision-log, goldgrow,
+  replay, planner-tune, drift-watch all archived per git log). Confirmed 2026-06-16.
+
+Gap analysis (no existing fleet covered either):
+  - NARRATE: the agent returns structured answers; nothing turns them into prose an
+    executive can read or a report a colleague can share. Zero existing PRDs for
+    insight generation, narrative composition, chart captions, or report packaging.
+  - AUTHOR: every fleet targets the AI *consumer* of the semantic layer, not the
+    *author* who builds and maintains it. jsy IS that author at AtScale. Zero existing
+    tools for model linting, AI-readiness scoring, synonym enrichment, or grounding
+    advice for non-ontologists.
+
+Drafted Fleet 5 — NARRATE (4 standalone j0yen rust-cli repos):
+  PRD-mqo-insight-extract.md    — extract ranked findings from metric answers
+                                  (delta, anomaly, parity-gap); the "so what"
+  PRD-mqo-narrative-compose.md  — compose findings into audience-targeted prose
+                                  (executive|analyst|technical); template-based,
+                                  no LLM in default path
+  PRD-mqo-chart-caption.md      — generate title/subtitle/caption for a Vega-Lite
+                                  spec from build_vega_spec; Tasty Bytes Summit
+                                  scenario motivated this directly
+  PRD-mqo-report-pack.md        — assemble NL question → agent → narrative → chart
+                                  into a Markdown/HTML report document; manifest-driven
+
+Drafted Fleet 6 — AUTHOR (4 standalone j0yen rust-cli repos):
+  PRD-mqo-measure-lint.md       — lint model for AI-hostile patterns: missing
+                                  descriptions, version markers in names, numeric
+                                  dimensions, redundant measures; SARIF output for CI.
+                                  Live evidence: COGS_USD/SALE_PRICE_USD as dimensions
+                                  in Tasty Bytes (M002 rule)
+  PRD-mqo-ai-coverage.md        — score every element on discoverability + bindability
+                                  + queryability; surface "dark corners"; the leading
+                                  indicator for mqo-bench accuracy
+  PRD-mqo-synonym-seed.md       — generate NL synonyms for measures via rule engine
+                                  (snake_case expansion, suffix/prefix tables: _AMT,
+                                  _QTY, _USD, _PCT, AVG_, ROLLING_); no API in
+                                  default path; `apply` writes approved synonyms into
+                                  model description fields
+  PRD-mqo-grounding-advisor.md  — for each ungrounded element, suggest BFO class +
+                                  copy-pasteable bfo_hint IRI + plain-English rationale;
+                                  no ontology jargon exposed to the author
+
+Fleet 5 order: insight-extract → narrative-compose → chart-caption → report-pack
+  (report-pack consumes all three; the first three are independent)
+Fleet 6 order: ALL INDEPENDENT. Suggested priority: measure-lint → ai-coverage →
+  synonym-seed → grounding-advisor (lint motivates the others; coverage shows ROI of
+  synonym+grounding; synonym-seed and grounding-advisor are the fixes)
+
+Fleet 6 compose loop: measure-lint (finds missing descriptions) → synonym-seed
+  (generates the fix) → apply → re-index with catalog-embed → ai-coverage improves
+  → mqo-bench accuracy improves. Author-side flywheel.
+
+Notes for /build: all 8 are j0yen/ repos (NOT AtScaleInc, NOT joeyen-atscale —
+  but if user wants to move to joeyen-atscale, safe to do; just not AtScaleInc/*).
+  All fixture-driven, cluster-free. grounding-advisor consumes ousia-atscale annotate
+  JSON output shape (document this clearly in the PRD; build must vendoring/fixture
+  that shape for tests).

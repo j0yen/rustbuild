@@ -8,6 +8,8 @@
 **Fleet 2 drafted:** 4 PRDs (DEMONSTRATE — make the thesis runnable + self-evident)
 **Fleet 3 drafted:** 4 PRDs (DEPLOY/OPERATE — make it safe to run in production)
 **Fleet 4 drafted:** 4 PRDs (LEARN — close the feedback loop so it improves over time)
+**Fleet 5 drafted:** 4 PRDs (NARRATE — turn answers into insights and shareable reports)
+**Fleet 6 drafted:** 4 PRDs (AUTHOR — tools for the model builder to improve AI-readiness)
 **Seed:** jsy (2026-06-16) — `/dream a vision for AtScale's AI strategy and roadmap`.
 Audience (jsy's call): *both* — a company-strategy thesis that doubles as the
 personal build roadmap. Constraint (jsy's call): **nothing written to the
