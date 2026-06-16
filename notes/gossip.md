@@ -10224,3 +10224,37 @@ Distinct from neighbors: time-intel ≠ next-query-proposer (derives time compar
   causal-tracer (single-result derivation, not deltas); template = wholly new.
 
 Sibling vision: visions/ousia-mqo.md (BFO semantic grounding into the same server) dreamed earlier today.
+
+## 2026-06-15T23:55  /dream  vision-mqo-trust (agentic-BI safety & runtime layer)
+Seed: user — "more for mqo-mcp server" (3rd mqo fleet today).
+NOTE: fallow=fallow streak=1 (escalate=false). OVERRIDE per explicit-user-steer rule.
+
+Research (2026-06-15, gh api on joeyen-atscale/mqo-mcp): grepped all 50 crates —
+  NO crate matches confidence|clarif|pii|sensitiv|error|explain|cache|redact|mask|
+  ambig|drift. This fleet is the trust/governance/runtime slice; complements
+  mqo-tools (analytical) + ousia-mqo (grounding).
+
+Drafted (5 standalone joeyen-atscale rust-cli repos; flag CLI + serve subprocess mode;
+  fixture-driven, cluster-free in tests):
+  PRD-mqo-binding-confidence.md — calibrated 0-1 confidence + alternatives per bound field
+  PRD-mqo-clarify.md            — disambiguation question when ≥2 candidates within margin
+  PRD-mqo-sensitivity-scan.md   — PII/sensitive field flag + optional --redact before rows reach model
+  PRD-mqo-error-explain.md      — backend fault (XMLA/DAX/MDX/SQL) → {cause, category, suggested_fix} via data catalog
+  PRD-mqo-result-cache.md       — content-addressed cache keyed on canonicalized BoundMqo
+
+Order: all 5 independent. binding-confidence + clarify are a natural pair (clarify
+  consumes confidence's margins but runs standalone). Priority: confidence → clarify →
+  sensitivity → error-explain → result-cache.
+
+Notes for /build: same conventions as mqo-tools — rust-cli new-repos under joeyen-atscale
+  (NOT j0yen), build_into ~/wintermute/<slug>, fixtures matching documented mqo-spec shapes
+  (confirm against mqo-spec at build time). Nice interlock: result-cache honors a sensitivity
+  flag so sensitivity-scan-flagged results are never cached to disk.
+
+Distinct from neighbors: binding-confidence ≠ param-validator (graded vs binary accept/reject);
+  clarify = new (pipeline commits, never asks); sensitivity = new (no data-sensitivity dimension
+  anywhere); error-explain = new (faults pass through raw); result-cache ≠ duckdb-handle-store
+  (cross-query cache vs single-result handle).
+
+Three mqo fleets now queued: mqo-tools (5) + ousia-mqo (4) + mqo-trust (5) = 14 PRDs aimed at
+  the same server.
