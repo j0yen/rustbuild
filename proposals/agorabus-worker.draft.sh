@@ -1,8 +1,19 @@
 #!/usr/bin/env bash
 # agorabus-worker.sh — RPC handler for one Claude session.
 #
-# DRAFT (PRD-chord-async-delegate iter-2): extends the live worker with
-# async delegation methods. Live install path:
+# DRAFT (PRD-agorabus-worker-idempotency-fix): fixes the idempotency guard
+# regex so it correctly matches workers launched with a trailing cwd argument.
+#
+# Bug verified 2026-06-16: pgrep -f "agorabus-worker.sh <sid>$" never matched
+# argv "bash …/agorabus-worker.sh <sid> /home/jsy" because the trailing arg
+# prevented the $ anchor from matching. Result: 21 duplicate workers for one
+# session (pid 1054), keeping stale/deleted-exe agorabus subscribers alive.
+#
+# Fix: replace the $-anchored pattern with one that tolerates a trailing token:
+#   old: pgrep -f "agorabus-worker.sh $sid\$"
+#   new: pgrep -f "agorabus-worker\.sh $sid( |\$)"
+#
+# Live install path (jsy's gated step — NOT run by the build):
 #   install -m755 ~/wintermute/autobuilder/proposals/agorabus-worker.draft.sh \
 #                 ~/wintermute/dotfiles/.claude/scripts/agorabus-worker.sh
 # Held out of live infra until jsy smoke-tests in one session.
@@ -48,7 +59,7 @@ fi
 
 # Idempotency: bail if another worker for this sid is already alive.
 self_pid=$$
-if pgrep -f "agorabus-worker.sh $sid\$" | grep -v "^${self_pid}\$" >/dev/null 2>&1; then
+if pgrep -f "agorabus-worker\.sh $sid( |\$)" | grep -v "^${self_pid}\$" >/dev/null 2>&1; then
     exit 0
 fi
 
