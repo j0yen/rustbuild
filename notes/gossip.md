@@ -10675,3 +10675,50 @@ Open questions: snapshot session-id stays comm:claude:PID until agentns lands
   (owned by assay / continuity Fleet 1.9 — NOT redrawn here). Whether the
   /etc/ override is permanent or retired once a corrected linux-wintermute
   pkgrel ships — the contract test (#3) is the canary that tells us.
+
+## 2026-06-16T15:39  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T15:55  /dream  vision-muster (extend, Fleet 2.0)
+Drafted (5 PRDs — the live verdict must grade the bus subtree):
+  PRD-muster-subtree-census.md — rust-extend ~/wintermute/muster (census.rs).
+    FOUNDATIONAL. `worker_pids` is declared but returns [] for live sessions —
+    verified: pid 1054 census says worker_pids:[] while pgrep -fc
+    "agorabus-worker.sh claude-1054-jsy" = 21. Populate it + add a `subtree`
+    block (subscriber_pids, worker_pids, deleted_exe, worker_generations).
+  PRD-muster-verdict-subtree-rot.md — rust-extend (verdict.rs). Add a
+    `subtree-rot` annotation ORTHOGONAL to live/duplicate/orphan/stale: any
+    session with >=1 deleted-exe child or >threshold worker generations is
+    flagged even when itself `live`. This is the home for self-review's
+    3-runs-open "fleet-binary-staleness: 3 deleted-exe agorabus subs".
+  PRD-muster-duplicate-rank.md — rust-extend (verdict.rs). 4 interactive
+    sessions all run from /home/jsy → all flagged `duplicate slug 'jsy'`, can't
+    pick the zombie. Rank by activity recency: freshest stays `live`, idle-older
+    become `duplicate (idle Ns)`. Settles the vision's "is cwd the right key"
+    open question (recurred 4-fold live).
+  PRD-agorabus-worker-idempotency-fix.md — shell → proposals/. ROOT CAUSE of
+    the rot. Guard at agorabus-worker.sh:51 is `pgrep -f "…$sid\$"` but argv has
+    a trailing cwd arg (`…$sid /home/jsy`), so the `$` anchor never matches →
+    21 workers for one session. One-line regex fix, ships to proposals per the
+    script's own held-out discipline.
+  PRD-muster-subtree-reap.md — rust-extend (reap.rs). The worker fix can't undo
+    already-leaked subtrees; reap the DEAD CHILDREN of a live session
+    (deleted-exe subs + surplus workers), proposal-only, --confirm, never the
+    root. Clears the backlog the fix can't retroactively undo.
+Vision: visions/muster.md (extended — appended "Extension 2026-06-16 … Fleet
+  2.0", not replaced).
+Order:
+  agorabus-worker-idempotency-fix  (independent — leak source, ship anytime)
+  muster-subtree-census → muster-verdict-subtree-rot → muster-subtree-reap
+                        └→ muster-duplicate-rank (parallels verdict-subtree-rot)
+Notes for /build: subtree-census is the gate — it adds the `subtree` JSON block
+  the other three muster PRDs consume; build it first. verdict-subtree-rot adds
+  an ANNOTATION, not a 5th VerdictKind variant — keep VerdictKind {Live,
+  Duplicate,Orphan,Stale} unchanged (verdict.rs:29-32) so existing tests hold.
+  The worker fix is shell→proposals only: do NOT install to the live symlink
+  (~/.claude/scripts/agorabus-worker.sh → dotfiles) — that's jsy's gated
+  smoke-test step. subtree-reap mirrors muster reap / mend-bridge / recourse:
+  dry-run default, --confirm to signal, hard refusal on root/interactive/live.
+Open questions: worker-generation rot threshold (lean: any deleted-exe is rot;
+  worker-count needs a tuned threshold, start >3). Whether subtree-reap is moot
+  post-fix — no, it cleans the pre-fix backlog (1054's 21) the fix can't undo.

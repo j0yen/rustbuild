@@ -120,3 +120,114 @@ bridge both consume the verdict and can proceed in parallel once it lands.
   or leave the existing orphan-subscriber / orphan-reap playbooks to sweep them?
   Leaning: muster reports the full subtree, reaps only the root, lets the
   established sweepers collect the rest.
+
+---
+
+## Extension 2026-06-16 — the live verdict must grade the bus subtree (Fleet 2.0)
+
+*Seed: bare `/dream`, Phase-1 live inspection. The vision's four components
+(census/verdict/reap/selfreview-bridge) all shipped — `muster` is installed and
+`muster verdict` runs. But running it against the live process table this run
+exposed two gaps the original PRDs didn't reach, both backed by hard evidence.*
+
+### What the live run showed
+
+`muster verdict` (2026-06-16, this box) returned:
+
+```
+1054     interactive-tty   duplicate   296277s   duplicate interactive-tty session for project slug 'jsy'
+949440   interactive-tty   duplicate    41771s   duplicate interactive-tty session for project slug 'jsy'
+1147375  interactive-tty   duplicate    34435s   duplicate interactive-tty session for project slug 'jsy'
+1195852  interactive-tty   duplicate    33669s   duplicate interactive-tty session for project slug 'jsy'
+```
+
+Two problems, both verified:
+
+1. **The roster's `worker_pids` is a lie.** `muster census --format json` for
+   pid 1054 returns `"worker_pids": []` — yet `pgrep -fc "agorabus-worker.sh
+   claude-1054-jsy"` = **21**, and 3 of that session's `agorabus subscribe`
+   children are **deleted-exe** (`readlink /proc/<pid>/exe` ends ` (deleted)` —
+   pids 1906, 2201, 579203). The census field promised in End-state §1
+   ("its agorabus peer session-id + worker subtree PIDs") is declared but never
+   populated. So muster cannot even *see* the subtree it claims to reconcile.
+
+2. **Every $HOME session collapses to `duplicate`.** All four interactive
+   sessions run from `/home/jsy`, so all resolve to project slug `jsy` and all
+   four are flagged `duplicate` with the same reason. The verdict cannot say
+   *which* of the four is the genuine zombie (1054, 3.4 days old, idle, dragging
+   21 leaked workers) versus three legitimately-active concurrent shells. The
+   open question "is cwd the right key … confirm against a real duplicate when
+   one recurs" has now recurred **four-fold, live** — it's research, not
+   speculation.
+
+### Root cause of the rot (verified)
+
+The subtree rot is not random churn — it has a one-line cause.
+`~/.claude/scripts/agorabus-worker.sh:51` (live symlink →
+`~/wintermute/dotfiles/.claude/scripts/agorabus-worker.sh`) guards against
+double-spawn with:
+
+```sh
+if pgrep -f "agorabus-worker.sh $sid\$" | grep -v "^${self_pid}\$" ...
+```
+
+The `\$` anchors end-of-string immediately after the session id — but the real
+argv is `agorabus-worker.sh claude-1054-jsy /home/jsy` (a trailing cwd arg the
+script itself passes). The anchor therefore **never matches**, the idempotency
+guard is a no-op, and every re-trigger (each agorabus reconnect under the
+`Restart=always` drop-ins) spawns a fresh worker that believes it is the only
+one. 21 workers for one session is the result; the deleted-exe subscribers are
+the old binaries those stale workers keep alive across reloads. This is the
+exact "fleet-binary-staleness: 3 deleted-exe agorabus subs" finding self-review
+has carried open for 3+ consecutive runs.
+
+### New components (PRD-sized)
+
+5. **muster-subtree-census** (`PRD-muster-subtree-census`) — `rust-extend`
+   into `~/wintermute/muster` (`census.rs`). Make `worker_pids` actually
+   populate, and add a `subtree` block per session: subscriber PIDs, worker
+   PIDs, `deleted_exe` count, and distinct worker generations. Fixes the empty
+   field and gives every later component its data. *Foundational for this
+   extension.*
+6. **muster-verdict-subtree-rot** (`PRD-muster-verdict-subtree-rot`) —
+   `rust-extend` (`verdict.rs`). Add a `subtree-rot` annotation orthogonal to
+   the live/duplicate/orphan/stale axis: any session whose subtree carries ≥1
+   deleted-exe member or more than a threshold of worker generations is flagged
+   with the counts and a reason, *even when the session itself is `live`*.
+   Depends on #5.
+7. **muster-duplicate-rank** (`PRD-muster-duplicate-rank`) — `rust-extend`
+   (`verdict.rs`). Disambiguate same-slug duplicates by activity recency
+   (transcript mtime / ctrace last-event / uptime): exactly the freshest stays
+   `live`; the idle-older ones become `duplicate (idle <N>s)`. Settles the
+   "which duplicate is the zombie" open question. Depends on #5; parallels #6.
+8. **agorabus-worker-idempotency-fix** (`PRD-agorabus-worker-idempotency-fix`)
+   — `shell`. Fix the `:51` anchor so the guard matches the real argv (drop the
+   `\$` or match `"agorabus-worker.sh $sid( |\$)"`). Plugs the leak at source.
+   Ships to `proposals/agorabus-worker.draft.sh` per the script's own
+   held-out-until-smoke-tested discipline. Independent of the muster PRDs.
+9. **muster-subtree-reap** (`PRD-muster-subtree-reap`) — `rust-extend`
+   (`reap.rs`). Extend `muster reap` to optionally collect just the **dead
+   children** (deleted-exe subscribers/workers) of an otherwise-`live` session,
+   proposal-only and `--confirm`-gated, never signalling the session root.
+   Clears the recurring self-review finding without killing the live session.
+   Depends on #6.
+
+### Order (extension)
+
+```
+agorabus-worker-idempotency-fix  (independent — the leak source)
+
+muster-subtree-census ──► muster-verdict-subtree-rot ──► muster-subtree-reap
+                      └──► muster-duplicate-rank
+```
+
+### Open questions (extension)
+
+- **Generation threshold.** How many worker generations is "rot" vs normal
+  reconnect churn? Lean: any deleted-exe member is rot regardless of count;
+  worker-count rot needs a threshold (start at >3, tune against a clean
+  freshly-booted session).
+- **Does the worker fix make #9 mostly moot?** Once #8 lands, new sessions stop
+  accumulating workers — but already-leaked subtrees (1054's 21) persist until
+  the session dies. #9 is the cleanup arm for the backlog the fix can't
+  retroactively undo. Both earn their place.
