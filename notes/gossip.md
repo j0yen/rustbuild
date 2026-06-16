@@ -10310,3 +10310,47 @@ Notes for /build: repos are j0yen/<slug> (NOT joeyen-atscale, NOT AtScaleInc) pe
 Open questions (in the vision): golden-set source (hand-authored vs trace-harvested);
   raw-table baseline (in-repo control vs external Spider/BIRD); whether MEASURE is
   the base pillar or the headline-number top of the roadmap.
+
+## 2026-06-16T06:55  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T08:00  /dream  vision-atscale-ai-strategy (Fleet 2 — DEMONSTRATE)
+Seed: bare /dream (interactive); fallow=fresh (streak 0, fingerprint moved since
+  06:55 rest). Extends the existing meta-vision (Fleet 1 = MEASURE drafted 05:35).
+Drafted Fleet 2 (4 PRDs) — the DEMONSTRATE pillar: make the thesis runnable +
+  self-evident, not just measured.
+  PRD-mqo-textsql-baseline.md  — KEYSTONE: honest raw-table text-to-SQL CONTROL so
+                                 mqo-bench's "+N% vs text-to-SQL" delta isn't fiction.
+                                 Vision named it as the explicit follow-on.
+  PRD-mqo-demo-runner.md       — orchestrator that RUNS the "gross margin by region
+                                 YoY EMEA vs AMER" story across all pillars
+                                 (catalog-embed→confidence→clarify→time-intel→
+                                 ousia-mqo-diff→engine-parity→sensitivity→credential),
+                                 emits one provable transcript. Today the demo is prose only.
+  PRD-mqo-scorecard.md         — publishes Fleet-1 tool JSON as ONE stakeholder scorecard
+                                 (md+json, trend deltas). End-state #4 "delta is published"
+                                 had no owner. Pure presenter, computes nothing.
+  PRD-mqo-trace-harvest.md     — grows golden set from demo-runner transcripts + bench run
+                                 I/O; dedupes (BGE cosine), emits CANDIDATES for human review,
+                                 NEVER auto-accepts (tautology guard, cf wm-router 100%→73.5%).
+
+Order: textsql-baseline → demo-runner → scorecard → trace-harvest.
+  baseline first (unblocks mqo-bench's honest number); harvest last (consumes
+  demo-runner output). All standalone j0yen/<slug> rust-cli, flag CLI + serve mode,
+  fixture-driven, cluster-free.
+
+Live-MCP re-confirmed (list_models, 2026-06-16): internet_sales on BOTH BigQuery +
+  Snowflake catalogs (real two-engine parity for demo-runner); internet_sales_no_pii
+  variants (real PII surface for sensitivity step); Tasty Bytes ex-Cortex .pbit (the
+  warehouse-locked competitor textsql-baseline proxies); TPC-DS multi-channel
+  catalog/store/web_sales (double-count trap for the control binder).
+
+Notes for /build: repos j0yen/<slug> per jsy's namespace constraint — NEVER AtScaleInc.
+  mqo-demo-runner depends on the pillar binaries at RUN time only (mock mode tests
+  cluster+binary-free, so it builds/ships before siblings install). mqo-scorecard
+  should build after mqo-bench + mqo-engine-parity ship (it consumes their JSON, but
+  fixtures let it build independently). mqo-trace-harvest reuses recall's BGE dedup.
+
+Open questions (in vision): is MEASURE the base pillar or the headline; golden-set
+  source (now partly answered — trace-harvest makes harvesting safe but human-gated);
+  whether mqo-scorecard should later serve HTML.

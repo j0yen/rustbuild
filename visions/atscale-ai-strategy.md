@@ -190,6 +190,69 @@ mqo-engine-parity → mqo-aggregate-advisor → mqo-semantic-regression**. mqo-b
 first because every other pillar's value claim ("trust raises accuracy",
 "grounding raises accuracy") becomes *measurable* once the harness exists.
 
+Fleet 2 (DEMONSTRATE) order:
+
+```
+mqo-textsql-baseline  (keystone; the control mqo-bench compare subtracts from)
+mqo-demo-runner       (independent; chains existing pillar subprocesses)
+mqo-scorecard         (consumes Fleet-1 tool JSON; build after bench+parity ship)
+mqo-trace-harvest     (consumes demo-runner transcripts + bench run I/O)
+```
+
+Priority: **mqo-textsql-baseline → mqo-demo-runner → mqo-scorecard →
+mqo-trace-harvest**. The baseline first because it unblocks `mqo-bench`'s honest
+headline number; the harvester last because it consumes the demo-runner's output.
+
+## Components — Fleet 2 (the DEMONSTRATE pillar)
+
+*Status: NEW — Fleet 2 of this vision (drafted 2026-06-16, second /dream pass).*
+Fleet 1 *measures* the thesis; Fleet 2 makes it **runnable and self-evident**.
+The "how the pillars compose" story below is, today, only prose — nothing on the
+box executes it, nothing publishes its numbers, and `mqo-bench`'s headline
+"+N% vs text-to-SQL" delta has no honest control to subtract from. Fleet 2 closes
+those gaps. Each is a standalone `j0yen/<slug>` rust-cli on the established
+`mqo-*` pattern (flag CLI + `serve` subprocess speaking `mqo-mcp-server` tool
+JSON), fixture-driven and cluster-free in tests. **No `AtScaleInc/*` touched.**
+
+1. **mqo-textsql-baseline** — the honest control binder (*keystone of Fleet 2*).
+   `mqo-bench compare` needs a *raw-table* answer key to publish "+N% over
+   text-to-SQL" without fiction. This builds a deliberately-naive raw-schema-only
+   binder: given an NL question and only the physical fact/dimension tables (no
+   semantic measures, no grounding), produce a best-effort bound query. The live
+   models expose exactly the raw surface to bind against — `factinternetsales`,
+   `catalog_sales`/`store_sales`/`web_sales`, raw `LINE_TOTAL`/`UNIT_PRICE` with
+   no `ORDER_AMT` metric. The control's *failures* (invented joins, double-counts,
+   picked the wrong grain) are the measurement. Explicitly the follow-on named in
+   this vision's open questions.
+
+2. **mqo-demo-runner** — the end-to-end pillar-composition orchestrator. Turns
+   the prose story below into a runnable artifact: given one NL question, it
+   chains the pillar tools in order (catalog-embed → binding-confidence → clarify
+   → time-intelligence → ousia-mqo-diff → engine-parity → sensitivity-scan →
+   rosetta-credential), each as a subprocess speaking the documented tool JSON,
+   and emits a single ordered transcript with each pillar's verdict + the final
+   signed answer. Motivated by: the demo is the roadmap's payoff and exists only
+   as a paragraph — a colleague can read it but cannot *run* it.
+
+3. **mqo-scorecard** — publishes the thesis as one artifact. End-state #4 says
+   "the delta is published," but the Fleet-1 tools each emit isolated JSON
+   (`mqo-bench` accuracy, `mqo-engine-parity` drift, `mqo-sensitivity-scan` PII
+   count, `mqo-aggregate-advisor` cost savings). This aggregates those outputs
+   into a single rendered scorecard (markdown + JSON) — the thesis as a dashboard
+   a stakeholder reads in one glance, with trend deltas when given a prior
+   scorecard. Consumes only the other tools' documented JSON; computes nothing
+   itself.
+
+4. **mqo-trace-harvest** — grows the golden set past the hand-authored ~30. The
+   open question "golden set: hand-authored vs trace-harvested" defaults to
+   hand-authored for v1; this is the harvester that makes growth real. It ingests
+   `mqo-demo-runner` transcripts and `mqo-bench run` binder I/O, extracts
+   `{nl_question, bound_mqo}` pairs, dedupes against the existing golden set
+   (reusing the `recall`-style near-duplicate check), and emits *candidate*
+   golden entries for human review (never auto-accepts — a harvested bind is a
+   hypothesis, not ground truth). Motivated by [[feedback_agent_written_fixtures_tautology]]:
+   harvested-then-blindly-trusted pairs would make the benchmark tautological.
+
 ## How the pillars compose (the demo)
 
 The roadmap's payoff is one end-to-end story a colleague can run:
