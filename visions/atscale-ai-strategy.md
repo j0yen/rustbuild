@@ -7,6 +7,7 @@
 **Fleet 1 drafted:** 5 PRDs (MEASURE — the "prove the thesis" capabilities)
 **Fleet 2 drafted:** 4 PRDs (DEMONSTRATE — make the thesis runnable + self-evident)
 **Fleet 3 drafted:** 4 PRDs (DEPLOY/OPERATE — make it safe to run in production)
+**Fleet 4 drafted:** 4 PRDs (LEARN — close the feedback loop so it improves over time)
 **Seed:** jsy (2026-06-16) — `/dream a vision for AtScale's AI strategy and roadmap`.
 Audience (jsy's call): *both* — a company-strategy thesis that doubles as the
 personal build roadmap. Constraint (jsy's call): **nothing written to the
@@ -270,6 +271,70 @@ touched.**
    it for golden-set candidates and `mqo-scorecard` reads its `summary` for trend
    deltas. Append-only + `provfs` session xattrs give tamper-evidence without
    reimplementing `rosetta-credential`'s per-answer signing.
+
+## Components — Fleet 4 (the LEARN pillar)
+
+*Status: NEW — Fleet 4 of this vision (drafted 2026-06-16, fourth /dream pass).*
+Fleet 1 *measures* the thesis; Fleet 2 makes it *runnable*; Fleet 3 makes it
+*safe to run*. But a strategy proven once and never watched silently rots — and
+Fleet 3's producers (`mqo-decision-log`, `mqo-trace-harvest`, `mqo-scorecard`,
+all shipped 2026-06-16, binaries on PATH) now emit a stream of outcomes that
+*nothing consumes to make the agent better*. Fleet 4 closes the loop: it grows
+the benchmark's ground truth under a human gate, catches the agent regressing
+against its own history, calibrates the planner from real outcomes, and watches
+the headline accuracy continuously instead of once. Every component is
+human-gated by design — no tool in this fleet trains the agent on its own
+unreviewed output, because that is exactly the tautology
+([[feedback_agent_written_fixtures_tautology]]) the whole MEASURE pillar exists
+to avoid. Each is a standalone `j0yen/<slug>` rust-cli on the established `mqo-*`
+pattern (flag CLI + `serve` subprocess speaking `mqo-mcp-server` tool JSON),
+fixture-driven and cluster-free. **No `AtScaleInc/*` touched.**
+
+1. **mqo-goldgrow** — human-gated curation of harvested candidates (*keystone of
+   Fleet 4*). `mqo-trace-harvest` emits *candidate* `{nl_question, bound_mqo}`
+   pairs and never auto-accepts; nothing turns a reviewed candidate into a real
+   golden entry. goldgrow presents candidates, records a human accept/reject
+   verdict with a reason, appends accepted ones to `mqo-bench`'s golden set with
+   provenance (`source: harvested, reviewer, ts`), and keeps an append-only
+   rejection ledger so a rejected candidate never re-surfaces. The only
+   sanctioned path by which ground truth grows.
+
+2. **mqo-replay** — behavioral regression against the agent's own history.
+   `mqo-semantic-regression` gates the *model contract*; nothing gates the
+   *agent's behavior*. replay re-runs the NL questions from a `mqo-decision-log`
+   through the current `mqo-agent` and classifies the delta (plan/bind/outcome/
+   value drift), failing CI on the classes that matter so a planner or pillar
+   change can't silently alter how a past question gets answered.
+
+3. **mqo-planner-tune** — outcome-weighted calibration advisory for the planner.
+   `mqo-agent`'s rule planner has hand-chosen thresholds (clarify cutoff,
+   retrieval-`k`, period-over-period trigger) that were never revisited against
+   what happened. tune joins `mqo-decision-log` outcomes with `mqo-goldgrow`
+   verdicts, computes per-threshold evidence, and *proposes* a planner config
+   diff — never auto-applies, so the planner stays deterministic and the change
+   is a reviewable artifact.
+
+4. **mqo-drift-watch** — continuous binding-accuracy & parity SLO monitor.
+   `mqo-scorecard` renders the thesis once; drift-watch compares each scheduled
+   scorecard against the last accepted baseline plus a declared SLO tolerance and
+   alerts (non-zero exit + structured event) on regression. Turns the one-glance
+   dashboard into an SLO gate; baseline promotion is a human gate so a real
+   regression can't silently become the new normal.
+
+## Order — Fleet 4 (the LEARN pillar)
+
+```
+mqo-goldgrow      (keystone; the human-gated curation every other LEARN signal trusts)
+  ├─ mqo-replay         (independent; consumes a decision-log + the current agent)
+  ├─ mqo-planner-tune   (consumes decision-log outcomes + goldgrow verdicts)
+  └─ mqo-drift-watch    (independent; consumes scorecard history)
+```
+
+Priority: **mqo-goldgrow → mqo-replay → mqo-planner-tune → mqo-drift-watch.**
+goldgrow first because it establishes the trusted ground-truth growth path the
+others lean on (planner-tune weights outcomes by goldgrow's verdicts); the rest
+build independently against fixtures. All four consume documented JSON shapes
+from already-shipped Fleet-2/3 tools — no live cluster in tests.
 
 ## Components — Fleet 2 (the DEMONSTRATE pillar)
 

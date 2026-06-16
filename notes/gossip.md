@@ -10408,3 +10408,66 @@ Open questions (added to vision's set): identity source for mqo-access-policy
   (who establishes the agent identity string — out of scope, caller's concern);
   whether the kernel agentns budget path is worth waiting on vs shipping userspace
   v1 now (default: ship userspace, capability-detect kernel).
+
+## 2026-06-16T03:09  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T10:39  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-16T11:10  /dream  vision-atscale-ai-strategy (Fleet 4 — LEARN)
+Seed: bare /dream (interactive); fallow=fresh (streak 0, fingerprint moved since
+  10:39 rest — /build shipped mqo-agent + mqo-trace-harvest + mqo-access-policy
+  today). Fourth pass extending the meta-vision. Fleets 1 (MEASURE) + 2
+  (DEMONSTRATE) + 3 (DEPLOY/OPERATE) drafted earlier today; this adds the pillar
+  that turns "we proved it / ran it / ran it safely" into "it gets measurably
+  better over time — without ever training on its own unreviewed output."
+Why now (verified): the Fleet-2/3 PRODUCERS all SHIPPED today and are binaries on
+  PATH — mqo-decision-log, mqo-trace-harvest, mqo-scorecard, mqo-agent — yet
+  NOTHING consumes their output to improve the agent. Fleet 4 is the consumer.
+Drafted Fleet 4 (4 PRDs):
+  PRD-mqo-goldgrow.md       — KEYSTONE: human-gated curation. mqo-trace-harvest
+                              emits *candidate* NL→MQO pairs and never auto-accepts;
+                              goldgrow reviews → accept/reject w/ reason → appends
+                              accepted to mqo-bench's golden set w/ provenance
+                              (source:harvested, reviewer, ts) + append-only
+                              rejection ledger so a reject never re-surfaces. The
+                              ONLY sanctioned path ground truth grows. Enforces
+                              [[feedback_agent_written_fixtures_tautology]]: no
+                              anonymous ground truth (accept w/o --reviewer = hard err).
+  PRD-mqo-replay.md         — behavioral regression vs the agent's OWN history.
+                              semantic-regression gates the MODEL contract; nothing
+                              gates AGENT behavior. replay re-runs decision-log
+                              questions through current mqo-agent, classifies delta
+                              (plan/bind/outcome/value drift), --fail-on gates CI.
+                              Numeric tol reuses mqo-engine-parity convention.
+  PRD-mqo-planner-tune.md   — outcome-weighted planner calibration ADVISORY. agent's
+                              rule planner has hand-chosen thresholds never revisited.
+                              tune joins decision-log outcomes + goldgrow verdicts,
+                              proposes a planner config DIFF (no apply subcommand —
+                              planner stays deterministic + tested). min-support
+                              guard = no tuning on noise. Leans on recall v0.6.0
+                              outcome-feedback pattern, not invented.
+  PRD-mqo-drift-watch.md    — continuous accuracy/parity/PII SLO monitor. scorecard
+                              renders ONCE; drift-watch compares each scheduled
+                              scorecard vs last accepted baseline + SLO tolerance,
+                              exit 0/2/3 (ok/warn/breach), emits structured alert
+                              events (no transport hardcoded). baseline --accept is
+                              a human gate so a real regression can't silently
+                              become the new normal. Per-metric direction in slo.toml.
+
+Order: mqo-goldgrow → mqo-replay → mqo-planner-tune → mqo-drift-watch.
+  goldgrow first (establishes trusted ground-truth growth the others lean on —
+  planner-tune weights outcomes by goldgrow's verdicts); rest build independently
+  against fixtures.
+Notes for /build: repos j0yen/<slug> per jsy's namespace constraint — NEVER
+  AtScaleInc. All four consume documented JSON from already-shipped Fleet-2/3
+  tools (decision-log query/summary, trace-harvest candidates, scorecard JSON,
+  agent answer.json) — reuse those shapes, no translation layer, no live cluster
+  in tests. mqo-replay's value-tol == mqo-engine-parity's tolerance convention.
+  goldgrow's accepted output MUST stay valid mqo-bench golden input (bench loads
+  it unchanged).
+Open questions: where does goldgrow's reviewer identity come from (caller's
+  concern, out of scope); should drift-watch's alert event sink into
+  mqo-decision-log or stay a free-standing structured event (default: free event,
+  notifier composes it).
