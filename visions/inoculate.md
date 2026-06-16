@@ -115,12 +115,23 @@ inoculate-core
 inoculate-core first; the other five are independent of each other once core
 ships and can build in parallel.
 
+## Fleet 2 (drafted 2026-06-16, after Fleet 1 shipped)
+
+- **inoculate-signet** (rust-extend inoculate) — the deferred 7th PRD, now
+  unblocked: both prerequisites (`inoculate-core`'s `strain`/`hash` and
+  `inoculate-spread`'s `announce`/`listen`) shipped 2026-06-15. Today's spread +
+  carrier-check are *symmetric* (HMAC-blake3 / shared content), so a peer can
+  announce a forged strain version and honest peers converge onto it. This PRD
+  adds an ed25519 keypair under `~/.config/inoculate/`, signs the strain hash,
+  attaches a detached signature to `spread announce`, and verifies it in
+  `spread listen` against a pinned trust store — making horizontal spread
+  tamper-evident in *provenance*, not just content. PRD-inoculate-signet.md.
+
 ## Open questions (for the next /dream pass or the user)
 
-- Should the strain be **signed** (a `signet`-style key) so a carrier check can
-  prove *provenance* (this strain came from this box), not just *content*? That
-  would make horizontal spread tamper-evident — likely a 7th PRD, deferred until
-  core + spread expose the shape.
+- ~~Should the strain be **signed**…~~ **Answered** by inoculate-signet
+  (Fleet 2). Provenance signing is ed25519 detached signatures over the strain
+  hash; the `signet` vision (kernel session id) stays a separate concept.
 - For `constellation`, does strain gossip ride the agorabus→NATS bridge, or a
   dedicated channel? Deferred to constellation's transport decision.
 - Should an un-inoculated subagent be **refused autonomy** (hard gate) or merely

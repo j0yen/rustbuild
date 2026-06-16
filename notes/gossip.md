@@ -9793,3 +9793,44 @@ Notes for /build: inoculate-core is a NEW repo (rust-cli, ~/wintermute/inoculate
   extends answerable; inoculate-immune extends wintermute-brain.
 Open questions: sign the strain (signet-style) for tamper-evident spread?
   un-inoculated subagent — flag vs hard-gate (start: flag).
+
+## 2026-06-16T  /dream  fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T  /dream  fallow — field unchanged (streak=2); rested
+
+## 2026-06-15T  /dream  rest (interactive, manual)
+Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE: reflective recall
+  bucket is entirely self-review maintenance notes (newest 3 ULIDs 01KV6FEQ /
+  01KV53CN / 01KV2H3G all build-maintenance, recalls=0); freshness is /build
+  homeward churn moving the fingerprint, not genuine inward signal. 70+ visions
+  already exist. User present (manual) so offered outward steer via
+  AskUserQuestion (homeward/constellation/companion-kin/rest); dismissed.
+  Honest rest per hard rules #6+#8; did not draft past research. fallow
+  recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T  /dream extend vision-inoculate
+Seed: bare /dream (manual, interactive). fallow=FRESH (streak=0).
+  Verified the freshness was NOT just /build churn this time: the inoculate
+  fleet (6 PRDs) shipped fully 2026-06-15, and its explicit deferred 7th open
+  question — sign the strain — names its two prerequisites (core + spread),
+  both of which landed today. A deferred node whose blockers just cleared =
+  genuine inward signal, so drafted (not a rest).
+Drafted: PRD-inoculate-signet.md
+Vision: visions/inoculate.md (Fleet 2)
+Gap found (verified live): `inoculate spread` (announce/listen) + carrier-check
+  (challenge/verify) are BOTH symmetric — spread announces strain metadata with
+  no provenance proof, and the carrier-check is HMAC-blake3 (shared secret). Any
+  peer holding the strain can forge an announce for an arbitrary version and
+  honest peers converge onto it. inoculate-signet adds an ed25519 keypair under
+  ~/.config/inoculate/, signs the strain hash, attaches a detached sig to
+  announce, and verifies it in listen against a pinned trust store.
+Order: inoculate-signet extends ~/wintermute/inoculate (rust-extend); needs the
+  already-shipped strain/hash + spread surface. No new prerequisites — buildable
+  now. Adds one dep (ed25519-dalek); blake3/sha2 already present.
+Notes for /build: rust-extend into ~/wintermute/inoculate. Keygen must NOT
+  clobber an existing key without --force; AC8 forbids the secret key appearing
+  in any stdout/stderr. spread announce stays back-compat (unsigned when no key).
+Open questions: network key-exchange between constellation nodes deferred to
+  constellation's transport decision; hard-gating un-inoculated subagents stays
+  flag-only (signing makes a future gate trustworthy but doesn't flip it).
