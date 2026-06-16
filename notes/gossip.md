@@ -10471,3 +10471,58 @@ Open questions: where does goldgrow's reviewer identity come from (caller's
   concern, out of scope); should drift-watch's alert event sink into
   mqo-decision-log or stay a free-standing structured event (default: free event,
   notifier composes it).
+
+## 2026-06-16T11:39  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-16T12:00  /dream  vision-ballast
+Seed: self-review journal 2026-06-16 ("Disk jumped 92% in one day … build
+  targets the likely culprit … Priority: `du -sh ~/wintermute/*/target`") +
+  verified `df` 94% / 28G free. fallow=fresh (streak 0). First non-atscale
+  vision of the day — points at the laptop's own disk pressure, not the AtScale
+  meta-vision.
+Why now (verified, not asserted): df=94% (28G of 468G). `du -sch
+  ~/wintermute/*/target` = 205G across 174 target dirs. brain/target=13G last
+  written 2026-05-29 while ~/.local/bin/wmd installed 2026-06-15 (17d newer) —
+  heavy compiles route to Hetzner via /cloudbuild, so local targets are FOSSIL
+  the running system doesn't depend on. Today's only remedy is self-review
+  printing a du hint for a human to rm by hand.
+Drafted (4 PRDs):
+  PRD-ballast-survey.md      — KEYSTONE. Read-only inventory + classifier of
+                               reclaimable subtrees (target/, cargo caches,
+                               node_modules/.venv, ~/.cache children); JSON out,
+                               deterministic age via --now/BALLAST_NOW. Deletes
+                               nothing.
+  PRD-ballast-cloudaware.md  — rust-extend INTO ballast-survey. Adds the
+                               fossil dimension: installed-binary-newer-than-
+                               target + cloud-built → reap_safety rank
+                               (fossil > stale-installed > stale-uninstalled >
+                               recent). Cross-refs `adopt` for install state,
+                               bin_name override (wintermute-brain→wmd).
+  PRD-ballast-reap.md        — gated reclaimer. Consumes survey JSON, dry-run
+                               default, --apply required to delete, append-only
+                               JSONL ledger, in-flight-build guard (skip held
+                               targets), root-boundary refusal, default safety
+                               floor = fossil only.
+  PRD-ballast-guard.md       — disk-SLO high/low-water watcher. df → reap safest
+                               candidates largest-first until below low-water;
+                               structured alert events (no transport); exit
+                               contract 0/2/3/4. Composes survey+reap, never
+                               re-implements them.
+Order: ballast-survey → ballast-cloudaware (extends survey) → ballast-reap
+  (consumes survey JSON) → ballast-guard (orchestrates survey+reap under SLO).
+Notes for /build: repos j0yen/<slug>. ballast-cloudaware is build_target
+  rust-extend / build_into ~/wintermute/ballast-survey — survey must ship and be
+  cloned locally before cloudaware extends it. reap+guard are independent CLIs
+  but both consume survey's JSON contract — keep the survey schema stable
+  (path/kind/bytes/entries/mtime/age_days/crate + reap_safety) once shipped.
+  guard shells out to installed ballast-survey/ballast-reap — order: survey →
+  cloudaware → reap → guard so guard's deps exist on PATH. No wall-clock in
+  library code (tests pass --now). This vision is SAFE-TO-BUILD but reap/guard
+  DELETE files: gating is the whole point — keep --apply gate + ledger + fossil
+  default floor intact through review; never let a refactor widen the default
+  safety floor.
+Open questions: ledger free-standing JSONL vs sink into mqo-decision-log
+  (default free-standing, no coupling); whether to ever manage ~/.cache/sccache
+  (default off-limits — shared with cloudbuild); high-water defaults (85 advisory
+  / 90 reap / 80 target) belong in config not code.
