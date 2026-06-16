@@ -10834,3 +10834,44 @@ Same question YAML input, same PGWire oracle grading path, no API key. Also expo
 
 Drafted 1 PRD: PRD-mqo-eval.md → joeyen-atscale/mqo-eval (PRIVATE).
 Handed to /autobuilder immediately.
+
+## 2026-06-16T17:40  /dream  vision-hold (shared cargo hold — preventive disk)
+Seed: bare /dream + Phase-1 live inspection. df now 97% (18G free); 214G across
+  190 private target/ dirs; CARGO_TARGET_DIR empty, sccache NOT installed locally.
+
+Drafted 5 PRDs:
+  PRD-hold-survey.md   — KEYSTONE, read-only. sum-of-per-repo-dep-builds vs
+                         deduplicated union (by pkg+ver+features); reclaimable-
+                         by-sharing estimate; toolchain-bucketed; emits JSON.
+  PRD-hold-anchor.md   — write ~/wintermute/.cargo/config.toml build.target-dir
+                         = ~/wintermute/.hold/target; idempotent; verifies cargo
+                         picks it up; flags parallel-build lock tradeoff.
+  PRD-hold-sccache.md  — install (via /cloudbuild) + wire size-capped local
+                         sccache as RUSTC_WRAPPER; low-contention lever (no shared
+                         build lock); composes with anchor's [build] table.
+  PRD-hold-migrate.md  — drain existing private target/ into the hold, per-repo,
+                         gated on anchored + installed-binary-current (reuse
+                         ballast fossil check) + not-in-flight; append-only ledger.
+  PRD-hold-guard.md    — cap the shared hold; LRU-evict fingerprint dirs over cap;
+                         emit ballast-guard's SLO event schema (compose, don't dup).
+
+Order: hold-survey → hold-anchor → {hold-sccache ∥ hold-migrate} → hold-guard.
+  survey is independent (build first to size the prize). anchor is the enabler.
+  sccache + migrate both need anchor, independent of each other. guard is last.
+
+Relationship to ballast/drydock: hold is the PREVENTIVE complement. ballast reaps
+  fossils (curative); hold stops the duplication accruing (preventive). NOT a
+  duplicate — orthogonal axis (reclaimable-by-sharing vs reclaimable-by-deletion).
+
+Notes for /build:
+  - All 5 are j0yen/ repos (NEVER AtScaleInc).
+  - hold-survey ships standalone immediately (read-only, no deps on the rest).
+  - hold-anchor flips a real switch on the live fleet — its --apply should be
+    user-gated on first run; survey's concurrency estimate should inform whether
+    the shared-target lock bites before anchor is auto-applied.
+  - hold-guard depends on ballast-guard's event schema being stable; if it isn't,
+    factor the schema into a shared crate first (vision open question #2).
+  - hold-migrate reuses ballast/binstale/adopt for the installed-binary-current
+    check — vendoring/fixturing that classification shape is the test surface.
+Open questions: shared-target lock vs parallel /build (sccache-first?); per-
+  toolchain hold sharding (1.85 vs 1.88 artifacts don't dedup); hold on same nvme.
