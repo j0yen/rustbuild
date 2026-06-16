@@ -10103,3 +10103,46 @@ Notes for /build: moral-core is rust-cli new-repo (gate). frameworks+reason+comp
 Open questions (in vision): Fleet 2 frameworks (Kant strict, Rawls, Aristotle eudaimonia,
   care ethics, Stoic, Confucian, Buddhist, Ubuntu); scenario authoring ergonomics;
   commensurability limits of the "neutral" core; meta-ethics explicitly out of scope.
+
+## 2026-06-15T22:30  /dream  vision-roundtable (Fleet 2 — the convener)
+NOTE: fallow check returned state=fallow streak=1 (escalate=false). OVERRIDE per
+  the "explicit user steer vs stale inward field" rule — the user invoked
+  `/dream extend roundtable` naming a concrete, verified gap the ledger can't see.
+  Proceeded; recorded the override here.
+
+Verified gap (ran --help on every shipped roundtable binary): all 6 sub-visions
+  shipped, but the table never convenes end-to-end. `the-lunch lunch` does
+  convene→seat→menu→minutes and STOPS — the critique (vicious-circle record),
+  column (conning-tower compose/syndicate), games (thanatopsis), and periodical
+  (new-yorker issue) are never chained. The shipped the-lunch.timer fires only
+  the convening half. The umbrella's Order diagram assumed a convener never written.
+
+Drafted (new repo ~/wintermute/roundtable; orchestrates existing binaries, reuses
+  the-lunch/vicious-circle/conning-tower/thanatopsis/new-yorker — re-implements none):
+  PRD-roundtable-session.md  — `roundtable session`: the-lunch lunch → per-artifact
+                               vicious-circle record → conning-tower compose+syndicate
+  PRD-roundtable-games.md    — `roundtable games` / `session --with-games`: deal the
+                               day's table into thanatopsis poker+charades
+  PRD-roundtable-bind.md     — `roundtable bind`: gather columns → new-yorker issue+cover
+  PRD-roundtable-cadence.md  — noon timer fires session --with-games; weekly bind timer;
+                               install.sh DISABLES the-lunch.timer (now subsumed → no
+                               double-convene)
+  PRD-roundtable-digest.md   — SessionStart hook surfacing yesterday's crowned bon mot +
+                               column headline (offline, local-state-only; mirrors
+                               the-lunch-sessionstart.sh)
+
+Order: session → {games, bind, digest} → cadence (cadence depends on session+games+bind).
+
+Notes for /build: session is rust-cli new-repo (gate). games/bind/digest are
+  rust-extend into ~/wintermute/roundtable (shared target → worktree-extend.sh).
+  cadence is mixed (units + install.sh). IMPORTANT for cadence: its install.sh must
+  `systemctl --user disable --now the-lunch.timer` or noon convenes twice.
+
+Real interfaces cited (verified 2026-06-15):
+  the-lunch lunch [--date]; table.json at $XDG_STATE_HOME/the-lunch/<date>/
+  vicious-circle record <artifact> [--ledger]; default $XDG_DATA_HOME/vicious-circle/ledger.jsonl
+  conning-tower compose --ledger [--date]; syndicate --ledger --columns-dir --to columns
+  thanatopsis poker|charades|...; new-yorker workspace (masthead/house-style/issue/cover)
+
+Open questions: weekly vs monthly issue cadence (default weekly); publish issues outward
+  or keep local (default local, per umbrella); should digest feed daily-receipt JSON.

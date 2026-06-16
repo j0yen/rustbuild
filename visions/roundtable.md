@@ -108,3 +108,60 @@ Every sub-vision cites real artifacts already on this laptop:
   local like the zine? Defer to `new-yorker`; default local.
 - One table per day, or convene on-demand when N new artifacts accumulate?
   Decide in `the-lunch`.
+
+---
+
+## Fleet 2 — the convener (added 2026-06-15, seed: `/dream extend roundtable`)
+
+> All six sub-visions shipped (bon-mot, vicious-circle, conning-tower, the-lunch,
+> thanatopsis, new-yorker — repos present, components at v0.3–v0.9). But the
+> **table never actually convenes end-to-end.** Verified 2026-06-15 by running
+> `--help` on every binary: `the-lunch lunch` runs `convene → seat → menu →
+> minutes open` and **stops there** — the table is set, the personas are seated,
+> and then nothing happens. The critique round (`vicious-circle record`), the
+> column (`conning-tower compose/syndicate`), the games (`thanatopsis`), and the
+> periodical (`new-yorker issue`) are never chained in. The shipped noon timer
+> (`the-lunch.timer`) only fires the convening half. The umbrella's "Order"
+> diagram assumed a convener that was never written.
+
+This fleet builds that convener: a thin new repo `~/wintermute/roundtable` that
+orchestrates the existing binaries into one daily session, plus the cadence and
+the digest that make the result a *conversation the user sees* rather than another
+write-only artifact.
+
+### Components (one bullet per PRD)
+
+- **roundtable-session** (`rust-cli`, new repo `~/wintermute/roundtable`) — the
+  core gap-closer. `roundtable session [--date]` runs the full chain:
+  `the-lunch lunch` → read `table.json` → for each seated artifact
+  `vicious-circle record <artifact>` (appends to the ledger) →
+  `conning-tower compose` + `syndicate`. Each tool resolved from `$PATH`;
+  idempotent; names the failed stage on error (mirrors `the-lunch lunch`'s
+  partial-progress contract). One command turns six soloists into a lunch.
+- **roundtable-games** (`rust-extend`) — after critique, the parlor games:
+  `roundtable games [--date]` (and `session --with-games`) deals the day's
+  table into `thanatopsis poker`/`charades` and appends to the games ledger.
+- **roundtable-bind** (`rust-extend`) — the periodical. `roundtable bind
+  [--since]` gathers accumulated `conning-tower` columns and runs
+  `new-yorker issue` + `cover` to bind a weekly issue; idempotent per period.
+- **roundtable-cadence** (`mixed` — shell + config) — supersede the convening-
+  only timer: a `roundtable.timer` at noon fires `roundtable session
+  --with-games`; a weekly `roundtable-bind.timer` fires `roundtable bind`.
+  install.sh disables the now-subsumed `the-lunch.timer` (the session calls
+  `the-lunch lunch` internally) to prevent a double-convene.
+- **roundtable-digest** (`mixed` — hooks) — make it visible. A SessionStart
+  hook surfacing yesterday's crowned **bon mot** + the column headline, reading
+  only local state (offline-safe; mirrors `the-lunch-sessionstart.sh`).
+
+### Order
+
+```
+roundtable-session (core chain) ──┬──> roundtable-games ──┐
+                                  │                       ├──> roundtable-cadence (wires all)
+                                  └──> roundtable-bind ───┘
+                                  └──> roundtable-digest (surfaces; parallel)
+```
+
+session first (new repo, the gate). games + bind extend it (shared target →
+worktree). cadence wires session+games+bind into timers. digest surfaces the
+output and can land in parallel with cadence.
