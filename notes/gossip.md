@@ -10526,3 +10526,62 @@ Open questions: ledger free-standing JSONL vs sink into mqo-decision-log
   (default free-standing, no coupling); whether to ever manage ~/.cache/sccache
   (default off-limits — shared with cloudbuild); high-water defaults (85 advisory
   / 90 reap / 80 target) belong in config not code.
+
+## 2026-06-16T13:00  /dream  vision-drydock
+Seed: bare /dream + Phase-1 live inspection. fallow=fresh (streak 0). Strongest
+  RECURRING signal across a week of self-reviews: detectors exist and work, but
+  nothing routes or closes the loop — every self-review re-dumps the same flat
+  "Pending your call" wall (wm-stt 9d, kernel pkgrel staged-not-booted, adopt
+  N/N not-current) and the human re-triages it daily.
+Why now (verified, not asserted): journals 2026-06-12→16 each re-report
+  fleet-binary-staleness + "adopt installed-stale (many)" with no run-over-run
+  trend. binstale fleet --format json + adopt verify --format json both emit
+  rich JSON live; nobody aggregates them. Kernel case proves naive vercmp is
+  wrong: booted linux-wintermute 7.0.11.arch1-1 is a HIGHER base version than
+  the staged patched 7.0.10.arch1-12 pkgs that carry the agentns-prctl fix —
+  vercmp says "fresh", boot hook still prints ACTIVATION BLOCKED. An Explore
+  pass over 10 rollout-ecosystem visions (vigil/scion/vest/fixpoint/changeover/
+  keel/homestead/tend/mend/anchor) confirmed NO vision has the risk-tier router
+  ("which items auto / window / reboot / approval") or an all-lanes closed loop;
+  fixpoint converges only the adopt-marker subset.
+Drafted (5 PRDs):
+  PRD-drydock-survey.md    — KEYSTONE rust-cli. Aggregate binstale fleet +
+                             adopt verify + a CAPABILITY-based kernel probe into
+                             one normalized DriftItem JSON inventory. Read-only,
+                             deterministic age via --now/DRYDOCK_NOW.
+  PRD-drydock-classify.md  — rust-extend INTO drydock-survey. Risk-tier router:
+                             auto/window/reboot/approval, deny-by-default
+                             (unknown ⇒ approval). Voice daemons + kernel +
+                             guardrail items are HARD FLOORS config can't
+                             downgrade. Emits one remediation command per item.
+  PRD-drydock-digest.md    — rust-cli consuming classify JSON. The single ranked
+                             lane-grouped block self-review pastes instead of its
+                             prose wall; per-lane counts + Δ + age escalation
+                             flag (>7d).
+  PRD-drydock-ledger.md    — rust-extend. Append-only JSONL convergence ledger;
+                             asserts auto lane non-increasing; first_seen
+                             carry-forward ages parked items for escalation.
+  PRD-drydock-apply.md     — rust-extend. Gated executor for lane==auto ONLY;
+                             dry-run default, --apply required; refuses
+                             window/reboot/approval BY CONSTRUCTION so it stays
+                             inside the immutable self-review guardrail; in-flight
+                             build guard; writes ledger.
+Order: survey → classify (extends survey) → digest (consumes classify) → ledger
+  (feeds digest Δ) → apply (consumes classify, auto-lane only, writes ledger).
+  classify/digest/ledger/apply are all build_into ~/wintermute/drydock-survey —
+  survey must ship + clone locally before the rest extend it.
+Notes for /build: repos j0yen/<slug> (survey is the only standalone repo; the
+  rest extend it in-place per build_into). Keep the DriftItem JSON schema stable
+  once survey ships — classify/digest/ledger/apply all key on it. No wall-clock
+  in library code (tests pass --now). drydock-apply DELETES nothing and restarts
+  nothing outside lane auto — the auto-lane-only scope + dry-run default + the
+  "no non-auto command ever emitted" unit test ARE the safety; never let a
+  refactor widen apply's selection set or wire it into the cron without jsy's
+  opt-in.
+Open questions: (1) does the auto-lane self-drain run unattended? Default NO —
+  apply ships dry-run-default, NOT cron-wired; jsy opts in (mirrors the approval
+  changeover/vigil already await — drydock doesn't pre-empt it). (2) kernel
+  staleness is a CAPABILITY probe (agent_session moves? boot hook still BLOCKED?)
+  not a vercmp; until decided, kernel item hard-routes to approval. (3) overlap
+  with fixpoint's adopt loop is by-design no-double-action: if fixpoint already
+  drains an item, survey sees it fresh and won't list it.
