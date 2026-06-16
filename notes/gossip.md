@@ -10875,3 +10875,56 @@ Notes for /build:
     check — vendoring/fixturing that classification shape is the test surface.
 Open questions: shared-target lock vs parallel /build (sccache-first?); per-
   toolchain hold sharding (1.85 vs 1.88 artifacts don't dedup); hold on same nvme.
+
+## 2026-06-16T18:05  /dream  vision-careen (intra-target reclaim for live dirs)
+Seed: bare /dream + Phase-1 live inspection. fallow=fresh (streak 0). df now
+  97% (17G free); du -sch ~/wintermute/*/target = 215G. recall/target=13G of
+  which debug/deps alone = 9.2G (295 rlibs, mostly orphaned old versions);
+  wintermute-brain/target=13G. find .../incremental -mtime +7 = 2550 stale dirs
+  fleet-wide. cargo-sweep NOT installed.
+
+The gap: ballast reaps WHOLE dead target dirs; hold SHARES one target dir.
+  Neither touches INSIDE a living target dir whose binary is current+in-use —
+  exactly where the two 13G giants (recall, brain) sit. careen is that third
+  axis: scrape cruft off the hull of a ship still in service.
+
+Drafted 4 PRDs:
+  PRD-careen-survey.md — KEYSTONE, read-only. Classifies 4 reclaimable classes
+                         (stale-incremental, orphaned-deps, wrong-toolchain,
+                         dead-build) per target dir; conservative+aggressive
+                         orphan estimates; JSON. Ships standalone first.
+  PRD-careen-sweep.md  — the reclaimer for ONE repo. Lock-aware (respects cargo
+                         target-dir flock; refuses busy targets), dry-run
+                         default, --apply gated; regenerable-only invariant
+                         (clean rebuild reproduces same binary). Reuses survey.
+  PRD-careen-guard.md  — SLO-triggered careen of the largest LIVE dirs when disk
+                         breaches. EMITS ballast-guard's Event schema (event.rs:
+                         Level/used_pct_before/after/bytes_reclaimed/
+                         reclaimable_bytes/candidates/ts) — composes, does NOT
+                         fork. Only acts on dirs ballast SKIPS (binary-current).
+  PRD-careen-ledger.md — append-only was-it-worth-it accounting: reclaimed bytes
+                         vs rebuild cost the next build paid. verdict
+                         worth_careening:bool so guard skips hot-thrash repos.
+
+Order: careen-survey → careen-sweep → {careen-guard ∥ careen-ledger}.
+  survey independent+read-only (build first to size prize). sweep is the engine.
+  guard + ledger both consume sweep, independent of each other.
+
+Relationship: ballast=delete-whole-dead-dir (curative), hold=share-target
+  (preventive), drydock=survey-drift, careen=scrape-living-dir. careen is NOT a
+  ballast dup — orthogonal (intra-dir vs whole-dir); it targets the dirs ballast
+  structurally can't touch.
+
+Notes for /build:
+  - All 4 are j0yen/ repos (PUBLIC; never AtScaleInc/joeyen-atscale).
+  - careen-survey ships standalone immediately (read-only, no deps on rest).
+  - careen-guard should depend on ballast-guard's event module as a LIBRARY if
+    exposed (preferred) to guarantee schema parity; else replicate + parity test.
+  - careen-sweep's lock-safety is load-bearing (heavy /build days run many
+    concurrent cargo) — do not weaken the flock check for green tests.
+Open questions: (1) shared watermark evaluator with ballast-guard vs two timers
+  racing the same mount (likely factor to a shared crate); (2) is Cargo.lock +
+  .fingerprint enough to prove an rlib dead, or ask cargo metadata; (3) after
+  hold-anchor lands, careen operates on the single shared hold (orphan set
+  becomes fleet-union) — both remain valid, sequence careen-now/hold-later;
+  (4) sccache (hold-sccache) moves deps economics — defer sccache-aware survey.
