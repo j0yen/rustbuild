@@ -9981,3 +9981,50 @@ Open questions (in the vision doc): VC v1 signs a stable JSON-LD serialization,
   serve is local-only (public IRI hosting = constellation/herald concern);
   rosetta-shacl implements a SHACL-core subset for the 4 rules, not a general engine.
 Decision: 5 PRDs, 1 vision.
+
+## 2026-06-16T  /dream  vision-lattice (Fleet 2) + vision-cogito (Fleet 1)
+Seed: jsy — "OWL tools for AIs"
+
+Phase 0 redirect: user said "deeply research external BFO ontologies and federate them
+  with lattice" mid-session → pivoted from cogito to lattice Fleet 2. cogito-tbox.md was
+  already drafted; remaining 5 cogito PRDs are in the vision doc only (don't dream past
+  what's researched).
+
+Drafted (lattice Fleet 2):
+  PRD-lattice-versioniri.md
+  PRD-lattice-seed.md
+  PRD-lattice-cco.md
+  PRD-lattice-ground-live.md
+
+Drafted (cogito Fleet 1, partial — only tbox was fully researched):
+  PRD-cogito-tbox.md
+
+Live research findings:
+  - lattice-registry sync: 265 OBO Foundry entries populated
+  - lattice-registry add works: BFO(35), RO(58), IAO(266), COB(69), SWO(1970) all bfo_grounded=true
+  - CRITICAL BUG: lattice-bridge align fails with "Unexpected tag: found versionIRI" on every
+    real OBO ontology; every OBO OWL/XML header contains owl:versionIRI (valid OWL 2 DL).
+    This blocks ALL federation. PRD-lattice-versioniri is the gating fix.
+  - CCO v2.0: 11 Turtle modules, BSD 3.1, DoD-standard mid-layer; confirmed BFO 2020-grounded
+    (README+structure). Agent, InfoEntity, Event, Time, ExtendedRelation = priority 5 for AI agent.
+  - BFO 2020 (ISO/IEC 21838-2): 35 classes, OWL IRI http://purl.obolibrary.org/obo/bfo.owl
+    (OBO PURL redirects to v2019; BFO 2020 proper at GitHub). 98KB OWL/XML, CC BY 4.0.
+  - SWO (Software Ontology): 1970 classes, bfo_grounded=true — the richest domain ontology
+    for an AI coding agent. CC BY 4.0.
+
+Order: lattice-versioniri → lattice-seed → lattice-cco → lattice-ground-live (strict pipeline)
+  cogito-tbox can build in parallel (no dependency on lattice)
+
+Notes for /build:
+  lattice-versioniri is a rust-extend into lattice-bridge — one-function OWL/XML parser fix.
+  lattice-seed/cco/ground-live are shell scripts; can chain once the parser is fixed.
+  cogito-tbox is rust-cli new-repo; independent, can build immediately.
+
+Open questions for next /dream pass:
+  - Does `lattice-bridge align` fail on Turtle format too, or only OWL/XML? (Turtle doesn't
+    have versionIRI in the same syntax.) Could use Turtle downloads as a workaround for the
+    bridge while the parser is fixed.
+  - Should `lattice-context serve` be wired as an MCP tool for the live Claude session?
+    (lattice-context serve already exists per help output — just needs a socket/config.)
+  - BFO 2020 vs BFO 2019: the OBO PURL redirects to 2019. Should lattice-seed explicitly
+    use the direct GitHub URL for BFO 2020 to get the ISO-standard version?

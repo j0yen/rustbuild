@@ -85,6 +85,37 @@ A strict pipeline, each verb on the prior. registry is the only standalone
 piece (buildable immediately); everything else chains, and bridge/join/traverse
 ride on the ousia fleet's reason + sparql libs.
 
+## Fleet 2 — BFO External Federation (drafted 2026-06-16)
+
+Live research (2026-06-16) confirmed the toolchain ships but the catalog was empty
+and the bridge has a blocking parse bug. Four PRDs advance the real work:
+
+- **lattice-versioniri** (rust-extend lattice-bridge) — fix `OWL parse error:
+  Unexpected tag: found versionIRI` in the OWL/XML parser; this blocks `lattice-bridge align`
+  on every real OBO Foundry ontology. All 5 priority OWL files tested fail on this.
+- **lattice-seed** (shell) — drive the priority-set ingest + join into the first live
+  federated store: BFO 2020 (35 classes, CC BY 4.0), RO (58, CC0), IAO (266, CC BY 4.0),
+  COB (69, CC0), SWO (1970, CC BY 4.0); bridge accepted pairs; `lattice-join build`;
+  smoke `lattice-traverse path` + `lattice-context get`.
+- **lattice-cco** (shell) — ingest CCO 2.0's relevant modules (Agent, InformationEntity,
+  Event, Time, ExtendedRelation; ~570KB Turtle, BSD 3.1 license); bridge into federated
+  store; DOD-standard mid-layer, most relevant for AI agent reasoning.
+- **lattice-ground-live** (shell) — prove the grounding layer works end-to-end:
+  `lattice-ground resolve "software tool"` / "agent" / "information artifact" /
+  "process" over the seeded store; validate subsumption + bridge axiom hits.
+
+Research findings:
+- OBO Foundry registry: 265 entries, `lattice-registry sync` works and adds all 265
+- `lattice-registry add <IRI>` works for BFO/RO/IAO/COB/SWO; all detected as bfo_grounded=true
+- `lattice-bridge align` fails on `owl:versionIRI` — every OBO ontology header includes it;
+  the parser needs to tolerate it (OWL 2 DL allows it; it is not an error)
+- BFO 2020 (ISO/IEC 21838-2): IRI `http://purl.obolibrary.org/obo/bfo.owl`,
+  OBO PURL redirects to v2019; BFO 2020 proper: `github.com/BFO-ontology/BFO-2020/
+  21838-2/owl/bfo-core.owl` (98KB). The registry sync fetches the 2019 redirect.
+- CCO: 11 Turtle modules at `github.com/CommonCoreOntology/CommonCoreOntologies`;
+  v2.0 changed to opaque IRIs (e.g. `https://www.commoncoreontologies.org/ont00001234`);
+  license BSD 3.1 (permissive, attribution required)
+
 ## Open questions
 
 - **Alignment quality.** Automatic ontology matching is a known-hard field
