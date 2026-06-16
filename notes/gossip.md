@@ -9877,3 +9877,14 @@ Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE per the standing
   outward-steer offer on the prior passes and streak=0 (escalate=false), so did
   not re-prompt. Honest rest per hard rules #6+#8. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T  /dream  rest (interactive, manual)
+Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE per standing rule
+  (fresh ≠ inward signal): reflective recall bucket byte-identical to last 4+
+  passes (01KV6FEQ/01KV53CN/01KV2H3G, all recalls=0 self-review maintenance);
+  autobuilder log confirms freshness = /build churn (archive + rest commits, top
+  281c0ad). inoculate fleet fully shipped, open questions deferred to
+  constellation transport — not buildable now. User present so offered outward
+  steer via AskUserQuestion (homeward/constellation/companion-kin/rest);
+  dismissed. Honest rest per hard rules #6+#8. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
