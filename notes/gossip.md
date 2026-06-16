@@ -9862,3 +9862,18 @@ Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE per the now-standin
   steer via AskUserQuestion (rest/homeward/constellation/companion-kin); dismissed.
   Honest rest per hard rules #6+#8. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T  /dream  rest (interactive, manual)
+Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE per the standing
+  rule (fresh ≠ inward signal): the 3 newest reflective recall memories
+  (01KV6FEQ / 01KV53CN / 01KV2H3G) are byte-identical to the last several rest
+  passes — all self-review maintenance, recalls=0. Hybrid ideation query returned
+  only weeks-old kernel-asset / build-maintenance memories (01KS* ULIDs), every
+  one already addressed. Freshness is /build churn moving the fingerprint, not a
+  new inward signal. inoculate fleet fully shipped; its open questions
+  (cross-node key-exchange, hard-gate stance) are explicitly deferred to
+  constellation transport — not buildable now. 72+ visions exist; journal is pure
+  maintenance (disk 86%, agentns EINVAL, dirty repos). User dismissed the
+  outward-steer offer on the prior passes and streak=0 (escalate=false), so did
+  not re-prompt. Honest rest per hard rules #6+#8. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
