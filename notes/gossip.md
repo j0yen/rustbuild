@@ -9945,3 +9945,39 @@ Seed: bare /dream. fallow=FRESH (streak=0, escalate=false) but verified LIVE per
   prior 5+ passes and streak=0, so did not re-prompt. Honest rest per hard
   rules #6+#8. fallow recorded (drafted=0).
 Decision: 0 PRDs, 0 visions.
+
+## 2026-06-16T04:41  /dream  vision-rosetta
+Seed: user — `/dream semantic web tools for ethical AI`. fallow=FRESH but this
+  was a directed topic seed (not a bare rest-pass), so dreamed for real.
+Drafted: PRD-rosetta-prov.md, PRD-rosetta-shacl.md, PRD-rosetta-credential.md,
+  PRD-rosetta-serve.md, PRD-rosetta-attest.md
+Vision: visions/rosetta.md
+What it is: the *interoperability* layer the ousia/lattice ethical-AI arc never
+  built. ousia reasons (OWL/SPARQL), lattice federates, ousia-guard gates,
+  answerable/inoculate attest+sign — but nothing emits decisions as W3C linked
+  data. rosetta translates verdicts+provenance into PROV-O, the rule battery into
+  SHACL, clearances into signed Verifiable Credentials, and serves it all as
+  dereferenceable IRIs + a SPARQL endpoint. Grounded in: ousia-guard gate.rs:51
+  Evaluation struct, the README rule battery, provfs/provenance-mcp xattrs,
+  answerable JSONL ledger, inoculate signet.rs signing, lattice-join's oxigraph
+  store. grep confirms ZERO existing PROV-O/SHACL/JSON-LD/VC/dereferenceable-IRI
+  coverage in the fleet — wholly unclaimed.
+Order: rosetta-prov (foundational) → {rosetta-shacl independent, rosetta-credential
+  dep prov, rosetta-serve dep prov+lattice-join} → rosetta-attest (capstone, deps
+  all four). prov can ship first and alone.
+Notes for /build:
+  - rosetta-prov / -shacl / -serve are independent of each other once prov lands;
+    safe to parallelize. rosetta-credential MUST reuse inoculate-signet's key, not
+    mint a parallel identity (AC5) — coordinate if inoculate is mid-flight.
+  - rosetta-serve depends on lattice-join's oxigraph store existing on disk; if
+    lattice-join isn't shipped/run, rosetta-serve can still build against a fixture
+    store but its integration AC needs the real store.
+  - rosetta-attest is an integration harness that subprocesses the other four +
+    ousia-guard + lattice-ground — build it LAST, after the chain exists.
+  - All use the locked RDF stack: oxrdf >=0.2,<0.3 / oxrdfio >=0.1,<0.2 /
+    oxigraph 0.4 (matches ousia-sparql + lattice-join). MSRV 1.85.
+Open questions (in the vision doc): VC v1 signs a stable JSON-LD serialization,
+  not true RDFC-1.0 canonicalization (documented simplification, follow-on PRD);
+  serve is local-only (public IRI hosting = constellation/herald concern);
+  rosetta-shacl implements a SHACL-core subset for the 4 rules, not a general engine.
+Decision: 5 PRDs, 1 vision.
