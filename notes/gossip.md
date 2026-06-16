@@ -10354,3 +10354,57 @@ Notes for /build: repos j0yen/<slug> per jsy's namespace constraint — NEVER At
 Open questions (in vision): is MEASURE the base pillar or the headline; golden-set
   source (now partly answered — trace-harvest makes harvesting safe but human-gated);
   whether mqo-scorecard should later serve HTML.
+
+## 2026-06-16T08:00+  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+2026-06-16T09:39:40Z loom-serial-fallback: SERIAL MODE for doxa (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-16T08:30  /dream  vision-atscale-ai-strategy (Fleet 3 — DEPLOY/OPERATE)
+Seed: bare /dream (interactive); fallow=fresh (streak 0, fingerprint moved since
+  08:00+ rest). Third pass extending the meta-vision. Fleets 1 (MEASURE) + 2
+  (DEMONSTRATE) drafted earlier today; this adds the pillar that turns "we proved
+  it / we can show it" into "an enterprise can safely RUN it."
+Drafted Fleet 3 (4 PRDs):
+  PRD-mqo-agent.md          — KEYSTONE: the adaptive planner. mqo-demo-runner (Fleet 2)
+                              walks a FIXED scripted chain for ONE question = a demo.
+                              mqo-agent DERIVES the pillar pipeline from an arbitrary NL
+                              question (clarify only if low-confidence; time-intel only on
+                              period-over-period; engine-parity only if multi-engine), loops
+                              on clarify, ends signed. Deterministic rule planner is the
+                              tested default; --planner brain is opt-in.
+  PRD-mqo-access-policy.md  — pre-execution authz gate. Live MCP (list_models 2026-06-16):
+                              internet_sales_no_pii twins exist on BOTH BigQuery+Snowflake,
+                              but Tasty Bytes ships raw CUSTOMER_EMAIL/PHONE/DOB +
+                              FRANCHISE_EMAIL with NO twin. So policy ROUTES under-cleared
+                              agents to the safe twin where one exists, COLUMN-DENIES where
+                              it doesn't. Prevents binding to forbidden surface (vs
+                              sensitivity-scan which detects PII post-build).
+  PRD-mqo-session-budget.md — per-session governor (queries/scan-cost/wall-time ceiling).
+                              Consumes mqo-aggregate-advisor's cost estimate. Leans on kernel
+                              PR_SET_AGENT_BUDGET_LIMITS where live — but agentns is BLOCKED
+                              on this box (all-zeros/EINVAL, 16+ runs), so v1 enforces in
+                              userspace + capability-detects the kernel path. Detect, degrade,
+                              never fail open.
+  PRD-mqo-decision-log.md   — durable append-only JSONL of every agent decision. The PRODUCER
+                              that Fleet 2 already assumes: mqo-trace-harvest mines it for
+                              golden candidates, mqo-scorecard reads `summary` for trend
+                              deltas. Append-only + provfs session xattr = tamper-evidence
+                              w/o reimplementing rosetta-credential signing.
+
+Order: mqo-agent → mqo-access-policy → mqo-session-budget → mqo-decision-log.
+  Agent first (introduces the loop the other three govern); decision-log last
+  (consumes agent output, feeds Fleet-2 harvest/scorecard). All four build
+  independently against fixtures; agent consults policy/budget at RUN time only.
+
+Notes for /build: repos j0yen/<slug> per jsy's namespace constraint — NEVER AtScaleInc.
+  mqo-agent shares the pillar subprocess tool-JSON calling convention with
+  mqo-demo-runner; reuse not reimplement. mqo-agent's answer.json schema == the
+  record mqo-decision-log ingests (no translation layer). mqo-session-budget
+  cost path consumes mqo-aggregate-advisor (Fleet 1) but mocks it in tests.
+  mqo-access-policy reads a catalog snapshot fixture (the list_models shape), not
+  a live cluster.
+
+Open questions (added to vision's set): identity source for mqo-access-policy
+  (who establishes the agent identity string — out of scope, caller's concern);
+  whether the kernel agentns budget path is worth waiting on vs shipping userspace
+  v1 now (default: ship userspace, capability-detect kernel).

@@ -4,7 +4,9 @@
 **Created:** 2026-06-16
 **Status:** active
 **Kind:** meta-vision (organizes existing AtScale-pointed fleets + drafts the gap-fillers)
-**Fleet 1 drafted:** 5 PRDs (the "prove the thesis" capabilities)
+**Fleet 1 drafted:** 5 PRDs (MEASURE — the "prove the thesis" capabilities)
+**Fleet 2 drafted:** 4 PRDs (DEMONSTRATE — make the thesis runnable + self-evident)
+**Fleet 3 drafted:** 4 PRDs (DEPLOY/OPERATE — make it safe to run in production)
 **Seed:** jsy (2026-06-16) — `/dream a vision for AtScale's AI strategy and roadmap`.
 Audience (jsy's call): *both* — a company-strategy thesis that doubles as the
 personal build roadmap. Constraint (jsy's call): **nothing written to the
@@ -202,6 +204,72 @@ mqo-trace-harvest     (consumes demo-runner transcripts + bench run I/O)
 Priority: **mqo-textsql-baseline → mqo-demo-runner → mqo-scorecard →
 mqo-trace-harvest**. The baseline first because it unblocks `mqo-bench`'s honest
 headline number; the harvester last because it consumes the demo-runner's output.
+
+Fleet 3 (DEPLOY/OPERATE) order:
+
+```
+mqo-agent           (keystone; the adaptive planner that turns "demo" into "agent")
+mqo-access-policy   (pre-execution authz gate the agent consults; independent build)
+mqo-session-budget  (per-session governor the agent's loop consults; independent build)
+mqo-decision-log    (durable sink the agent emits to; producer for harvest+scorecard trends)
+```
+
+Priority: **mqo-agent → mqo-access-policy → mqo-session-budget →
+mqo-decision-log**. The agent first because it introduces the loop the other
+three govern; the decision-log last because it consumes the agent's output and
+feeds Fleet-2's harvester/scorecard. All four build independently against
+fixtures (the agent consults policy/budget at *run* time only).
+
+## Components — Fleet 3 (the DEPLOY/OPERATE pillar)
+
+*Status: NEW — Fleet 3 of this vision (drafted 2026-06-16, third /dream pass).*
+Fleet 1 *measures* the thesis; Fleet 2 makes it *runnable and self-evident*;
+Fleet 3 makes it **safe to run in production**. Fleet 2's `mqo-demo-runner`
+executes a *fixed, scripted* chain for *one* rehearsed question — that is a demo,
+not an agent. And nothing yet decides which governed model variant an agent may
+touch, bounds a runaway agent loop, or keeps a durable audit trail of agent
+decisions. Fleet 3 closes the gap between "we proved it works" and "an enterprise
+can let an agent run it." Each is a standalone `j0yen/<slug>` rust-cli on the
+established `mqo-*` pattern (flag CLI + `serve` subprocess speaking
+`mqo-mcp-server` tool JSON), fixture-driven and cluster-free. **No `AtScaleInc/*`
+touched.**
+
+1. **mqo-agent** — the adaptive reference agent (*keystone of Fleet 3*). Where
+   `mqo-demo-runner` walks a human-authored fixed pipeline, `mqo-agent` *derives*
+   the pipeline from an arbitrary NL question: a deterministic rule planner
+   selects which pillars to fire (clarify only if the bind is low-confidence,
+   time-intelligence only if the question is period-over-period, engine-parity
+   only if the model is multi-engine), loops on clarify, and stops with a signed,
+   defensible answer. `--planner brain` is an opt-in LLM path; the deterministic
+   rules are the tested default. This is what makes end-state #1 ("the agent's
+   default interface is the semantic layer") true for *any* question, not the
+   rehearsed one.
+
+2. **mqo-access-policy** — the pre-execution authorization gate. The live catalog
+   ships PII-safe twins (`internet_sales_no_pii` on both BigQuery and Snowflake)
+   *and* a model with raw PII and no twin (`Tasty Bytes`: `CUSTOMER_EMAIL`,
+   `CUSTOMER_PHONE_NUMBER`, `CUSTOMER_DOB`, `FRANCHISE_EMAIL`). Given an agent
+   identity + a requested model, this *routes* an under-cleared agent to the safe
+   twin where one exists and *column-denies* the PII surface where it does not —
+   the confused-deputy defense `mqo-sensitivity-scan` (which detects PII *after*
+   a query is built) cannot provide on its own.
+
+3. **mqo-session-budget** — the per-session governor. `mqo-agent` introduces a
+   loop; a loop over warehouse spend needs a ceiling. Tracks queries, estimated
+   scan cost (consuming `mqo-aggregate-advisor`'s estimate), and wall-time against
+   a declared budget, and refuses the next step at the ceiling. Leans on the
+   kernel `PR_SET_AGENT_BUDGET_LIMITS` agentns primitive where live, but honestly
+   falls back to userspace accounting because that primitive is currently blocked
+   on this box ([[self_agentns_einval_flag_collision]]) — detect, degrade, never
+   fail open.
+
+4. **mqo-decision-log** — the durable audit sink. Every `mqo-agent` run appends
+   one structured decision record (question, plan, access verdict, budget
+   consumed, pillars fired, credential id) to an append-only JSONL log. This is
+   the *producer* the Fleet-2 consumers assume exists: `mqo-trace-harvest` mines
+   it for golden-set candidates and `mqo-scorecard` reads its `summary` for trend
+   deltas. Append-only + `provfs` session xattrs give tamper-evidence without
+   reimplementing `rosetta-credential`'s per-answer signing.
 
 ## Components — Fleet 2 (the DEMONSTRATE pillar)
 
