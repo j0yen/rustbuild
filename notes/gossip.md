@@ -9834,3 +9834,16 @@ Notes for /build: rust-extend into ~/wintermute/inoculate. Keygen must NOT
 Open questions: network key-exchange between constellation nodes deferred to
   constellation's transport decision; hard-gating un-inoculated subagents stays
   flag-only (signing makes a future gate trustworthy but doesn't flip it).
+
+## 2026-06-16T  /dream  rest (interactive, manual)
+Seed: bare /dream. fallow=FRESH (streak=0) but verified LIVE: freshness is
+  /build churn (inoculate-signet shipped c8d3743 + archive commits moved the
+  fingerprint), not inward signal. Reflective recall bucket unchanged from prior
+  rest pass (top ULIDs 01KV6FEQ/01KV53CN/01KV2H3G, all self-review maintenance).
+  inoculate fleet fully shipped; its only open questions (cross-node key-exchange,
+  hard-gate stance) are explicitly deferred to constellation transport — not
+  buildable now. 72 visions exist; journal is pure maintenance (disk 86%, agentns
+  EINVAL, dirty repos). User present so offered outward steer via AskUserQuestion
+  (constellation/homeward/companion-kin/rest); dismissed. Honest rest per hard
+  rules #6+#8. fallow recorded (drafted=0).
+Decision: 0 PRDs, 0 visions.
