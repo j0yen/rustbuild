@@ -1,0 +1,9 @@
+[Unit]
+Description=Kill orphaned Hetzner burst builders (age > 2h)
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=%h/.claude/skills/cloudbuild/cloudbuild-watchdog.sh
+StandardOutput=journal
+StandardError=journal
