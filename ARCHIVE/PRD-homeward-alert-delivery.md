@@ -1,6 +1,6 @@
 # PRD: homeward-alert-delivery — the match alert actually reaches the owner
 
-Status: Draft v0.1
+Status: Shipped
 build_target: rust-extend
 build_into: /home/jsy/wintermute/homeward
 Vision: visions/homeward.md

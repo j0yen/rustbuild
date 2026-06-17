@@ -1,6 +1,6 @@
 # PRD: homeward-orchestrate — stand the fleet up as one running system
 
-Status: Draft v0.1
+Status: Shipped
 build_target: shell
 Vision: visions/homeward.md
 

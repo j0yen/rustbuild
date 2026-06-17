@@ -1,6 +1,6 @@
 # PRD: homeward-eval-harness — run the eval, publish the number, no tautology
 
-Status: Draft v0.1
+Status: Shipped
 build_target: mixed
 build_into: /home/jsy/wintermute/homeward
 Vision: visions/homeward.md

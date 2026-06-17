@@ -10928,3 +10928,6 @@ Open questions: (1) shared watermark evaluator with ballast-guard vs two timers
   hold-anchor lands, careen operates on the single shared hold (orphan set
   becomes fleet-union) — both remain valid, sequence careen-now/hold-later;
   (4) sccache (hold-sccache) moves deps economics — defer sccache-aware survey.
+
+## 2026-06-16T18:09  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested

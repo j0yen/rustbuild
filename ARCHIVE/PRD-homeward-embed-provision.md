@@ -1,6 +1,6 @@
 # PRD: homeward-embed-provision — the model exists, the index serves, proven once
 
-Status: Draft v0.1
+Status: Shipped
 build_target: mixed
 build_into: /home/jsy/wintermute/homeward
 Vision: visions/homeward.md
