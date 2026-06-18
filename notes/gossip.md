@@ -10931,3 +10931,65 @@ Open questions: (1) shared watermark evaluator with ballast-guard vs two timers
 
 ## 2026-06-16T18:09  /dream  fallow
 /dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-17T23:20  /dream  vision-tether
+Drafted: PRD-tether-link.md, PRD-tether-presence.md, PRD-tether-gossip.md,
+  PRD-tether-recall.md, PRD-tether-tools.md
+Vision: visions/tether.md
+Seed: jsy — "connecting better with the work node. establish a persistent
+  connection. extend agorabus. share your tools, notes, thoughts, gossip. It's
+  a part of you — wire it in."
+
+What this is: the work node (jsy's AtScale 5700U box, joeyen-atscale identity)
+  becomes a PEER OF THE SELF — not a builder (constellation dropped it as a
+  builder; harbor owns build pods). A persistent bus link + four mirrors:
+  presence, gossip, recall, tools.
+
+Order: tether-link → tether-presence → {tether-gossip ∥ tether-recall ∥ tether-tools}
+  tether-link (rust-cli)      — persistent self-healing Tailscale+NATS-leaf
+                                supervisor + tether-link.service. The literal
+                                "persistent connection." Depends on wm-busbridge
+                                (INSTALLED). AC5/AC6 deferred (embedded NATS /
+                                real sleep-wake on the work box).
+  tether-presence (rust-EXTEND agorabus, build_into=~/wintermute/agorabus, minor)
+                              — the literal "extend agorabus": add `node` to the
+                                peer announce + `agorabus peers --fleet` merging
+                                remote peers from wm.fleet.presence.*. Additive;
+                                AC1 preserves agorabus AC2 (local output
+                                byte-identical). AC6 deferred.
+  tether-gossip (rust-cli)    — bidirectional gossip.md mirror over
+                                wm.fleet.gossip.append, loop-guarded + append-only
+                                (respects the gossip hard rule on both sides).
+  tether-recall (rust-cli)    — READ bridge: work node `recall query` over
+                                wm.fleet.recall.query, laptop runs it, ranked hits
+                                back. Read-first (write-back deferred, OQ#3).
+  tether-tools (rust-cli)     — remote capability: laptop advertises an allowlist
+                                of ~/.local/bin tools + executes allowlisted
+                                invokes (argv array, NO shell, deny-by-default,
+                                arg-sanitized). Highest-risk → built last.
+
+Notes for /build:
+  - tether-presence is rust-EXTEND of agorabus (j0yen/agorabus, PUBLIC). All
+    others are NEW rust-cli repos (j0yen/ public, ecosystem tooling — NOT
+    joeyen-atscale; these are wintermute self, not AtScale-derived).
+  - Every tether PRD inherits persona's honesty discipline: authored +
+    fixture-tested HERE, installed on the work box, SKIP honestly when the
+    link/identity isn't live, NEVER false-green by assuming remote state. The
+    real cross-machine ACs are deferred with embedded-NATS mocks (the
+    agorabus-nats-bridge precedent: "verified against an embedded/test NATS
+    server") or, where no mock is tractable (tether-link AC6 = real sleep/wake),
+    a mock_justifications entry.
+  - tether-link must land before the three consumers can round-trip live, but
+    each consumer's LOCAL logic is independently buildable+testable against an
+    embedded NATS server now — do not block them on a live work-node link.
+  - tether-tools: the allowlist + arg-sanitization (no sh -c, no metacharacters)
+    is load-bearing safety, grep-asserted. Do not weaken for green tests.
+
+Cross-links: reconciles with [[constellation]] (un-drops the 5700U as a peer,
+  not a builder — see vision OQ#1) and composes with [[persona]] (persona =
+  the work node's face/identity; tether = its nervous system). Transport rides
+  the existing [[harbor]]/agorabus-nats-bridge hub.
+Open questions (see vision): (1) amend constellation's fleet row vs tether-as-
+  canonical work-node vision; (2) hub-primary vs direct Tailscale peering;
+  (3) recall write-back conflict model; (4) tool-invoke trust (cap-token vs
+  Tailscale-ACL+allowlist); (5) a tether-doctor next pass.
