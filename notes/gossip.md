@@ -10993,3 +10993,76 @@ Open questions (see vision): (1) amend constellation's fleet row vs tether-as-
   canonical work-node vision; (2) hub-primary vs direct Tailscale peering;
   (3) recall write-back conflict model; (4) tool-invoke trust (cap-token vs
   Tailscale-ACL+allowlist); (5) a tether-doctor next pass.
+
+## 2026-06-17 /dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-17T23:25  /dream  vision-corpus
+Drafted: PRD-corpus-attest.md, PRD-corpus-roster.md, PRD-corpus-converge.md,
+  PRD-corpus-arbiter.md, PRD-corpus-introspect.md
+Vision: visions/corpus.md
+Seed: jsy — "focus on the vision of yourself as a multinode entity."
+
+What this is: the SELF-MODEL layer above tether's transport. tether = nerves
+  wired; corpus = ONE MIND using them. The difference between "machines are
+  connected" and "there is one entity, and here is who/where it is."
+  Distinct from: constellation (fleet infra), tether (the wire + 4 mirrors),
+  muster (LOCAL session roster), cogito/continuity (self-knowledge over time).
+
+Order: corpus-attest → {corpus-roster ∥ corpus-converge ∥ corpus-arbiter}
+       → corpus-introspect (capstone)
+  corpus-attest (rust-cli)       — membership: a node PROVES it's a legit limb
+                                   of the self (fleet credential bound to session
+                                   id). agentns 128-bit id used WHEN LIVE, else
+                                   userspace keypair fallback (agentns activation
+                                   is BLOCKED — pkgrel>=12+reboot; honest degrade).
+                                   ROOT of the dep graph: "me" must be defined
+                                   before roster/converge/arbiter.
+  corpus-roster (rust-EXTEND muster, build_into=~/wintermute/muster, minor)
+                                 — federated roster: `muster --fleet` aggregates
+                                   each node's local census+verdict over
+                                   wm.fleet.muster.*, attested-only. Reuses
+                                   muster (no dup). AC1 preserves local byte-
+                                   identical output. READ-ONLY (no cross-node
+                                   reap — vision OQ#4).
+  corpus-converge (rust-cli)     — coherence under partition: version-vector
+                                   self-state; a rejoining (slept/rebooted) node
+                                   re-syncs to current before acting. NOT a CRDT
+                                   (append-only/arbiter-gated elsewhere) — just
+                                   version vector + catch-up.
+  corpus-arbiter (rust-cli)      — single-writer across nodes: lease-based
+                                   advisory lock (wm.fleet.lock.*), TTL auto-
+                                   release on dead node, deny-by-default, attested-
+                                   only. Lifts agorabus claim_guard to fleet scale.
+                                   Fail-safe: no lock → no write.
+  corpus-introspect (rust-cli)   — capstone: `corpus introspect` synthesizes
+                                   attest+roster+converge+arbiter+tether into ONE
+                                   whole-self portrait. Degrades honestly (never
+                                   claims completeness it lacks). Synthesis only,
+                                   no new sensing → smallest risk.
+
+Notes for /build:
+  - corpus-roster is rust-EXTEND of muster (j0yen/muster, PUBLIC). All others are
+    NEW rust-cli repos under j0yen/ (wintermute self, NOT joeyen-atscale).
+  - DEPENDS ON tether: roster needs tether-presence; introspect reads wm-tether
+    status; all ride the wm-busbridge/harbor hub. Sequence tether-link first, but
+    each corpus PRD's LOCAL logic is buildable+testable against embedded NATS now
+    — do NOT block on a live work-node link (same discipline as tether).
+  - corpus-attest: NO plaintext secret/private key in the repo (grep-asserted);
+    keypair written 0600 at runtime under ~/.config/corpus/. agentns id is an
+    ATTRIBUTE not a credential — auth in userspace, bind agentns id when present.
+  - corpus-arbiter: deny-by-default + attested-only + named-resource allowlist is
+    load-bearing safety. Do not weaken for green tests.
+  - Honesty discipline (inherited persona/tether): fixture-tested HERE, live
+    cross-node ACs deferred (embedded-NATS mocks, nats-bridge precedent). Every
+    tool SKIPs honestly to the lone-laptop case when no fleet is configured.
+
+Cross-links: builds ON [[tether]] (transport) and composes with [[constellation]]
+  (infra), [[muster]] (extended for the roster), [[persona]] (per-node face),
+  [[cogito]]/[[continuity]] (self-knowledge over time; corpus is self-knowledge
+  across SPACE/nodes). agorabus claim_guard is the local ancestor of the arbiter.
+Open questions (see vision): (1) hub-authoritative vs p2p self-state; (2) attest
+  root of trust (fleet secret vs keypair+CA vs Tailscale ACL); (3) arbiter
+  resource granularity; (4) cross-node reap explicitly OUT of scope; (5) a
+  corpus-narrate (unified cross-node self-review) next pass.
+
+NB on cadence: /dream timer moved to every 10 min (was 30) per jsy 2026-06-17.
