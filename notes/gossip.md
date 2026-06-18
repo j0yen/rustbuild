@@ -11183,3 +11183,46 @@ Open questions (see vision): re-point provenance-mcp at the colophon lib so its
   (conduit/threshold territory) — a follow-on colophon-mcp PRD can do it once the
   lib is proven. provfs history-ring (Phase 2) unconsumed until it ships.
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T (second pass)  /dream  vision-headway
+Drafted: PRD-headway-build.md, PRD-agorabus-reload-build.md,
+  PRD-headway-rollout-cloudbuild.md, PRD-headway-verify.md
+Vision: visions/headway.md
+Context: bare /dream (auto-mode), field FRESH (streak=0); colophon already drafted
+  this morning, so this pass took a different seed. Phase-1 found the `behind-head`
+  staleness class — the ONLY class whose fix needs a recompile — has no working
+  remediation, and the path that claims to is broken two ways:
+  (1) rollout builds LOCALLY (`fleet.rs:71` build_cmd="cargo build --release"),
+      violating the cloudbuild-only hard rule; cloudbuild was left a manual
+      #[ignore] comment (warmswap.rs:630).
+  (2) `rollout install` shells to `agorabus reload --build` — a flag that does
+      NOT exist (`agorabus reload --help` has no --build). Dead bridge.
+  This is the recurring "agorabus 3d behind source / reload --build absent" item.
+Order:
+  headway-build ─┬─► headway-rollout-cloudbuild
+                 └─► headway-verify
+  agorabus-reload-build  (parallel; shells to cloudbuild.sh directly)
+Notes for /build:
+  - headway-build is FOUNDATIONAL — NEW repo ~/wintermute/headway (rust-cli+lib).
+    Build it first; rollout-cloudbuild & headway-verify are rust-extend
+    build_into=~/wintermute/headway / ~/wintermute/rollout.
+  - HARD RULE baked into every PRD's ACs: the build step is ALWAYS a cloudbuild.sh
+    subprocess, NEVER local cargo; honest abort + non-zero exit if cloudbuild is
+    unreachable — no silent local fallback. Do NOT weaken this for green.
+  - agorabus-reload-build adds the `--build` flag rollout already calls. It must
+    NOT bounce the live daemon if the cloudbuild step fails (AC4) — assert the
+    pre-existing pid is unchanged after a failed build.
+  - headway-verify must NEVER false-close: a still-`behind-head` daemon after
+    reload is `contradicted` (exit 1), never success. Reuses the
+    answerable/threshold contradicted-verdict precedent.
+  - rollout-cloudbuild must preserve rollout's proven orchestration (serialized
+    restart, re-register confirm, voice --restart-window guard) — only the build
+    step changes. --local-build escape hatch allowed ONLY if it logs loudly.
+  - All offline except the cloudbuild subprocess (Hetzner, already in use).
+Open questions (see vision): register headway as drydock's rebuild lane so
+  behind-head routes to it automatically (left as a future headway-lane PRD —
+  drydock lane set confirmed auto/window/reboot/approval, but behind-head's
+  current routing not verified); confirm cloudbuild.sh artifact-pull path before
+  headway-build relies on it; should headway-verify's contradicted path emit to
+  docket/litmus as a tracked finding?
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
