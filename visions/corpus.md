@@ -128,11 +128,13 @@ self's view of itself.
    via `harbor`, durable, survives laptop sleep) vs fully peer-to-peer (no single
    point, but harder convergence). Leaning hub-authoritative with peer cache —
    but that's a corpus-converge design decision, flag it.
-2. **Attestation root of trust.** A shared fleet secret in the encrypted store,
-   per-node keypairs with a fleet CA, or lean entirely on Tailscale ACL identity?
-   The agentns id is an *attribute*, not a *credential* — it identifies but
-   doesn't authenticate. Likely keypair + Tailscale, agentns id as a bound
-   attribute.
+2. ~~**Attestation root of trust.**~~ **RESOLVED (2026-06-18, jsy):**
+   per-node Ed25519 keypairs + Tailscale ACL identity. No shared fleet secret,
+   no fleet CA. Each node self-signs its attestation with its own keypair;
+   `verify` checks the sig against the enrolled pubkey for that Tailscale node.
+   The fleet roster (`fleet.toml`) is a set of `{tailscale_node, pubkey}` pairs
+   — pubkeys only, safe to sync. The agentns id remains an *attribute* bound to
+   the attestation when live, not the credential itself.
 3. **Arbiter scope.** Which resources are lease-gated? The memory store and
    `settings.json` are obvious; is a whole repo too coarse? Probably a
    named-resource registry, deny-by-default, grown as collisions are observed.

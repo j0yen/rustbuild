@@ -42,10 +42,18 @@ A `corpus-attest` binary (single crate, `~/wintermute/corpus-attest`):
   pubkey, agentns_session?}` — `agentns_session` populated from
   `/proc/self/agent_session` when readable and non-zero, omitted (with a logged
   `degraded: agentns-inactive`) otherwise.
-- **Credential.** A fleet membership is established by a shared fleet root
-  (config: a reference to the encrypted-store fleet secret, or a fleet CA pubkey
-  — never a plaintext secret in the repo, grep-asserted). `corpus-attest enroll`
-  produces a signed attestation `{node_identity, issued_ts, expiry, sig}`.
+- **Credential.** Fleet membership is established by **per-node Ed25519 keypairs
+  + Tailscale ACL identity** (jsy decision 2026-06-18; no shared fleet secret,
+  no fleet CA). Each node generates a keypair on first enroll and records its
+  Tailscale node name as the authoritative network identity. The fleet root of
+  trust is: "this Tailscale node name is enrolled, and it owns this pubkey."
+  Enrollment writes `~/.config/corpus/fleet.toml` (the set of enrolled
+  `{tailscale_node, pubkey}` pairs — the fleet roster); each node ships a copy
+  (synced over gossip or manual `corpus-attest sync-roster`). `corpus-attest
+  enroll` produces a signed attestation `{node_identity, issued_ts, expiry,
+  sig}` where `sig` is the node's own Ed25519 signature over the identity +
+  timestamps, and `verify` checks sig against the enrolled pubkey for that
+  Tailscale node — never a standalone CA.
 - **Verify.** `corpus-attest verify <attestation>` checks the signature against
   the fleet root and the expiry window, returning `valid | invalid | expired`
   with the reason. This is the function roster/arbiter call before trusting a
@@ -70,14 +78,15 @@ cross-node + live-agentns paths are deferred.
    `pubkey`; `agentns_session` is present iff `/proc/self/agent_session` is
    readable and non-zero, and a `degraded:["agentns-inactive"]` marker appears
    when it is not (the current real state on this box).
-2. `enroll` with a configured test fleet root produces an attestation that
-   `verify` returns `valid` for; tampering with any field (flip one byte of the
-   node identity or sig) makes `verify` return `invalid`.
+2. `enroll` produces an Ed25519-signed attestation; `verify` returns `valid` for
+   an enrolled `(tailscale_node, pubkey)` pair and `invalid` if any field is
+   tampered (flip one byte of the node identity or sig).
 3. An attestation past its `expiry` verifies as `expired` (injected clock), not
    `valid`.
-4. No plaintext fleet secret or private key material is committed in the repo
-   (grep-asserted over the source tree); the private key is written 0600 under
-   `~/.config/corpus/` at runtime, never to the repo.
+4. No private key material is committed in the repo (grep-asserted); the
+   private key is written 0600 under `~/.config/corpus/` at runtime. The fleet
+   roster (`fleet.toml`) contains only pubkeys + Tailscale node names — no
+   secrets — and is safe to commit/sync.
 5. With no fleet root configured, `enroll` and `verify` exit non-zero with a
    `not-enrolled` reason and do NOT emit a usable attestation; `whoami` still
    succeeds and marks the node `unattested`.
