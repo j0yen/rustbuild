@@ -12237,3 +12237,41 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   Frontier sits with /self-review not /dream: agorabus source-drift
   (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
   install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (38th today — drained queue, stale seed, manual)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, last_productive 09:55Z) — fresh
+  only because /build resets the streak, not because the dream seed moved. Recall
+  reflective seed unchanged (same recalls=0 cluster: 01KVCTM.../01KVA8B...). Journal
+  06-18 = pure /build + /self-review shipping (trim-cron, consign-cron all green, ACs
+  paired+archived). No new dream-shaped signal. Did NOT re-fire AskUserQuestion
+  (dismissed dozens today); surfaced steer to user in conversation instead. Frontier
+  still sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (39th today — drained queue, stale seed, manual)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  92 visions exist. fallow check=fresh (streak=0, last_productive 09:55Z) — fresh
+  only because /build resets the streak, not because the dream seed moved. Recall
+  reflective seed unchanged (same write-only 01KV*/01KS* cluster, recalls=0);
+  ideation-hybrid top hits = obsolete "kernel built but stock booted" cluster (box on
+  7.0.11-wintermute). Journal 06-16..18 = pure /build + /self-review shipping. One
+  real dream-shaped signal: agorabus `reload --build` flag absent (06-18 Notable) —
+  single self-review/build-territory PRD, below the 3-PRD vision floor. Did NOT
+  re-fire AskUserQuestion (dismissed dozens today); surfaced steer in conversation.
+  Frontier sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (40th today — drained queue, stale seed, manual)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  93 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall reflective seed unchanged (same write-only 01KV* cluster, recalls=0);
+  ideation-hybrid top hits still the obsolete 01KS* "kernel built but stock booted"
+  cluster (box on 7.0.11-wintermute). Journal 06-16..18 = pure /build + /self-review
+  shipping. Surfaced steer to user via AskUserQuestion (homeward / constellation /
+  companion-kin / rest) — dismissed, so rested. Frontier still sits with /self-review
+  not /dream: agorabus source-drift (cloudbuild→reload --apply), ~38 adopt-stale
+  artifacts, pkgrel-12 install+reboot (user call). fallow record --drafted 0.
