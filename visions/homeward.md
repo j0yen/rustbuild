@@ -481,3 +481,72 @@ parallel branches off one foundation.
   but the orchestrator treats it as static.
 - Non-US open-data portals (UK `data.gov.uk`, EU ODS instances) — the vision is
   US-framed; international reach is a deliberate scope decision, not a build.
+
+---
+
+## Reach 3 — coverage & priority (added 2026-06-17 by /dream)
+
+**Trigger.** Bare interactive `/dream`, fallow gate escalated (streak=3,
+threshold crossed) — inward self-tooling field saturated; user dismissed the
+steer prompt; picked outward `homeward`. Phase-1 mapped the *built* fleet
+(homeward v0.29.0, 22 PRDs shipped + web-ui/owner-notify in worktrees). The
+ingest+match+report pipeline is wired and live (174K+ animals in the SQLite
+store), but two of this vision's own "still un-dreamt" frontier items remain,
+and Phase-1 surfaced two adjacent grounded gaps. Theme: **reach the metros
+we're missing, and weigh the records most likely to be someone's lost pet.**
+
+This reach descends directly from the vision's core thesis — the
+**stray/found population is the someone's-lost-pet population** — and from the
+"open + auditable coverage" wedge against the closed incumbent.
+
+### Components
+
+- **homeward-catchment-geo** (rust-extend → homeward-connectors) — turn
+  coverage from a *list of source names* into a *map of geography*. Today
+  `coverage.rs:374-391` derives a metro label from the source *name*
+  (`metro_from_name`), and `catalog_documented_gaps()` (coverage.rs:397-416)
+  hand-lists holes (LA/NY/Chicago/Houston/Phoenix). Yet every `PetRecord`
+  already carries a coarse `ShelterLocation { lat, lon, precision }`
+  (schema geo.rs:11-57). Roll those points up into geographic coverage cells
+  (offline, no PostGIS server — a CPU-only laptop) so a coverage hole is a
+  *region with shelter population but no feed*, computed, not hand-typed.
+
+- **homeward-cadence-stray** (rust-extend → homeward-ingest) — make the
+  adaptive cadence *stray-aware*. The AIMD loop (`orchestrator.rs:53-64`)
+  resets to the floor on churn ≥10 and backs off on zero — but counts *all*
+  records equally, blind to `IntakeType::Stray`. The whole vision says the
+  stray feed is the gold mine; the scheduler should poll a source that is
+  actively producing STRAY intakes faster than one returning only adoptables.
+
+- **homeward-found-geocode** (rust-extend → homeward-connectors) — give the
+  dead `found_location_text` free-text field (PetRecord) a coarse geographic
+  point. For a stray, *where it was found* is often closer to the owner's
+  last-seen location than *where the shelter is* — but today that text is
+  never parsed. An offline US gazetteer (Census place/ZCTA, public domain)
+  fills `location` when absent, coarsened to the same privacy precision (±~1km),
+  no external geocode API (ToS + offline-first).
+
+- **homeward-catchment-discover** (rust-extend → homeward-connectors) — close
+  the loop: feed the *computed* coverage holes from catchment-geo into the
+  existing `discover` subcommand (shipped, ARCHIVE/PRD-homeward-source-discover)
+  so "hole in metro X" becomes "query the Socrata/ODS catalog for candidate
+  feeds in metro X." Honest: emits ranked candidates for human probe→commit,
+  never auto-commits a source. Depends on catchment-geo.
+
+### Reach-3 order
+
+```
+homeward-catchment-geo ─► homeward-catchment-discover
+homeward-cadence-stray      (independent)
+homeward-found-geocode      (independent)
+```
+
+catchment-geo is the foundation (the geographic coverage model discover reads).
+cadence-stray and found-geocode are independent extends, parallel-buildable now.
+
+### Still un-dreamt after reach 3
+
+- Non-US open-data portals (UK `data.gov.uk`, EU ODS) — deliberate scope
+  decision, US-framed vision; still not a build.
+- A served coverage *map tile* / visual front-end — catchment-geo emits the
+  data; rendering it is a UI concern for a later pass.

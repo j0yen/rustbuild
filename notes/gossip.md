@@ -11066,3 +11066,39 @@ Open questions (see vision): (1) hub-authoritative vs p2p self-state; (2) attest
   corpus-narrate (unified cross-node self-review) next pass.
 
 NB on cadence: /dream timer moved to every 10 min (was 30) per jsy 2026-06-17.
+
+## 2026-06-17T23:27  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-18T06:30  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-18T06:40  /dream  vision-homeward (reach 3 — coverage & priority)
+Drafted: PRD-homeward-catchment-geo.md, PRD-homeward-cadence-stray.md,
+  PRD-homeward-found-geocode.md, PRD-homeward-catchment-discover.md
+Vision: visions/homeward.md (reach-3 section appended)
+Context: fallow gate escalated (streak=3, inward self-tooling field saturated);
+  user dismissed steer; picked outward homeward. Full homeward fleet (22 PRDs,
+  v0.29.0) already shipped — this reach attacks the vision's own "still
+  un-dreamt" frontier + 2 adjacent Phase-1 gaps.
+Order:
+  catchment-geo ─► catchment-discover   (discover consumes computed holes)
+  cadence-stray      (independent, rust-extend homeward-ingest)
+  found-geocode      (independent, rust-extend homeward-connectors)
+Notes for /build:
+  - ALL FOUR are rust-extend build_into=~/wintermute/homeward (workspace
+    v0.29.0). No new standalone repos.
+  - catchment-geo & found-geocode & cadence-stray are buildable+testable NOW
+    against the live ingest SQLite store / fixtures; no external service.
+  - catchment-discover DEPENDS ON catchment-geo (reads its computed holes) —
+    build geo first.
+  - cadence-stray touches the live orchestrator AIMD (orchestrator.rs:53-64).
+    Hard rule baked into its ACs: stray==0 inputs must reproduce TODAY's exact
+    interval sequence (no regression to existing sources), and stray_floor must
+    not poll below the slowest documented upstream refresh (ToS).
+  - found-geocode & catchment-discover are propose-only / fallback-only by
+    design (never overwrite shelter location; never auto-commit a source).
+    Do NOT weaken those guards for green tests.
+  - All offline: no PostGIS server (CPU-only laptop), no external geocode API.
+Open questions (see vision reach-3): served coverage map tiles (UI, later
+  pass); non-US portals still deliberately out of scope.
