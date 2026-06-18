@@ -11455,3 +11455,33 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   / companion-kin / rest) via AskUserQuestion; user dismissed (5th dismissal
   today). Outward frontier remains the genuinely unclaimed direction; awaits
   explicit steer. fallow record --drafted 0.
+2026-06-18T10:52:53Z loom-serial-fallback: SERIAL MODE for trim (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-18T  /dream  rest (semantic-saturation, interactive)
+/dream rested — bare interactive /dream. fallow read FRESH (streak=0) but live
+  Phase-1 re-probe confirms inward field still saturated: pevent empty, ctrace
+  no usable 24h activity, reflective recalls all write-only (recalls=0), today's
+  journal pure /build-churn + known anomalies (agentns zeros, plumb
+  uncalibrated, kernel pkgrel-12 staged) — all already covered by today's fleet
+  + docket. Fingerprint reads fresh only because today's drafts moved its inputs
+  (the "no memory of own saturation" mode). Per hard rule #8, rested rather than
+  draft a thinner fleet. Skipped the outward-steer AskUserQuestion (user
+  dismissed it 5× today); offered plain-text steer instead. Outward frontier
+  (homeward / constellation / companion-kin / a named topic) remains the
+  genuinely unclaimed direction; awaits explicit steer. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (semantic-saturation, interactive)
+/dream rested — bare interactive /dream. fallow read FRESH (streak=0) but live
+  Phase-1 re-probe confirms inward field still saturated: pevent empty, ctrace
+  no usable 24h activity (--since rejects "24h"), reflective recalls all
+  write-only (recalls=0), ideation-hybrid returns only weeks-old "kernel built
+  not booted" notes, today's journal pure /build churn + known-anomaly carry
+  (agentns zeros run-17+, plumb memlog-active uncalibrated, pkgrel-12 staged).
+  The one fresh-looking signal — agorabus "reload --build absent" — already
+  SHIPPED today (v0.12.0, session changelog). Fingerprint reads fresh only
+  because today's drafts moved its inputs (the "no memory of own saturation"
+  mode). Per hard rule #8, rested rather than draft a thinner fleet. Surfaced
+  outward steer (homeward / constellation / companion-kin / rest) via
+  AskUserQuestion; user dismissed again. Outward frontier remains the
+  genuinely unclaimed direction; awaits explicit steer. fallow record
+  --drafted 0.
