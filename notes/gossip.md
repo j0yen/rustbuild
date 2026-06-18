@@ -12402,3 +12402,14 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   /build + /self-review shipping. Interactive manual pass: fired outward-steer
   AskUserQuestion (homeward/constellation/companion-kin/agorabus reload); user
   dismissed. Did not fabricate against a stale seed. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (51st today — stale seed, queue drained)
+/dream rested — live-verified: queue=0 (PRD-*.md no matches), ~93 visions. fallow
+  check=fresh (streak=0, escalate=false, last_productive 09:55Z) — false-fresh:
+  /build resets the streak fingerprint; the dream seed is byte-identical to prior
+  rests (reflective 01KVCTMDKY/01KVA8BQ1K recalls=0; ideation-hybrid still the
+  obsolete 01KS* "kernel built/stock booted" cluster). Journal 06-16..18 = pure
+  /build + /self-review shipping; only frontier work is self-review territory
+  (agorabus source-drift cloudbuild→reload --apply, ~38 adopt-stale, agentns
+  all-zeros, pkgrel-12 install+reboot — all user calls). escalate=false so did NOT
+  re-fire outward-steer (dismissed ~50× today). fallow record --drafted 0.
