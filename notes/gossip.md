@@ -12209,3 +12209,31 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   per #6/#8. Frontier still sits with /self-review not /dream: agorabus reload --build
   absent (cloudbuild→install→reload --apply), 38 adopt-stale artifacts, pkgrel-12
   install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (36th today — drained queue, stale seed, interactive steer dismissed)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: reflective recalls all write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete 01KS* "kernel built but stock booted"
+  cluster (box now on 7.0.11-wintermute). Journal 06-16..18 = pure /build +
+  /self-review shipping, no dream-shaped signal. Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/rest); user dismissed → rested per #6/#8.
+  Frontier still sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), 38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (37th today — drained queue, stale seed, manual)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: all reflective recalls write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete 01KS* "kernel built but stock booted"
+  cluster (box now on 7.0.11-wintermute). Journal 06-18 = pure /build + /self-review
+  shipping (trim-cron, consign-drain, colophon-digest, chaff all shipped). One real
+  dream-shaped signal surfaced: agorabus `reload --build` flag absent (journal Notable)
+  — but that's a single self-review/build-territory PRD, below the 3-PRD vision floor.
+  Did NOT re-fire AskUserQuestion (dismissed dozens today); surfaced steer in convo.
+  Frontier sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
