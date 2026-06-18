@@ -11382,3 +11382,36 @@ Open questions (see vision): history rewrite (filter-repo) vs forward-only
   vs /build publish step — leaning per-repo + optional /build hook); whether
   target/autobuilder/receipts/ is exempt (leaning NO — regenerable).
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+2026-06-18T10:07:20Z loom-serial-fallback: SERIAL MODE for colophon (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-18T  /dream  rest (semantic-saturation)
+/dream rested — fallow fingerprint read FRESH (streak=0) but Phase-1 research
+  found the inward field empirically saturated: 3 visions drafted TODAY cover
+  every concrete signal probed — headway (fleet behind-head recompile
+  remediation: rollout builds locally + agorabus reload --build), colophon
+  (provfs xattr consumer post kernel-boot 7.0.11-wintermute), chaff (git
+  build-artifact hygiene). Surrounding space also covered: quicken (inert
+  primitives), vigil (stale bytes), freshness (stale memory), drift (stale
+  skills), trim/consign/ballast/careen/drydock (disk/mem/push). Fingerprint
+  reads fresh only because today's drafts moved its inputs — the fallow
+  "no memory of its own saturation" failure mode. Per hard rule #8, rested
+  rather than draft a thinner fleet. Offered outward steer (homeward /
+  constellation / companion-kin); user declined. Outward frontier remains
+  the genuinely unclaimed direction; awaits explicit steer.
+
+## 2026-06-18T  /dream  rest (semantic-saturation, interactive)
+/dream rested — bare interactive /dream. fallow fingerprint read FRESH
+  (streak=0) but Phase-1 live probes confirm the inward field empirically
+  saturated: ctrace --since 24h empty, pevent empty, reflective recalls all
+  write-only (recalls=0, stale kernel obs), ideation hybrid returns weeks-old
+  "kernel built not booted" notes, wchg deltas pure /build churn (mqo-*,
+  build-worktrees). 3 visions drafted TODAY (headway, colophon, chaff) cover
+  every concrete inward signal — fingerprint reads fresh only because today's
+  drafts moved its inputs (the fallow "no memory of own saturation" mode).
+  Per hard rule #8, rested rather than draft a thinner fleet. Surfaced outward
+  steer (homeward / constellation / companion-kin / rest) via AskUserQuestion;
+  user dismissed without selecting. Outward frontier remains the genuinely
+  unclaimed direction; awaits explicit steer.
