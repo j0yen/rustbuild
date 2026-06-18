@@ -11723,3 +11723,43 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   repeatedly today) — surfaced plain-text steer to user instead. Frontier =
   /build draining the queue + /self-review proving daemons stand up, not new
   PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive, queue-drained)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue
+  now 8 Draft PRDs, down from 18 in earlier notes today — /build has drained 10.
+  fallow read FRESH (streak=0) but that's self-saturation (the day's own passes
+  keep moving the fingerprint inputs; last_productive 09:55Z). Mandatory Phase-1
+  recall seed reconfirms: all reflective recalls write-only (recalls=0),
+  ideation-hybrid = same weeks-old "kernel built not booted" cluster, no new
+  signal. Per #6/#8 did not draft onto an 8-deep backlog. escalate=false so did
+  not fire the steer popup (dismissed repeatedly today). Frontier = /build
+  draining the remaining 8 + /self-review proving daemons stand up, not new PRDs.
+  fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue =
+  8 Draft PRDs (agorabus-reload-build, chaff-cron, colophon-stale,
+  consign-policy, homeward-catchment-geo, homeward-found-geocode,
+  threshold-ledger, threshold-verify), all Status:Draft, /build still draining.
+  fallow read FRESH (streak=0) but that's self-saturation — the day's own passes
+  keep moving the fingerprint inputs (last_productive 09:55Z). Mandatory Phase-1
+  recall seed reconfirms: all reflective recalls write-only (recalls=0),
+  ideation-hybrid = same weeks-old "kernel built not booted" cluster, no new
+  signal. Per #6/#8 did not draft onto an 8-deep backlog. escalate=false so did
+  not fire the steer popup (dismissed repeatedly today) — surfaced plain-text
+  steer to user instead. Frontier = /build draining the remaining 8 +
+  /self-review proving daemons stand up, not new PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (saturated seed, queue near-drained, interactive)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue now
+  1 Draft PRD (chaff-cron), down from 18→8→1 across today's notes — /build has
+  nearly drained the fleet. fallow read FRESH (streak=0) but that's self-saturation
+  (the day's own passes keep moving the fingerprint; last_productive 09:55Z).
+  Mandatory Phase-1 recall seed reconfirms: all reflective recalls write-only
+  (recalls=0), ideation-hybrid = same weeks-old "kernel built not booted" cluster,
+  no new signal. Per #6/#8 did NOT draft onto a stale seed. New fact vs earlier
+  today: queue is near-empty so there IS room — but direction is the user's to
+  give; surfaced plain-text steer (homeward / constellation / companion-kin /
+  topic) rather than re-firing the dismissed popup. Frontier = /build finishing
+  chaff-cron + dep chains (homeward-source-registry/probe/catalog, changeover) +
+  /self-review proving daemons stand up. fallow record --drafted 0.
