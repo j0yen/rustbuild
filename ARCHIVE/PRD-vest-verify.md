@@ -1,6 +1,6 @@
 # PRD: vest-verify — turn "84/84 stale" into actionable failure buckets reported to the docket
 
-Status: Draft v0.1
+Status: Shipped (adopt v0.5.0, 2026-06-13)
 build_target: rust-extend
 build_into: /home/jsy/wintermute/adopt
 Vision: visions/vest.md
