@@ -11763,3 +11763,42 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   topic) rather than re-firing the dismissed popup. Frontier = /build finishing
   chaff-cron + dep chains (homeward-source-registry/probe/catalog, changeover) +
   /self-review proving daemons stand up. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (saturated seed, interactive steer declined)
+/dream rested — bare interactive /dream. Live-verified: queue = 1 Draft PRD
+  (chaff-cron), /build has drained the fleet (18→8→1 across today's notes).
+  fallow read FRESH (streak=0) but it's self-saturation (today's own passes keep
+  moving the fingerprint; last_productive 09:55Z). Mandatory Phase-1 recall seed
+  reconfirms: all reflective recalls write-only (recalls=0), ideation-hybrid =
+  same weeks-old "kernel built not booted" cluster, no new signal. Queue near-
+  empty so there IS room — surfaced the steer popup to the interactive user
+  (homeward / constellation / companion-kin / kernel-boot arc) but user
+  dismissed it. Per #6/#8 did not draft onto a stale seed without a direction.
+  Frontier = /build finishing chaff-cron + dep chains + /self-review proving
+  daemons stand up. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (no fresh seed, steer declined, interactive)
+/dream rested — bare interactive /dream. Live-verified: queue = 1 Draft PRD
+  (chaff-cron); /build drained the fleet 18→1 across today. fallow=fresh
+  (streak=0) but self-saturation (today's passes keep moving the fingerprint;
+  last_productive 09:55Z, escalate=false so steer popup not forced). Mandatory
+  Phase-1 recall seed reconfirms: reflective recalls write-only (recalls=0),
+  ideation-hybrid = same weeks-old "kernel built but stock booted" cluster, no
+  new signal. Surfaced AskUserQuestion steer (homeward / constellation /
+  companion-kin / kernel-boot arc); user dismissed. Per #6/#8 did NOT draft onto
+  a stale seed without direction. Frontier = /build finishing chaff-cron + dep
+  chains (homeward-source-registry/probe/catalog, changeover) + /self-review
+  proving the staged kernel/daemons stand up. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (saturated seed, interactive steer dismissed)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue = 1
+  Draft PRD (chaff-cron), /build still draining it. fallow read FRESH (streak=0,
+  escalate=false, last_productive 09:55Z) but that's self-saturation — today's own
+  passes keep moving the fingerprint inputs. Mandatory Phase-1 recall seed
+  reconfirmed stale: reflective recalls all write-only (recalls=0), ideation-hybrid
+  = same weeks-old "kernel built but stock booted" cluster, no new signal. Surfaced
+  AskUserQuestion steer (homeward / constellation / companion-kin / kernel-boot
+  arc) since user actively invoked /dream; user dismissed. Per #6 did NOT draft
+  onto a stale seed without direction. Frontier = /build finishing chaff-cron + dep
+  chains + /self-review proving the staged kernel/daemons stand up. fallow record
+  --drafted 0.
