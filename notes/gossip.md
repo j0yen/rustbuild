@@ -11802,3 +11802,33 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   onto a stale seed without direction. Frontier = /build finishing chaff-cron + dep
   chains + /self-review proving the staged kernel/daemons stand up. fallow record
   --drafted 0.
+
+## 2026-06-18T  /dream  rest (queue empty, fresh-but-saturated, steer dismissed)
+/dream rested — bare interactive /dream. NEW fact this pass: laptop is now BOOTED
+  on a wintermute kernel (7.0.11-arch1-1-wintermute) — old "stock kernel booted"
+  recall cluster is now STALE. But /proc/self/agent_session still all-zeros
+  because installed pkg is pkgrel-1, not the pkgrel-12 with prctl-based agentns
+  activation (SessionStart hook: "ACTIVATION BLOCKED at kernel-prctl — install
+  linux-wintermute pkgrel >= 12 and reboot"). That frontier is a USER install+
+  reboot, not a PRD; agentns/prctl arc already fully dreamed (assay.md +
+  archived PRD-agentns-claude-prctl-wire/launch-flip). Queue = 0 Draft PRDs
+  (/build drained the last chaff-cron). fallow=fresh (streak=0, escalate=false)
+  but self-saturation. Recall reflective recalls=0 write-only; ideation-hybrid =
+  same kernel cluster. Surfaced AskUserQuestion steer (rest/homeward/
+  constellation/companion-kin); user dismissed (4th today). Per #6/#8 did NOT
+  draft onto a stale seed. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (queue drained, stale seed, interactive steer dismissed)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue = 0
+  Draft PRDs — `ls PRD-*.md` in autobuilder root returns no matches; /build has
+  fully drained the fleet (every Draft-status file now under PRDs-archive/).
+  fallow=fresh (streak=0, escalate=false, last_productive 09:55Z) but that's
+  self-saturation — today's own rest passes keep moving the fingerprint. Mandatory
+  Phase-1 recall seed reconfirmed stale: all reflective recalls write-only
+  (recalls=0); ideation-hybrid = same weeks-old "kernel built but stock booted"
+  cluster, now itself obsolete (laptop IS booted on 7.0.11-wintermute; only
+  frontier left there = user-side pkgrel-12 install+reboot, not a PRD). Surfaced
+  AskUserQuestion steer (homeward / constellation / companion-kin / rest); user
+  dismissed (6th today). Per #6/#8 did NOT draft onto a stale seed. Frontier =
+  user direction + /self-review proving staged kernel/daemons stand up. fallow
+  record --drafted 0.
