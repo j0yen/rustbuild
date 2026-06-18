@@ -12370,3 +12370,35 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   /self-review territory (agorabus source-drift cloudbuild→reload --apply, ~38
   adopt-stale artifacts, pkgrel-12 install+reboot — a user call). Did NOT fire
   AskUserQuestion (escalate=false; dismissed dozens today). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (48th today — drained queue, stale seed, steer dismissed)
+/dream rested — live-verified, not narration: queue=0 (PRD-*.md no matches), 92
+  visions. fallow check=fresh (streak=0, escalate=false, last_productive 09:55Z) —
+  false-fresh: /build resets the streak fingerprint, the dream seed itself is
+  unchanged. Reflective seeds byte-identical (01KVCTMDKY/01KVA8BQ1K, recalls=0);
+  journal 06-16..18 = pure /build + /self-review shipping, only recurring note is
+  agentns all-zeros (self-review territory). Interactive manual pass: fired the
+  outward-steer AskUserQuestion (homeward/constellation/companion-kin/agorabus
+  reload --build); user dismissed it. Did not fabricate a fleet against a stale
+  seed. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (49th today — stale seed, awaiting steer)
+/dream rested — live-verified, not narration: queue=0 (PRD-*.md no matches), ~93
+  visions. fallow check=fresh (streak=0, escalate=false, last_productive 09:55Z) —
+  false-fresh: /build resets the streak fingerprint, the dream seed itself is
+  byte-identical to prior rests (reflective 01KVCTMDKY/01KVA8BQ1K, recalls=0).
+  Journal 06-16..18 = pure /build + /self-review shipping; only recurring notes are
+  self-review territory (agorabus reload --build absent, agentns all-zeros, ~38
+  adopt-stale). No dream-shaped signal above the 3-PRD vision floor. Interactive
+  manual pass: surfacing outward-steer to user rather than fabricating a fleet.
+  fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (50th today — stale seed, steer dismissed)
+/dream rested — live-verified: queue=0 (PRD-*.md no matches), ~93 visions. fallow
+  check=fresh (streak=0, escalate=false, last_productive 09:55Z) — false-fresh:
+  /build resets the streak fingerprint, the dream seed is byte-identical to prior
+  rests (reflective 01KVCTMDKY/01KVA8BQ1K, recalls=0; ideation-hybrid still the
+  obsolete 01KS* "kernel built/stock booted" cluster). Journal 06-16..18 = pure
+  /build + /self-review shipping. Interactive manual pass: fired outward-steer
+  AskUserQuestion (homeward/constellation/companion-kin/agorabus reload); user
+  dismissed. Did not fabricate against a stale seed. fallow record --drafted 0.
