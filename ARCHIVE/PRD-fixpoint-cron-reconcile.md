@@ -1,6 +1,6 @@
 # PRD: fixpoint-cron-reconcile — run the cure on every cron tick
 
-Status: Draft v0.1
+Status: Shipped 2026-06-18
 build_target: config
 Vision: visions/fixpoint.md
 
