@@ -11331,3 +11331,54 @@ Open questions (see vision): does recalld expose a "shed cache" IPC or is
   trim defers local-LLM to thrift. "Idle" threshold: start recent-CPU floor,
   refine per-unit (homeward-ingest AIMD quiet windows) later.
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-18T  /dream  vision-chaff
+Drafted: PRD-chaff-survey.md, PRD-chaff-policy.md, PRD-chaff-gitignore.md,
+  PRD-chaff-repair.md, PRD-chaff-guard.md, PRD-chaff-cron.md
+Vision: visions/chaff.md
+Context: bare /dream (auto-mode), field FRESH (streak=0, last-productive
+  2026-06-18T09:15Z). Phase-1 live walk of ~/wintermute/*/.git found a sharp
+  UNOWNED hygiene gap under the recurring self-review line "56 dirty repos":
+  12 of 226 repos track ~2745 regenerable build-artifact files committed into
+  git. careen-ledger=1942 target/ files + NO .gitignore; rosetta-prov=464 (no
+  .gitignore); hold-guard=203. Two strains: (1) no .gitignore at all; (2) the
+  footgun — coda's .gitignore literally says /target/ yet still tracks
+  target/.rustc_info.json because .gitignore only ignores UNTRACKED paths.
+  The disk fleet's cargo clean turns tracked target/ into 1942 phantom " D"
+  dirty entries — i.e. it MANUFACTURES the "dirty repos" noise. consign drains
+  COMMITS (would push the junk); ballast/careen/drydock delete SPACE; chaff
+  owns deciding what should be in git at all.
+Order:
+  chaff-survey ─► chaff-policy ─► chaff-repair ─► chaff-guard ─► chaff-cron
+              └─► chaff-gitignore (parallel; additive, no policy gate)
+Notes for /build:
+  - chaff-survey is FOUNDATIONAL — NEW repo ~/wintermute/chaff (rust-cli+lib).
+    Build it first; policy/gitignore/repair/guard are rust-extend
+    build_into=~/wintermute/chaff; chaff-cron is shell (systemd-user units +
+    additive self-review block).
+  - chaff-policy GATES chaff-repair (default-deny; only regenerable dirs/exts,
+    never src/; HARD-exclude diverged/mid-rebase/detached repos and
+    .build-worktrees). Build policy before repair.
+  - chaff-gitignore is the SAFE arm (writes .gitignore, never untracks) and is
+    independent of policy — parallelizable with policy/repair.
+  - chaff-repair ACTS: git rm --cached + ensure ignore line + commit deletion
+    with Joe Yen identity, dry-run by default (--no-dry-run to apply, mirrors
+    adopt apply / consign drain). Forward-only — does NOT rewrite history
+    (a git-filter-repo purge PRD is deferred; see vision open question).
+  - SEQUENCING vs consign: chaff should run BEFORE consign drains so consign
+    never pushes build junk. No code dependency, just ordering — if both are
+    queued, advance chaff-repair before consign-drain.
+  - Reuse on this box: self_sigpipe_panic_toolkit (sigpipe::reset first line),
+    MSRV 1.85 no let-chains, /cloudbuild for all cargo, apply-agentns.py
+    anchor-block pattern for chaff-guard's hook install + the self-review block.
+Open questions (see vision): history rewrite (filter-repo) vs forward-only
+  (leaning forward-only v1); guard hook location (per-repo vs core.hooksPath
+  vs /build publish step — leaning per-repo + optional /build hook); whether
+  target/autobuilder/receipts/ is exempt (leaning NO — regenerable).
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
