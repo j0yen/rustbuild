@@ -129,6 +129,17 @@
       "notes": "minutes.rs module + CLI subcommands fully implemented; 8 unit tests + integration tests all green (48 total)"
     },
     {
+      "slug": "pulse-silence-gate",
+      "status": "completed",
+      "completed_at": "2026-06-13T15:45:19-07:00",
+      "build_target": "rust-extend",
+      "build_into": "~/wintermute/wintermute-reach",
+      "version_bumped_to": "0.7.0",
+      "git_sha": "3c6bbd7a8de78c47638f0a2ea53db13f9785d0dd",
+      "acs_passed": [1, 2, 3, 4, 5, 6, 7],
+      "notes": "Device-alive gate for silence-nudge: reads hearing_confirmed_in_window from pulse-watch state.json, suppresses nudge when device was deaf (logs silence_nudge_suppressed_deaf), fires when confirmed or absent (fail-open). Debounce preserved. 6 acceptance tests in tests/silence_nudge_gate_ac1.rs. Merged to main as v0.7.0."
+    },
+    {
       "slug": "keel-cordon",
       "status": "completed",
       "completed_at": "2026-06-11T22:39:45-07:00",
