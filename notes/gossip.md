@@ -11285,3 +11285,49 @@ Open questions (see vision): push feature/worktree branches or default-only?
   auto-published). Widen roots beyond ~/wintermute (~/.claude, ~/projects) later
   via config. New-mint visibility inherits policy, never unconditional --public.
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T  /dream  vision-trim
+Drafted: PRD-trim-survey.md, PRD-trim-attribute.md, PRD-trim-policy.md,
+  PRD-trim-relief.md, PRD-trim-psi.md, PRD-trim-cron.md
+Vision: visions/trim.md
+Context: bare /dream (auto-mode), field FRESH (streak=0, last-productive
+  2026-06-18T09:04Z). Phase-1 found a recurring self-review finding with NO
+  OWNER: "swap 5.4G/8G — heavy, monitor; not actionable today" repeats in every
+  journal 2026-06-12..18. Disk pressure has a rich fleet (ballast/careen/
+  drydock/thrift); MEMORY pressure has nobody. Live walk: swap 5.4G/8G used;
+  /proc/pressure/memory full total=337243465 (the box HAS thrashed); top swap
+  holders homeward-embed-svc 476M + recalld 237M — BOTH systemd user units
+  (homeward-embed.service, recalld.service), i.e. relief-eligible idle daemons.
+  trim is to RAM what ballast is to disk. Verified: PSI live, cgroup-v2
+  user.slice present, self-healing daemons (Restart=always) confirmed.
+Order:
+  trim-survey ─► trim-attribute ─► trim-policy ─┬─► trim-relief ─► trim-cron
+                                                └─► trim-psi
+Notes for /build:
+  - trim-survey is FOUNDATIONAL — NEW repo ~/wintermute/trim (rust-cli+lib).
+    Build it first; attribute/policy/relief/psi are rust-extend build_into=
+    ~/wintermute/trim; trim-cron is shell (systemd-user units).
+  - trim-policy GATES every relief action. Default-deny like consign-policy:
+    only systemd-managed, self-healing (Restart=always), IDLE wintermute daemons
+    over the swap floor are eligible. HARD exclusions (non-overridable by config):
+    user-apps (firefox/slack), builds (rustc), local-llm (ollama→defer to thrift),
+    and wmd/wm-dialog DURING a live voice TURN. Build policy before relief.
+  - trim-relief + trim-psi both depend on policy, INDEPENDENT of each other
+    (parallelizable). relief ACTS (dry-run by default, --no-dry-run to apply,
+    mirroring adopt/consign); psi only WARNS (emits agorabus trim.pressure).
+  - HARD: relief levers are gentle+reversible — try-restart (NEVER restart/start,
+    so a stopped unit is never started), MemoryHigh via --runtime (evaporates on
+    reboot), or a drop-cache IPC. NEVER kill, NEVER oom_score_adj in v1, NEVER
+    touch a user process or a live turn. Reuse self_agorabus_restart_kills_voice
+    (Restart=always self-heal) + project_voice_input_null_detectors (turn-state).
+  - trim-cron mirrors adopt-cron/ballast-pilot: 6h timer + additive guarded
+    self-review skill-doc block replacing the "not actionable" swap line. WRAP
+    don't replace; degrade to honest one-liner + exit 0 when trim absent.
+  - All offline except agorabus emit (psi) + systemctl --user (relief); build via
+    /cloudbuild per the standing hard rule.
+Open questions (see vision): does recalld expose a "shed cache" IPC or is
+  try-restart the only lever? (follow-on recall PRD if not). oom_score_adj
+  nudging — leaning NO for v1 (blunt+irreversible). ollama relief boundary:
+  trim defers local-LLM to thrift. "Idle" threshold: start recent-CPU floor,
+  refine per-unit (homeward-ingest AIMD quiet windows) later.
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
