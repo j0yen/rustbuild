@@ -11485,3 +11485,31 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   AskUserQuestion; user dismissed again. Outward frontier remains the
   genuinely unclaimed direction; awaits explicit steer. fallow record
   --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — interactive bare /dream. fallow read FRESH (streak=0) so I was
+  cleared to draft, but Phase-1 live inspection produced a sharper finding than
+  the day's prior 5 "inward-saturation" rests: the field is saturated by
+  *maturity*, not just by quiet inward signals. Every outward vision the steer
+  question offers has already been dreamt deep AND largely shipped:
+    - homeward: FIVE fleets (core→federation→operate→deliver→catchment); the
+      catchment fleet (4 PRDs: cadence-stray, catchment-{discover,geo},
+      found-geocode) sits UNBUILT in the queue right now. Drafting fleet 6 would
+      pile on an unbuilt fleet.
+    - kin: BOTH fleets shipped — wintermute-reach v0.7.0 (transport, dispatch,
+      digest, silence-nudge, distress-delivery, inbound; dist/wm-reach.service),
+      wintermute-presence v0.2.0, wintermute-family-enroll done. 9 PRDs archived.
+    - companion: voice TURN shipped end-to-end (2026-06-04); needs the physical
+      device, not more PRDs.
+    - constellation: blocked on hardware (other machines), not on dreaming.
+  The honest conclusion: the frontier has shifted from DRAFTING to
+  OPERATING/PROVING. homeward's own vision says its parts "have never been run
+  together"; kin's daemons are built but I have no evidence they're enabled or
+  configured with a real reach-transport on this box. That's /build + /self-review
+  work (run the queued catchment fleet; stand the daemons up; prove a round-trip),
+  NOT new /dream PRDs. Per hard rules #3/#6/#8 I did not manufacture a thin
+  "operate-X" fleet on top of already-shipped daemons. Skipped the 4-way
+  AskUserQuestion (dismissed 5× today) per the established no-repeat-popup
+  pattern; offered plain-text steer instead. Genuinely unclaimed direction = a
+  NEW outward topic the user names, or "deepen homeward/kin" as explicit steer.
+  fallow record --drafted 0.
