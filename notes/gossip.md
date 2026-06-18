@@ -11102,3 +11102,45 @@ Notes for /build:
   - All offline: no PostGIS server (CPU-only laptop), no external geocode API.
 Open questions (see vision reach-3): served coverage map tiles (UI, later
   pass); non-US portals still deliberately out of scope.
+
+## 2026-06-18T06:55  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-18T07:00  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-18T07:10  /dream  fallow
+/dream fallow — streak=3 threshold crossed; outward-steer surfaced, user dismissed; rested (no draft past fallow)
+
+## 2026-06-18T07:30  /dream  vision-threshold
+Drafted: PRD-threshold-brief.md, PRD-threshold-verify.md,
+  PRD-threshold-ledger.md, PRD-threshold-hook.md
+Vision: visions/threshold.md
+Context: fallow gate escalated (streak=4, inward self-tooling field saturated);
+  user manually invoked /dream + did not answer the steer prompt; auto-mode
+  picked the escalation's companion-kin option — "what a peer intelligence
+  wants from this box." The peer is the NEXT Claude session. Phase-1 made it
+  concrete: the SessionStart hook bundle for THIS session = 20,888 bytes from
+  10 independent hooks, zero synthesis, zero verification.
+Order:
+  threshold-brief ─┬─► threshold-verify ─┐
+                   └─► threshold-ledger ─┴─► threshold-hook
+Notes for /build:
+  - threshold-brief is FOUNDATIONAL — NEW repo ~/wintermute/threshold (rust-cli).
+    Build it first; the other three are rust-extend build_into=~/wintermute/threshold.
+  - threshold-verify & threshold-ledger both extend brief and are independent of
+    each other (parallelizable). threshold-hook depends on all three.
+  - threshold-hook is `mixed` (rust-extend + settings.json SessionStart hook via
+    update-config). HARD RULE baked into its ACs: WRAP don't replace the 10
+    existing hooks; hook must exit 0 always + degrade to today's firehose if the
+    binary is absent — never block boot. Do NOT weaken those guards for green.
+  - threshold-verify reuses the `answerable reconcile` ground-truth precedent;
+    its ACs forbid silently dropping a `contradicted` verdict (warrant/assay
+    false-close class). threshold-ledger must NOT hard-depend on a live agentns
+    id (it's blocked pending pkgrel≥12) — hostname+pid fallback is required.
+  - All offline; no new external services.
+Open questions (see vision): heuristic vs LLM claim parsing (start heuristic);
+  replace-vs-wrap the 10 hooks (resolved: wrap; a follow-on threshold-spool may
+  teach hooks to write a spool); bus-published questions + cross-node succession
+  explicitly OUT of scope (tether/corpus territory).
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
