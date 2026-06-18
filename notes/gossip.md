@@ -11226,3 +11226,62 @@ Open questions (see vision): register headway as drydock's rebuild lane so
   headway-build relies on it; should headway-verify's contradicted path emit to
   docket/litmus as a tracked finding?
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — field unchanged (streak=1); rested
+
+## 2026-06-18T08:07  /dream  fallow
+/dream fallow — field unchanged (streak=2); rested
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — streak=3 threshold crossed; outward-steer offered, user declined to steer; rested
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — streak=4 threshold crossed; outward-steer offered (interactive), user declined to steer; rested
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — streak=5 threshold crossed; outward-steer offered (interactive), unanswered/declined; rested
+
+## 2026-06-18T  /dream  fallow
+/dream fallow — streak=6 threshold crossed; outward-steer offered (interactive), unanswered/declined; rested
+
+## 2026-06-18T  /dream  vision-consign
+Drafted: PRD-consign-survey.md, PRD-consign-policy.md, PRD-consign-publish.md,
+  PRD-consign-drain.md, PRD-consign-cron.md, PRD-consign-verify.md
+Vision: visions/consign.md
+Context: bare /dream (auto-mode), field FRESH (streak=0, last-productive
+  2026-06-18T07:54Z). headway (drafted earlier today) covers behind-head DAEMON
+  recompile; consign is its sibling for un-mirrored GIT COMMITS. Phase-1 live
+  walk of ~/wintermute/*/.git found the "8 unpushed" self-review line is a
+  systematic UNDERCOUNT: 7 ahead-of-upstream + 5 no-upstream (invisible to the
+  @{u} check) + 2 no-remote (colophon, headway — never published) + 1 diverged
+  (mqo-narrative-compose 2/2). Broader `git log --branches --not --remotes` = 29
+  repos holding commits on no remote. Single-laptop SPOF; disk-critical near-miss
+  2026-06-17 underlines the risk. gh authed as j0yen (keyring); adopt-cron is the
+  6h-timer precedent to mirror.
+Order:
+  consign-survey ─► consign-policy ─┬─► consign-publish ─┐
+                                    └─► consign-drain ───┼─► consign-cron
+                                                         └─► consign-verify
+Notes for /build:
+  - consign-survey is FOUNDATIONAL — NEW repo ~/wintermute/consign (rust-cli+lib).
+    Build it first; policy/publish/drain/verify are rust-extend build_into=
+    ~/wintermute/consign; consign-cron is shell (systemd-user units).
+  - consign-policy GATES every write path (publish, drain). Default-deny:
+    private-hold (autobuilder*/*-private/.consign-hold/secret-file) and
+    manual-only (diverged / non-default branch / detached) never auto-push.
+  - publish + drain are PARALLEL: publish mints remotes for no-remote repos
+    (gh repo create j0yen/<name>), drain pushes ahead/no-upstream repos. Both
+    dry-run by DEFAULT (--no-dry-run to act), mirroring adopt apply.
+  - HARD: drain NEVER --force / --force-with-lease; diverged repos surfaced for
+    humans, never auto-resolved (would destroy the behind commits).
+  - consign-verify reuses headway-verify's contradicted-never-false-close: a repo
+    drain claimed pushed but still ahead = contradicted (exit 1), never green.
+    Standalone it can replace self-review's undercounting @{u} line.
+  - All offline except gh (publish) + git push (drain) to GitHub; build via
+    /cloudbuild per the standing hard rule.
+Open questions (see vision): push feature/worktree branches or default-only?
+  (leaning: non-default HEAD => manual-only, so homeward's worktree branch isn't
+  auto-published). Widen roots beyond ~/wintermute (~/.claude, ~/projects) later
+  via config. New-mint visibility inherits policy, never unconditional --public.
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
