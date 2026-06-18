@@ -129,6 +129,25 @@
       "notes": "minutes.rs module + CLI subcommands fully implemented; 8 unit tests + integration tests all green (48 total)"
     },
     {
+      "slug": "pulse-deaf-escalation",
+      "status": "completed",
+      "completed_at": "2026-06-13T15:38:53-07:00",
+      "build_target": "rust-extend",
+      "build_into": "~/wintermute/wintermute-reach",
+      "version_bumped_to": "0.6.0",
+      "git_sha": "a9bf1589de0e0d2863c40f20fc14d7785fea2b07",
+      "acs_passed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "notes": "Deaf-device escalation path added to wintermute-reach: subscribes wm.health.hearing.fail, delivers durable alert via run_distress_ladder() (retry+fallback), debounced per outage with cool-down timer, recovery note on wm.health.hearing.ok, deaf_escalation_enabled config (default ON). No brain/API dependency. deaf_escalation.rs (607 lines) + daemon.rs wired + config.rs extended. Full test suite: AC1-6 + cool-down re-alert test + primary-fail/fallback-ok (AC2). Merged to main as v0.6.0."
+    },
+    {
       "slug": "pulse-silence-gate",
       "status": "completed",
       "completed_at": "2026-06-13T15:45:19-07:00",
@@ -136,7 +155,15 @@
       "build_into": "~/wintermute/wintermute-reach",
       "version_bumped_to": "0.7.0",
       "git_sha": "3c6bbd7a8de78c47638f0a2ea53db13f9785d0dd",
-      "acs_passed": [1, 2, 3, 4, 5, 6, 7],
+      "acs_passed": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
       "notes": "Device-alive gate for silence-nudge: reads hearing_confirmed_in_window from pulse-watch state.json, suppresses nudge when device was deaf (logs silence_nudge_suppressed_deaf), fires when confirmed or absent (fail-open). Debounce preserved. 6 acceptance tests in tests/silence_nudge_gate_ac1.rs. Merged to main as v0.7.0."
     },
     {
@@ -148,6 +175,16 @@
       "version_bumped_to": "0.3.0",
       "git_sha": "727e112907a00454208d2eefbe08f3ac28d96aca",
       "notes": "Cordon decision library + keel cordon CLI subcommand. All 8 ACs covered in tests/cordon.rs. Merged to main as v0.3.0."
+    },
+    {
+      "slug": "changeover-claim-guard",
+      "path": "ARCHIVE/PRD-changeover-claim-guard.md",
+      "status": "shipped",
+      "build_target": "rust-extend",
+      "build_into": "/home/jsy/wintermute/agorabus",
+      "shipped_at": "2026-06-18",
+      "version": "0.10.0",
+      "notes": "ClaimGuard added in v0.10.0; all 5 ACs verified green on Hetzner cloud builder at v0.12.0"
     }
   ]
 }
