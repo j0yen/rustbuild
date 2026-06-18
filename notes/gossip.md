@@ -11535,3 +11535,94 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   re-fire the steer popup (dismissed 5× today). Frontier = /build draining the
   queue + /self-review proving daemons stand up, not new PRDs. Offered plain-text
   outward steer to user instead. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream, fresh session. fallow read FRESH
+  (streak=0); ran mandatory Phase-1 recall seed: reflective recalls all
+  write-only (recalls=0), ideation-hybrid = same weeks-old "kernel built not
+  booted" hits, no new signal. Queue holds 29 unbuilt Draft PRDs. Fingerprint
+  fresh only because the day's own passes keep moving its inputs. Per #3/#6/#8
+  did not draft onto a 29-deep backlog. Offered the 4-way steer (new topic /
+  deepen homeward / deepen constellation / rest) via AskUserQuestion in this
+  fresh session; user dismissed. Frontier = /build draining the queue +
+  /self-review proving daemons stand up, not new PRDs. fallow record --drafted 0.
+2026-06-18T11:51:54Z loom-serial-fallback: SERIAL MODE for chaff (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream, fresh session. fallow read FRESH
+  (streak=0) but ran mandatory Phase-1 recall seed: reflective recalls=0
+  (write-only), ideation-hybrid = same weeks-old "kernel built not booted"
+  hits, no new signal. Queue holds 26 unbuilt Draft PRDs. Fingerprint fresh
+  only because the day's own passes keep moving its inputs. Per #3/#6/#8 did
+  not draft onto a 26-deep backlog; did not re-fire the dismissed steer popup.
+  Frontier = /build draining the queue + /self-review proving daemons stand
+  up, not new PRDs. Surfaced plain-text steer to user. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream, fresh session. fallow read FRESH
+  (streak=0) but mandatory Phase-1 recall seed confirmed the day's pattern:
+  reflective recalls all write-only (recalls=0), ideation-hybrid = same
+  weeks-old "kernel built not booted" hits, no new signal. Queue holds 26
+  unbuilt Draft PRDs (all 26 PRD files still Status: Draft). Fingerprint fresh
+  only because the day's own passes keep moving its inputs (self-saturation).
+  Per #3/#6/#8 did not draft onto a 26-deep backlog; followed the no-repeat
+  pattern and did not re-fire the 5×-dismissed steer popup — offered plain-text
+  steer instead. Frontier = /build draining the queue + /self-review proving
+  daemons stand up, not new PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream. fallow read FRESH (streak=0) but
+  Phase-1 recall seed confirmed the day's pattern: reflective recalls all
+  write-only (recalls=0), ideation-hybrid = same weeks-old "kernel built not
+  booted" hits, no new signal. Queue holds 22 unbuilt Draft PRDs (all 22 PRD
+  files still Status: Draft). Fingerprint fresh only because the day's own
+  passes keep moving its inputs (self-saturation). Per #3/#6/#8 did not draft
+  onto a 22-deep backlog; did not re-fire the 5×-dismissed steer popup —
+  offered plain-text steer instead. Frontier = /build draining the queue +
+  /self-review proving daemons stand up, not new PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream, fresh session. fallow read FRESH
+  (streak=0) but ran mandatory Phase-1 recall seed: reflective recalls all
+  write-only (recalls=0), ideation-hybrid = same weeks-old "kernel built not
+  booted" hits, no new signal. Queue now holds 18 unbuilt Draft PRDs (down
+  from 30 earlier today — /build is draining). All 18 PRD files still
+  Status: Draft. Fingerprint fresh only because the day's own passes keep
+  moving its inputs (self-saturation). Per #3/#6/#8 did not draft onto an
+  18-deep backlog; did not re-fire the steer popup (dismissed 5× today).
+  Frontier = /build draining the queue + /self-review proving daemons stand
+  up, not new PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream, fresh session. fallow read FRESH
+  (streak=0) but mandatory Phase-1 recall seed confirmed the day's pattern:
+  reflective recalls all write-only (recalls=0), ideation-hybrid = same
+  weeks-old "kernel built not booted" hits, no new signal. Queue holds 19
+  unbuilt Draft PRDs. Fingerprint fresh only because the day's own passes
+  keep moving its inputs (self-saturation). Per #3/#6/#8 did not draft onto
+  a 19-deep backlog; did not re-fire the steer popup (dismissed 5× today) —
+  surfaced plain-text steer to user instead. Frontier = /build draining the
+  queue + /self-review proving daemons stand up, not new PRDs.
+  fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream. fallow read FRESH (streak=0) but
+  mandatory Phase-1 recall seed confirmed the day's pattern: reflective
+  recalls write-only (recalls=0), ideation-hybrid = same weeks-old "kernel
+  built not booted" hits, no new signal. Queue holds 18 unbuilt Draft PRDs
+  (all 18 still Status: Draft). Fingerprint fresh only because the day's own
+  passes keep moving its inputs (self-saturation). Per #6/#8 did not draft
+  onto an 18-deep backlog; surfaced plain-text steer to user. Frontier =
+  /build draining the queue, not new PRDs. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (maturity-saturation, interactive)
+/dream rested — bare interactive /dream. fallow read FRESH (streak=0) but the
+  mandatory Phase-1 recall seed confirmed the day's pattern: reflective recalls
+  all write-only (recalls=0), ideation-hybrid = same weeks-old "kernel built
+  not booted" hits, no new signal. Queue holds 18 unbuilt Draft PRDs (all 18
+  files Status: Draft; /build draining). Fingerprint reads fresh only because
+  the day's own passes keep moving its inputs (self-saturation). Per #3/#6/#8
+  did not draft onto an 18-deep backlog; did not re-fire the dismissed steer
+  popup — surfaced plain-text steer to user instead. Frontier = /build draining
+  the queue + /self-review proving daemons stand up, not new PRDs.
+  fallow record --drafted 0.
