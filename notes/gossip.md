@@ -12098,3 +12098,114 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   sits with /self-review not /dream: agorabus 3d source-drift
   (cloudbuild→install→reload --apply), 38 adopt-stale artifacts, pkgrel-12
   install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (27th today — drained queue, stale seed, interactive steer dismissed)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue = 0
+  (ls PRD-*.md → no matches). fallow check = fresh (streak=0, escalate=false,
+  last_productive 09:55Z) but self-saturation: 26 prior rest passes today. Phase-1
+  recall seed re-verified LIVE this pass: reflective recalls all write-only
+  (recalls=0); ideation-hybrid top hits = same weeks-old "kernel built but stock
+  booted" cluster (01KS… IDs), obsolete (box now on 7.0.11-wintermute). Fired
+  AskUserQuestion steer (homeward/constellation/companion-kin/frontier-cleanup);
+  user dismissed → rested per #6/#8 (do not draft onto a stale seed). Frontier still
+  sits with /self-review not /dream: agorabus 3d source-drift
+  (cloudbuild→install→reload --apply), 38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (28th today — drained queue, stale seed, interactive steer dismissed)
+/dream rested — bare interactive /dream. Live-verified (not narration): queue = 0
+  (ls PRD-*.md → no matches). fallow check = fresh (streak=0, escalate=false,
+  last_productive 09:55Z) but self-saturation: 27 prior rest passes today keep
+  nudging the fingerprint. Phase-1 recall seed re-verified LIVE this pass: reflective
+  recalls all write-only (recalls=0); ideation-hybrid top hits = same weeks-old
+  "kernel built but stock booted" cluster (01KSF…/01KSG… IDs), obsolete (box now on
+  7.0.11-wintermute). Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/frontier-cleanup); user dismissed → rested
+  per #6/#8 (do not draft onto a stale seed). Frontier still sits with /self-review
+  not /dream: agorabus 3d source-drift (cloudbuild→install→reload --apply), 38
+  adopt-stale artifacts, pkgrel-12 install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (29th today — drained queue, stale seed, interactive steer dismissed)
+/dream rested — bare interactive /dream. Live-verified: queue=0 (ls PRD-*.md → no
+  matches); ~90 visions already exist. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) but self-saturation: 28 prior rest passes today nudging the
+  fingerprint. Recall seed re-verified LIVE: reflective recalls all write-only
+  (recalls=0); ideation-hybrid top hits = same obsolete "kernel built but stock
+  booted" cluster (box now on 7.0.11-wintermute). Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/rest); user dismissed → rested per #6/#8.
+  Frontier sits with /self-review not /dream: agorabus source-drift, ~38 adopt-stale
+  artifacts, pkgrel-12 install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (30th today — drained queue, stale seed)
+/dream rested — bare interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, last_productive 09:55Z) but
+  self-saturated: 29 prior rest passes today. Recall seed re-verified LIVE:
+  reflective recalls all write-only (recalls=0); ideation-hybrid top hits = same
+  obsolete "kernel built but stock booted" cluster (01KSE/F/G IDs; box now on
+  7.0.11-wintermute). Today's journal = pure /build+/self-review shipping. Did NOT
+  re-fire the dismissed AskUserQuestion modal (29× dismissed today); surfaced the
+  steer to the user in conversation instead. Frontier still sits with /self-review:
+  agorabus source-drift (needs reload --build PRD), 38 adopt-stale artifacts,
+  pkgrel-12 install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (31st today — drained queue, stale seed, manual steer dismissed)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — but fresh only because /build productivity resets the streak, not because
+  the dream seed moved. Recall seed re-verified LIVE: all reflective recalls
+  write-only (recalls=0); ideation-hybrid top hits = same obsolete "kernel built but
+  stock booted" cluster (01KSF/G IDs; box now on 7.0.11-wintermute). Today's journal
+  = pure /build + /self-review shipping. Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/frontier-cleanup); user dismissed → rested
+  per #6/#8 (do not draft onto a stale seed). Frontier still sits with /self-review
+  not /dream: agorabus reload --build absent (cloudbuild→install→reload --apply), 38
+  adopt-stale artifacts, pkgrel-12 install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (32nd today — drained queue, stale seed, manual steer dismissed)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: reflective recalls all write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete "kernel built but stock booted" cluster
+  (01KSF/G IDs; box now on 7.0.11-wintermute). Today's journal = pure /build +
+  /self-review shipping. Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/rest); user dismissed → rested per #6/#8.
+  Frontier still sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (33rd today — drained queue, stale seed, manual)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: reflective recalls all write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete "kernel built but stock booted" cluster
+  (01KSF/G IDs; box now on 7.0.11-wintermute). Journal 06-16..18 = pure /build +
+  /self-review shipping, no new dream-shaped signal. Did NOT re-fire AskUserQuestion
+  (dismissed dozens of times today); surfaced steer in conversation instead. Frontier
+  still sits with /self-review not /dream: agorabus source-drift
+  (cloudbuild→install→reload --apply), ~38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (34th today — drained queue, stale seed, manual steer dismissed)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  92 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: all reflective recalls write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete "kernel built but stock booted" cluster
+  (01KS* IDs; box now on 7.0.11-wintermute). Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/rest); user dismissed → rested per #6/#8.
+  Frontier still sits with /self-review not /dream: agorabus source-drift, ~38
+  adopt-stale artifacts, pkgrel-12 install+reboot (user call). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (35th today — drained queue, stale seed, interactive steer dismissed)
+/dream rested — manual interactive /dream. Live-verified: queue=0 (no PRD-*.md);
+  ~90 visions exist. fallow check=fresh (streak=0, escalate=false, last_productive
+  09:55Z) — fresh only because /build resets the streak, not because the dream seed
+  moved. Recall seed re-verified LIVE: all reflective recalls write-only (recalls=0);
+  ideation-hybrid top hits = same obsolete "kernel built but stock booted" cluster
+  (01KS* IDs; box now on 7.0.11-wintermute). Fired AskUserQuestion steer
+  (homeward/constellation/companion-kin/frontier-cleanup); user dismissed → rested
+  per #6/#8. Frontier still sits with /self-review not /dream: agorabus reload --build
+  absent (cloudbuild→install→reload --apply), 38 adopt-stale artifacts, pkgrel-12
+  install+reboot (user call). fallow record --drafted 0.
