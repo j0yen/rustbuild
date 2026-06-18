@@ -11144,3 +11144,42 @@ Open questions (see vision): heuristic vs LLM claim parsing (start heuristic);
   teach hooks to write a spool); bus-published questions + cross-node succession
   explicitly OUT of scope (tether/corpus territory).
 Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
+
+## 2026-06-18T08:05  /dream  vision-colophon
+Drafted: PRD-colophon-parse.md, PRD-colophon-attribute.md,
+  PRD-colophon-stale.md, PRD-colophon-digest.md
+Vision: visions/colophon.md
+Context: bare /dream (auto-mode, no topic), field FRESH (streak=0). Phase-1 hit
+  a genuine state change — the wintermute kernel is now BOOTED, not just built
+  (`uname -r` = 7.0.11-arch1-1-wintermute), so provfs is LIVE and stamping an
+  enriched structured `user.prov.session` xattr on every closed-after-write
+  file. Read this dream pass's own gossip write and it carried
+  `comm-chain:cat>zsh>claude;cwd:…;pid:2662703;uid:1000`. But the one consumer
+  (provenance-mcp) returns the raw blob and its tests assume the old opaque
+  `sess-abc123` form — nobody parses the structure. colophon is the userspace
+  half that catches it.
+Order:
+  colophon-parse ─┬─► colophon-attribute ─┐
+                  └─► colophon-stale ──────┴─► colophon-digest
+Notes for /build:
+  - colophon-parse is FOUNDATIONAL — NEW repo ~/wintermute/colophon (rust-cli+lib).
+    Build it first; the other three are rust-extend build_into=~/wintermute/colophon.
+  - colophon-attribute & colophon-stale both extend parse and are independent of
+    each other (parallelizable). colophon-digest depends on BOTH.
+  - colophon-digest is `mixed` (rust-extend + a guarded, additive self-review
+    skill-doc block). HARD RULE in its ACs: WRAP don't replace self-review's
+    existing reporting; degrade to an honest one-liner + exit 0 when provfs is
+    absent — never break a self-review run.
+  - parse's ACs require BOTH the comm-chain form AND the 128-bit agentns-id form
+    parse today, so when agentns finally activates (blocked on the EINVAL
+    CLONE_NEWAGENT collision, see vision-assay) the switch is a no-op.
+  - attribute & stale are STRICTLY read-only by design (report, don't delete);
+    ACs assert the fixture tree is unchanged after a run. Do NOT add mutation for
+    convenience. provfs skips target/.git/node_modules — attribution must report
+    those as skipped-by-design, never as unattributed (confirmed live: a
+    target/ artifact carries no prov xattr).
+Open questions (see vision): re-point provenance-mcp at the colophon lib so its
+  file_provenance tool returns structured fields? Left as a deliberate boundary
+  (conduit/threshold territory) — a follow-on colophon-mcp PRD can do it once the
+  lib is proven. provfs history-ring (Phase 2) unconsumed until it ships.
+Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
