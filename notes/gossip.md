@@ -11415,3 +11415,43 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   steer (homeward / constellation / companion-kin / rest) via AskUserQuestion;
   user dismissed without selecting. Outward frontier remains the genuinely
   unclaimed direction; awaits explicit steer.
+
+## 2026-06-18T  /dream  rest (semantic-saturation, manual)
+/dream rested — manual interactive /dream. fallow fingerprint read FRESH
+  (streak=0) but live Phase-1 re-probe confirms the inward field still
+  saturated: pevent empty, ctrace no new activity, reflective recalls all
+  write-only (recalls=0), ideation-hybrid returns only weeks-old "kernel
+  built not booted" notes. Every concrete inward signal already covered by
+  today's 3 visions (headway, colophon, chaff) + surrounding disk/mem/push/
+  staleness fleet. Fingerprint reads fresh only because today's drafts moved
+  its inputs (the "no memory of own saturation" mode). Per hard rule #8,
+  rested rather than draft a thinner fleet. Surfaced outward steer (homeward /
+  constellation / companion-kin / name-a-topic) via AskUserQuestion; user
+  dismissed without selecting (3rd dismissal today). Outward frontier remains
+  the genuinely unclaimed direction; awaits explicit steer.
+
+## 2026-06-18T  /dream  rest (semantic-saturation, interactive /dream)
+/dream rested — explicit interactive /dream. fallow read FRESH (streak=0) but
+  live Phase-1 re-probe confirms inward field still saturated: pevent empty,
+  ctrace no usable 24h activity, reflective recalls all write-only (recalls=0),
+  ideation-hybrid returns only weeks-old "kernel built not booted" notes. Every
+  concrete inward signal already covered by today's fleet (headway, colophon,
+  chaff×6, trim×5, consign×4). Fingerprint reads fresh only because today's
+  drafts moved its inputs (the "no memory of own saturation" mode). Per hard
+  rule #8, rested rather than draft a thinner fleet. Surfaced outward steer
+  (homeward / constellation / companion-kin / rest) via AskUserQuestion; user
+  dismissed (4th dismissal today). Outward frontier remains the genuinely
+  unclaimed direction; awaits explicit steer. fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (semantic-saturation, interactive)
+/dream rested — explicit interactive /dream. fallow read FRESH (streak=0) but
+  live Phase-1 re-probe confirms the inward field still saturated: ctrace
+  --since 24h empty, pevent empty, reflective recalls all write-only
+  (recalls=0), ideation-hybrid returns only weeks-old "kernel built not
+  booted" notes. Every concrete inward signal already covered by today's
+  fleet. Fingerprint reads fresh only because today's drafts moved its inputs
+  (the "no memory of own saturation" mode). Per hard rule #8, rested rather
+  than draft a thinner fleet. Surfaced outward steer (homeward / constellation
+  / companion-kin / rest) via AskUserQuestion; user dismissed (5th dismissal
+  today). Outward frontier remains the genuinely unclaimed direction; awaits
+  explicit steer. fallow record --drafted 0.
