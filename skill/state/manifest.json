@@ -191,6 +191,36 @@
       "status": "verified-completed",
       "output_repo_path": "/home/jsy/wintermute/rollout",
       "output_repo_url": "https://github.com/j0yen/rollout"
+    },
+    {
+      "slug": "changeover-daemon-claims",
+      "status": "verified-complete",
+      "verified_at": "2026-06-18",
+      "build_result": "green",
+      "build_version": "wintermute-audio v0.12.0",
+      "notes": "All 4 daemons (wm-audio, wm-dialog, wm-stt, wm-tts) hold agorabus://daemon/<unit> claims via ClaimGuard. ClaimGuard acquired after bus connect, released on SIGTERM before exit. Best-effort: bus-down at startup does not block boot. Claim paths: wm-audio=agorabus://daemon/wm-audio, wm-dialog=agorabus://daemon/wm-dialog, wm-stt=agorabus://daemon/wm-stt, wm-tts=agorabus://daemon/wm-tts. All CHANGELOGs updated. cargo test green (cloudbuild 2026-06-18). Integrated as v0.12.0 in prior tick."
+    },
+    {
+      "slug": "pulse-watch",
+      "status": "shipped",
+      "output_repo_path": "/home/jsy/wintermute/wintermute-presence",
+      "output_repo_url": "https://github.com/j0yen/wintermute-presence",
+      "build_target": "rust-extend",
+      "build_into": "/home/jsy/wintermute/wintermute-presence",
+      "last_commit": "3126262",
+      "acs_verified": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "iter_log": [
+        "iter-1: hearing.rs + config.rs + state.rs + daemon.rs wiring (91b0ad7)",
+        "iter-2: persist liveness in DailyState, extend status, add AC4-6 integration tests (3126262)"
+      ]
     }
   ]
 }
