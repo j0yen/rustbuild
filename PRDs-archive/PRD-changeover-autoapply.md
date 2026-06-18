@@ -1,6 +1,6 @@
 # PRD: changeover-autoapply
 
-Status: Draft v0.1
+Status: verified-completed
 build_target: rust-extend
 build_into: /home/jsy/wintermute/rollout
 Vision: visions/changeover.md

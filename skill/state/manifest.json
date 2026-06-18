@@ -185,6 +185,12 @@
       "shipped_at": "2026-06-18",
       "version": "0.10.0",
       "notes": "ClaimGuard added in v0.10.0; all 5 ACs verified green on Hetzner cloud builder at v0.12.0"
+    },
+    {
+      "slug": "changeover-autoapply",
+      "status": "verified-completed",
+      "output_repo_path": "/home/jsy/wintermute/rollout",
+      "output_repo_url": "https://github.com/j0yen/rollout"
     }
   ]
 }
