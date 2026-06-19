@@ -1,10 +1,11 @@
 # PRD: homeward-relay-send — make owner notification actually send
 
-- Status: Draft v0.1
-- build_target: rust-extend
-- build_into: /home/jsy/wintermute/homeward
-- Vision: visions/homeward.md
-- build_version_bump: minor
+---
+Status: Draft v0.1
+build_target: rust-extend
+build_into: /home/jsy/wintermute/homeward
+build_version_bump: minor
+---
 
 ## TL;DR
 
