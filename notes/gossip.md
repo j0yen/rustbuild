@@ -12933,3 +12933,138 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   Real frontier = /self-review territory (self-review due, agorabus source-drift,
   ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user calls).
   fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Seed byte-identical to all prior rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0), confirmed live via recall list + recall query
+  --hybrid. Bare interactive /dream — did NOT re-fire the dismissed outward-steer
+  (escalate=false, user dismissed ~93x). Did not fabricate PRDs. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, user dismissed steer)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~93 prior rests (top 01KSK8SDM4, recalls=0). New top
+  reflective 01KVFD23ST is just today's self-review reflection (disk-resolved/adopt-JSON-bug/
+  agentns-collision/pkgrel-12) — pure /self-review territory, not dream-seedable. Interactive:
+  offered homeward/constellation/companion-kin/rest steer via AskUserQuestion; user dismissed
+  (same signal as ~93 prior rests). Did not fabricate PRDs. Real frontier = /self-review +
+  user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Seed byte-identical to all ~93 prior rests today: ideation top 01KSK8SDM4, reflective
+  top 01KVCTMDKY/01KVA8BQ1K (all recalls=0). Only new reflective 01KVFD23ST = today's
+  self-review reflection (self-review territory, not dream-seedable). Bare interactive /dream,
+  no topic — did NOT re-fire the user-dismissed outward-steer (escalate=false, ~93× dismissed).
+  Did not fabricate PRDs. Real frontier = /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Seed byte-identical to all ~93 prior rests today: ideation top 01KSK8SDM4, reflective
+  top 01KVCTMDKY/01KVA8BQ1K (all recalls=0). Only new reflective 01KVFD23ST = today's
+  self-review reflection (self-review territory, not dream-seedable). Bare interactive /dream,
+  no topic — did NOT re-fire the user-dismissed outward-steer (escalate=false, ~93× dismissed).
+  Did not fabricate PRDs. Real frontier = /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~94 prior rests today: top 01KSK8SDM4 (recalls=0),
+  reflective top 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, ~93× dismissed). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~94 prior rests today: top 01KSK8SDM4 (recalls=0);
+  reflective top 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~95 prior rests today: top 01KSK8SDM4 (recalls=0);
+  reflective top 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~95 prior rests today: top 01KSK8SDM4 (recalls=0);
+  reflective top 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~95 prior rests today; reflective top 01KVFD23ST =
+  today's self-review reflection (self-review territory, not dream-seedable). Bare interactive
+  /dream, no topic — did NOT re-fire the user-dismissed outward-steer (escalate=false,
+  dismissed ~93x). Did not fabricate PRDs. Real frontier = /self-review + user-gated work.
+  fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to ~95 prior rests today: top 01KSK8SDM4 (recalls=0); only new
+  reflective 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to all ~95 prior rests today: top 01KSK8SDM4 (recalls=0);
+  reflective top 01KVFD23ST = today's self-review reflection (self-review territory, not
+  dream-seedable). Bare interactive /dream, no topic — did NOT re-fire the user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Did not fabricate PRDs. Real frontier =
+  /self-review + user-gated work. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, stale seed — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed byte-identical to ~95 prior rests today: reflective top 01KVFD23ST =
+  today self-review reflection (self-review territory, not dream-seedable). Bare interactive
+  /dream, no topic — did NOT re-fire the user-dismissed outward-steer (escalate=false,
+  dismissed ~93x). Did not fabricate PRDs. Real frontier = /self-review + user-gated work.
+  fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, interactive — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Seed byte-identical to ~95 prior rests today: reflective top 01KVFD23ST = today's
+  self-review reflection (not dream-seedable). Interactive bare /dream, no topic — did NOT
+  fabricate PRDs, did NOT re-fire user-dismissed outward-steer (escalate=false). Real
+  frontier = /self-review + user-gated work, or a user-named topic. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, interactive — user dismissed steer)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Ideation seed unchanged from ~95 prior rests today: recall top 01KSK8SDM4 (recalls=0);
+  freshest reflective 01KVFD23ST = today's self-review reflection (not dream-seedable).
+  Interactive bare /dream, no topic — offered outward-steer (homeward/constellation/
+  companion-kin/rest) via AskUserQuestion; user dismissed. Did NOT fabricate PRDs against a
+  dead seed (hard rules 6 & 8). Real frontier = /self-review + user-gated work, or a
+  user-named topic. fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (manual, interactive — live-verified)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) but known false-fresh (/build resets fingerprint).
+  Seed byte-identical to ~96 prior rests today; reflective top 01KVFD23ST = today's
+  self-review reflection (not dream-seedable). Bare interactive /dream, no topic — did NOT
+  fabricate PRDs against a dead seed (hard rules 6 & 8), did NOT re-fire user-dismissed
+  outward-steer (escalate=false, dismissed ~93x). Real frontier = /self-review + user-gated
+  work, or a user-named topic. fallow record --drafted 0.
