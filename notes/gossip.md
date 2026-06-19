@@ -12562,3 +12562,140 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   remains /self-review territory (agorabus source-drift cloudbuild->reload --apply,
   ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user calls).
   fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (64th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 (PRD-*.md no matches), 92
+  visions. fallow check=fresh (streak=0, escalate=false, last_productive 09:55Z) —
+  known false-fresh: /build resets the streak fingerprint. Seed byte-identical to
+  prior 63 rests: ideation-hybrid still the obsolete 01KS* "kernel built/stock
+  booted" cluster (recalls=0); reflective top still 01KVCTMDKY/01KVA8BQ1K
+  (recalls=0). Confirmed live via recall list --kind reflective + recall query
+  --hybrid. Bare `/dream` (no topic), interactive. Did NOT fire the dismissed-~50x
+  outward-steer (escalate=false) nor fabricate against a stale seed; surfaced state
+  to user and offered to seed on a named topic. Real frontier remains /self-review
+  territory (agorabus source-drift cloudbuild->reload --apply, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record
+  --drafted 0.
+
+## 2026-06-18T  /dream  rest (65th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 (PRD-*.md no matches), 92
+  visions. fallow check=fresh (streak=0, escalate=false, last_productive 09:55Z) —
+  known false-fresh: /build resets the streak fingerprint. Seed byte-identical to
+  prior 64 rests: ideation-hybrid still the obsolete 01KS* "kernel built/stock
+  booted" cluster (top 01KSK8SDM4, all recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream` (no topic), interactive. Did
+  NOT fire the dismissed-~50x outward-steer (escalate=false) nor fabricate against
+  a stale seed; surfaced state to user and offered to seed on a named topic. Real
+  frontier remains /self-review territory (agorabus source-drift cloudbuild->reload
+  --apply, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user
+  calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (66th today — manual, stale seed)
+/dream rested — live-verified: queue=0 (PRD-*.md no matches), 92 visions. fallow
+  check=fresh (streak=0, escalate=false, last_productive 09:55Z) — known
+  false-fresh (/build resets the streak fingerprint). Seed byte-identical to prior
+  65 rests: ideation-hybrid top still 01KSK8SDM4 "kernel built/stock booted"
+  cluster (recalls=0); reflective top still 01KVCTMDKY/01KVA8BQ1K (recalls=0).
+  Confirmed live via recall list --kind reflective + recall query --hybrid. Bare
+  `/dream` (no topic), interactive. Surfaced state + fired the outward-steer
+  AskUserQuestion (homeward/constellation/companion-kin/topic); user dismissed.
+  Did NOT fabricate against a stale seed. Real frontier remains /self-review
+  territory (agorabus source-drift cloudbuild->reload --apply, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record
+  --drafted 0.
+
+## 2026-06-18T  /dream  rest (67th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=1 (only PRD-chaff-repair-push.md,
+  a /build artifact, no dream seed), 92 visions. fallow check=fresh (streak=0,
+  escalate=false, last_productive 09:55Z) — known false-fresh (/build resets the
+  streak fingerprint). Seed byte-identical to prior 66 rests: ideation-hybrid top
+  still 01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top
+  still 01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream` (no topic), interactive. Fired
+  the outward-steer AskUserQuestion (homeward/constellation/companion-kin/topic);
+  user dismissed. Did NOT fabricate against a stale seed. Real frontier remains
+  /self-review territory (agorabus source-drift cloudbuild->reload --apply, 38
+  adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user calls).
+  fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (68th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 (only PRD-chaff-repair-push.md,
+  a /build artifact), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak fingerprint).
+  Seed byte-identical to prior 67 rests: ideation-hybrid top still 01KSK8SDM4
+  "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind reflective
+  + recall query --hybrid. Bare `/dream` (no topic), interactive. Did NOT re-fire the
+  ~50x-dismissed outward-steer mechanically (escalate=false) nor fabricate against a
+  stale seed; surfaced state to user and offered to seed on a named topic. Real
+  frontier remains /self-review territory (agorabus source-drift cloudbuild->reload
+  --apply, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user
+  calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (69th today — manual, stale seed)
+/dream rested — live-verified: queue=1 (only PRD-chaff-repair-push.md, a /build
+  artifact), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak
+  fingerprint). Seed byte-identical to prior 68 rests: ideation-hybrid top still
+  01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream`, interactive. Offered fresh-topic
+  / homeward / constellation / rest via AskUserQuestion; user dismissed. Did NOT
+  fabricate against a stale seed. Real frontier remains /self-review territory
+  (agorabus source-drift, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+
+  reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (70th today — manual, stale seed)
+/dream rested — live-verified: queue=1 (only PRD-chaff-repair-push.md, a /build
+  artifact), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak
+  fingerprint). Seed byte-identical to prior 69 rests: ideation-hybrid top still
+  01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream`, interactive. escalate=false so
+  did NOT re-fire the ~50x-dismissed outward-steer; surfaced state to user, offered
+  to seed on a named topic instead. Did NOT fabricate against a stale seed. Real
+  frontier remains /self-review territory (agorabus source-drift cloudbuild->reload
+  --apply, 38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user
+  calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (71st today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (only /build artifacts),
+  92 visions. fallow check=fresh (streak=0, escalate=false, last_productive 09:55Z)
+  — known false-fresh (/build resets the streak fingerprint). Seed byte-identical to
+  prior 70 rests: ideation-hybrid top still 01KSK8SDM4 "kernel built/stock booted"
+  cluster (recalls=0); reflective top still 01KVCTMDKY/01KVA8BQ1K (recalls=0).
+  Confirmed live via recall list --kind reflective + recall query --hybrid. Bare
+  `/dream`, interactive. Offered rest/homeward/constellation/companion-kin via
+  AskUserQuestion; user dismissed. Did NOT fabricate against a stale seed. Real
+  frontier remains /self-review territory (agorabus source-drift cloudbuild->reload
+  --apply, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot — all user
+  calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (72nd today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 dream-seedable PRDs (chaff-repair-push
+  since archived by /build), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak fingerprint).
+  Seed byte-identical to prior 71 rests: ideation-hybrid top still 01KSK8SDM4 "kernel
+  built/stock booted" cluster (recalls=0); reflective top still 01KVCTMDKY/01KVA8BQ1K
+  (recalls=0). Confirmed live via recall list --kind reflective + recall query --hybrid.
+  Bare `/dream`, interactive. escalate=false so did NOT mechanically re-fire the ~50x-
+  dismissed outward-steer; surfaced state to user, offered to seed on a named topic.
+  Did NOT fabricate against a stale seed. Real frontier remains /self-review territory
+  (agorabus source-drift cloudbuild->reload --apply, 38 adopt-stale, agentns all-zeros,
+  pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (73rd today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 dream-seedable PRDs (no
+  PRD-*.md present), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak
+  fingerprint). Seed byte-identical to prior 72 rests: ideation-hybrid top still
+  01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream`, interactive. escalate=false so
+  did NOT mechanically re-fire the dismissed outward-steer AskUserQuestion;
+  surfaced state to user in text, invited a named-topic seed instead. Did NOT
+  fabricate against a stale seed. Real frontier remains /self-review territory
+  (agorabus source-drift cloudbuild->reload --apply, 38 adopt-stale, agentns
+  all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
