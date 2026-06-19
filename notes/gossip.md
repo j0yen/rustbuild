@@ -12727,3 +12727,60 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   fabricate against a stale seed. Real frontier remains /self-review territory
   (agorabus source-drift, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+
   reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (76th today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 75 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0). Bare interactive /dream; did NOT re-fire the
+  ~50x-dismissed outward-steer (escalate=false), did NOT fabricate against stale seed.
+  Real frontier = /self-review territory (agorabus source-drift, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (77th today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 76 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0). Bare interactive /dream; did NOT re-fire the
+  ~50x-dismissed outward-steer (escalate=false), did NOT fabricate against stale seed.
+  Real frontier = /self-review territory (agorabus source-drift, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (78th today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 77 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0). Bare interactive /dream; did NOT re-fire the
+  ~50x-dismissed outward-steer (escalate=false), did NOT fabricate against stale seed.
+  Real frontier = /self-review territory (agorabus source-drift, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-19T  /dream  rest (79th today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 78 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0). Bare interactive /dream; did NOT re-fire the
+  dismissed outward-steer (escalate=false), did NOT fabricate against stale seed.
+  Real frontier = /self-review territory (agorabus source-drift, ~38 adopt-stale,
+  agentns all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (80th today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 79 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0). Bare interactive /dream — surfaced state to
+  user in text + invited a named-topic seed instead of fabricating. Did NOT re-fire the
+  ~50x-dismissed outward-steer (escalate=false). Real frontier = /self-review territory
+  (agorabus source-drift, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot —
+  all user calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (81st today — manual, stale seed)
+/dream rested — live-verified: queue=0 dream-seedable PRDs (no PRD-*.md), 92 visions.
+  fallow=fresh (streak=0, escalate=false) — known false-fresh (/build resets fingerprint).
+  Seed byte-identical to prior 80 rests: ideation top 01KSK8SDM4, reflective top
+  01KVCTMDKY/01KVA8BQ1K (all recalls=0), confirmed via recall query --hybrid + recall
+  list --kind reflective. Bare interactive /dream — surfaced state to user + invited a
+  named-topic seed rather than fabricating against the stale seed. Did NOT re-fire the
+  ~50x-dismissed outward-steer (escalate=false). Real frontier = /self-review territory
+  (agorabus source-drift, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+reboot —
+  all user calls). fallow record --drafted 0.
