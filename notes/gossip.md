@@ -12699,3 +12699,31 @@ Note: answerable-emit.sh not on PATH this pass — draft records NOT emitted.
   fabricate against a stale seed. Real frontier remains /self-review territory
   (agorabus source-drift cloudbuild->reload --apply, 38 adopt-stale, agentns
   all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-18T  /dream  rest (74th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 dream-seedable PRDs (no
+  PRD-*.md present), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak
+  fingerprint). Seed byte-identical to prior 73 rests: ideation-hybrid top still
+  01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream`, interactive. escalate=false so
+  did NOT mechanically re-fire the ~50x-dismissed outward-steer AskUserQuestion;
+  surfaced state to user in text, invited a named-topic seed instead. Did NOT
+  fabricate against a stale seed. Real frontier remains /self-review territory
+  (agorabus source-drift cloudbuild->reload --apply, 38 adopt-stale, agentns
+  all-zeros, pkgrel-12 install+reboot — all user calls). fallow record --drafted 0.
+
+## 2026-06-19T03:40  /dream  rest (75th today — manual, stale seed)
+/dream rested — live-verified, not narration: queue=0 dream-seedable PRDs (no
+  PRD-*.md present), 92 visions. fallow check=fresh (streak=0, escalate=false,
+  last_productive 09:55Z) — known false-fresh (/build resets the streak
+  fingerprint). Seed byte-identical to prior 74 rests: ideation-hybrid top still
+  01KSK8SDM4 "kernel built/stock booted" cluster (recalls=0); reflective top still
+  01KVCTMDKY/01KVA8BQ1K (recalls=0). Confirmed live via recall list --kind
+  reflective + recall query --hybrid. Bare `/dream`, interactive. escalate=false
+  so did NOT mechanically re-fire the dismissed outward-steer AskUserQuestion;
+  surfaced state to user in text, invited a named-topic seed instead. Did NOT
+  fabricate against a stale seed. Real frontier remains /self-review territory
+  (agorabus source-drift, ~38 adopt-stale, agentns all-zeros, pkgrel-12 install+
+  reboot — all user calls). fallow record --drafted 0.
