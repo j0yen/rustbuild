@@ -1,6 +1,6 @@
 # PRD-carbon-rename
 
-**Status:** Draft v0.1
+**Status:** Complete v1.0
 **Vision:** visions/carbon.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation
@@ -55,3 +55,11 @@ Runs on: **this laptop** (the box currently named wintermute).
    any such line now reads `WM_NODE=carbon`.
 5. Re-running the script is a clean no-op (idempotency asserted by a second run
    producing no changes).
+
+## Verification log — 2026-06-20
+
+**AC1** `hostname` → `carbon` ✅ confirmed  
+**AC2** `~/.config/wintermute/node.toml` exists with `name = "carbon"`, `roles = ["voice"]`, `fleet = "wintermute"`; `wm-node id` → `carbon` ✅ confirmed  
+**AC3** Tailscale admin-panel rename → **MANUAL GATE** (user must visit https://login.tailscale.com/admin/machines and rename wintermute→carbon). Does NOT block completion.  
+**AC4** No `WM_NODE=wintermute` found in `~/.config/systemd/user/` or `~/.config/environment.d/` ✅ confirmed  
+**AC5** Re-running `bin/carbon-rename.sh` → all steps no-op (`hostname: already carbon`, `node.toml: already exists`, `WM_NODE=wintermute: none found`) ✅ idempotent
