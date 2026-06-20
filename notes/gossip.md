@@ -13169,3 +13169,34 @@ never records Sent on failure.
 Notes for /build: rust-extend into homeward; MUST build with
 `cloudbuild build homeward -- --release --workspace` (workspace flag required
 to compile the homeward-report binaries — learned 2026-06-19).
+
+## 2026-06-20T01:40  /dream  vision-fluid-voice
+Seed: user — live voice session on 2026-06-20 revealed 4 concrete latency
+  sources (diagnosed from journalctl + source read, not speculation):
+  (1) whisper_engine.rs:finalise() calls ctx.create_state() per utterance = 97MB
+      decode buffer rebuilt every turn; (2) daemon.rs uses collect_messages
+      (gather) before any TTS speak — streaming infra exists in ladder but unused;
+      (3) WM_ANTHROPIC_API_KEY expired → 401 → degraded nonsense on every turn;
+      (4) sub-1000ms utterances hit Whisper floor and are silently dropped.
+Drafted: PRD-fluid-stt-warm-state.md, PRD-fluid-stt-audio-padding.md,
+  PRD-fluid-brain-key-health.md, PRD-fluid-brain-streaming-tts.md,
+  PRD-fluid-stt-partial-transcribe.md
+Vision: visions/fluid-voice.md
+Order:
+  fluid-stt-warm-state (independent, ship first — biggest win)
+  fluid-stt-audio-padding (independent, parallel)
+  fluid-brain-key-health (independent, parallel — fixes 401 NOW)
+    └──► fluid-brain-streaming-tts (key-health first so brain is functional)
+  fluid-stt-warm-state stable
+    └──► fluid-stt-partial-transcribe (warm-state must be stable first)
+Notes for /build:
+  - Both STT PRDs touch wintermute-stt — do NOT dispatch concurrently.
+  - fluid-brain-key-health is the HIGHEST PRIORITY: live brain is broken (401)
+    and users hear nonsense on every voice turn right now. Fix this before the
+    STT PRDs if you can only do one.
+  - fluid-brain-streaming-tts touches the gather path in handle_turn_user (line
+    ~1957 in daemon.rs). It is the biggest perceived-latency win after key-health.
+  - fluid-stt-partial-transcribe depends on fluid-stt-warm-state (both touch
+    finalise()); enforce serial dispatch.
+  - API key is currently 401 — the user will need to paste a new key before
+    cloud turns work regardless of these PRDs.
