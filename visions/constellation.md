@@ -2,6 +2,7 @@
 
 **Authored by:** /dream (Claude Opus 4.8), with jsy
 **Created:** 2026-06-04
+**Updated:** 2026-06-20 — fleet-join pass; PRDs re-derived from live machine state
 **Status:** active
 **Seed:** jsy — *"I need you to expand across multiple computers. This laptop is
 too resource constrained... I have a 32GB AMD desktop with a medium Radeon GPU.
@@ -238,3 +239,26 @@ each build on the bus.
 - **Voice on every node?** The desktop and cloud node may not want a live mic.
   Voice-on-boot should be a per-host role flag (the laptop/companion devices are
   voice nodes; the desktop is a compute node, optionally voice).
+
+---
+
+## 2026-06-20 Update — fleet-join live probe
+
+**What's already built (found via SSH, not assumed):**
+- Tailscale mesh: **LIVE** — wintermute (100.114.123.20), ryzen-work (100.111.184.102), hub (100.66.158.49) all connected, direct path wintermute↔ryzen-work
+- agorabus-nats-bridge v0.5.0: **BUILT on both machines** — binary at `target/release/wm-busbridge` on ryzen-work; `~/.local/bin/wm-busbridge` on wintermute
+- nats-server: **installed on ryzen-work** at `~/.local/bin/nats-server`
+- agorabus: **active on both machines** (0 fleet peers — bridge not wired)
+- wm-busbridge.service + nats-leaf.service: **unit files exist on ryzen-work** (binary not installed → inactive)
+- constellation repo with mesh/ansible/chezmoi: **exists on ryzen-work**
+
+**The blocker:** hub:7422 and hub:4222 CLOSED, hub SSH not accessible → NATS hub not running anywhere → entire fleet bus dead despite all code being built
+
+**Active fleet PRDs (5):**
+1. PRD-constellation-nats-hub — run NATS hub on ryzen-work (nats-server already installed)
+2. PRD-constellation-bus-ryzen — install wm-busbridge, start bridge on ryzen-work
+3. PRD-constellation-bus-wintermute — configure wintermute as leaf to ryzen-work hub
+4. PRD-constellation-wm-daemons-ryzen — deploy wm-* voice stack to ryzen-work
+5. PRD-constellation-voice-boot-ryzen — greetd autologin + i3 + wintermute.target on ryzen-work
+
+**Order:** nats-hub → bus-ryzen (parallel: bus-wintermute) → wm-daemons-ryzen → voice-boot-ryzen

@@ -13200,3 +13200,36 @@ Notes for /build:
     finalise()); enforce serial dispatch.
   - API key is currently 401 — the user will need to paste a new key before
     cloud turns work regardless of these PRDs.
+
+## 2026-06-20T02:45  /dream  vision-constellation
+Seed: user — "wintermute join the fleet" (after asking ryzen-work hw specs)
+Research: live SSH probes to ryzen-work + wintermute. Key finding: MORE IS BUILT
+  THAN EXPECTED. Tailscale mesh already live (wintermute/ryzen-work/hub connected,
+  direct paths). agorabus-nats-bridge v0.5.0 already built on both machines.
+  nats-server already installed on ryzen-work. agorabus active on both. The
+  ONLY blocker: NATS hub not running anywhere (hub VPS at 100.66.158.49 not
+  bootstrapped — SSH and ports 4222/7422 all closed).
+
+ryzen-work has ~/wintermute/ with: agorabus, agorabus-nats-bridge, autobuilder,
+  constellation, tether-{gossip,link,recall,tools} — significant pre-existing work.
+  ryzen-work Tailscale IP: 100.111.184.102. ryzen-work hostname: Apollo.
+
+Drafted 5 PRDs (all in dependency order):
+1. PRD-constellation-nats-hub.md — run NATS in hub mode on ryzen-work (nats-server already installed)
+2. PRD-constellation-bus-ryzen.md — install wm-busbridge, enable services on ryzen-work
+3. PRD-constellation-bus-wintermute.md — configure wintermute as leaf pointing to ryzen-work:7422
+4. PRD-constellation-wm-daemons-ryzen.md — deploy wm-* voice stack to ryzen-work via cloudbuild+rsync
+5. PRD-constellation-voice-boot-ryzen.md — greetd autologin + i3 + wintermute.target on ryzen-work
+
+Order: nats-hub → bus-ryzen (parallel: bus-wintermute after nats-hub) → wm-daemons-ryzen → voice-boot-ryzen
+
+Notes for /build:
+  - PRD-constellation-nats-hub is the UNBLOCK. Everything else cascades from it.
+    Ship this first. It's a shell PRD (ssh commands + systemd units) not cargo.
+  - PRDs 2 and 3 can run in parallel after nats-hub is green.
+  - PRD 4 needs wm-busbridge verified on ryzen-work before deploying voice daemons.
+  - PRD 5 (voice-boot) is last; needs daemons + greetd + X11 packages.
+  - All shell PRDs run via SSH to ryzen-work from wintermute.
+  - ryzen-work is x86_64 (same arch as wintermute) — cloudbuild binaries copy directly.
+  - ryzen-work swap at 7.8/8G — voice stack memory footprint (~200MB for whisper small.en) OK.
+  - ryzen-work API key: same WM_ANTHROPIC_API_KEY needed (user must supply valid key to both).
