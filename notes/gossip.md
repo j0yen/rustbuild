@@ -13233,3 +13233,40 @@ Notes for /build:
   - ryzen7 is x86_64 (same arch as wintermute) — cloudbuild binaries copy directly.
   - ryzen7 swap at 7.8/8G — voice stack memory footprint (~200MB for whisper small.en) OK.
   - ryzen7 API key: same WM_ANTHROPIC_API_KEY needed (user must supply valid key to both).
+
+## 2026-06-20T21:11  /dream  vision-carbon
+Seed: user — "moving Wintermute to the cloud. Move the non-voice tasks — messaging,
+  reminders, NATS subscribers — to the cloud. this laptop will be a node like any
+  other. rename this node to carbon."
+Research: live probes this laptop + hub. Key findings:
+  - WM_NODE wired NOWHERE (grep 0 hits) — node identity is implicit (hostname only).
+    "A node like any other" has no concept to stand on; must be built first.
+  - Hub 100.66.158.49 LIVE in Tailscale (direct path, tx/rx active) but NOT
+    ssh-reachable (host-key-verification-failed, no key). Same unblock shape as
+    constellation-nats-hub.
+  - Hub is ARM (Hetzner CAX21 per docs/cloud-hub.md); cloudbuild is x86. ARM build
+    path is a hard gate for any relocated Rust daemon (cf ryzen7 Ubuntu/AVX-512).
+  - Cloud-candidate always-on daemons: homeward-{ingest,report,embed}; node-agnostic
+    timers: roundtable/self-review/adopt-cron/consign-drain/chaff/trim-relief/ballast-guard.
+  - No dedicated messaging unit — sends embedded in homeward-reportd + relay path.
+
+Drafted 6 PRDs (dependency order):
+1. PRD-carbon-node-identity.md  — WM_NODE + role registry (new repo wm-node, rust-cli). FOUNDATIONAL.
+2. PRD-carbon-rename.md          — laptop wintermute→carbon (hostname/tailscale/WM_NODE). shell. THIS BOX ONLY.
+3. PRD-carbon-hub-access.md      — hub ssh + linger + agorabus + NATS hub + ARM build path. shell. THE UNBLOCK.
+4. PRD-carbon-reminders-cloud.md — relocate node-agnostic timers to hub. shell.
+5. PRD-carbon-subscribers-cloud.md — relocate 24/7 subscribers (homeward) to hub. shell.
+6. PRD-carbon-messaging-cloud.md — outbound sends from hub, bus-triggered. shell.
+
+Order: node-identity(1) → {rename(2) ∥ hub-access(3)}; hub-access → {reminders(4), subscribers(5)}; subscribers → messaging(6).
+
+Notes for /build:
+  - node-identity(1) ships first and independently — it's the only rust-cli, new repo (wm-node).
+  - rename(2) needs sudo on THIS laptop (user must run hostnamectl); surface, don't escalate.
+  - hub-access(3) needs the user to install an SSH key to the hub (one-time password). It's the
+    unblock — 4/5/6 all cascade from it. Don't dispatch 4/5/6 until 3 is green.
+  - ARM build path (in hub-access AC5) gates every relocated Rust daemon. Pick native-on-hub for bootstrap.
+  - relates to [[harbor]] (always-on hub upgrade) and [[constellation]] (fleet peers). carbon is the
+    sequel: constellation made ryzen7 a peer; carbon makes THE LAPTOP a peer + moves work to the hub.
+Open questions (left in vision, NOT drafted): recall-memory placement (canonical, laptop-held);
+  build/dream loop placement (heavy, laptop-bound). Both their own future visions.
