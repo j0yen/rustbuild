@@ -5,13 +5,13 @@
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/agorabus-nats-bridge
 
-**Depends on:** PRD-constellation-nats-hub, PRD-constellation-bus-ryzen (NATS hub on ryzen-work + ryzen-work bridge both running)
+**Depends on:** PRD-constellation-nats-hub, PRD-constellation-bus-ryzen (NATS hub on ryzen7 + ryzen7 bridge both running)
 
 ## TL;DR
 
 wintermute (this laptop) has `wm-busbridge` installed at `~/.local/bin/wm-busbridge`
 (v0.5.0) but has no NATS leaf config and no `wm-busbridge.service`. This PRD joins
-wintermute to the fleet bus by configuring it as a NATS leaf pointing to ryzen-work
+wintermute to the fleet bus by configuring it as a NATS leaf pointing to ryzen7
 (the interim hub at Tailscale IP 100.111.184.102:7422).
 
 ## Why this exists
@@ -21,7 +21,7 @@ wintermute to the fleet bus by configuring it as a NATS leaf pointing to ryzen-w
 - `ls ~/.config/nats/` → no such directory (no NATS config)
 - `ls ~/.config/systemd/user/wm-busbridge*` → no matches (no service file)
 - `ls ~/.config/systemd/user/nats*` → no matches
-- Tailscale: wintermute=100.114.123.20, ryzen-work=100.111.184.102 (direct connection, tx/rx active)
+- Tailscale: wintermute=100.114.123.20, ryzen7=100.111.184.102 (direct connection, tx/rx active)
 - `agorabus peers` on wintermute shows 0 fleet peers
 
 wintermute's agorabus is single-machine only. This PRD makes it fleet-aware.
@@ -30,7 +30,7 @@ wintermute's agorabus is single-machine only. This PRD makes it fleet-aware.
 
 All changes on **wintermute** (local).
 
-1. **`~/.config/nats/leaf.conf`** — NATS leaf config pointing to ryzen-work:
+1. **`~/.config/nats/leaf.conf`** — NATS leaf config pointing to ryzen7:
    ```
    server_name: wm-leaf-wintermute
    listen: "127.0.0.1:4222"
@@ -49,8 +49,8 @@ All changes on **wintermute** (local).
    Note: no credentials needed for initial setup — the hub can add auth later.
 
 2. **Install `nats-server` on wintermute** (for the leaf process):
-   - `pacman -S nats-server` OR copy from ryzen-work via scp.
-   - Fall back: the wm-busbridge can connect directly to ryzen-work:4222 (client
+   - `pacman -S nats-server` OR copy from ryzen7 via scp.
+   - Fall back: the wm-busbridge can connect directly to ryzen7:4222 (client
      port) without a local leaf process if nats-server is not available.
 
 3. **`~/.config/systemd/user/nats-leaf.service`**:
@@ -91,13 +91,13 @@ All changes on **wintermute** (local).
    ```
 
 6. **End-to-end validation**: from wintermute, `wm-busbridge selftest` confirms round-trip
-   through ryzen-work hub. `agorabus peers --fleet` should show ryzen-work session(s).
+   through ryzen7 hub. `agorabus peers --fleet` should show ryzen7 session(s).
 
 ## Acceptance criteria
 
 1. `systemctl --user is-active nats-leaf` returns `active` on wintermute.
 2. `systemctl --user is-active wm-busbridge` returns `active` on wintermute.
 3. `wm-busbridge selftest` exits 0 on wintermute.
-4. `agorabus peers --fleet` on wintermute shows at least one fleet peer from ryzen-work.
-5. `agorabus peers --fleet` on ryzen-work shows at least one fleet peer from wintermute.
+4. `agorabus peers --fleet` on wintermute shows at least one fleet peer from ryzen7.
+5. `agorabus peers --fleet` on ryzen7 shows at least one fleet peer from wintermute.
    (Both machines see each other — bidirectional fleet presence confirmed.)
