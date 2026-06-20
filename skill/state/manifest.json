@@ -221,6 +221,22 @@
         "iter-1: hearing.rs + config.rs + state.rs + daemon.rs wiring (91b0ad7)",
         "iter-2: persist liveness in DailyState, extend status, add AC4-6 integration tests (3126262)"
       ]
+    },
+    {
+      "slug": "continuity-activation-doctor",
+      "status": "shipped",
+      "last_action": "2026-06-18T22:57:53Z",
+      "ticks_invested_delta": 1,
+      "action": "rust-extend",
+      "outcome": "activation subcommand fully implemented \u2014 6-layer continuity chain diagnosis with JSON output and SessionStart hook; 47 tests green",
+      "output_repo_path": "/home/jsy/wintermute/agentns-doctor"
+    },
+    {
+      "slug": "carbon-reminders-cloud",
+      "status": "in_progress",
+      "action": "disable-fleet-timers-laptop",
+      "last_action": "2026-06-20T23:27:18Z",
+      "output_repo_path": "/home/jsy/wintermute/constellation"
     }
   ]
 }
