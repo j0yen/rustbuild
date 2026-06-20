@@ -237,6 +237,17 @@
       "action": "disable-fleet-timers-laptop",
       "last_action": "2026-06-20T23:27:18Z",
       "output_repo_path": "/home/jsy/wintermute/constellation"
+    },
+    {
+      "slug": "carbon-messaging-cloud",
+      "path": "/home/jsy/wintermute/autobuilder/PRD-carbon-messaging-cloud.md",
+      "status": "in_progress",
+      "action": "provision-relay-env",
+      "outcome": "messaging.env written on hub at ~/.config/wintermute/secrets/messaging.env (0600, jsy), homeward-reportd starts clean with env loaded (dry-run mode; relay endpoint empty pending provider provisioning)",
+      "last_action": "2026-06-20T23:29:23Z",
+      "build_auto": true,
+      "build_target": "shell",
+      "build_into": "/home/jsy/wintermute/constellation"
     }
   ]
 }
