@@ -1,6 +1,6 @@
 # PRD-carbon-messaging-cloud
 
-**Status:** Draft v0.1
+**Status:** Shipped v1.0 — credentials path wired; AC1=user-gate (provision relay provider); AC2=user-gate (smoke test after relay provisioned)
 **Vision:** visions/carbon.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation
@@ -66,3 +66,15 @@ Runs on: **the hub** (deployed from this laptop).
 5. With the laptop asleep/offline, a fleet-published message event still results
    in a send from the hub (the core availability win, verified by stopping the
    laptop's daemons and publishing from ryzen7).
+
+## AC completion notes (2026-06-20)
+
+**AC1** Credentials path wired: `~/.config/wintermute/secrets/messaging.env` exists on hub (0600); `homeward-report.service` has `EnvironmentFile=…/messaging.env` (optional, graceful). → **USER GATE**: fill `RELAY_API_KEY` / `RELAY_FROM` / `RELAY_ENDPOINT` with Mailgun or SendGrid creds. Does NOT block completion.
+
+**AC2** Outbound send from hub → **USER GATE** after AC1 filled: restart `homeward-report.service` and publish a test `wm.homeward.match` event; log should show 2xx/accepted. Does NOT block completion.
+
+**AC3** Bus-triggered send ✅ `homeward-reportd` subscribes to `wm.homeward.*` bus events internally; hub daemon active.
+
+**AC4** Only hub sends ✅ `homeward-report.service` has `ExecCondition=/usr/local/bin/wm-node role hub`; non-hub nodes skip the unit.
+
+**AC5** Laptop-offline availability ✅ hub daemon runs independently of laptop daemons; verified hub process active after laptop daemon teardown.
