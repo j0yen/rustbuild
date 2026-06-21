@@ -13270,3 +13270,40 @@ Notes for /build:
     sequel: constellation made ryzen7 a peer; carbon makes THE LAPTOP a peer + moves work to the hub.
 Open questions (left in vision, NOT drafted): recall-memory placement (canonical, laptop-held);
   build/dream loop placement (heavy, laptop-bound). Both their own future visions.
+
+## 2026-06-21T00:58  /dream  vision-summa
+Seed: jsy — /dream <Karpathy "LLM Wiki" gist>. An LLM-maintained, compounding,
+  interlinked markdown wiki between the human and raw sources; index.md + log.md
+  navigation; periodic lint; answers filed back as pages; git-backed; Obsidian
+  frontend. Instantiated on the REAL ~/Notes/ Obsidian vault.
+Research (live probe ~/Notes/):
+  - 498 md, 81 PDFs, 13 subject subdirs, .obsidian/ present, 149 files w/ [[wikilinks]].
+  - NO index.md / NO log.md (Karpathy's two nav files both absent).
+  - NOT a git repo (no version history despite 498 files).
+  - Link rot: 18 files w/ broken \| clipper escaping ([[Title\|numericID]]);
+    81 PDFs w/ no synthesized companion page; no entity pages; no ingest path.
+  - recall is a SEPARATE agentic-memory store; nothing maintains the vault.
+  - No naming collision; no existing vision covers it (lattice/ousia/doxa = formal
+    BFO ontologies; vellum = PRD-corpus reader; corpus = multinode self).
+Named "summa" (Aquinas's Summa / summary; avoids OpenAI "codex" collision).
+
+Drafted 5 PRDs (dependency order):
+1. PRD-summa-schema.md   — Notes/CLAUDE.md schema + index.md/log.md skeletons + git init. shell. build_into=/home/jsy/Notes. FOUNDATIONAL.
+2. PRD-summa-cli.md      — `summa` binary (new repo j0yen/summa): ingest/index/log/links. rust-cli. pure mechanics, no LLM.
+3. PRD-summa-lint.md     — `summa lint [--fix]`: orphans/dangling/malformed/stale/un-ingested. rust-extend → ~/wintermute/summa.
+4. PRD-summa-skill.md    — /summa skill (mixed): ingest-with-synthesis + ask-and-file, brain-ladder backend. build_into=~/.claude/skills/summa.
+5. PRD-summa-commit.md   — summa-commit.timer (node-local) auto-commits the vault. shell → constellation.
+
+Order: schema(1) → {cli(2) → {lint(3), skill(4)}, commit(5)}.
+Notes for /build:
+  - schema(1) ships first + alone (file scaffolding + git init on ~/Notes; touches NO existing note content — AC4 guards that).
+  - cli(2) is the only new-repo rust-cli; lint(3) extends it; skill(4) needs cli+schema.
+  - summa-cli ingest does extraction ONLY (stub JSON); synthesis is the skill's LLM job (CLI/skill split mirrors recall).
+  - PDF extraction path (pdf-extract crate vs pdftotext) is a build-time choice — declare in README.
+  - commit(5) is node-local (vault is single-node canonical, like recall store); do NOT relocate to hub.
+Open questions (in vision, not drafted): summa↔recall cross-consult; synthesis tier
+  (local-3b may be too weak for dense PDFs); cross-page contradiction detection;
+  image localization+captioning; fleet-shared vault placement.
+DEEPER PASS INCOMING: user asked to "/dream harder for summa" — a follow-on design
+  deep-dive (schema spec, page/frontmatter formats, link grammar, ingest state
+  machine, test fixtures) is being appended so /build can move fast. See summa.md.
