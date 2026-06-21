@@ -7,6 +7,8 @@
 **build_version_bump:** minor
 
 **Depends on:** PRD-summa-cli (extends the `summa` binary; consumes `summa links`)
+**Design spec (authoritative):** visions/summa-design.md §4 — exact lint predicates
+and `--fix` scope table; §0 — ownership rule that bounds what `--fix` may touch.
 
 ## TL;DR
 

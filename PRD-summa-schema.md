@@ -2,6 +2,8 @@
 
 **Status:** Draft v0.1
 **Vision:** visions/summa.md
+**Design spec (authoritative):** visions/summa-design.md §1–§2 — the exact
+`CLAUDE.md`, `index.md`, and `log.md` content to write is given verbatim there.
 **build_target:** shell
 **build_into:** /home/jsy/Notes
 

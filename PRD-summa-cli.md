@@ -5,6 +5,9 @@
 **build_target:** rust-cli
 
 **Depends on:** PRD-summa-schema (the vault conventions this binary encodes)
+**Design spec (authoritative):** visions/summa-design.md §3 — module layout, crate
+list, JSON contracts, wikilink grammar, and `summa page` are fully specified there;
+build from it.
 
 ## TL;DR
 
@@ -58,6 +61,14 @@ Subcommands:
    the graph, and report: orphan pages (no inbound links), dangling targets
    (linked but no matching file), and malformed links (the `\|` clipper escaping).
    JSON output for machine consumption by summa-lint.
+5. **`summa page <entity|summary|answer> …`** — the **tested write path** the
+   `/summa` skill calls to mint pages with correct frontmatter, dedup, and
+   back-links (so the skill never hand-rolls file writes). Full flag spec in
+   summa-design §3. Idempotent on slug/title (re-mint = update, never duplicate).
+
+**Ownership invariant (from summa-design §0):** summa writes only files it owns
+(those carrying a `summa:` frontmatter key), all under `~/Notes/wiki/`, plus the
+managed `index.md`/`log.md`. It never modifies human notes or raw sources.
 
 Vault root resolves from `$SUMMA_VAULT` (default `~/Notes`). `sigpipe::reset()` in
 `main()` (local-CLI SIGPIPE convention). Unit tests over a temp fixture vault.
@@ -77,4 +88,8 @@ Vault root resolves from `$SUMMA_VAULT` (default `~/Notes`). `sigpipe::reset()` 
    timestamped line to `log.md` and changes nothing else.
 5. `summa links --json` over a fixture vault correctly enumerates orphans, dangling
    targets, and malformed `\|` links (asserted against a known fixture graph).
-6. `cargo test --release` passes; `summa --help` lists all four subcommands.
+6. `summa page entity <Title> --mention "[[S]] — claim"` creates the entity page
+   with correct frontmatter when absent and appends a deduped `## Mentions` bullet
+   when present (no duplicate page; round-trip asserted on a fixture).
+7. `cargo test --release` passes; `summa --help` lists `ingest`, `index`, `log`,
+   `links`, and `page`.

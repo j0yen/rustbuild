@@ -13307,3 +13307,29 @@ Open questions (in vision, not drafted): summa↔recall cross-consult; synthesis
 DEEPER PASS INCOMING: user asked to "/dream harder for summa" — a follow-on design
   deep-dive (schema spec, page/frontmatter formats, link grammar, ingest state
   machine, test fixtures) is being appended so /build can move fast. See summa.md.
+
+## 2026-06-21T01:05  /dream harder  vision-summa (deep design pass)
+Seed: jsy — "/dream harder for summa. Really think things through so we can build
+  this later quickly." Wrote visions/summa-design.md — the AUTHORITATIVE build spec.
+Decisions LOCKED (so /build makes no mid-build calls):
+  - OWNERSHIP RULE (the linchpin): summa owns a file iff it has a `summa:` frontmatter
+    key; it writes/edits/lint-fixes ONLY owned files. Human's 498 notes are read-only
+    to summa (link+catalog, never rewrite). New pages live under ~/Notes/wiki/
+    {entities,sources,answers}/. Makes "touches no human content" trivially true.
+  - schema file CLAUDE.md written VERBATIM in design §1; index.md/log.md formats §2
+    (human notes catalogued at FOLDER granularity to stay bounded over 498 files).
+  - summa-cli §3: modules table, crate list (pdf-extract — NO pdftotext on box;
+    ureq+html2text; regex link parser), JSON contracts, wikilink grammar (handles
+    [[T]] [[T|a]] [[T\|123]] [[T#h]] ![[..]]), AND a new `summa page` command (the
+    skill's TESTED write path — added to PRD-summa-cli ACs).
+  - lint §4: exact predicate table + --fix scope (malformed + index ONLY; human-note
+    rot fix is opt-in --include-human, lossless).
+  - skill §5: CORRECTED backend — synthesis = Claude executing the skill (wmd is a
+    DAEMON not a one-shot; do NOT shell to it). Headless cron = claude -p, secondary.
+    Both flows have state machines + prompt skeletons.
+  - test fixtures §6: concrete tests/fixtures/vault/ layout, +/- case per lint rule.
+  - build order §7: 1→2→{3,4}, 5 anytime after 1; summa-cli is the only heavy build.
+  - All 5 vision open-questions ANSWERED in §8 (recall=separate+cross-link-only;
+    tier=cloud-sonnet headless default; contradiction/image/fleet-vault=out-of-v1).
+All 5 PRDs now carry a "Design spec (authoritative): summa-design.md §X" pointer.
+Net for /build: read summa-design.md first; the PRDs are the gate, the design is the map.

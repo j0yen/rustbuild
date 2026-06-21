@@ -5,7 +5,10 @@
 **build_target:** mixed
 **build_into:** /home/jsy/.claude/skills/summa
 
-**Depends on:** PRD-summa-cli (mechanics), PRD-summa-schema (conventions)
+**Depends on:** PRD-summa-cli (mechanics, incl. `summa page`), PRD-summa-schema (conventions)
+**Design spec (authoritative):** visions/summa-design.md §5 — the two flow state
+machines, synthesis-prompt skeletons, and the locked backend decision (synthesis =
+Claude executing this skill; `wmd` is a daemon, not a one-shot — do NOT shell to it).
 
 ## TL;DR
 
@@ -31,9 +34,11 @@ synthesis.
 - Karpathy: "Good answers become permanent pages … query results can be filed back
   into the wiki, ensuring explorations compound like ingested sources." Today asking
   a question of the vault leaves nothing behind. `/summa ask` closes that loop.
-- The brain ladder (`wmd`, local-3b → cloud haiku/sonnet/opus, brain-local-first)
-  is the right synthesis backend — consistent with how this box already routes LLM
-  work, and keeps `/summa` usable headless.
+- The synthesis backend is **Claude executing this skill** — the agent *is* the
+  wiki maintainer (faithful to Karpathy). `wmd` is a long-running daemon (Claude
+  API loop over the bus), not a one-shot `ask`, so the skill does NOT shell to it.
+  A fully-headless cron path (`claude -p`, default cloud-sonnet, `SUMMA_TIER`
+  override) is secondary/optional, not v1's primary path. (Locked: summa-design §5.)
 
 ## What this builds
 
@@ -47,9 +52,8 @@ A skill at `~/.claude/skills/summa/` (`SKILL.md` + helper scripts under
    - **Mint/strengthen entity pages**: for each significant entity, create the
      `Title.md` entity page if absent or append a sourced bullet if present; wire
      `[[cross-references]]` both ways (summary→entity and entity→summary).
-   - `summa index` to refresh the catalog; `summa log ingest <subject> <title>`.
-   - Synthesis routes through the brain ladder; the skill documents pinning a cloud
-     tier when local-3b is too weak for dense sources (see vision open question).
+   - Mechanical writes go through `summa page entity|summary` (tested path), never
+     ad-hoc file writes; `summa index` to refresh; `summa log ingest <subject> <title>`.
 2. **`/summa ask <question>`**
    - Retrieve candidate pages (grep + `summa links` neighborhood; optionally
      `recall query` per the vision's summa↔recall open question).
