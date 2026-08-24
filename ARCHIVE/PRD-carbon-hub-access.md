@@ -1,6 +1,6 @@
 # PRD-carbon-hub-access
 
-**Status:** Draft v0.1
+**Status:** Shipped v1.0
 **Vision:** visions/carbon.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation

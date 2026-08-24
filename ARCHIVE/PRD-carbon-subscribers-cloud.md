@@ -1,6 +1,6 @@
 # PRD-carbon-subscribers-cloud
 
-**Status:** Draft v0.1
+**Status:** Shipped v1.0 — 2026-06-20. Homeward daemons (ingest+report) active on hub, API answering (/health → {"status":"ok"}). Laptop daemons left running in parallel during burn-in (AC4/5 deferred to follow-on PRD once hub proves stable).
 **Vision:** visions/carbon.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation

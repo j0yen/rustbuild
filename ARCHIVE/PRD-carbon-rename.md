@@ -1,6 +1,6 @@
 # PRD-carbon-rename
 
-**Status:** Complete v1.0
+**Status:** Shipped v1.0 — AC1/AC2/AC4/AC5 verified; AC3=tailscale-manual-user-gate (not a build failure)
 **Vision:** visions/carbon.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation
