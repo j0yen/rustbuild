@@ -48,7 +48,8 @@ as `jsy` (no root), syncs into `~/build/<crate>`, uses RedBaron's sccache +
 mold, and rsyncs `target/` back — the binary runs on the client because all
 three machines are Ubuntu 26.04 x86_64. `.env` (Hetzner token) is optional on a
 hub-only client; burst commands then fail with a clear message. If RedBaron is
-down, routing falls back to burst automatically (needs `.env`). Measured from
+down, `prefer=always` makes routing **fail loudly** (exit 1, no Hetzner spend);
+only an explicit `--ephemeral` bursts. Measured from
 carbon: `cradle --release` in 15 s build / 17 s end-to-end.
 
 ## The workhorse

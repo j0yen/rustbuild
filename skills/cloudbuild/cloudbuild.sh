@@ -286,6 +286,10 @@ route_decision(){ # route_decision <crate_path> [--force-hub] [--force-burst]
   fi
 
   if ! hub_reachable "$ip"; then
+    if [ "$HUB_PREFER" = "always" ]; then
+      echo "ERROR: hub $HUB_USER@$ip is unreachable and hub.json has prefer=always — refusing to burst to Hetzner. Bring the hub up, or pass --ephemeral to burst explicitly." >&2
+      return 1
+    fi
     echo "burst ccx53 (hub $ip unreachable — SSH timeout)"; return
   fi
 
