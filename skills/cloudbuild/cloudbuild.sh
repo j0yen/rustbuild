@@ -41,11 +41,14 @@
 set -uo pipefail
 
 ENV_FILE="${WM_BURST_ENV:-$HOME/.config/wm-burst/.env}"
-[ -f "$ENV_FILE" ] || { echo "cloudbuild: missing $ENV_FILE (run setup / wm-burst init)" >&2; exit 1; }
-# shellcheck disable=SC1090
-source "$ENV_FILE"
-
-: "${HCLOUD_TOKEN:?cloudbuild: HCLOUD_TOKEN not set in $ENV_FILE}"
+if [ -f "$ENV_FILE" ]; then
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+elif [ ! -f "$HOME/.config/wm-burst/hub.json" ]; then
+  echo "cloudbuild: missing $ENV_FILE (run setup / wm-burst init)" >&2; exit 1
+fi
+# HCLOUD_TOKEN is only needed for burst (Hetzner) paths; hub-only machines may omit .env.
+HCLOUD_TOKEN="${HCLOUD_TOKEN:-}"
 BUILDER_TYPE="${BUILDER_TYPE:-ccx33}"
 BUILDER_LOC="${BUILDER_LOC:-fsn1}"
 SSH_KEY_NAME="${SSH_KEY_NAME:-wintermute-build}"
@@ -56,6 +59,17 @@ STATE_DIR="$HOME/.config/wm-burst"
 COST_LOG="$STATE_DIR/cost.log"
 
 HUB_JSON="${STATE_DIR}/hub.json"
+# hub.json fields (harbor-route): ip (required), user (default root),
+# build_root (default /root/build), sccache_dir (default /root/.sccache),
+# prefer ("incremental" = classic heuristic, "always" = hub whenever reachable).
+hub_field(){ # hub_field <key> <default>
+  [ -f "$HUB_JSON" ] || { echo "$2"; return; }
+  python3 -c "import json,sys; d=json.load(open('$HUB_JSON')); print(d.get(sys.argv[1]) or sys.argv[2])" "$1" "$2" 2>/dev/null || echo "$2"
+}
+HUB_USER="$(hub_field user root)"
+HUB_BUILD_ROOT="$(hub_field build_root /root/build)"
+HUB_SCCACHE_DIR="$(hub_field sccache_dir /root/.sccache)"
+HUB_PREFER="$(hub_field prefer incremental)"
 CACHE_ENV="${STATE_DIR}/cache.env"
 HARBOR_CACHE_CLIENT="${HOME}/wintermute/constellation-burst-builder/scripts/harbor-cache-client-env.sh"
 SESSION_LOCK="${STATE_DIR}/session.lock"
@@ -63,6 +77,7 @@ SESSION_LOCK="${STATE_DIR}/session.lock"
 log(){ echo "[cloudbuild $(date +%H:%M:%S)] $*" >&2; }
 api(){ # api METHOD PATH [json]
   local method="$1" path="$2" body="${3:-}"
+  [ -n "$HCLOUD_TOKEN" ] || { echo "cloudbuild: HCLOUD_TOKEN not set (no $ENV_FILE) — burst path unavailable, only the hub route works on this machine" >&2; return 1; }
   if [ -n "$body" ]; then
     curl -fsS -X "$method" -H "Authorization: Bearer $HCLOUD_TOKEN" \
       -H "Content-Type: application/json" -d "$body" "$API$path"
@@ -80,6 +95,7 @@ server_ip(){ server_json | python3 -c 'import json,sys;s=json.load(sys.stdin)["s
 # IP with a new host key would otherwise abort SSH). Throwaway known_hosts.
 SSH_CMD="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=8 -o ServerAliveInterval=30 -o ServerAliveCountMax=60 -i $SSH_KEY"
 ssh_box(){ $SSH_CMD "root@$1" "${@:2}"; }
+ssh_hub(){ $SSH_CMD "$HUB_USER@$1" "${@:2}"; }
 
 hourly_rate(){ # for BUILDER_TYPE at BUILDER_LOC
   api GET "/server_types?per_page=50" | python3 -c '
@@ -188,7 +204,7 @@ cmd_status(){
   local hub_ip_val; hub_ip_val="$(hub_ip)"
   if [ -n "$hub_ip_val" ]; then
     if hub_reachable "$hub_ip_val"; then
-      echo "hub: $hub_ip_val (reachable) — billed monthly; see \`wm-burst cost\` for standing cost"
+      echo "hub: $HUB_USER@$hub_ip_val (reachable, prefer=$HUB_PREFER, build_root=$HUB_BUILD_ROOT)"
     else
       echo "hub: $hub_ip_val (UNREACHABLE — SSH timeout)"
     fi
@@ -203,11 +219,11 @@ cmd_doctor(){
   ssh_box "$ip" '. ~/.cargo/env; echo "arch: $(uname -m)"; rustc --version; rustup toolchain list; sccache --version 2>/dev/null || echo "sccache: MISSING"'
 }
 
-do_sync(){ # do_sync <ip> <crate_path>
-  local ip="$1" crate="$2" base; base="$(basename "$crate")"
-  ssh_box "$ip" "mkdir -p /root/build/$base"
+do_sync(){ # do_sync <ip> <crate_path> [user] [build_root]
+  local ip="$1" crate="$2" user="${3:-root}" root="${4:-/root/build}" base; base="$(basename "$crate")"
+  $SSH_CMD "$user@$ip" "mkdir -p $root/$base"
   rsync -az --delete --exclude target --exclude .git -e "$SSH_CMD" \
-    "$crate/" "root@$ip:/root/build/$base/"
+    "$crate/" "$user@$ip:$root/$base/"
   echo "$base"
 }
 
@@ -273,6 +289,11 @@ route_decision(){ # route_decision <crate_path> [--force-hub] [--force-burst]
     echo "burst ccx53 (hub $ip unreachable — SSH timeout)"; return
   fi
 
+  if [ "$HUB_PREFER" = "always" ]; then
+    ROUTE_DEST=hub; ROUTE_IP="$ip"
+    echo "warm hub @ $ip (prefer=always in hub.json)"; return
+  fi
+
   if is_incremental "$crate"; then
     ROUTE_DEST=hub; ROUTE_IP="$ip"
     echo "warm hub @ $ip (incremental — target/ dir exists)"; return
@@ -309,20 +330,20 @@ _maybe_export_cache_env(){
 _build_or_test_hub(){ # _build_or_test_hub <build|test> <hub_ip> <crate> [cargo args...]
   local action="$1" ip="$2" crate="$3"; shift 3
   [ "${1:-}" = "--" ] && shift
-  local base; base="$(do_sync "$ip" "$crate")"
+  local base; base="$(do_sync "$ip" "$crate" "$HUB_USER" "$HUB_BUILD_ROOT")"
   local cargocmd
   if [ "$action" = "test" ]; then cargocmd="cargo test $*"; else cargocmd="cargo build $*"; fi
-  log "hub $ip: $cargocmd  (in /root/build/$base)"
+  log "hub $HUB_USER@$ip: $cargocmd  (in $HUB_BUILD_ROOT/$base)"
   local start rc; start=$(date +%s)
   # Hub uses shared sccache; source cache.env if available for a shared S3-style bucket.
-  local sccache_block=". ~/.cargo/env; export RUSTC_WRAPPER=sccache SCCACHE_DIR=/root/.sccache"
-  ssh_box "$ip" "$sccache_block; cd /root/build/$base; $cargocmd"
+  local sccache_block=". ~/.cargo/env 2>/dev/null; export RUSTC_WRAPPER=sccache SCCACHE_DIR=$HUB_SCCACHE_DIR"
+  ssh_hub "$ip" "$sccache_block; cd $HUB_BUILD_ROOT/$base; $cargocmd"
   rc=$?
   log "hub $action exit=$rc in $(($(date +%s)-start))s"
-  ssh_box "$ip" '. ~/.cargo/env; sccache --show-stats 2>/dev/null | grep -iE "cache hits rate|compile requests executed"' 2>/dev/null || true
+  ssh_hub "$ip" ". ~/.cargo/env 2>/dev/null; sccache --show-stats 2>/dev/null | grep -iE 'cache hits rate|compile requests executed'" 2>/dev/null || true
   if [ "$action" = "build" ] && [ $rc -eq 0 ]; then
     rsync -az -e "$SSH_CMD" \
-      "root@$ip:/root/build/$base/target/" "$crate/target/" 2>/dev/null && log "pulled artifacts to $crate/target/" || log "(no artifacts pulled)"
+      "$HUB_USER@$ip:$HUB_BUILD_ROOT/$base/target/" "$crate/target/" 2>/dev/null && log "pulled artifacts to $crate/target/" || log "(no artifacts pulled)"
   fi
   return $rc
 }

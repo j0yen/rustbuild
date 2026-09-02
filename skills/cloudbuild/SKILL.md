@@ -36,6 +36,21 @@ locally** — it is the designated Rust build machine (2026-09-01): 16 threads,
   provfs needs .so.4, noble-built needs .so.3. Building on the wrong snapshot
   fails at local verify, not at compile.
 
+## Warm hub = RedBaron (2026-09-01)
+
+Carbon and ryzen7 route **every** `cloudbuild build/test` to RedBaron over
+Tailscale SSH instead of Hetzner: `~/.config/wm-burst/hub.json` on each client
+is `{"ip":"100.73.175.108","user":"jsy","build_root":"/home/jsy/build",
+"sccache_dir":"/home/jsy/.cache/sccache","prefer":"always"}`. `prefer=always`
+sends cold and incremental builds alike to the hub whenever port 22 answers;
+`prefer=incremental` (or absent) restores the old heuristic. The hub build runs
+as `jsy` (no root), syncs into `~/build/<crate>`, uses RedBaron's sccache +
+mold, and rsyncs `target/` back — the binary runs on the client because all
+three machines are Ubuntu 26.04 x86_64. `.env` (Hetzner token) is optional on a
+hub-only client; burst commands then fail with a clear message. If RedBaron is
+down, routing falls back to burst automatically (needs `.env`). Measured from
+carbon: `cradle --release` in 15 s build / 17 s end-to-end.
+
 ## The workhorse
 
 Everything is driven by `cloudbuild.sh` (next to this file). It reads config + the
