@@ -98,7 +98,7 @@ server_ip(){ server_json | python3 -c 'import json,sys;s=json.load(sys.stdin)["s
 
 # Ephemeral boxes reuse Hetzner IPs, so do NOT persist/check host keys (a recycled
 # IP with a new host key would otherwise abort SSH). Throwaway known_hosts.
-SSH_CMD="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=8 -o ServerAliveInterval=30 -o ServerAliveCountMax=60 -i $SSH_KEY"
+SSH_CMD="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=8 -o ServerAliveInterval=30 -o ServerAliveCountMax=60 -i $SSH_KEY -o BatchMode=yes -o StrictHostKeyChecking=accept-new"
 ssh_box(){ $SSH_CMD "root@$1" "${@:2}"; }
 ssh_hub(){ $SSH_CMD "$HUB_USER@$1" "${@:2}"; }
 
