@@ -1,6 +1,6 @@
 ---
 name: cloudbuild
-description: Build and test Rust on a cheap on-demand Hetzner Cloud x86 box instead of this laptop, then tear it down so billing stops. Boots from a pre-provisioned snapshot (~30s, rustc 1.85+1.88 + sccache), rsyncs the crate, runs the build/test remotely with a shared sccache cache, pulls artifacts back, and destroys the server. Use when the user says /cloudbuild, asks to "build in the cloud", "burst this build", "run the build on the cloud box", or wants the cloud-burst builder brought up/down. This is the preferred build path for the user's work — it replaces local /autobuilder cargo builds for heavy/cold compiles.
+description: Build and test Rust on a cheap on-demand Hetzner Cloud x86 box instead of this laptop, then tear it down so billing stops. Boots from a pre-provisioned snapshot (~30s, rustc 1.85+1.88 + sccache), rsyncs the crate, runs the build/test remotely with a shared sccache cache, pulls artifacts back, and destroys the server. Use when the user says /cloudbuild, asks to "build in the cloud", "burst this build", "run the build on the cloud box", or wants the cloud-burst builder brought up/down. This is the preferred build path for the user's work — it replaces local /autobuilder cargo builds for heavy/cold compiles. Exception: on RedBaron (hostname RedBaron) cargo runs locally by default — use this skill there only on explicit request or for fleet fan-out.
 user_invocable: true
 ---
 
@@ -14,12 +14,27 @@ does the work, and is **destroyed afterward** so billing stops (~€0.12/hr whil
 
 It is the cloud counterpart to `/autobuilder`: same goal (build/validate Rust), but
 the expensive compilation runs in the cloud instead of pinning local cores (which on
-this box are needed for the voice stack + local LLM). For the user's work, prefer
-`/cloudbuild` over local building.
+this box are needed for the voice stack + local LLM). For the user's work on
+carbon/ryzen7, prefer `/cloudbuild` over local building. **On RedBaron, build
+locally** — it is the designated Rust build machine (2026-09-01): 16 threads,
+30 GB, sccache + mold; a clean `recall` release build there beats a ccx53 burst.
 
-**Current builder:** `ccx53` (32 vCPU, 128 GB RAM) at `nbg1`, snapshot `394184500`
-(rustc 1.85+1.88 + sccache, provisioned 2026-06-05). This fills the account's
+**Current builder:** `ccx53` (32 vCPU, 128 GB RAM) at `nbg1`. This fills the account's
 32-core dedicated limit exactly. `ccx63` (48 vCPU) would exceed it.
+
+**Two snapshots — pick by deploy target** (as of 2026-08-31):
+- `SNAPSHOT_ID=427125061` — **default** (rebuilt 2026-09-01; 426737971 was snapshotted unclean and had an unreadable libLLVM), Ubuntu 26.04/resolute (glibc 2.43,
+  libfuse3.so.4, rustc 1.85+1.88, sccache via apt), cpx32-derived (160GB disk
+  footprint, deploys on cpx32 and larger). Matches **carbon** — use for
+  anything installed to this laptop.
+- `SNAPSHOT_ID_NOBLE=394184500` — Ubuntu 24.04/noble (glibc 2.39), the old
+  ccx-derived 240GB snapshot. Matches the **constellation hub** — use for
+  hub-targeted builds (homeward daemons) by exporting
+  `SNAPSHOT_ID="$SNAPSHOT_ID_NOBLE"` before invoking cloudbuild.sh.
+- Why both: a binary linking versioned system sonames (fuse, system rocksdb,
+  non-vendored openssl) only runs where the soname matches; resolute-built
+  provfs needs .so.4, noble-built needs .so.3. Building on the wrong snapshot
+  fails at local verify, not at compile.
 
 ## The workhorse
 
