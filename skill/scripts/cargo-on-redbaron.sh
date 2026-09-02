@@ -24,7 +24,8 @@
 # Subcommands:
 #   up                 create server from snapshot, wait until SSH+toolchain ready
 #   status             show running builder (if any) + hub status + accrued cost estimate
-#   build <crate> [-- <cargo args>]   hub-aware: warm hub or burst; use --ephemeral to force burst
+#   build <crate> [-- <cargo args>]   cargo build on RedBaron, pull target/ back
+#   cargo <crate> -- <args...>        any cargo command on RedBaron (used by skill/bin/cargo)
 #   test  <crate> [-- <cargo args>]   hub-aware test run
 #   route <crate> [--dry-run]         print routing decision without doing work
 #   fleet [--type cpx41] [--max N] <crate>... [-- <cargo args>]
@@ -340,8 +341,12 @@ _build_or_test_hub(){ # _build_or_test_hub <build|test> <hub_ip> <crate> [cargo 
   [ "${1:-}" = "--" ] && shift
   local base; base="$(do_sync "$ip" "$crate" "$HUB_USER" "$HUB_BUILD_ROOT")"
   local cargocmd
-  if [ "$action" = "test" ]; then cargocmd="cargo test $*"; else cargocmd="cargo build $*"; fi
-  log "hub $HUB_USER@$ip: $cargocmd  (in $HUB_BUILD_ROOT/$base)"
+  case "$action" in
+    test)  cargocmd="cargo test $*";;
+    cargo) cargocmd="cargo $*";;
+    *)     cargocmd="cargo build $*";;
+  esac
+  log "RedBaron $HUB_USER@$ip: $cargocmd  (in $HUB_BUILD_ROOT/$base)"
   local start rc; start=$(date +%s)
   # Hub uses shared sccache; source cache.env if available for a shared S3-style bucket.
   local sccache_block=". ~/.cargo/env 2>/dev/null; export RUSTC_WRAPPER=sccache SCCACHE_DIR=$HUB_SCCACHE_DIR"
@@ -349,7 +354,7 @@ _build_or_test_hub(){ # _build_or_test_hub <build|test> <hub_ip> <crate> [cargo 
   rc=$?
   log "hub $action exit=$rc in $(($(date +%s)-start))s"
   ssh_hub "$ip" ". ~/.cargo/env 2>/dev/null; sccache --show-stats 2>/dev/null | grep -iE 'cache hits rate|compile requests executed'" 2>/dev/null || true
-  if [ "$action" = "build" ] && [ $rc -eq 0 ]; then
+  if [ "$action" != "test" ] && [ $rc -eq 0 ]; then
     rsync -az -e "$SSH_CMD" \
       "$HUB_USER@$ip:$HUB_BUILD_ROOT/$base/target/" "$crate/target/" 2>/dev/null && log "pulled artifacts to $crate/target/" || log "(no artifacts pulled)"
   fi
@@ -391,33 +396,8 @@ _build_or_test(){ # _build_or_test <build|test> <keep?> <crate> [cargo args...]
     return $?
   fi
 
-  # Burst path — reuse session server if warm, otherwise create→build→destroy.
-  local ip base
-  local _session_ip; _session_ip="$(session_read_ip)"
-  if [ -n "$_session_ip" ] && hub_reachable "$_session_ip"; then
-    log "session warm: reusing builder @ $_session_ip (no create/destroy — billing continues until session-end)"
-    ip="$_session_ip"
-    # no EXIT trap — lifecycle managed by session-start/session-end
-  else
-    ip="$(cmd_up)" || return 1
-    if [ "$keep" != "keep" ]; then trap 'cmd_down' EXIT INT TERM; fi
-  fi
-  _maybe_export_cache_env
-  base="$(do_sync "$ip" "$crate")"
-  local cargocmd
-  if [ "$action" = "test" ]; then cargocmd="cargo test $*"; else cargocmd="cargo build $*"; fi
-  log "burst: $cargocmd  (in /root/build/$base)"
-  local start rc; start=$(date +%s)
-  ssh_box "$ip" ". ~/.cargo/env; export RUSTC_WRAPPER=sccache SCCACHE_DIR=/root/.sccache; cd /root/build/$base; $cargocmd"
-  rc=$?
-  log "burst $action exit=$rc in $(($(date +%s)-start))s"
-  ssh_box "$ip" '. ~/.cargo/env; sccache --show-stats 2>/dev/null | grep -iE "cache hits rate|compile requests executed"' 2>/dev/null || true
-  if [ "$action" = "build" ] && [ $rc -eq 0 ]; then
-    # pull built release/debug binaries back
-    rsync -az -e "$SSH_CMD" \
-      "root@$ip:/root/build/$base/target/" "$crate/target/" 2>/dev/null && log "pulled artifacts to $crate/target/" || log "(no artifacts pulled)"
-  fi
-  return $rc
+  echo "ERROR: no route to RedBaron ($decision); the Hetzner burst path was retired 2026-09-01." >&2
+  return 2
 }
 
 cmd_build(){ _build_or_test build destroy "$@"; }
@@ -540,6 +520,7 @@ main(){
     sync) cmd_sync "$@" ;;
     build) cmd_build "$@" ;;
     test) cmd_test "$@" ;;
+    cargo) _build_or_test cargo nokeep "$@" ;;
     route) cmd_route "$@" ;;
     ssh) cmd_ssh "$@" ;;
     -h|--help|help) sed -n '2,55p' "$0" | sed 's/^# \?//' ;;

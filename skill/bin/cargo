@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# rustbuild's cargo shim (2026-09-02, merged from /cloudrustbuild).
+#   On RedBaron (the fleet's Rust build machine): run the real cargo.
+#   On any other node: sync the crate to RedBaron, run the same cargo command
+#   there (sccache + mold), pull target/ back. Never a local build, never a
+#   rented server. RUSTBUILD_LOCAL=1 forces the real cargo anywhere.
+set -uo pipefail
+self_dir="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+real=""
+IFS=: read -ra _parts <<<"${PATH:-}"
+for _p in "${_parts[@]}"; do
+  [ "$_p" = "$self_dir" ] && continue
+  [ -x "$_p/cargo" ] && { real="$_p/cargo"; break; }
+done
+[ -n "$real" ] || real="$HOME/.cargo/bin/cargo"
+host="$(hostname 2>/dev/null || echo unknown)"
+if [ "${host,,}" = "redbaron" ] || [ "${RUSTBUILD_LOCAL:-0}" = "1" ]; then exec "$real" "$@"; fi
+# Commands that make no sense remotely stay local.
+case "${1:-}" in
+  ""|--version|-V|--help|-h|--list|install|uninstall|new|init|search|login|logout|owner|publish|yank) exec "$real" "$@";;
+esac
+# Crate root = nearest Cargo.toml above $PWD; outside a crate, local.
+d="$PWD"; while [ "$d" != "/" ] && [ ! -f "$d/Cargo.toml" ]; do d="$(dirname "$d")"; done
+[ -f "$d/Cargo.toml" ] || exec "$real" "$@"
+exec bash "$self_dir/../scripts/cargo-on-redbaron.sh" cargo "$d" -- "$@"

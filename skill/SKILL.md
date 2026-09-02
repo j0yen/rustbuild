@@ -9,6 +9,31 @@ description: PRD-driven, rigorously validated Rust code generation. Use when the
 
 Takes a PRD (file path or pasted text) and drives a 5-stage pipeline that yields a Rust project where every artifact is (a) generated from a structured `intent-card.json` derived via 4/5-Whys, (b) iterated under a narrow falsifiable advance-or-revert loop, (c) accompanied by per-iteration `EvidencePack` receipts and `FailureCapsule`s on crash, (d) gated by 8 receipts before declaring "ready," and (e) fed into a postmortem that queues self-improvement proposals.
 
+## Where cargo runs (merged from /cloudrustbuild, 2026-09-02)
+
+Fleet names: **RedBaron** is the Rust build machine; **carbon** and **ryzen7**
+are the other workstations; **Wintermute Hub** is the Hetzner box that runs NATS
+and builds nothing. The rule:
+
+- **On RedBaron: cargo runs locally.**
+- **On any other node: cargo runs on RedBaron.** Every stage that touches cargo
+  first prepends this skill's shim to PATH:
+  `export PATH="$HOME/.claude/skills/rustbuild/bin:$PATH"`. The shim
+  (`skill/bin/cargo`) is a pass-through on RedBaron; elsewhere it syncs the
+  crate to RedBaron over Tailscale SSH, runs the same cargo command there with
+  RedBaron's sccache and mold, and pulls `target/` back (`cargo install`, `new`,
+  `--version` and the like stay local). Config lives in
+  `~/.config/wm-burst/hub.json` (`{"ip":"100.73.175.108","user":"jsy",
+  "build_root":"/home/jsy/build","sccache_dir":"/home/jsy/.cache/sccache",
+  "prefer":"always"}` — `hub.json` is the script's legacy name for the build
+  machine, not Wintermute Hub).
+- **RedBaron unreachable: stop.** The shim exits 2; the stage records
+  `blocked: RedBaron unreachable`. It never falls back to a local build and
+  never rents a server (the Hetzner burst box was retired 2026-09-01).
+
+Direct use: `bash ~/.claude/skills/rustbuild/scripts/cargo-on-redbaron.sh
+status|doctor|route <crate>|build <crate> -- <args>|test <crate> -- <args>|ssh`.
+
 ## When to invoke
 
 Invoke when the user:
