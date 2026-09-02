@@ -1,13 +1,15 @@
 ---
 name: cloudrustbuild
-description: Run cargo build/test for a Rust crate on the fleet's Rust build hub (RedBaron) from any other node, over Tailscale SSH, with RedBaron's sccache and mold, and pull target/ back. Use from carbon or ryzen7 when a /rustbuild step or the user needs a compile; on RedBaron itself cargo runs locally. The Hetzner burst box was retired on 2026-09-01 — nothing here rents a server.
+description: Run cargo build/test for a Rust crate on RedBaron (the fleet's Rust build machine) from carbon or ryzen7, over Tailscale SSH, with RedBaron's sccache and mold, and pull target/ back. On RedBaron itself cargo runs locally. Not related to Wintermute Hub (the Hetzner box that runs NATS). The Hetzner burst box was retired on 2026-09-01 — nothing here rents a server.
 user_invocable: true
 ---
 
-# /cloudrustbuild — cargo on the RedBaron hub, from any node
+# /cloudrustbuild — cargo on RedBaron, from carbon or ryzen7
 
-RedBaron is the fleet's Rust build machine (i7-11700KF, 16 threads, 30 GB,
-sccache + mold). This skill lets carbon and ryzen7 use it: `cloudbuild.sh` syncs
+Fleet names: **RedBaron** (this Rust build machine: i7-11700KF, 16 threads,
+30 GB, sccache + mold), **carbon**, **ryzen7**, and **Wintermute Hub** (the
+Hetzner box that runs NATS; it builds nothing). This skill lets carbon and
+ryzen7 build on RedBaron: `cloudbuild.sh` syncs
 the crate to `~/build/<crate>` on RedBaron, runs the cargo command there as `jsy`,
 prints the sccache hit rate, and rsyncs `target/` back. All three machines are
 Ubuntu 26.04 x86_64, so the binary runs where it was requested.
@@ -20,6 +22,10 @@ now error (or no-op for `session-*`) so a stale caller fails loudly instead of
 renting a server. If RedBaron is unreachable the script exits 2; it never bursts
 and never falls back to a local build on its own.
 
+The script's config file is still called `hub.json` and its log lines say
+`warm hub` — that is the script's old name for "the standing build machine",
+and it means RedBaron. It has nothing to do with Wintermute Hub.
+
 ## Config
 
 `~/.config/wm-burst/hub.json` on each client:
@@ -29,7 +35,7 @@ and never falls back to a local build on its own.
  "sccache_dir":"/home/jsy/.cache/sccache","prefer":"always"}
 ```
 
-`prefer: always` routes cold and incremental builds alike to the hub. No token,
+`prefer: always` routes cold and incremental builds alike to RedBaron. No token,
 no `.env` is needed.
 
 ## Commands
@@ -38,11 +44,11 @@ no `.env` is needed.
 SK=~/.claude/skills/cloudrustbuild/cloudbuild.sh
 bash "$SK" build <crate> [-- <cargo args>]   # sync → cargo build on RedBaron → pull target/
 bash "$SK" test  <crate> [-- <cargo args>]   # sync → cargo test on RedBaron
-bash "$SK" status                            # hub reachable? sccache stats
-bash "$SK" doctor                            # toolchain check on the hub
+bash "$SK" status                            # RedBaron reachable? sccache stats
+bash "$SK" doctor                            # toolchain check on RedBaron
 bash "$SK" route <crate>                     # print the routing decision without building
 bash "$SK" sync  <crate>                     # sync only
-bash "$SK" ssh [cmd]                         # shell on the hub
+bash "$SK" ssh [cmd]                         # shell on RedBaron
 ```
 
 `<crate>` is an absolute path or a bare name resolved under `~/wintermute/`.
@@ -51,5 +57,5 @@ bash "$SK" ssh [cmd]                         # shell on the hub
 
 Branch agents on carbon and ryzen7 export `AUTOBUILDER_CLOUD=1` so /rustbuild's
 `cargo-cloud` shim routes every cargo invocation through `cloudbuild.sh build`.
-There is no session to start or tear down. If `status` reports the hub is down,
-the branch marks its PRD blocked with "build hub unreachable" and stops.
+There is no session to start or tear down. If `status` reports RedBaron is down,
+the branch marks its PRD blocked with "RedBaron unreachable" and stops.

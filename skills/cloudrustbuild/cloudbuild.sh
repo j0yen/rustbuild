@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# cloudbuild.sh — run cargo for a crate on the fleet's Rust build hub (RedBaron).
+# cloudbuild.sh — run cargo for a crate on RedBaron, the fleet's Rust build machine
+# (not Wintermute Hub, the Hetzner NATS box). 'hub'/hub.json below is this
+# script's legacy name for the standing build machine.
 # The Hetzner burst path was retired on 2026-09-01; every burst entry point
 # below now errors or no-ops. Hub config: ~/.config/wm-burst/hub.json.
 #
@@ -269,12 +271,12 @@ route_decision(){ # route_decision <crate_path> [--force-hub] [--force-burst]
   ROUTE_DEST=burst; ROUTE_IP=""
 
   if [ $force_burst -eq 1 ]; then
-    echo "ERROR: --ephemeral requested, but the Hetzner burst box was retired on 2026-09-01; builds run on the RedBaron hub only." >&2; return 2
+    echo "ERROR: --ephemeral requested, but the Hetzner burst box was retired on 2026-09-01; builds run on RedBaron (the fleet's Rust build machine) only." >&2; return 2
   fi
 
   local ip; ip="$(hub_ip)"
   if [ -z "$ip" ]; then
-    echo "ERROR: no hub.json at $HUB_JSON and the Hetzner burst box was retired (2026-09-01). Write hub.json pointing at RedBaron." >&2; return 2
+    echo "ERROR: no hub.json at $HUB_JSON and the Hetzner burst box was retired (2026-09-01). Write hub.json pointing at RedBaron (hub.json is this script's legacy name for the build-machine config; it is not Wintermute Hub)." >&2; return 2
   fi
 
   if [ $force_hub -eq 1 ]; then
@@ -292,7 +294,7 @@ route_decision(){ # route_decision <crate_path> [--force-hub] [--force-burst]
       echo "ERROR: hub $HUB_USER@$ip is unreachable and hub.json has prefer=always — refusing to burst to Hetzner. Bring the hub up, or pass --ephemeral to burst explicitly." >&2
       return 1
     fi
-    echo "ERROR: hub $HUB_USER@$ip unreachable (SSH timeout) and the Hetzner burst box was retired (2026-09-01) — bring RedBaron up." >&2; return 2
+    echo "ERROR: RedBaron ($HUB_USER@$ip) unreachable (SSH timeout) and the Hetzner burst box was retired (2026-09-01) — bring RedBaron up." >&2; return 2
   fi
 
   if [ "$HUB_PREFER" = "always" ]; then
@@ -305,7 +307,7 @@ route_decision(){ # route_decision <crate_path> [--force-hub] [--force-burst]
     echo "warm hub @ $ip (incremental — target/ dir exists)"; return
   fi
 
-  echo "warm hub $HUB_USER@$ip (cold/full compile also goes to the hub; the Hetzner burst box was retired 2026-09-01)"; ROUTE_DEST=hub; ROUTE_IP="$ip"; return
+  echo "warm hub $HUB_USER@$ip = RedBaron (cold/full compile also builds there; the Hetzner burst box was retired 2026-09-01)"; ROUTE_DEST=hub; ROUTE_IP="$ip"; return
 }
 
 cmd_route(){ # route <crate> [--dry-run]
@@ -531,8 +533,8 @@ cmd_fleet(){
 main(){
   local sub="${1:-status}"; shift || true
   case "$sub" in
-    up|down|keep-build|fleet) echo "cloudbuild: '$1' is retired — the Hetzner burst box is no longer used (2026-09-01); builds run on the RedBaron hub (build/test/status/doctor/sync/route/ssh)." >&2; exit 2 ;;
-    session-start|session-end) echo "cloudbuild: '$1' is a no-op — no burst sessions since 2026-09-01; the RedBaron hub is always warm." ;;
+    up|down|keep-build|fleet) echo "cloudbuild: '$1' is retired — the Hetzner burst box is no longer used (2026-09-01); builds run on RedBaron (build/test/status/doctor/sync/route/ssh)." >&2; exit 2 ;;
+    session-start|session-end) echo "cloudbuild: '$1' is a no-op — no burst sessions since 2026-09-01; RedBaron is always on." ;;
     status) cmd_status ;;
     doctor) cmd_doctor ;;
     sync) cmd_sync "$@" ;;
