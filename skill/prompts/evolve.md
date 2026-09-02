@@ -1,14 +1,14 @@
 # Evolve — gated self-improvement aggregator
 
-You are invoked when the user runs `/autobuilder --evolve` (or `scripts/evolve.sh`). You aggregate the `evolution-proposal-*.json` files in `~/.claude/skills/autobuilder/proposals/` from the last K runs and surface a diff against the skill itself for the user's review.
+You are invoked when the user runs `/rustbuild --evolve` (or `scripts/evolve.sh`). You aggregate the `evolution-proposal-*.json` files in `~/.claude/skills/rustbuild/proposals/` from the last K runs and surface a diff against the skill itself for the user's review.
 
 You **never** auto-apply changes to `SKILL.md`, `rules/`, `templates/`, `schemas/`, or `prompts/`. The whole point of Stage 5 is to keep the self-modification loop honest.
 
 ## Inputs
 
-- All `evolution-proposal-*.json` in `~/.claude/skills/autobuilder/proposals/` newer than the last applied change.
-- The current state of `~/.claude/skills/autobuilder/{SKILL.md,rules/,templates/,schemas/,prompts/}`.
-- An optional `~/.claude/skills/autobuilder/proposals/applied.log` recording prior accepted/rejected proposals (so you don't re-propose what the user already rejected).
+- All `evolution-proposal-*.json` in `~/.claude/skills/rustbuild/proposals/` newer than the last applied change.
+- The current state of `~/.claude/skills/rustbuild/{SKILL.md,rules/,templates/,schemas/,prompts/}`.
+- An optional `~/.claude/skills/rustbuild/proposals/applied.log` recording prior accepted/rejected proposals (so you don't re-propose what the user already rejected).
 
 ## Aggregation rules
 
@@ -23,8 +23,8 @@ You **never** auto-apply changes to `SKILL.md`, `rules/`, `templates/`, `schemas
 A markdown report and a unified-diff bundle:
 
 ```
-~/.claude/skills/autobuilder/proposals/evolve-report-<YYYYMMDD>.md
-~/.claude/skills/autobuilder/proposals/evolve-diff-<YYYYMMDD>.patch
+~/.claude/skills/rustbuild/proposals/evolve-report-<YYYYMMDD>.md
+~/.claude/skills/rustbuild/proposals/evolve-diff-<YYYYMMDD>.patch
 ```
 
 The report:
@@ -53,9 +53,9 @@ Considered <N> proposals from <M> runs since <last-applied-date>.
 
 The diff is NOT auto-applied. Review each hunk:
 
-    git -C ~/.claude/skills/autobuilder apply --check evolve-diff-<date>.patch
+    git -C ~/.claude/skills/rustbuild apply --check evolve-diff-<date>.patch
     # then, for accepted hunks:
-    git -C ~/.claude/skills/autobuilder apply --include='<path>' evolve-diff-<date>.patch
+    git -C ~/.claude/skills/rustbuild apply --include='<path>' evolve-diff-<date>.patch
 
 After applying, record decisions in `proposals/applied.log` so future evolve runs don't re-surface them.
 ```
@@ -66,7 +66,7 @@ The patch is a standard unified diff that `git apply` accepts.
 
 - **Never** write directly to `SKILL.md` or any other skill file. Only produce the diff.
 - **Never** include a hunk you cannot trace to specific run evidence in the proposals.
-- **Never** modify `~/.claude/skills/autobuilder/proposals/applied.log` automatically — that file records user decisions only.
+- **Never** modify `~/.claude/skills/rustbuild/proposals/applied.log` automatically — that file records user decisions only.
 - **Never** discard proposals because they're inconvenient. Surface; the user decides.
 
 ## Safety check before exit

@@ -1,10 +1,10 @@
 ---
-name: cloudbuild
-description: Build and test Rust on a cheap on-demand Hetzner Cloud x86 box instead of this laptop, then tear it down so billing stops. Boots from a pre-provisioned snapshot (~30s, rustc 1.85+1.88 + sccache), rsyncs the crate, runs the build/test remotely with a shared sccache cache, pulls artifacts back, and destroys the server. Use when the user says /cloudbuild, asks to "build in the cloud", "burst this build", "run the build on the cloud box", or wants the cloud-burst builder brought up/down. This is the preferred build path for the user's work — it replaces local /autobuilder cargo builds for heavy/cold compiles. Exception: on RedBaron (hostname RedBaron) cargo runs locally by default — use this skill there only on explicit request or for fleet fan-out.
+name: cloudrustbuild
+description: Build and test Rust on a cheap on-demand Hetzner Cloud x86 box instead of this laptop, then tear it down so billing stops. Boots from a pre-provisioned snapshot (~30s, rustc 1.85+1.88 + sccache), rsyncs the crate, runs the build/test remotely with a shared sccache cache, pulls artifacts back, and destroys the server. Use when the user says /cloudrustbuild, asks to "build in the cloud", "burst this build", "run the build on the cloud box", or wants the cloud-burst builder brought up/down. This is the preferred build path for the user's work — it replaces local /rustbuild cargo builds for heavy/cold compiles. Exception: on RedBaron (hostname RedBaron) cargo runs locally by default — use this skill there only on explicit request or for fleet fan-out.
 user_invocable: true
 ---
 
-# /cloudbuild — burst Rust builds to a Hetzner Cloud x86 box
+# /cloudrustbuild — burst Rust builds to a Hetzner Cloud x86 box
 
 This skill offloads heavy Rust compiles and `cargo test` from this CPU-only laptop
 to a cheap, **on-demand** Hetzner Cloud server that **matches the laptop's arch**
@@ -12,10 +12,10 @@ to a cheap, **on-demand** Hetzner Cloud server that **matches the laptop's arch*
 shares an sccache cache. The box boots from a pre-provisioned **snapshot** in ~30s,
 does the work, and is **destroyed afterward** so billing stops (~€0.12/hr while up).
 
-It is the cloud counterpart to `/autobuilder`: same goal (build/validate Rust), but
+It is the cloud counterpart to `/rustbuild`: same goal (build/validate Rust), but
 the expensive compilation runs in the cloud instead of pinning local cores (which on
 this box are needed for the voice stack + local LLM). For the user's work on
-carbon/ryzen7, prefer `/cloudbuild` over local building. **On RedBaron, build
+carbon/ryzen7, prefer `/cloudrustbuild` over local building. **On RedBaron, build
 locally** — it is the designated Rust build machine (2026-09-01): 16 threads,
 30 GB, sccache + mold; a clean `recall` release build there beats a ccx53 burst.
 
@@ -59,7 +59,7 @@ API token from `~/.config/wm-burst/.env` (`HCLOUD_TOKEN`, `SNAPSHOT_ID`,
 `BUILDER_TYPE`, `BUILDER_LOC`, `SSH_KEY_NAME`, `SSH_KEY`).
 
 ```sh
-SK=~/.claude/skills/cloudbuild/cloudbuild.sh
+SK=~/.claude/skills/cloudrustbuild/cloudbuild.sh
 bash "$SK" build <crate> [-- <cargo args>]   # one-shot: up → build → pull → DOWN
 bash "$SK" test  <crate> [-- <cargo args>]   # one-shot: up → cargo test → DOWN
 bash "$SK" fleet [--type cpx41] [--max N] <crate>... [-- <cargo args>]

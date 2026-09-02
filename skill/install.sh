@@ -3,7 +3,7 @@
 #
 # Two modes:
 #   1. Repo-local: invoked as `./skill/install.sh` from a checkout of
-#      j0yen/autobuilder. Symlinks ~/.claude/skills/autobuilder/ to
+#      j0yen/autobuilder. Symlinks ~/.claude/skills/rustbuild/ to
 #      this script's parent dir.
 #   2. Curl-piped: invoked as `curl ... | bash`. No checkout exists;
 #      script self-clones the repo into ~/.local/share/autobuilder/
@@ -15,7 +15,7 @@
 
 set -euo pipefail
 
-TARGET="$HOME/.claude/skills/autobuilder"
+TARGET="$HOME/.claude/skills/rustbuild"
 
 # --- Mode detection ---------------------------------------------------
 # If $0 resolves to a real file inside a checkout of j0yen/autobuilder,
@@ -85,6 +85,6 @@ echo
 echo "✓ autobuilder skill installed."
 echo
 echo "Next steps:"
-echo "  1. Open Claude Code; on next session start, /autobuilder is available."
+echo "  1. Open Claude Code; on next session start, /rustbuild is available."
 echo "  2. For Stages 3-5, build the companion binary:"
 echo "     cd \"$(dirname "$SCRIPT_DIR")\" && cargo install --path autobuilder"

@@ -108,7 +108,7 @@ If `decision == "block"`, the run does not ship. The orchestrator will surface t
 ## Calibration logging (Phase A)
 
 After you emit your verdict, the orchestrator appends one line to
-`~/.claude/skills/autobuilder/state/reviewer-calibration.jsonl`:
+`~/.claude/skills/rustbuild/state/reviewer-calibration.jsonl`:
 `{"ts": <iso8601>, "slug": <slug>, "verdict": <pass|concern|block>, "concern_summary": <one-liner or null>, "shipped": <bool>, "post_ship_revert": null}`.
 This is append-only (one `write()` + fsync per line). In **Phase A** (current),
 a `concern` verdict is advisory: it is logged with `shipped: true` and the build

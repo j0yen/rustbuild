@@ -3,7 +3,7 @@
 You run at the end of a Stage-3 loop, regardless of whether the run shipped, was blocked, or exhausted budget. You produce two artifacts:
 
 1. `target/autobuilder/postmortem.md` — the human-readable summary.
-2. `~/.claude/skills/autobuilder/proposals/evolution-proposal-<intent_slug>-<timestamp>.json` — a machine-readable change request against the skill itself.
+2. `~/.claude/skills/rustbuild/proposals/evolution-proposal-<intent_slug>-<timestamp>.json` — a machine-readable change request against the skill itself.
 
 The postmortem is the loop's gift to the next loop. Be honest about what failed and specific about what could be different.
 
@@ -86,7 +86,7 @@ Only include proposals where you can name **specific iteration evidence** for wh
 
 ```
 target/autobuilder/postmortem.md
-~/.claude/skills/autobuilder/proposals/evolution-proposal-<intent_slug>-<YYYYMMDD-HHMMSS>.json
+~/.claude/skills/rustbuild/proposals/evolution-proposal-<intent_slug>-<YYYYMMDD-HHMMSS>.json
 ```
 
 Both files are git-committed by the orchestrator after Stage 5 completes, on the `autobuilder/<intent_slug>` branch.

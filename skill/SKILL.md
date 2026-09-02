@@ -1,5 +1,5 @@
 ---
-name: autobuilder
+name: rustbuild
 description: PRD-driven, rigorously validated Rust code generation. Use when the user wants to build a Rust CLI or library from a Product Requirements Document under an autonomous iterate-and-prove loop with structured receipts and a 7-receipt risk gate. Synthesizes autoresearch's locked-harness model, jankurai's anti-pattern catalog, and jeryu's proof-receipt gate into one pipeline.
 ---
 
@@ -87,7 +87,7 @@ PRD-asserted subcommand verbs against the tool's real subcommand surface.
   Abort before Stage 3 and surface `target/autobuilder/spec-drift.json` as the
   diagnostic. This catches the cadence-bind-letters failure mode (PRD assumed
   `letter-curate aggregate`; the binary only does `triage`/`show`/`list`)
-  before any /autobuilder cycle — or any parallel /build sibling branch — is
+  before any /rustbuild cycle — or any parallel /build sibling branch — is
   burned chasing a hallucinated verb.
 - **exit 2** — bad invocation (missing PRD path).
 
@@ -109,7 +109,7 @@ LOOP UNTIL all-MUST-ACs-green AND risk-gate-passes OR budget-exhausted:
   3. git commit -m "iter-<n>: <hypothesis>"
   4. scripts/run-metrics.sh > target/autobuilder/run.log 2>&1
      4b. If the crate has tests, invoke
-         `~/.claude/skills/autobuilder/scripts/run-mutants.sh <crate_dir>`
+         `~/.claude/skills/rustbuild/scripts/run-mutants.sh <crate_dir>`
          (PRD autobuilder-mutation-testing, Phase 1 — telemetry only). It
          runs cargo-mutants (installing it once if absent), merges
          `mutants_total / mutants_killed_count / mutants_alive_count /
@@ -205,7 +205,7 @@ call that produces the reviewer-agent receipt.
 
 **Reviewer calibration & phased graduation.** Every `reviewer-agent`
 verdict is appended as one line to
-`~/.claude/skills/autobuilder/state/reviewer-calibration.jsonl`
+`~/.claude/skills/rustbuild/state/reviewer-calibration.jsonl`
 (append-only JSONL; one `write()` per line, fsync after — durability over
 throughput, fires once per crate ship). Line shape:
 
@@ -237,7 +237,7 @@ active today. This PRD ships Phase A only.
 
 ### Stage 5 — Postmortem & Self-Evolve
 
-`target/autobuilder/postmortem.md` summarizes the run. A run-level `evolution-proposal.json` queues in `~/.claude/skills/autobuilder/proposals/`. `autobuilder evolve` aggregates across the last K runs and emits a diff against `SKILL.md` / `rules/bad-rust.md` / `templates/scaffold/`.
+`target/autobuilder/postmortem.md` summarizes the run. A run-level `evolution-proposal.json` queues in `~/.claude/skills/rustbuild/proposals/`. `autobuilder evolve` aggregates across the last K runs and emits a diff against `SKILL.md` / `rules/bad-rust.md` / `templates/scaffold/`.
 
 **Auto-apply (default).** Each `Suggestion` is append-only by construction. `evolve` writes the appended lines to the target file in the skill tree, commits the change in the skill_root git repo when present (one commit per suggestion, message `evolve: <rationale>`), and records `applied-suggestion:<sha256-of-target-and-appended-lines>` in `proposals/applied.log` so the same suggestion does not re-emit on subsequent runs.
 
@@ -377,7 +377,7 @@ rather than rolling equivalents:
 ## Layout
 
 ```
-~/.claude/skills/autobuilder/
+~/.claude/skills/rustbuild/
 ├── SKILL.md                              ← this file
 ├── prompts/
 │   ├── prd-intake-5whys.md

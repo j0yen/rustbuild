@@ -1,6 +1,6 @@
 # PRD Intake — 4/5-Whys Interview
 
-You are running Stage 1 of the autobuilder pipeline. Your job: turn an ambiguous PRD into a structured `intent-card.json` that validates against `~/.claude/skills/autobuilder/schemas/intent-card.schema.json`. Subsequent stages depend on this card being **honest and complete** — your job is not to be charitable, it's to be falsifiable.
+You are running Stage 1 of the autobuilder pipeline. Your job: turn an ambiguous PRD into a structured `intent-card.json` that validates against `~/.claude/skills/rustbuild/schemas/intent-card.schema.json`. Subsequent stages depend on this card being **honest and complete** — your job is not to be charitable, it's to be falsifiable.
 
 ## Inputs
 
@@ -104,11 +104,11 @@ Before emitting the card, run these checks. If any trigger, halt and surface to 
 2. **Conflicting**: Do any hard constraints contradict (e.g. `deny_unsafe: true` AND scope mentions inline assembly)? → conflict.
 3. **Untestable**: Does any AC lack a `test` field that resolves to either a Rust test name or a metric predicate? → reject.
 4. **Metric-AC redundancy**: Does the unfakeable metric duplicate a MUST-AC's pass criterion? → fine, but say so.
-5. **Slug collision**: Does `~/.claude/skills/autobuilder/<intent_slug>/` already exist? → ask for a new slug.
+5. **Slug collision**: Does `~/.claude/skills/rustbuild/<intent_slug>/` already exist? → ask for a new slug.
 
 ## Output
 
-Emit the JSON to `<project_dir>/agent/intent-card.json` (project dir is decided in Stage 2 — at intake time, write it to the conversation and to `~/.claude/skills/autobuilder/proposals/intake-<intent_slug>-<timestamp>.json` for resumption).
+Emit the JSON to `<project_dir>/agent/intent-card.json` (project dir is decided in Stage 2 — at intake time, write it to the conversation and to `~/.claude/skills/rustbuild/proposals/intake-<intent_slug>-<timestamp>.json` for resumption).
 
 Validate against `schemas/intent-card.schema.json` before writing. If validation fails, fix the structure rather than relaxing the schema — the schema IS the contract.
 

@@ -10,7 +10,7 @@ a 7-receipt release gate.
 ### Skill only — `bash` + `jq` (covers Stages 1-2)
 
 One-liner — clones the skill into a temp dir, symlinks it into
-`~/.claude/skills/autobuilder/`, exits clean:
+`~/.claude/skills/rustbuild/`, exits clean:
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/j0yen/autobuilder/main/skill/install.sh | bash
@@ -24,7 +24,7 @@ git clone --depth 1 https://github.com/j0yen/autobuilder.git
 ```
 
 Claude Code picks up the skill on the next session start.
-`/autobuilder <PRD-path>` invokes it.
+`/rustbuild <PRD-path>` invokes it.
 
 ### Full pipeline — skill + companion binary (covers Stages 3-5)
 
@@ -96,7 +96,7 @@ The **agent edits only `src/`**. Everything else — `Cargo.toml`, `clippy.toml`
 `deny.toml`, `tests/`, `scripts/run-metrics.sh` — is read-only harness,
 mirroring autoresearch's `prepare.py`/`train.py` separation. The skill ships
 the BAD_RUST audit and risk-gate driver scripts in
-`~/.claude/skills/autobuilder/{rules/audit-checks.sh,scripts/risk-gate.sh}`
+`~/.claude/skills/rustbuild/{rules/audit-checks.sh,scripts/risk-gate.sh}`
 rather than per-project, so they stay versioned in one place.
 
 ### The 7 receipts
@@ -178,7 +178,7 @@ cat target/autobuilder/metrics.json
 inside a Claude Code session with a PRD path:
 
 ```
-/autobuilder --prd path/to/prd.md
+/rustbuild --prd path/to/prd.md
 ```
 
 …and the skill drives all five stages, leaving every receipt under
