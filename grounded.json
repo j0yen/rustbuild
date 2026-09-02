@@ -1,0 +1,164 @@
+{
+  "model_catalog": "acme",
+  "model_schema": "sales",
+  "model_table": "fact_orders",
+  "annotations": {
+    "order_count": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000033",
+        "label": "information generically dependent continuant",
+        "rationale": "'order_count' is a measure — an information GDC that inheres in a process; it carries propositional content about the magnitude of some activity (BFO:GDC)."
+      },
+      "domainModule": "QuantitativeProcess",
+      "aristotelianDefinition": {
+        "genus": "information generically dependent continuant",
+        "differentia": "order_count in the context of acme.sales.fact_orders"
+      }
+    },
+    "avg_order_value": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000033",
+        "label": "information generically dependent continuant",
+        "rationale": "'avg_order_value' is a measure — an information GDC that inheres in a process; it carries propositional content about the magnitude of some activity (BFO:GDC)."
+      },
+      "domainModule": "GeneralSemanticLayer",
+      "aristotelianDefinition": {
+        "genus": "information generically dependent continuant",
+        "differentia": "avg_order_value in the context of acme.sales.fact_orders"
+      }
+    },
+    "order_key": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000019",
+        "label": "quality",
+        "rationale": "'order_key' is a key — an identifier quality that inheres in the entity it identifies (BFO:quality)."
+      },
+      "domainModule": "GeneralSemanticLayer",
+      "aristotelianDefinition": {
+        "genus": "quality",
+        "differentia": "order_key in the context of acme.sales.fact_orders"
+      }
+    },
+    "TopCustomers": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000019",
+        "label": "quality",
+        "rationale": "'TopCustomers' is a named set — a grouping of entities sharing a quality; the shared quality grounds the set (BFO:quality)."
+      },
+      "domainModule": "CustomerRole",
+      "aristotelianDefinition": {
+        "genus": "quality",
+        "differentia": "TopCustomers in the context of acme.sales.fact_orders"
+      }
+    },
+    "ship_time": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000008",
+        "label": "temporal region",
+        "rationale": "'ship_time' is a date/time field — a temporal region (interval or instant) at which processes and states are located (BFO:temporal region)."
+      },
+      "domainModule": "TemporalRegion",
+      "aristotelianDefinition": {
+        "genus": "temporal region",
+        "differentia": "ship_time in the context of acme.sales.fact_orders"
+      }
+    },
+    "customer_name": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000019",
+        "label": "quality",
+        "rationale": "'customer_name' is a dimension/attribute — a quality that inheres in its bearer, characterising it intrinsically (BFO:quality)."
+      },
+      "domainModule": "CustomerRole",
+      "aristotelianDefinition": {
+        "genus": "quality",
+        "differentia": "customer_name in the context of acme.sales.fact_orders"
+      }
+    },
+    "product_category": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000023",
+        "label": "role",
+        "rationale": "'product_category' is a dimension/attribute with relational/status semantics — it denotes a role played by entities in a social or organisational context (BFO:role)."
+      },
+      "domainModule": "ProductQuality",
+      "aristotelianDefinition": {
+        "genus": "role",
+        "differentia": "product_category in the context of acme.sales.fact_orders"
+      }
+    },
+    "region": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000019",
+        "label": "quality",
+        "rationale": "'region' is a dimension/attribute — a quality that inheres in its bearer, characterising it intrinsically (BFO:quality)."
+      },
+      "domainModule": "SpatialRegion",
+      "aristotelianDefinition": {
+        "genus": "quality",
+        "differentia": "region in the context of acme.sales.fact_orders"
+      }
+    },
+    "CustomerHierarchy": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000023",
+        "label": "role",
+        "rationale": "'CustomerHierarchy' is a hierarchy/level — a role that members play within a classification scheme (BFO:role)."
+      },
+      "domainModule": "CustomerRole",
+      "aristotelianDefinition": {
+        "genus": "role",
+        "differentia": "CustomerHierarchy in the context of acme.sales.fact_orders"
+      }
+    },
+    "customer_status": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000023",
+        "label": "role",
+        "rationale": "'customer_status' is a dimension/attribute with relational/status semantics — it denotes a role played by entities in a social or organisational context (BFO:role)."
+      },
+      "domainModule": "CustomerRole",
+      "aristotelianDefinition": {
+        "genus": "role",
+        "differentia": "customer_status in the context of acme.sales.fact_orders"
+      }
+    },
+    "order_date": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000008",
+        "label": "temporal region",
+        "rationale": "'order_date' is a date/time field — a temporal region (interval or instant) at which processes and states are located (BFO:temporal region)."
+      },
+      "domainModule": "TemporalRegion",
+      "aristotelianDefinition": {
+        "genus": "temporal region",
+        "differentia": "order_date in the context of acme.sales.fact_orders"
+      }
+    },
+    "ProductLevelGroup": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000023",
+        "label": "role",
+        "rationale": "'ProductLevelGroup' is a hierarchy/level — a role that members play within a classification scheme (BFO:role)."
+      },
+      "domainModule": "ProductQuality",
+      "aristotelianDefinition": {
+        "genus": "role",
+        "differentia": "ProductLevelGroup in the context of acme.sales.fact_orders"
+      }
+    },
+    "revenue": {
+      "philosophicalGrounding": {
+        "iri": "http://purl.obolibrary.org/obo/BFO_0000033",
+        "label": "information generically dependent continuant",
+        "rationale": "'revenue' is a measure — an information GDC that inheres in a process; it carries propositional content about the magnitude of some activity (BFO:GDC)."
+      },
+      "domainModule": "FinancialProcess",
+      "aristotelianDefinition": {
+        "genus": "information generically dependent continuant",
+        "differentia": "revenue in the context of acme.sales.fact_orders"
+      }
+    }
+  },
+  "overlay_version": "ousia-atscale/0.1.0"
+}

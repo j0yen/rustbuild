@@ -3,6 +3,7 @@
 Status: Draft v0.1
 build_target: shell
 build_into: /home/jsy/wintermute/consign
+deferred_acs: [6]
 Vision: visions/consign.md
 
 ## TL;DR

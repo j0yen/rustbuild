@@ -1,0 +1,6 @@
+{"ts":"2026-05-30T02:44:15Z","slug":"rouse-wake-vad-models","verdict":"pass","concern_summary":"airtight no-unverified-blob invariant; back-compat intact; non-tautological tests; nits: wm-audio --help omits subcommand, okay_nabu deferred","shipped":false,"post_ship_revert":null}
+{"ts": "2026-05-30T04:12:44Z", "slug": "ctrace-scribe", "verdict": "pass", "concern_summary": null, "shipped": true, "post_ship_revert": null}
+{"ts": "2026-05-30T04:35:00Z", "slug": "wm-hardware-drift", "verdict": "pass", "concern_summary": null, "shipped": true, "post_ship_revert": null}
+{"ts": "2026-05-30T04:45:42Z", "slug": "ctrace-orphan-reap", "verdict": "pass", "concern_summary": "ac5-sigterm-not-at-integration-level: SIGTERM path covered by unit tests only", "shipped": true, "post_ship_revert": null}
+{"ts": "2026-06-02T08:16:28Z", "slug": "bpolicy", "verdict": "concern", "concern_summary": "AC2 golden test structural not Python-output diff", "shipped": true, "post_ship_revert": null}
+{"ts":"2026-06-05T01:57:20Z","slug":"agorabus-nats-bridge","verdict":"concern","concern_summary":"arc-mutex-without-justification, no-integration-level-happy-path-test","shipped":true,"post_ship_revert":null}

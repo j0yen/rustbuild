@@ -1,6 +1,6 @@
 # PRD-constellation-wm-daemons-ryzen
 
-**Status:** Draft v0.1
+**Status:** Shipped v1.0 — wm-brain, wm-tts, wm-dialog deployed via initial PRD; wm-audio + wm-stt completed via constellation-voice-boot-ryzen (native build on ryzen7, GLIBC 2.39, target-cpu=native/no-AVX512). All 5 ACs green.
 **Vision:** visions/constellation.md
 **build_target:** shell
 **build_into:** /home/jsy/wintermute/constellation
