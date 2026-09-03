@@ -166,15 +166,20 @@ LOOP UNTIL all-MUST-ACs-green AND risk-gate-passes OR budget-exhausted:
      `ac-judge run --prd <prd_path> --crate-root <crate_dir>`
      (binary from j0yen/ac-judge; install via that repo's `install.sh`).
      It pairs each declared AC's English text with the test claiming to
-     verify it and asks an independent model (Sonnet 4.6, a different
-     family from the implementer) two questions: does the test exercise
-     the AC's behavior, and does it assert the AC's invariant or merely
-     restate the impl? Emits `target/autobuilder/ac-semantic-judge.json`
-     (Receipt #9, schema `schemas/ac-semantic-judge.schema.json`). Exits
-     4 if any AC has `behavior_match: no` OR (`assertion_kind:
-     restates-impl` AND `confidence >= 0.7`); that exit is the Stage 4
-     `ac-semantic-judge` block. Requires `$ANTHROPIC_API_KEY` (exits 6
-     without it, no network call). Complements mutation testing: mutation
+     verify it and asks an independent model two questions: does the test
+     exercise the AC's behavior, and does it assert the AC's invariant or
+     merely restate the impl? The judge runs on a pluggable backend
+     (`--backend auto`, the default): **codex** (`codex exec`, preferred —
+     a genuinely different model family from the Claude implementer) first,
+     then the Anthropic API (`$ANTHROPIC_API_KEY`), then `claude login`'s
+     headless CLI (`claude -p`) as the last resort. Emits
+     `target/autobuilder/ac-semantic-judge.json` (Receipt #9, schema
+     `schemas/ac-semantic-judge.schema.json`, `backend` field records which
+     one judged). Exits 4 if any AC has `behavior_match: no` OR
+     (`assertion_kind: restates-impl` AND `confidence >= 0.7`); that exit is
+     the Stage 4 `ac-semantic-judge` block. Requires a judge backend:
+     `codex login`, `$ANTHROPIC_API_KEY`, or `claude login` (exits 6 if none
+     is available, no network call). Complements mutation testing: mutation
      asks "would the test catch a broken impl?"; the judge asks "does the
      test check the right thing at all?"
 ```
