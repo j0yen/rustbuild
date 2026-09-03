@@ -44,12 +44,14 @@ Invoke when the user:
 Do NOT invoke for:
 - Greenfield non-Rust projects.
 - Surgical edits to an existing Rust crate (use direct tools).
-- Web services, WASM, or embedded targets (v1 is `--target cli|lib` only).
+- WASM or embedded targets. (A crate that serves HTTP is still a `--target cli`
+  or `lib` crate and goes through this skill — a `build_target: rust-*` PRD is
+  never routed around /rustbuild because of what the binary does. 2026-09-02.)
 
 ## Resolved decisions (locked 2026-05-21)
 
 1. **Skill + companion Rust binary.** Skill orchestrates Claude subagents; the companion `autobuilder` binary (Cargo workspace at `../autobuilder/` in the repo, installed via `cargo install --path autobuilder`) owns the metric harness, receipt writing, risk gate, and experiment-loop runner. Skill shells out to the binary. Binary is itself dogfooded.
-2. **Target scope: CLIs + library crates.** `--target cli` or `--target lib`. For libs add cargo-semver-checks, docs-coverage, `cargo public-api` diff. Service/WASM/embedded → v2.
+2. **Target scope: CLIs + library crates.** `--target cli` or `--target lib`. For libs add cargo-semver-checks, docs-coverage, `cargo public-api` diff. A CLI/lib that happens to run a server is in scope; WASM/embedded → v2.
 3. **Hybrid autonomy.** Loop and risk gate run fully autonomous. Human checkpoint only when the agent wants to add/relax a MUST acceptance criterion, widen hard constraints, or modify the skill itself. Trigger via `intent_card_amendment_request.json`.
 4. **First PRD is the metric harness.** Build `autobuilder-metric-harness` (input: project path; output: normalized `metrics.json`) before throwing external PRDs at autobuilder.
 
@@ -466,7 +468,7 @@ evolve` (Phase B); and the metric-harness meta-PRD plus many external PRDs
 have run through the full loop (Phase C). The pipeline is load-bearing in
 the daily `/build` automation, which delegates every Rust-shaped PRD to it;
 EvidencePack receipts and postmortems have accumulated across shipped
-projects. Scope remains `--target cli|lib` (services/WASM/embedded are v2),
+projects. Scope remains `--target cli|lib` — servers included; WASM/embedded are v2 —
 and Stage 6 publish is still a manual convention (see that stage).
 
 ## Resolved block — recall-memory-linter (historical)
