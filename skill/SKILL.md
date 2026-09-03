@@ -227,13 +227,14 @@ on it (per PRD autobuilder-mutation-testing).
 
 Missing receipts → block + machine-readable diagnostic. No self-approval.
 
-**Reviewer model: always Opus.** The `reviewer-agent` sub-agent dispatches
-on `model: "opus"` regardless of the model that ran the implementation
-loop (e.g. a Sonnet `/build` branch). Independent verification is the one
-place to spend the strongest model — its whole purpose is to catch what
-the (possibly cheaper) implementer missed, against the intent-card's
-English ACs rather than the code. Set `model: "opus"` on the Agent/Task
-call that produces the reviewer-agent receipt.
+**Reviewer model: Sonnet.** The `reviewer-agent` sub-agent dispatches
+on `model: "sonnet"`, the same tier as the implementation loop, matching
+`/pybuild`'s Stage 4 reviewer. Independence comes from a fresh agent that
+reads the intent-card's English ACs rather than the code, not from a
+bigger model. Escalate the reviewer to `model: "opus"` only when the user
+explicitly asks (changed 2026-09-02; was always-Opus). Set
+`model: "sonnet"` on the Agent/Task call that produces the reviewer-agent
+receipt.
 
 **Reviewer calibration & phased graduation.** Every `reviewer-agent`
 verdict is appended as one line to
