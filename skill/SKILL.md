@@ -260,7 +260,7 @@ always fails the gate.
 | `experiment` | roll up a multi-slice campaign's per-slice outcomes into one receipt | pass, skipped |
 
 **Producing the extended receipts.** Install once:
-Fastest path: `skill/scripts/extended-receipts.sh <crate> [parallelism=6]` runs all 17 in parallel (~45 s instead of ~2 min) and prints each verdict; run it after `scripts/audit.sh`, never concurrently with it.
+One command: `skill/scripts/extended-receipts.sh <crate> [parallelism=6]` runs all 17 and prints a verdict table. Wall time is dominated by determinism and cold-build-time (three clean builds), so parallelism buys little on a loaded box (measured 131 s with a cycle running vs ~120 s serial); the value is one command and one table. Run it after `scripts/audit.sh`, never concurrently with it.
 `cargo install --path ~/wintermute/rustbuild/autobuilder/crates/extended-gates --locked`.
 Run each producer against a crate: `<name> --project <crate>` (e.g.
 `ac-traceability --project ~/repos/foo`), which writes
