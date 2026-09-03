@@ -104,7 +104,7 @@ grep_unwrap_on_external_input() {
   # flag .unwrap() / .expect() on results of common boundary functions.
   local pattern='(env::var|fs::read|fs::read_to_string|fs::write|std::io|stdin|stdout|stderr|args|TcpStream|TcpListener|UdpSocket|reqwest|hyper|serde_json::from_str|serde_json::from_slice|toml::from_str|process::Command|child::wait|Receiver::recv|Sender::send)[^;]{0,200}\.(unwrap|expect)\('
   while IFS= read -r -d '' file; do
-    grep -nE "$pattern" "$file" 2>/dev/null || true
+    grep -nHE "$pattern" "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-029-RUST-BAD-BEHAVIOR" "grep_unwrap_on_external_input" "blocking" "$file" "$line" "$snippet" \
@@ -114,7 +114,7 @@ grep_unwrap_on_external_input() {
 
 grep_box_leak() {
   while IFS= read -r -d '' file; do
-    grep -nE 'Box::leak' "$file" 2>/dev/null || true
+    grep -nHE 'Box::leak' "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-029-RUST-BAD-BEHAVIOR" "grep_box_leak" "blocking" "$file" "$line" "$snippet" \
@@ -124,7 +124,7 @@ grep_box_leak() {
 
 grep_static_mut() {
   while IFS= read -r -d '' file; do
-    grep -nE '\bstatic\s+mut\b' "$file" 2>/dev/null || true
+    grep -nHE '\bstatic\s+mut\b' "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-029-RUST-BAD-BEHAVIOR" "grep_static_mut" "blocking" "$file" "$line" "$snippet" \
@@ -134,7 +134,7 @@ grep_static_mut() {
 
 grep_mem_transmute() {
   while IFS= read -r -d '' file; do
-    grep -nE 'mem::transmute|std::mem::transmute' "$file" 2>/dev/null || true
+    grep -nHE 'mem::transmute|std::mem::transmute' "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-029-RUST-BAD-BEHAVIOR" "grep_mem_transmute" "blocking" "$file" "$line" "$snippet" \
@@ -144,7 +144,7 @@ grep_mem_transmute() {
 
 grep_unsafe_impl_send_sync() {
   while IFS= read -r -d '' file; do
-    grep -nE 'unsafe\s+impl\s+(Send|Sync)' "$file" 2>/dev/null || true
+    grep -nHE 'unsafe\s+impl\s+(Send|Sync)' "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-029-RUST-BAD-BEHAVIOR" "grep_unsafe_impl_send_sync" "blocking" "$file" "$line" "$snippet" \
@@ -157,7 +157,7 @@ grep_unsafe_impl_send_sync() {
 grep_hardcoded_secrets() {
   local pattern='(api[_-]?key|secret|password|passwd|token|bearer)[[:space:]]*=[[:space:]]*"[A-Za-z0-9_\-]{8,}"'
   while IFS= read -r -d '' file; do
-    grep -niE "$pattern" "$file" 2>/dev/null || true
+    grep -niHE "$pattern" "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-010-SECRET-SPRAWL" "grep_hardcoded_secrets" "blocking" "$file" "$line" "$snippet" \
@@ -401,7 +401,7 @@ check_reviewer_agent_receipt_present() {
 grep_dangerous_comments() {
   local pattern='(TODO[: ].*later|FIXME|XXX|HACK|TEMP[: ]|AI[- ]generated|copilot[- ]generated|claude[- ]generated|chatgpt[- ]generated|works on my machine|should not happen)'
   while IFS= read -r -d '' file; do
-    grep -niE "$pattern" "$file" 2>/dev/null || true
+    grep -niHE "$pattern" "$file" 2>/dev/null || true
   done < <(rust_files | tr '\n' '\0') | while IFS=: read -r file line snippet; do
     is_allowlisted "$file" "$line" && continue
     emit_finding "HLT-041-COMMENT-HYGIENE" "grep_dangerous_comments" "advisory" "$file" "$line" "$snippet" \

@@ -3,7 +3,7 @@
 # audit.sh — runs the BAD_RUST audit against this project.
 # READ-ONLY: the edit-agent must not modify this file.
 #
-# Delegates to ~/.claude/skills/autobuilder/rules/audit-checks.sh.
+# Delegates to ~/.claude/skills/rustbuild/rules/audit-checks.sh.
 # Output: target/autobuilder/receipts/risk-gate.json (the gate's expected
 # location — eliminates the previous manual `cp audit.json risk-gate.json`
 # step every standalone build needed).
@@ -12,7 +12,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-AUDIT="$HOME/.claude/skills/autobuilder/rules/audit-checks.sh"
+AUDIT="$HOME/.claude/skills/rustbuild/rules/audit-checks.sh"
 mkdir -p target/autobuilder/receipts
 
 if [ ! -x "$AUDIT" ]; then

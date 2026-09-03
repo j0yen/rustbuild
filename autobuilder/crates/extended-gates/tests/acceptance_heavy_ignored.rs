@@ -6,6 +6,11 @@
 //!
 //! Covered (one happy + one planted per producer):
 //! - determinism, cold-build-time, mutation-kill, flake-audit, hermetic-build
+//!
+//! Also covered: `target/autobuilder/receipts/` must survive `determinism`
+//! and `cold-build-time`, which both run `cargo clean` — if they clean the
+//! project's real `target/` dir (instead of an isolated `CARGO_TARGET_DIR`)
+//! every other producer's receipt is wiped along with the build artifacts.
 
 #![allow(
     clippy::unwrap_used,
@@ -133,4 +138,45 @@ fn ac_hermetic_build_1_no_new_sockets_passes() {
         v.get("platform").and_then(serde_json::Value::as_str),
         Some("linux")
     );
+}
+
+/// Write a sentinel receipt into `target/autobuilder/receipts/` and assert
+/// it is still there (byte-identical) after the given producer runs. Guards
+/// against a producer's `cargo clean` wiping the project's real `target/`.
+fn assert_sentinel_survives(producer: &str) {
+    let tmp = tempfile::tempdir().unwrap();
+    let project = tmp.path();
+    init_git(project);
+    scaffold_trivial_lib(project);
+
+    let receipts_dir = project.join("target/autobuilder/receipts");
+    std::fs::create_dir_all(&receipts_dir).unwrap();
+    let sentinel_path = receipts_dir.join("sentinel-receipt.json");
+    let sentinel_bytes = b"{\"schema\":\"test.sentinel.v1\",\"verdict\":\"pass\"}";
+    std::fs::write(&sentinel_path, sentinel_bytes).unwrap();
+
+    run_producer(producer, project).unwrap();
+
+    let after = std::fs::read(&sentinel_path).unwrap_or_else(|e| {
+        panic!(
+            "sentinel {} did not survive running {producer}: {e}",
+            sentinel_path.display()
+        )
+    });
+    assert_eq!(
+        after, sentinel_bytes,
+        "sentinel receipt was modified by {producer} (target/autobuilder/receipts/ must be untouched)"
+    );
+}
+
+#[test]
+#[ignore]
+fn ac_determinism_2_target_autobuilder_receipts_survives() {
+    assert_sentinel_survives("determinism");
+}
+
+#[test]
+#[ignore]
+fn ac_cold_build_time_2_target_autobuilder_receipts_survives() {
+    assert_sentinel_survives("cold-build-time");
 }

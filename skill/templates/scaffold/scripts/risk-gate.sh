@@ -5,4 +5,4 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-exec "$HOME/.claude/skills/autobuilder/scripts/risk-gate.sh" .
+exec "$HOME/.claude/skills/rustbuild/scripts/risk-gate.sh" .

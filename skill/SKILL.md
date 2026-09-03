@@ -211,7 +211,7 @@ mutation data is absent (`null` — script skipped or not yet run), treat the
 term as 0 so the score stays defined. Phase 1 weights it; Phase 2 will gate
 on it (per PRD autobuilder-mutation-testing).
 
-### Stage 4 — Risk Gate (9 receipts)
+### Stage 4 — Risk Gate (25 receipts)
 
 | Receipt | Source | Pass condition |
 |---|---|---|
@@ -226,6 +226,51 @@ on it (per PRD autobuilder-mutation-testing).
 | `ci-checks` | Stage 2 | `.github/workflows/` green on a fresh worktree clone |
 
 Missing receipts → block + machine-readable diagnostic. No self-approval.
+
+**Extended receipts (17).** `autobuilder gate` has checked all 25 receipts
+below since PRD-extended-gates shipped (2026-05-23) — the 9-row table above
+is the original core; these 17 extend it with supply-chain,
+reproducibility, performance, API-contract, and test-quality checks plus a
+campaign roll-up. Each row's "Pass" column is its `ProducerSpec`/
+`ReceiptSpec` `pass_verdicts` (`autobuilder/crates/gate/src/lib.rs`
+`RECEIPT_SPECS`; `autobuilder/crates/extended-gates/src/lib.rs`
+`PRODUCER_SPECS` — the two tables are kept in sync and asserted equal by an
+integration test). Every extended producer also accepts `block`, which
+always fails the gate.
+
+| Receipt | Purpose | Pass |
+|---|---|---|
+| `supply-audit` | scan `Cargo.lock` for deps listed in vendored RUSTSEC advisories | pass |
+| `license-audit` | every transitive dep's `license` field is in the allowlist | pass |
+| `secrets-scan` | scan tracked source files for high-confidence secret patterns | pass |
+| `sbom` | emit a CycloneDX-shape SBOM JSON of the workspace deps | pass |
+| `determinism` | two cold `cargo build --release` runs produce identical artifact sha256 | pass, skipped |
+| `hermetic-build` | detect outbound network sockets during `cargo build --offline` | pass, skipped |
+| `msrv-verify` | declared `rust-version` actually compiles + tests clean | pass, skipped |
+| `binary-size` | every `target/release/*` binary is under its configured budget | pass, skipped |
+| `cold-build-time` | clean `cargo build --release` wall-time under budget | pass, skipped |
+| `bench-delta` | criterion benches don't regress >X% vs a frozen baseline JSON | pass, skipped |
+| `semver-check` | pub-API diff between `HEAD~1` and `HEAD` is semver-compatible | pass, skipped |
+| `cli-surface` | every declared bin's `--help` output matches its snapshot | pass, skipped |
+| `schema-compat` | receipt JSON schemas added/changed are additive-only | pass, skipped |
+| `ac-traceability` | every PRD AC id has ≥1 Rust test fn referencing it | pass |
+| `mutation-kill` | a small mutation-operator pass on `src/lib.rs` causes the test suite to fail | pass, skipped |
+| `flake-audit` | `cargo test` rerun K times produces identical outcomes | pass, skipped |
+| `experiment` | roll up a multi-slice campaign's per-slice outcomes into one receipt | pass, skipped |
+
+**Producing the extended receipts.** Install once:
+`cargo install --path ~/wintermute/rustbuild/autobuilder/crates/extended-gates --locked`.
+Run each producer against a crate: `<name> --project <crate>` (e.g.
+`ac-traceability --project ~/repos/foo`), which writes
+`target/autobuilder/receipts/<name>-receipt.json`. Optional
+`extended-gates.toml` in the crate root tunes thresholds: `prd_path`,
+`mutation_kill_min_pct`, binary-size budgets. Two invariants any change to a
+producer must preserve: the audit's findings must carry real `path`/`line`
+values, never a bare line number where a path belongs (`skill/rules/
+audit-checks.sh` — every single-file `grep` needs `-H`); and no producer may
+touch `target/autobuilder/` (`determinism`/`cold-build-time` build in an
+isolated `CARGO_TARGET_DIR`, never the project's own `target/`, precisely
+so their `cargo clean` can't wipe every other producer's receipt).
 
 **Reviewer model: Sonnet.** The `reviewer-agent` sub-agent dispatches
 on `model: "sonnet"`, the same tier as the implementation loop, matching

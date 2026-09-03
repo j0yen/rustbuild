@@ -94,8 +94,8 @@ echo "::gate audit" | tee -a "$LOG"
 AUDIT_OUT=target/autobuilder/audit.json
 BLOCKING=0
 ADVISORY=0
-if [ -x "$HOME/.claude/skills/autobuilder/rules/audit-checks.sh" ]; then
-  if ! "$HOME/.claude/skills/autobuilder/rules/audit-checks.sh" . > "$AUDIT_OUT" 2>&1; then
+if [ -x "$HOME/.claude/skills/rustbuild/rules/audit-checks.sh" ]; then
+  if ! "$HOME/.claude/skills/rustbuild/rules/audit-checks.sh" . > "$AUDIT_OUT" 2>&1; then
     : # Non-zero exit is fine; we'll read counts from the JSON.
   fi
   BLOCKING=$(jq -r '.blocking_count // 0' "$AUDIT_OUT" 2>/dev/null || echo 0)
