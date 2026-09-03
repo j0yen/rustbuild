@@ -15,6 +15,10 @@ use clap::Args as ClapArgs;
 use serde_json::Value;
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
+
+#[cfg(unix)]
+use std::os::unix::fs::PermissionsExt;
 
 #[derive(Debug, ClapArgs)]
 pub(crate) struct Args {
@@ -96,6 +100,12 @@ pub(crate) fn run(args: Args) -> Result<()> {
     let subs = [("{{intent_slug}}", slug.as_str()), ("{{target_kind}}", target_kind.as_str())];
     let mut files_written = 0usize;
     copy_tree(&template_root, &args.out, &subs, &mut files_written)?;
+
+    // Vendor the audit rules into the crate. `scripts/audit.sh` falls back
+    // to `rules/audit-checks.sh` when `~/.claude` is absent (every CI
+    // runner), so every scaffolded crate needs its own copy rather than
+    // relying on the skill checkout that only exists on a build box.
+    vendor_rules(&template_root, &args.out, &mut files_written)?;
 
     // For lib targets, drop the scaffold's `src/main.rs` stub. The template
     // emits both `src/main.rs` and `src/lib.rs` so the same materialization
@@ -193,6 +203,113 @@ fn copy_file_with_subs(src: &Path, dst: &Path, subs: &[(&str, &str)]) -> Result<
             .with_context(|| format!("could not copy {} → {}", src.display(), dst.display()))?;
     }
     Ok(())
+}
+
+/// Vendors `rules/audit-checks.sh` and `rules/hlt-rules.toml` from the skill
+/// checkout into the new project's `rules/`. The skill checkout is the
+/// sibling of `templates/scaffold/` (i.e. `template_root/../../rules`) —
+/// `--template` always points at `<skill_root>/templates/scaffold`.
+///
+/// `scripts/audit.sh` has no `~/.claude` on a CI runner, so it falls back to
+/// this vendored copy — see its header comment. Non-fatal when the skill
+/// checkout can't be located (e.g. a minimal `--template` fixture in tests):
+/// prints a warning and leaves the project without `rules/` rather than
+/// failing the whole scaffold.
+fn vendor_rules(template_root: &Path, out: &Path, files_written: &mut usize) -> Result<()> {
+    let Some(skill_root) = template_root.parent().and_then(Path::parent) else {
+        eprintln!(
+            "scaffold: could not derive a skill root from template path {}; skipping rules/ vendoring",
+            template_root.display()
+        );
+        return Ok(());
+    };
+    let rules_src_dir = skill_root.join("rules");
+    let audit_src = rules_src_dir.join("audit-checks.sh");
+    let hlt_src = rules_src_dir.join("hlt-rules.toml");
+    if !audit_src.is_file() || !hlt_src.is_file() {
+        eprintln!(
+            "scaffold: vendored rules not found under {} (no skill checkout detected); scripts/audit.sh will need ~/.claude/skills/rustbuild at build/CI time",
+            rules_src_dir.display()
+        );
+        return Ok(());
+    }
+
+    let rules_dst_dir = out.join("rules");
+    fs::create_dir_all(&rules_dst_dir)
+        .with_context(|| format!("could not create {}", rules_dst_dir.display()))?;
+
+    let sha = git_short_sha(skill_root).unwrap_or_else(|_| "unknown".to_owned());
+    let header = format!(
+        "# VENDORED COPY — canonical source: j0yen/rustbuild skill/rules/audit-checks.sh @ {sha}\n\
+         # CI has no ~/.claude, so the crate carries it; refresh by re-copying.\n"
+    );
+    let audit_body = fs::read_to_string(&audit_src)
+        .with_context(|| format!("could not read {}", audit_src.display()))?;
+    let audit_dst = rules_dst_dir.join("audit-checks.sh");
+    fs::write(&audit_dst, insert_after_shebang(&audit_body, &header))
+        .with_context(|| format!("could not write {}", audit_dst.display()))?;
+    set_executable(&audit_dst)?;
+    *files_written += 1;
+
+    let hlt_dst = rules_dst_dir.join("hlt-rules.toml");
+    fs::copy(&hlt_src, &hlt_dst)
+        .with_context(|| format!("could not copy {} → {}", hlt_src.display(), hlt_dst.display()))?;
+    *files_written += 1;
+
+    Ok(())
+}
+
+/// Inserts `header` immediately after the shebang line (if any); otherwise
+/// prepends it. Assumes `header` already ends in a newline.
+fn insert_after_shebang(body: &str, header: &str) -> String {
+    if let Some(rest) = body.strip_prefix("#!") {
+        if let Some(nl) = rest.find('\n') {
+            let (shebang_line, tail) = rest.split_at(nl + 1);
+            return format!("#!{shebang_line}{header}{tail}");
+        }
+    }
+    format!("{header}{body}")
+}
+
+/// Sets the executable bit on a vendored script. `fs::copy` would have
+/// preserved the source's mode, but we rewrite the file's contents (to
+/// insert the vendoring header) via `fs::write`, which does not.
+#[cfg(unix)]
+fn set_executable(path: &Path) -> Result<()> {
+    let mut perms = fs::metadata(path)
+        .with_context(|| format!("could not stat {}", path.display()))?
+        .permissions();
+    let mode = perms.mode() | 0o111;
+    perms.set_mode(mode);
+    fs::set_permissions(path, perms)
+        .with_context(|| format!("could not chmod +x {}", path.display()))?;
+    Ok(())
+}
+
+#[cfg(not(unix))]
+fn set_executable(_path: &Path) -> Result<()> {
+    Ok(())
+}
+
+/// Short SHA of the rustbuild checkout backing `skill_root` (a symlink into
+/// the repo, or the repo itself, or a self-cloned copy under
+/// `~/.local/share/autobuilder/`). Used for the vendored-rules header so a
+/// crate's `rules/audit-checks.sh` can be traced back to the source commit.
+fn git_short_sha(skill_root: &Path) -> Result<String> {
+    let output = Command::new("git")
+        .arg("-C")
+        .arg(skill_root)
+        .args(["rev-parse", "--short", "HEAD"])
+        .output()
+        .context("failed to spawn git rev-parse --short HEAD")?;
+    if !output.status.success() {
+        return Err(anyhow!(
+            "git rev-parse --short HEAD in {} failed: {}",
+            skill_root.display(),
+            String::from_utf8_lossy(&output.stderr).trim()
+        ));
+    }
+    Ok(String::from_utf8_lossy(&output.stdout).trim().to_owned())
 }
 
 fn is_textual(path: &Path) -> bool {

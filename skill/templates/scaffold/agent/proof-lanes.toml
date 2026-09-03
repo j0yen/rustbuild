@@ -41,6 +41,14 @@ required_commands = [
 ]
 
 [[lane]]
+id = "meta"
+description = "Orchestrator-owned scaffold metadata (agent/** intent-card, program doc, owner/test maps, this file), repo hygiene, and the vendored audit rules CI needs (rules/audit-checks.sh has no ~/.claude on a runner). Not edit-agent-owned (see owner-map.json); no build proof applies, only intent-card schema validation."
+globs = ["agent/**", ".gitignore", "CHANGELOG.md", "README.md", "LICENSE-*", "extended-gates.toml", "PRD-*.md", "rules/**"]
+required_commands = [
+  "autobuilder intake --validate agent/intent-card.json",
+]
+
+[[lane]]
 id = "harness-readonly"
 description = "Harness files; should never change after scaffold"
 globs = [

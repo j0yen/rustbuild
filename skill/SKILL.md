@@ -85,6 +85,7 @@ Generate a project where harness is read-only, agent edits only `src/`:
 ├── scripts/run-metrics.sh                ← read-only; emits metrics.json
 ├── scripts/audit.sh                      ← read-only; BAD_RUST scan
 ├── scripts/risk-gate.sh                  ← read-only; checks 7 receipts
+├── rules/audit-checks.sh + hlt-rules.toml ← vendored from skill/rules at scaffold time (CI has no ~/.claude)
 ├── agent/
 │   ├── AUTOBUILDER_PROGRAM.md            ← autoresearch-style instructions
 │   ├── intent-card.json
