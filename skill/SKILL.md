@@ -228,6 +228,18 @@ on it (per PRD autobuilder-mutation-testing).
 
 Missing receipts → block + machine-readable diagnostic. No self-approval.
 
+**Rollback base (PRD-rustbuild-tag-rollback-base).** `rollback-plan`'s
+`--base` defaults to the newest `v<major>.<minor>.<patch>` tag reachable
+from HEAD by first-parent (falling back to the crate's initial commit,
+noted `base=initial (no tags)`, when no such tag exists yet); an explicit
+`--base` still wins. Every shipped commit gets that tag via Stage 6's
+`ship-tag.sh` (below), so a healthy crate's rollback range is only the
+commits since its last ship, not its whole history. **A failing rollback
+receipt is fixed by splitting or reverting the offending commit forward,
+never by rewriting history; if history must be rewritten, a human does it
+and says so in the commit.** Squashing history to satisfy this receipt is
+never the fix — it only moves the same conflict onto the next tag.
+
 **Extended receipts (17).** `autobuilder gate` has checked all 25 receipts
 below since PRD-extended-gates shipped (2026-05-23) — the 9-row table above
 is the original core; these 17 extend it with supply-chain,
@@ -336,7 +348,10 @@ Per-slice steps:
 1. **README + LICENSE.** Generate `README.md` from `agent/intent-card.json` (root_motivation as overview, MUST-level acceptance criteria as the AC list). Drop dual `LICENSE-MIT` + `LICENSE-APACHE` files into the repo root.
 2. **Rename branch to `main`.** The autobuilder scaffold uses `autobuilder/<slug>` as the working branch. Before publishing: delete any stale `main` (the iter-0 scaffold baseline) and rename `autobuilder/<slug>` → `main`. Skip this if you want to preserve the autobuilder branch name on GitHub.
 3. **Commit + push.** Single commit "Prep for standalone distribution: README + dual MIT/Apache-2.0 license" using the `Joe Yen <jyen.tech@gmail.com>` identity for wintermute-ecosystem repos, then `gh repo create j0yen/<slug> --public --source . --remote origin --push`.
-4. **Update wintermute's `REPOS.md`** with a one-line description and category (pipeline/runtime/memory/session/artist). The bootstrap installer will then pick up the new repo on next `install.sh` run.
+4. **Tag the shipped commit (PRD-rustbuild-tag-rollback-base).** Right after the publish commit lands, run `skill/scripts/ship-tag.sh <slug-repo-dir> <slug>`. It reads the version from the crate's `Cargo.toml`, creates an annotated `v<version>` tag at HEAD, and pushes it with `--follow-tags`; a second run is a no-op. This is what the *next* PRD's `rollback-plan` measures from by default — a shipped commit that isn't tagged means the next rollback receipt falls back to the crate's initial commit instead. Treat "the shipped commit is tagged" as part of this stage's own done-condition alongside README/LICENSE/push.
+5. **Update wintermute's `REPOS.md`** with a one-line description and category (pipeline/runtime/memory/session/artist). The bootstrap installer will then pick up the new repo on next `install.sh` run.
+
+**Backfill (one-time, human-run).** `skill/scripts/ship-tag.sh --backfill [--yes] [root...]` scans `~/wintermute/` and `~/repos/` (or the given roots) for crates with no `v<version>` tag at HEAD yet, lists crate/version/HEAD, and tags+pushes the untagged ones after a y/N confirmation (or unattended with `--yes`). Crates with a dirty tree, an unreadable version, or a tag already at a different commit are listed and skipped rather than blocking the batch.
 
 The autobuilder companion binary does not yet automate Stage 6; it is a manual convention. A future `autobuilder publish` subcommand may codify this.
 

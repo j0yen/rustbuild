@@ -195,6 +195,15 @@ its `bootstrap/install.sh` clones each published slice on a fresh machine.
 
 ## Recent
 
+- **2026-09-04**: `rollback-plan`'s default `--base` is now the newest
+  `v<major>.<minor>.<patch>` tag reachable from HEAD (falling back to the
+  initial commit when none exists), not `main` — a fixed/ancient base made
+  the rollback receipt unsatisfiable as history grew. Stage 6 publish now
+  tags every shipped commit via `skill/scripts/ship-tag.sh` (also has a
+  one-time `--backfill` mode for the rest of the fleet), and the SKILL.md
+  rollback guidance is explicit that a failing receipt is fixed by
+  splitting/reverting forward, never by squashing history
+  (PRD-rustbuild-tag-rollback-base).
 - **v0.2.0** (2026-05-30): added `autobuilder publish` subcommand — codifies the
   Stage-6 publish pipeline (README/LICENSE generation, branch normalize, `wm-publish`
   repo create, `wm-push`, `REPOS.md` update) into a deterministic, idempotent,
