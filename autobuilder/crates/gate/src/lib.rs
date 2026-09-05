@@ -104,8 +104,10 @@ pub const RECEIPT_SPECS: &[ReceiptSpec] = &[
     ReceiptSpec {
         name: "rollback-plan",
         file_name: ReceiptPath::Static("rollback-plan.json"),
-        expected_schema: "autobuilder.rollback_plan_receipt.v1",
-        alt_schemas: &[],
+        expected_schema: "autobuilder.rollback_plan_receipt.v2",
+        // Transition window (PRD-autobuilder-rollback-tag-aware): a v1
+        // receipt left on disk from before this ship is still accepted.
+        alt_schemas: &["autobuilder.rollback_plan_receipt.v1"],
         requires_head_match: true,
         pass_verdicts: &["pass"],
     },
