@@ -1,8 +1,8 @@
 {
   "schema": "autobuilder.intent_card.v1",
-  "prd_source": "PLAN.md",
-  "intent_slug": "autobuilder",
-  "root_motivation": "Bootstrap autobuilder under its own discipline. The companion Rust binary owns the load-bearing parts of the Stage 1–5 pipeline (intake, scaffold, loop, gate, postmortem, evolve). The first artifact whose existence the gate can verify on itself is the 7-receipt risk-gate machinery — proving the binary can produce and walk all seven receipts on its own repo is the v1 acceptance test for the gate model itself.",
+  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-autobuilder-rollback-tag-aware.md",
+  "intent_slug": "autobuilder-rollback-tag-aware",
+  "root_motivation": "The buildloop's deploy gate treats the rollback-plan receipt as a ship blocker. For a crate that ships as a redeployable tagged binary, the receipt asks a question with no bearing on the real rollback path. `autobuilder/src/rollback.rs` resolves a base tag, then sets `verdict = if blocking == 0 { \"pass\" } else { \"block\" }` where `blocking` counts commits that are not `git revert`-clean (merge commits always count, `parent_count > 1`). mcphost's history is deliberately interleaved \u2014 every parallel-extend integrate since v0.5.5 lands a `--no-ff` merge plus a version bump \u2014 so `blocking` is never zero and the receipt is red on every HEAD. The concrete cost: v0.13.2 is built and gate-blocked from the hub right now solely on this receipt (plus an unrelated test defect), and every future version will hit the same wall. The operator's 2026-09-05 decision (fix-forward; rollback unit is the version range you would actually revert; base = the currently-deployed version's tag; the non-revert-c...",
   "user_persona": "The autobuilder skill orchestrator (a Claude session) and the human invoking `/autobuilder` from their own project. Both shell out to this binary for the receipt + gate steps that must not live in bash.",
   "unfakeable_metric": {
     "name": "stage4_receipt_producers_callable",
@@ -14,44 +14,62 @@
     {
       "id": "AC1",
       "level": "MUST",
-      "description": "`autobuilder rollback-plan --project <dir> --base <ref>` dry-runs git revert via merge-tree, writes target/autobuilder/rollback.md, and emits a digest-bound receipts/rollback-plan.json with verdict pass|block.",
-      "test": "scripts/run-metrics.sh — smoke against the autobuilder repo itself"
+      "description": "Given a crate configured `rollback_model = redeploy-tag` with a contiguous v-tag lineage from the previous deployed tag to HEAD including `--no-ff` merge commits, When rollback-plan runs, Then verdict is pass and the receipt names the previous tag as rollback_target.",
+      "test": "tests/acceptance_ac1.rs"
     },
     {
       "id": "AC2",
       "level": "MUST",
-      "description": "`autobuilder vti-plan --project <dir> --base <ref>` reads agent/proof-lanes.toml, routes every changed file from <base>..HEAD to ≥1 lane (confidence ≥ 0.70), and emits a digest-bound receipts/vti-plan.json.",
-      "test": "scripts/run-metrics.sh — smoke against the autobuilder repo itself"
+      "description": "Given a library-crate fixture with no rollback_model set and one non-revert-clean commit, When rollback-plan runs, Then verdict is block, identical to the pre-change golden receipt for that fixture.",
+      "test": "tests/acceptance_ac2.rs"
     },
     {
       "id": "AC3",
       "level": "MUST",
-      "description": "`autobuilder reviewer-agent prepare` assembles a review-request packet (HEAD, base, intent_card_sha256, commits, changed_files); `autobuilder reviewer-agent finalize --input <decision.json>` validates the subagent's JSON against the schema in prompts/reviewer-agent.md and emits a digest-bound receipts/reviewer-agent.json.",
-      "test": "scripts/run-metrics.sh — smoke against the autobuilder repo itself"
+      "description": "Given the same library fixture with all commits revert-clean, When rollback-plan runs, Then verdict is pass, identical to the pre-change golden.",
+      "test": "tests/acceptance_ac3.rs"
     },
     {
       "id": "AC4",
       "level": "MUST",
-      "description": "`autobuilder ci-checks --project <dir>` shells out to `gh run list --commit <head>` and refuses to emit verdict=pass without at least one workflow run with conclusion=success on HEAD.",
-      "test": "scripts/run-metrics.sh — smoke against the autobuilder repo itself"
+      "description": "Given `redeploy-tag` mode and a crate with zero tags, When rollback-plan runs, Then verdict is block with reason no-previous-tag.",
+      "test": "tests/acceptance_ac4.rs"
     },
     {
       "id": "AC5",
       "level": "MUST",
-      "description": "`autobuilder gate --project <dir>` walks target/autobuilder/receipts/{intake,vti-plan,proof-receipt,risk-gate,reviewer-agent,rollback-plan,ci-checks}.json, verifies schema + head_sha + verdict on each, and emits target/autobuilder/release-receipt.json with the aggregated verdict.",
-      "test": "scripts/run-metrics.sh — smoke against the autobuilder repo itself"
+      "description": "Given the receipt for a redeploy-tag run, When parsed, Then it carries rollback_model, rollback_target (previous tag + sha), and tag_lineage, and validates as schema v2.",
+      "test": "tests/acceptance_ac5.rs"
     },
     {
       "id": "AC6",
-      "level": "SHOULD",
-      "description": "Strict clippy (clippy::pedantic + workspace lints) passes with -D warnings on the autobuilder bin. Workspace cargo check + cargo test --workspace pass under CI's RUSTFLAGS=-D warnings env.",
-      "test": ".github/workflows/ci.yml — exercised on every push"
+      "level": "MUST",
+      "description": "Given a v1 rollback receipt on disk, When `autobuilder gate` reads it, Then it is accepted.",
+      "test": "tests/acceptance_ac6.rs"
     },
     {
       "id": "AC7",
       "level": "SHOULD",
-      "description": "Every receipt produced by autobuilder includes a sha256 `receipt_digest` over its own canonicalized JSON (keys sorted), plus a UTC `captured_at` (RFC3339). The digest field is overwritten with an empty string before computing the digest so the field is self-binding.",
-      "test": "src/receipt.rs::write covers every receipt; visual inspection of any emitted receipt JSON"
+      "description": "Given a version bump in the range that was never tagged, When rollback-plan runs in redeploy-tag mode, Then verdict is block with reason tag-lineage-gap naming that version.",
+      "test": "tests/acceptance_ac7.rs"
+    },
+    {
+      "id": "AC8",
+      "level": "SHOULD",
+      "description": "Given `--explain`, When rollback-plan runs, Then it prints the resolved model, base tag, and rollback target on one line.",
+      "test": "tests/acceptance_ac8.rs"
+    },
+    {
+      "id": "AC9",
+      "level": "MUST",
+      "description": "Given a config declaring an unknown rollback_model value, When rollback-plan runs, Then it exits non-zero naming the invalid value and writes no receipt.",
+      "test": "tests/acceptance_ac9.rs"
+    },
+    {
+      "id": "AC10",
+      "level": "MUST",
+      "description": "Given mcphost at a HEAD with interleaved v0.13.1/v0.13.2 merge commits configured redeploy-tag with base v0.13.0, When rollback-plan runs, Then verdict is pass.",
+      "test": "tests/acceptance_ac10.rs"
     }
   ],
   "scope": [
@@ -84,7 +102,7 @@
     {
       "why": 1,
       "q": "Why a Rust companion binary instead of a pure-skill scaffold?",
-      "a": "Shell is too easy to subvert (set -e off, grep eaten, jq missing). The load-bearing parts — metric extraction, digest binding, schema validation — need a typed implementation under tests."
+      "a": "Shell is too easy to subvert (set -e off, grep eaten, jq missing). The load-bearing parts \u2014 metric extraction, digest binding, schema validation \u2014 need a typed implementation under tests."
     },
     {
       "why": 2,
@@ -107,11 +125,21 @@
       "a": "Timestamps lie under git checkout. A self-binding sha256 lets the gate detect tampering and lets reviewers re-verify by recomputing on the receipt's own contents."
     }
   ],
+  "created_at": "2026-05-22T08:10:00Z",
+  "carried_forward": {
+    "user_persona": true,
+    "unfakeable_metric": true,
+    "scope": true,
+    "non_goals": true,
+    "hard_constraints": true,
+    "five_whys_trace": true,
+    "created_at": true,
+    "ambiguities_resolved": true
+  },
   "ambiguities_resolved": [
     {
-      "question": "Where does the autobuilder repo's 'project' live for the gate — repo root or autobuilder/ workspace?",
+      "question": "Where does the autobuilder repo's 'project' live for the gate \u2014 repo root or autobuilder/ workspace?",
       "resolution": "Repo root. agent/, scripts/, target/autobuilder/ all sit at /home/jsy/projects/autobuilder/. Proof-lanes globs use autobuilder/src/** prefix to match `git diff` output."
     }
-  ],
-  "created_at": "2026-05-22T08:10:00Z"
+  ]
 }
