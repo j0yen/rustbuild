@@ -131,13 +131,15 @@ fn ac_hermetic_build_1_no_new_sockets_passes() {
         .status();
     run_producer("hermetic-build", project).unwrap();
     let v = read_receipt(project, "hermetic-build-receipt.json");
-    // Either pass (sockets empty + cargo exit 0) or block (in CI environments
-    // where /proc/net/tcp shows non-build sockets). We just assert the
-    // platform/payload shape is right.
+    // PRD-rustbuild-hermetic-scope: attribution is now scoped to the
+    // build's own process tree, so machine-wide noise (this used to say
+    // "either pass or block depending on what else is on the host") can no
+    // longer cause a false block here — a quiet build must pass.
     assert_eq!(
         v.get("platform").and_then(serde_json::Value::as_str),
         Some("linux")
     );
+    assert_eq!(verdict_of(&v), "pass", "quiet build must pass: {v:?}");
 }
 
 /// Write a sentinel receipt into `target/autobuilder/receipts/` and assert
