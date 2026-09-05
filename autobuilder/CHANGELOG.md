@@ -1,5 +1,19 @@
 # Changelog
 
+## v0.4.0 — 2026-09-05
+
+The rollback-plan producer gains a `redeploy-tag` mode alongside the
+existing `revert-commits` check: for a deploy-gated crate whose real
+rollback is redeploying the previous tagged version (not reverting `--no-ff`
+merge commits), the receipt now verifies base-tag existence, tag-lineage
+contiguity, and a tagged/taggable HEAD instead of per-commit
+git-revert-cleanliness — fixing the mcphost gate re-blocking on every
+version-bump merge. Selected via `rollback_model` in
+`agent/intent-card.json` or `agent/AUTOBUILDER_PROGRAM.md`, else inferred
+from a deploy manifest, else defaults to `revert-commits` (unchanged).
+Receipt schema bumps to v2 (additive); the gate accepts v1 and v2. Adds
+`--explain` and `--migrate-note`.
+
 ## v0.3.0 — 2026-09-05
 
 The hermetic-build producer now attributes outbound sockets to the build's
