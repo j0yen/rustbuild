@@ -5,6 +5,17 @@
 //! identifiers, then walks `tests/` and `src/` for `#[test] fn` whose name
 //! or docstring contains the id (case-insensitive).
 //!
+//! `<project>` is now (PRD-build-extend-gate-nested-crate-project) whatever
+//! `extend-gate.sh`/`extended-receipts.sh` resolved as the actual Cargo
+//! project root — for a nested-crate repo like rustbuild itself that is
+//! `<repo-root>/autobuilder`, not `<repo-root>`, where the PRD file and
+//! `extended-gates.toml` actually live. `locate_prd` therefore checks
+//! `<project>` first (unchanged behavior for root-level-Cargo.toml repos,
+//! where project *is* the repo root) and falls back to `<project>`'s
+//! parent directory when nothing is found directly — mirroring
+//! `supply-audit`'s existing multi-candidate lookup for the same
+//! self-hosting layout.
+//!
 //! A second AC-id source: the /build contract also numbers ACs as plain
 //! numbered lines under a `## Acceptance criteria` heading (also spelled
 //! `## Acceptance` or `## Acceptance tests`), e.g. `1. P0 — Given …`. Each
@@ -35,19 +46,19 @@ struct Payload {
     tests_per_ac: BTreeMap<String, usize>,
 }
 
-fn locate_prd(project: &Path) -> Option<PathBuf> {
-    let cfg = project.join("extended-gates.toml");
+fn locate_prd_in(dir: &Path) -> Option<PathBuf> {
+    let cfg = dir.join("extended-gates.toml");
     if let Ok(text) = std::fs::read_to_string(&cfg) {
         if let Ok(value) = text.parse::<TomlValue>() {
             if let Some(s) = value.get("prd_path").and_then(TomlValue::as_str) {
-                let p = project.join(s);
+                let p = dir.join(s);
                 if p.is_file() {
                     return Some(p);
                 }
             }
         }
     }
-    for entry in std::fs::read_dir(project).ok()?.flatten() {
+    for entry in std::fs::read_dir(dir).ok()?.flatten() {
         let name = entry.file_name().to_string_lossy().into_owned();
         let is_md = std::path::Path::new(&name)
             .extension()
@@ -57,6 +68,15 @@ fn locate_prd(project: &Path) -> Option<PathBuf> {
         }
     }
     None
+}
+
+/// Checks `project` itself, then (self-hosting nested-crate layout) its
+/// parent directory — the actual repo root when `project` was resolved to
+/// a nested Cargo project one level down (e.g. rustbuild's `autobuilder/`).
+/// A repo whose Cargo.toml lives at its own root never needs the fallback:
+/// `project` there already *is* the repo root, so the first check succeeds.
+fn locate_prd(project: &Path) -> Option<PathBuf> {
+    locate_prd_in(project).or_else(|| project.parent().and_then(locate_prd_in))
 }
 
 /// Matches `AC1`, `AC-foo.1`, etc. anywhere in the PRD body.
