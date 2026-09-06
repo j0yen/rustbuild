@@ -14,6 +14,18 @@ required_commands = [
 ]
 
 [[lane]]
+id = "extended-gates-rust"
+description = "Behavior changes in the extended-gates producer crate (rustbuild's own /build gate producers: supply-audit, ac-traceability, etc.)"
+globs = [
+  "autobuilder/crates/extended-gates/src/**/*.rs",
+  "autobuilder/crates/extended-gates/tests/**/*.rs",
+]
+required_commands = [
+  "cd autobuilder && cargo check --workspace",
+  "cd autobuilder && cargo test -p autobuilder-extended-gates",
+]
+
+[[lane]]
 id = "metric-harness-rust"
 description = "Behavior changes in the dogfooded metric-harness crate"
 globs = ["autobuilder/crates/metric-harness/src/**/*.rs"]
