@@ -1,5 +1,23 @@
 # Changelog
 
+## v0.5.0 — 2026-09-06
+
+ac-traceability: find this PRD and its nested-crate test coverage
+
+Fixed the ac-traceability gate blocker (was 0/6 ACs traced, mis-picking a
+stale legacy PRD file at repo root): added extended-gates.toml
+(prd_path = PRD-rustbuild-hermetic-scope.md), committed the PRD text at
+repo root, and widened collect_test_text() to walk the whole autobuilder/
+tree (this repo has no root Cargo.toml; crates live nested under
+autobuilder/crates/*). Verified twice (receipted): ac-traceability verdict
+flipped from block to pass (8 AC ids, 0 untraced).
+
+hermetic-build/cold-build-time/flake-audit's cargo_exit_code:101 is a
+distinct, still-open extend-gate.sh/extended-receipts.sh --project
+path-resolution defect (repo root has no Cargo.toml at any commit; cargo
+needs --manifest-path autobuilder/Cargo.toml) — confirmed again this tick,
+out of scope for this PRD's own code.
+
 ## v0.4.0 — 2026-09-05
 
 The rollback-plan producer gains a `redeploy-tag` mode alongside the
