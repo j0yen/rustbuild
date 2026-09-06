@@ -128,12 +128,30 @@ fn extract_ac_ids(prd: &str) -> BTreeSet<String> {
 
 fn collect_test_text(project: &Path) -> Vec<(PathBuf, String)> {
     let mut out: Vec<(PathBuf, String)> = Vec::new();
-    for sub in ["tests", "src", "crates"] {
-        let dir = project.join(sub);
+    let mut roots: Vec<PathBuf> = ["tests", "src", "crates"]
+        .into_iter()
+        .map(|sub| project.join(sub))
+        .collect();
+    // Self-hosting layout: this repo has no root `Cargo.toml` (confirmed at
+    // every commit in history) — its own crates live nested one level down
+    // at `autobuilder/crates/*` (see supply-audit's identical
+    // `autobuilder/crates/extended-gates/vendor/rustsec` fallback candidate
+    // for the same root cause). An AC's test coverage can land in any
+    // sibling crate under there (e.g. a producer-crate AC test paired with
+    // a gate-crate receipt-acceptance test), so walk the whole `autobuilder/`
+    // tree rather than only `extended-gates`.
+    let autobuilder_dir = project.join("autobuilder");
+    if autobuilder_dir.is_dir() {
+        roots.push(autobuilder_dir);
+    }
+    for dir in roots {
         if !dir.is_dir() {
             continue;
         }
-        for entry in WalkDir::new(&dir) {
+        let walker = WalkDir::new(&dir).into_iter().filter_entry(|e| {
+            !(e.file_type().is_dir() && e.file_name() == std::ffi::OsStr::new("target"))
+        });
+        for entry in walker {
             let Ok(entry) = entry else { continue };
             if !entry.file_type().is_file() {
                 continue;
