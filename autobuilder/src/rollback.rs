@@ -301,9 +301,12 @@ fn explicit_rollback_model(project: &Path) -> Result<Option<(String, &'static st
 /// Infer `redeploy-tag` when the crate carries a deploy manifest — the
 /// signal that it ships as a redeployable tagged artifact rather than a
 /// library. Convention: `agent/deploy-manifest.toml` (mirrors
-/// `agent/AUTOBUILDER_PROGRAM.md`'s home under `agent/`). Absent that
-/// signal, the default stays `revert-commits` — the guard against a silent
-/// global weakening (PRD Technical Considerations).
+/// `agent/AUTOBUILDER_PROGRAM.md`'s home under `agent/`); presence alone is
+/// the signal today, fields inside are not yet parsed. Absent that signal,
+/// the default stays `revert-commits` — the guard against a silent global
+/// weakening (PRD Technical Considerations). See the README's "Rollback
+/// models" section (PRD-rollback-redeploy-tag-onboard) for the full
+/// onboarding schema and both opt-in paths.
 fn infer_rollback_model(project: &Path) -> RollbackModel {
     if project.join("agent/deploy-manifest.toml").is_file() {
         RollbackModel::RedeployTag
