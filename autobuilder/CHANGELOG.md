@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.6.0 — 2026-09-06
+
+`rollback-plan` now correctly infers the `redeploy-tag` model from an
+`agent/deploy-manifest.toml` marker (AC1/AC3) and stays on the default
+`revert-commits` model when no marker or explicit `rollback_model` is
+present (AC3 regression proof, unweakened fleet default). Adds
+`scripts/set-rollback-model.sh`, a standalone helper that idempotently
+stamps `rollback_model` onto an existing `agent/intent-card.json` (AC5).
+Evaluated `wm-node` and `adopt` against the deploy-tag-or-not question and
+recorded both staying on `RevertCommits` (AC6) — neither ships as a
+tag-redeployed service. Documents the schema and both opt-in paths in
+README.md (AC4). mcphost itself has not yet been stamped with the marker
+file or the `rollback_model` key — that onboarding is a tracked follow-on,
+not part of this ship (AC1/AC2 prove the mechanism against fixtures, not
+the live repo).
+
 ## v0.5.0 — 2026-09-06
 
 ac-traceability: find this PRD and its nested-crate test coverage
