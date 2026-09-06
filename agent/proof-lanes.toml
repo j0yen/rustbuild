@@ -6,7 +6,11 @@
 [[lane]]
 id = "autobuilder-rust"
 description = "Behavior changes in the autobuilder binary"
-globs = ["autobuilder/src/**/*.rs"]
+globs = [
+  "autobuilder/src/**/*.rs",
+  "autobuilder/tests/**/*.rs",
+  "autobuilder/tests/fixtures/**",
+]
 required_commands = [
   "cd autobuilder && cargo check --workspace",
   "cd autobuilder && cargo clippy --bin autobuilder -- -D warnings",
