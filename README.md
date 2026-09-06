@@ -119,6 +119,38 @@ its own work and its own digest.
 `autobuilder gate` aggregates them into `release-receipt.json` and exits
 non-zero on `block`.
 
+### Rollback models — onboarding a deploy-tag service (PRD-rollback-redeploy-tag-onboard)
+
+`rollback-plan` supports two `rollback_model` values, resolved per crate:
+
+- `revert-commits` (default, unchanged if you do nothing): every commit in
+  `<base>..HEAD` must `git revert` cleanly. Right for a library/CLI crate —
+  `summa`, `rustbuild` itself, and `wm-node` all use this, and stay on it
+  unless a human explicitly opts them onto the other model.
+- `redeploy-tag`: for a service that ships by moving a deploy tag forward
+  and rolls back by redeploying the previous tag (never `git revert`) — the
+  verdict instead depends on tag lineage from `base` to `HEAD` being
+  contiguous and `HEAD` being tagged or taggable. Merge commits and
+  non-revert-clean commits never affect this verdict, which is what makes
+  it the right model for a service like `mcphost` with real systemd deploy
+  units under `deploy/` and a `--no-ff` parallel-integrate merge history.
+
+Opt a crate into `redeploy-tag` one of two ways (either is sufficient on
+its own; no other fields are read by `rollback.rs` today, but the schema
+below is the one to extend if that changes):
+
+1. Drop a marker file at `agent/deploy-manifest.toml` (presence alone is
+   the signal `infer_rollback_model` checks for — an empty file, or one
+   with just a comment, is enough).
+2. Set `"rollback_model": "redeploy-tag"` explicitly in
+   `agent/intent-card.json`, or a `rollback_model: redeploy-tag` line in
+   `agent/AUTOBUILDER_PROGRAM.md`. An explicit key always wins over the
+   marker-file inference, and an unrecognized value errors out naming the
+   bad value (never silently falls back to a default).
+
+A crate with neither signal always resolves to `revert-commits` — the
+guard against a silent global weakening of the check across the fleet.
+
 ## The companion binary
 
 A thin Rust 2024 / `rustc 1.85` binary. Everything load-bearing — intent-card
