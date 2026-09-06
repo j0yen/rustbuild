@@ -13334,3 +13334,4 @@ Decisions LOCKED (so /build makes no mid-build calls):
 All 5 PRDs now carry a "Design spec (authoritative): summa-design.md §X" pointer.
 Net for /build: read summa-design.md first; the PRDs are the gate, the design is the map.
 2026-09-04T10:46:02Z loom-serial-fallback: SERIAL MODE for ac4-repo (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
+2026-09-06T07:35:24Z loom-serial-fallback: SERIAL MODE for summa (streak=2, pathset=unknown) — fanning at most 1 branch/tick until backlog drains
