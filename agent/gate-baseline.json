@@ -1,11 +1,11 @@
 {
   "schema": "autobuilder.gate_baseline.v1",
-  "recorded_at": "2026-09-07T02:43:53Z",
-  "head_sha": "a1b078b53c9582e3c2abc603d0ad87b4d092b6c4",
+  "recorded_at": "2026-09-07T20:07:00Z",
+  "head_sha": "c8a93255e84c5d96c88200c707bfb7f8b3cb8cd9",
   "receipts": [
     {
-      "name": "intake",
-      "reason": "missing: /home/jsy/wintermute/rustbuild/autobuilder/target/autobuilder/receipts/intake.json"
+      "name": "vti-plan",
+      "reason": "verdict=block not in [\"pass\"]"
     },
     {
       "name": "reviewer-agent",
@@ -13,10 +13,6 @@
     },
     {
       "name": "rollback-plan",
-      "reason": "verdict=block not in [\"pass\"]"
-    },
-    {
-      "name": "secrets-scan",
       "reason": "verdict=block not in [\"pass\"]"
     }
   ]
