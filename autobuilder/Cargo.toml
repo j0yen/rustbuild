@@ -61,10 +61,10 @@ sha2 = "0.10"
 toml = "0.8"
 globset = "0.4"
 regex = "1"
-session-trace-receipt = { path = "crates/session-trace" }
-autobuilder-receipt = { path = "crates/receipt" }
-autobuilder-gate = { path = "crates/gate" }
-autobuilder-evolve-safety = { path = "crates/evolve-safety" }
+session-trace-receipt = { path = "crates/session-trace", version = "0.1.0" }
+autobuilder-receipt = { path = "crates/receipt", version = "0.1.0" }
+autobuilder-gate = { path = "crates/gate", version = "0.1.0" }
+autobuilder-evolve-safety = { path = "crates/evolve-safety", version = "0.1.0" }
 
 [dev-dependencies]
 tempfile = "3"

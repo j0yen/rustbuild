@@ -277,10 +277,43 @@ done
 AUDIT_RAW="$OUT_DIR/audit.raw.json"
 RISK_GATE_RECEIPT="$OUT_DIR/receipts/risk-gate.json"
 mkdir -p "$OUT_DIR/receipts"
-if bash "$HOME/.claude/skills/autobuilder/rules/audit-checks.sh" "$REPO_ROOT" > "$AUDIT_RAW" 2>>"$RUN_LOG"; then
+
+# Resolve audit-checks.sh the same defensive way find_autobuilder_binary
+# resolves the autobuilder bin. This repo's own rustbuild skill is
+# installed as ~/.claude/skills/rustbuild (not "autobuilder" — that name
+# is the convention for OTHER projects the skill scaffolds), so the old
+# hardcoded ~/.claude/skills/autobuilder/rules/audit-checks.sh path never
+# existed here: the `bash` invocation failed, AUDIT_RAW stayed empty, and
+# the jq filter below silently wrote a 0-byte risk-gate.json every run.
+find_audit_checks() {
+  local candidates=(
+    "$REPO_ROOT/skill/rules/audit-checks.sh"
+    "$HOME/.claude/skills/rustbuild/rules/audit-checks.sh"
+    "$HOME/.claude/skills/autobuilder/rules/audit-checks.sh"
+  )
+  for c in "${candidates[@]}"; do
+    if [ -x "$c" ]; then
+      echo "$c"
+      return
+    fi
+  done
+}
+AUDIT_CHECKS="$(find_audit_checks)"
+log "audit-checks.sh: ${AUDIT_CHECKS:-NOT FOUND}"
+if [ -n "$AUDIT_CHECKS" ] && bash "$AUDIT_CHECKS" "$REPO_ROOT" > "$AUDIT_RAW" 2>>"$RUN_LOG"; then
   log "audit (raw): passed (no blocking)"
 else
-  log "audit (raw): blocking findings present"
+  log "audit (raw): blocking findings present, or audit script missing/failed"
+fi
+# The audit script may have failed to run at all (missing, crashed, wrote
+# nothing) — never let that degrade into a 0-byte/invalid risk-gate.json.
+# Fall back to an explicit empty-findings receipt so the gate always sees
+# a schema-valid autobuilder.bad_rust_audit.v1 document.
+if ! jq -e . "$AUDIT_RAW" >/dev/null 2>&1; then
+  log "audit (raw) output missing/invalid JSON; emitting empty-findings fallback receipt"
+  jq -n --arg head "$(git rev-parse HEAD 2>/dev/null || echo unknown)" \
+    '{schema: "autobuilder.bad_rust_audit.v1", head_sha: $head, findings: [], blocking_count: 0, advisory_count: 0}' \
+    > "$AUDIT_RAW"
 fi
 # Filter the layout-specific false positive and recompute counts. The
 # resulting object is the autobuilder.bad_rust_audit.v1 receipt the gate
