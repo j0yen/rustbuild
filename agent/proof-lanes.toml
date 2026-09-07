@@ -23,6 +23,7 @@ description = "Behavior changes in the extended-gates producer crate (rustbuild'
 globs = [
   "autobuilder/crates/extended-gates/src/**/*.rs",
   "autobuilder/crates/extended-gates/tests/**/*.rs",
+  "autobuilder/extended-gates.toml",
 ]
 required_commands = [
   "cd autobuilder && cargo check --workspace",
