@@ -1,8 +1,8 @@
 {
   "schema": "autobuilder.intent_card.v1",
-  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-rustbuild-gate-debt.md",
-  "intent_slug": "rustbuild-gate-debt",
-  "root_motivation": "Three rustbuild PRDs (rustbuild-hermetic-scope, autobuilder-rollback-tag-aware, rollback-redeploy-tag-onboard) have finished code, green AC tests, and clean clippy, but the shared gate has reported the identical 6-of-25 block set for over 20 hours and ~15 concurrent ticks, always dismissed as \"pre-existing, out of scope.\" This PRD is the first to actually run each blocking receipt fresh and read its real cause instead of re-citing the prior tick's prose \u2014 three of the six turn out to be concretely fixable in-repo, not host-wide mysteries: a `cargo-deny` bans/advisories failure, a self-hosted test that can never pass on a fresh checkout, and an empty risk-gate receipt. A fourth (CI) is real but is a human GitHub-account check, not a code fix. Pay this once so the rustbuild trio (and whatever lands next) can actually reach `built`.",
+  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-autobuilder-secrets-scan-allowlist.md",
+  "intent_slug": "autobuilder-secrets-scan-allowlist",
+  "root_motivation": "PRD-autobuilder-gate-debt (2026-09-07) investigated fixing this for `~/wintermute/autobuilder` and stopped short: routing around the planted fixture would require editing `secrets_scan.rs` itself, which lives in the shared `extended-gates` crate \u2014 out of that PRD's declared scope (repo-local scaffolding only, no library changes). The same false positive independently blocks `~/wintermute/rustbuild`'s own gate. Every day this stays unfixed, every repo vendoring `extended-gates` either baselines `secrets-scan` (weakening the gate to a formality for that receipt, per the exact drift the 2026-09-06 gate-debt PRDs were written to stop) or has no test fixture proving the scanner actually catches a real secret.",
   "user_persona": "The autobuilder skill orchestrator (a Claude session) and the human invoking `/autobuilder` from their own project. Both shell out to this binary for the receipt + gate steps that must not live in bash.",
   "unfakeable_metric": {
     "name": "stage4_receipt_producers_callable",
@@ -14,44 +14,32 @@
     {
       "id": "AC1",
       "level": "MUST",
-      "description": "Given the 4 wildcard path dependencies now carry explicit `version =`, When `cargo deny check bans` runs, Then it no longer reports the wildcard-dependency error for any of them.",
+      "description": "Given no `extended-gates.toml` or no `secrets_scan_allowlist` key, When `secrets-scan` runs, Then behavior is byte-for-byte identical to today (regression check against the existing `acceptance_secrets_scan_planted.rs`).",
       "test": "tests/acceptance_ac1.rs"
     },
     {
       "id": "AC2",
       "level": "MUST",
-      "description": "Given the anyhow lockfile bump, When `cargo deny check advisories` runs, Then the RUSTSEC advisory against `anyhow` is resolved and `cargo test --workspace` stays fully green apart from item 3 below.",
+      "description": "Given a `secrets_scan_allowlist` glob matching a file containing a planted secret pattern, When `secrets-scan` runs, Then that file is skipped and does not appear in `findings`.",
       "test": "tests/acceptance_ac2.rs"
     },
     {
       "id": "AC3",
       "level": "MUST",
-      "description": "Given the AC-X1 fix, When `cargo test --workspace` runs on a fresh checkout with no pre-existing `target/release` binaries, Then `acceptance_ac_x1_helps` passes without requiring an out-of-band `cargo build --release` first.",
+      "description": "Given a synthetic secret planted at a path NOT covered by any allowlist entry, When `secrets-scan` runs, Then `verdict=block` and the finding appears \u2014 the control check this PRD exists to add.",
       "test": "tests/acceptance_ac3.rs"
     },
     {
       "id": "AC4",
       "level": "MUST",
-      "description": "Given items 1-3 landed, When `scripts/run-metrics.sh` runs standalone, Then AC6 passes and `ac_passing_count == ac_total_count` (7/7), so `autobuilder loop --iteration 0 --trace` reports `verdict != crash`.",
+      "description": "Given `~/wintermute/rustbuild`'s own `extended-gates.toml` allowlists its planted-fixture path, When `extend-gate.sh ~/wintermute/rustbuild` re-runs at HEAD, Then `secrets-scan`'s receipt reports `verdict=pass` (no longer needs to be in that repo's baseline \u2014 actual un-baselining left to that repo's own follow-up commit per Non-goals).",
       "test": "tests/acceptance_ac4.rs"
     },
     {
       "id": "AC5",
-      "level": "MUST",
-      "description": "Given the risk-gate emission fix, When a normal loop iteration runs, Then `target/autobuilder/receipts/risk-gate.json` is non-empty and parses as valid `autobuilder.bad_rust_audit.v1`.",
+      "level": "SHOULD",
+      "description": "Given `~/wintermute/autobuilder` picks up the same crate update (out of this PRD's `build_into`, but verify the mechanism transplants cleanly), When its own `extended-gates.toml` allowlists its planted-fixture path, Then `secrets-scan` passes there too.",
       "test": "tests/acceptance_ac5.rs"
-    },
-    {
-      "id": "AC6",
-      "level": "MUST",
-      "description": "Given all of the above, When `extend-gate.sh /home/jsy/wintermute/rustbuild --head <landed sha>` runs, Then the blocking set no longer contains `proof-receipt`, `risk-gate`, or the bans/advisories portion of `reviewer-agent`'s `block_reasons` (`intake`, `ci-checks`, and `secrets-scan` may still block per the Problem section's documented structural/human-decision/by-design causes).",
-      "test": "tests/acceptance_ac6.rs"
-    },
-    {
-      "id": "AC7",
-      "level": "MUST",
-      "description": "Given the finished diff, When version and tests are checked, Then `Cargo.toml` is bumped patch, `cargo test --workspace` is fully green, and `cargo clippy --workspace --all-targets -- -D warnings` is clean on the diff.",
-      "test": "tests/acceptance_ac7.rs"
     }
   ],
   "scope": [
