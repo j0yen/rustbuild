@@ -1,8 +1,8 @@
 {
   "schema": "autobuilder.intent_card.v1",
-  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-rollback-redeploy-tag-onboard.md",
-  "intent_slug": "rollback-redeploy-tag-onboard",
-  "root_motivation": "Three sibling PRDs sharing `build_into: /home/jsy/wintermute/mcphost` this build cycle (`grand-loop-billing`, `mcphost-ci-sandbox-coverage`, `mcphost-metered-overage`) all ran `extend-gate.sh` at unchanged HEADs and got an identical `rollback-plan: block` naming the same five commits (`255cf1e`, `c0ed989`, `7297aee`, `04818b5`, plus a pre-existing `2da9b55`) as not individually `git-revert`-clean. Each PRD's own tick correctly attributed the block to shared repo/integration-chain state, not to its own diff, and correctly declined to force a pass \u2014 but nothing in the fleet resolves the underlying misclassification, so every future PRD touching mcphost hits the same wall until a human intervenes.",
+  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-rustbuild-gate-debt.md",
+  "intent_slug": "rustbuild-gate-debt",
+  "root_motivation": "Three rustbuild PRDs (rustbuild-hermetic-scope, autobuilder-rollback-tag-aware, rollback-redeploy-tag-onboard) have finished code, green AC tests, and clean clippy, but the shared gate has reported the identical 6-of-25 block set for over 20 hours and ~15 concurrent ticks, always dismissed as \"pre-existing, out of scope.\" This PRD is the first to actually run each blocking receipt fresh and read its real cause instead of re-citing the prior tick's prose \u2014 three of the six turn out to be concretely fixable in-repo, not host-wide mysteries: a `cargo-deny` bans/advisories failure, a self-hosted test that can never pass on a fresh checkout, and an empty risk-gate receipt. A fourth (CI) is real but is a human GitHub-account check, not a code fix. Pay this once so the rustbuild trio (and whatever lands next) can actually reach `built`.",
   "user_persona": "The autobuilder skill orchestrator (a Claude session) and the human invoking `/autobuilder` from their own project. Both shell out to this binary for the receipt + gate steps that must not live in bash.",
   "unfakeable_metric": {
     "name": "stage4_receipt_producers_callable",
@@ -14,38 +14,44 @@
     {
       "id": "AC1",
       "level": "MUST",
-      "description": "Given `mcphost` has `agent/deploy-manifest.toml` present, When `rollback-plan` runs at the current `origin/main` HEAD, Then `resolve_rollback_model` returns `RedeployTag` and the receipt's `verdict` is `pass` (tag lineage check, not per-commit revert-clean).",
+      "description": "Given the 4 wildcard path dependencies now carry explicit `version =`, When `cargo deny check bans` runs, Then it no longer reports the wildcard-dependency error for any of them.",
       "test": "tests/acceptance_ac1.rs"
     },
     {
       "id": "AC2",
       "level": "MUST",
-      "description": "Given the same repo and HEAD as AC1, When `extend-gate.sh /home/jsy/wintermute/mcphost --head <HEAD>` runs the full 25-receipt gate, Then `rollback-plan` is no longer in the blocking set (other pre-existing blockers named in the current `grand-loop-billing`/`mcphost-ci-sandbox-coverage` manifest entries \u2014 `vti-plan`, `reviewer-agent`'s history-not-revert-clean reason \u2014 may still need their own fix, but must not still cite rollback-plan).",
+      "description": "Given the anyhow lockfile bump, When `cargo deny check advisories` runs, Then the RUSTSEC advisory against `anyhow` is resolved and `cargo test --workspace` stays fully green apart from item 3 below.",
       "test": "tests/acceptance_ac2.rs"
     },
     {
       "id": "AC3",
       "level": "MUST",
-      "description": "Given a repo with no `agent/deploy-manifest.toml` and no explicit `rollback_model` (e.g. `summa`, `rustbuild`), When `rollback-plan` runs, Then it still resolves to `RevertCommits` (unchanged default) \u2014 regression test proving this PRD does not weaken the check fleet-wide.",
+      "description": "Given the AC-X1 fix, When `cargo test --workspace` runs on a fresh checkout with no pre-existing `target/release` binaries, Then `acceptance_ac_x1_helps` passes without requiring an out-of-band `cargo build --release` first.",
       "test": "tests/acceptance_ac3.rs"
     },
     {
       "id": "AC4",
-      "level": "SHOULD",
-      "description": "Given a developer runs `autobuilder --help` or `rollback-plan --explain` (or reads the doc comment on `resolve_rollback_model`), When they look for `agent/deploy-manifest.toml`'s schema (even if fields beyond existence are still unused by `rollback.rs`), Then they find both `rollback_model` values enumerated with a one-line description of when each applies, documented in exactly one place.",
+      "level": "MUST",
+      "description": "Given items 1-3 landed, When `scripts/run-metrics.sh` runs standalone, Then AC6 passes and `ac_passing_count == ac_total_count` (7/7), so `autobuilder loop --iteration 0 --trace` reports `verdict != crash`.",
       "test": "tests/acceptance_ac4.rs"
     },
     {
       "id": "AC5",
-      "level": "SHOULD",
-      "description": "Given mcphost's real `agent/intent-card.json`, When a helper (new script or `intent-card-refresh.sh` flag) runs against it, Then `rollback_model: redeploy-tag` is set idempotently (a second run makes no further change).",
+      "level": "MUST",
+      "description": "Given the risk-gate emission fix, When a normal loop iteration runs, Then `target/autobuilder/receipts/risk-gate.json` is non-empty and parses as valid `autobuilder.bad_rust_audit.v1`.",
       "test": "tests/acceptance_ac5.rs"
     },
     {
       "id": "AC6",
-      "level": "MAY",
-      "description": "Given `wm-node` and `adopt`, When they are evaluated (not necessarily onboarded) against the same deploy-tag-or-not question, Then the finding is recorded in this PRD's own iter log rather than silently assumed.",
+      "level": "MUST",
+      "description": "Given all of the above, When `extend-gate.sh /home/jsy/wintermute/rustbuild --head <landed sha>` runs, Then the blocking set no longer contains `proof-receipt`, `risk-gate`, or the bans/advisories portion of `reviewer-agent`'s `block_reasons` (`intake`, `ci-checks`, and `secrets-scan` may still block per the Problem section's documented structural/human-decision/by-design causes).",
       "test": "tests/acceptance_ac6.rs"
+    },
+    {
+      "id": "AC7",
+      "level": "MUST",
+      "description": "Given the finished diff, When version and tests are checked, Then `Cargo.toml` is bumped patch, `cargo test --workspace` is fully green, and `cargo clippy --workspace --all-targets -- -D warnings` is clean on the diff.",
+      "test": "tests/acceptance_ac7.rs"
     }
   ],
   "scope": [
