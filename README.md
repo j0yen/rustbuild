@@ -31,6 +31,12 @@ Claude Code picks up the skill on the next session start.
 The metric harness, iterate-and-prove loop, risk gate, postmortem,
 and evolve subcommands all live in the companion Rust crate. Install:
 
+**Note (2026-09-07):** the `autobuilder/` crate in *this* repo is frozen /
+ported-from — see `autobuilder/PORTED.md`. New autobuilder feature work
+targets the canonical crate at `~/wintermute/autobuilder`
+(`--project-root autobuilder`) instead; this repo's copy stays only for
+rustbuild's own harness, which keeps building it unaffected.
+
 ```sh
 git clone --depth 1 https://github.com/j0yen/autobuilder.git
 cd autobuilder
