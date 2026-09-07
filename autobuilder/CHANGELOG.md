@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.2 — 2026-09-07
+
+`secrets-scan` is baselined (excused) in at least two repos' `agent/gate-baseline.json` today (`~/wintermute/autobuilder` and `~/wintermute/rustbuild` itself) for the identical reason: the producer's own planted-fixture test, `crates/extended-gates/tests/acceptance_secrets_scan_planted.rs`, embeds a synthetic `AKIA...` literal to prove the scanner catches real secrets — and the scanner's file-content walk matches that literal when it scans the whole crate tree, not just the test's own isolated tempdir. Unlike `license-audit` (`extended-gates.toml::license_allowlist`), `ac-traceability` (`extended-gates.toml::prd_path`), and the other extended-gates producers that already read `<project>/extended-gates.toml` for their own config, `secrets_scan.rs` had zero config surface — its only skip mechanism was a hardcoded directory-name list. This PRD gives it the same `extended-gates.toml`-driven allowlist pattern its siblings already use, plus a control test proving a secret outside the allowlist still blocks.
+
+Version bumped patch (0.6.1 -> 0.6.2), not the PRD's default minor: this crate was frozen/ported-from earlier the same day (see `autobuilder/PORTED.md`), with the canonical `~/wintermute/autobuilder` crate deliberately kept at a higher version (v0.7.0) so "the canonical install" stays checkable by version number alone. A minor bump here (0.6.1 -> 0.7.0) would have collided with that invariant; a patch bump keeps this crate strictly below canonical while still recording the fix.
+
 ## v0.6.1 — 2026-09-07
 
 Pays down repo-wide gate debt that has blocked every rustbuild ship for
