@@ -20,6 +20,23 @@ this repo) is confirmed to be an account-level spending-limit/minutes-quota
 setting, not a code defect — flagged for a human to check in `j0yen`'s
 GitHub billing settings.
 
+Addendum found while proving the fix end-to-end through the real
+`autobuilder loop`/gate call path (not just a standalone script
+invocation): `scripts/run-metrics.sh` hardcoded `$REPO_ROOT/autobuilder`
+at three call sites, assuming `REPO_ROOT` is always the outer git root —
+true for a standalone `scripts/run-metrics.sh` run, false for
+`autobuilder loop --project <dir>` (extend-gate.sh's nested-crate
+project-root resolution passes the crate dir itself), which made AC6
+fail every time via the real call path even though it passed standalone,
+keeping `proof-receipt` at `verdict=crash`. Now detects whether
+`REPO_ROOT` already has a `Cargo.toml` before deciding whether to
+append `/autobuilder`. Also allowlists 4 `grep_unwrap_on_external_input`
+false positives in `src/experiment.rs`'s `#[cfg(test)]` helpers (already
+`#[allow(clippy::unwrap_used)]`-covered, plain test-fixture writes, not
+external input) via the detector's own `// allowlist:` convention, so
+`risk-gate`'s `blocking_count` is genuinely 0 rather than emitting real
+but false blocking findings.
+
 ## v0.6.0 — 2026-09-06
 
 `rollback-plan` now correctly infers the `redeploy-tag` model from an

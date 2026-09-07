@@ -686,7 +686,7 @@ mod tests {
         for (k, v) in identity {
             run_git(p, &["config", k, v]);
         }
-        std::fs::write(p.join("README"), "a").unwrap();
+        std::fs::write(p.join("README"), "a").unwrap(); // allowlist: test-fixture write in #[cfg(test)] helper, not external input
         run_git(p, &["add", "README"]);
         run_git(p, &["commit", "-q", "-m", "baseline"]);
         let baseline = git_head_sha(p).unwrap();
@@ -711,7 +711,7 @@ mod tests {
         let (dir, baseline) = init_repo();
         let p = dir.path();
         // Add a second commit; HEAD moves forward.
-        std::fs::write(p.join("README"), "b").unwrap();
+        std::fs::write(p.join("README"), "b").unwrap(); // allowlist: test-fixture write in #[cfg(test)] helper, not external input
         run_git(p, &["add", "README"]);
         run_git(p, &["commit", "-q", "-m", "second"]);
         let advanced = git_head_sha(p).unwrap();
@@ -725,7 +725,7 @@ mod tests {
     fn apply_transition_advance_commit_is_noop() {
         let (dir, baseline) = init_repo();
         let p = dir.path();
-        std::fs::write(p.join("README"), "b").unwrap();
+        std::fs::write(p.join("README"), "b").unwrap(); // allowlist: test-fixture write in #[cfg(test)] helper, not external input
         run_git(p, &["add", "README"]);
         run_git(p, &["commit", "-q", "-m", "second"]);
         let advanced = git_head_sha(p).unwrap();
@@ -737,7 +737,7 @@ mod tests {
     fn apply_transition_continue_is_noop() {
         let (dir, baseline) = init_repo();
         let p = dir.path();
-        std::fs::write(p.join("README"), "b").unwrap();
+        std::fs::write(p.join("README"), "b").unwrap(); // allowlist: test-fixture write in #[cfg(test)] helper, not external input
         run_git(p, &["add", "README"]);
         run_git(p, &["commit", "-q", "-m", "second"]);
         let advanced = git_head_sha(p).unwrap();
