@@ -108,16 +108,6 @@
     }
   ],
   "created_at": "2026-05-22T08:10:00Z",
-  "carried_forward": {
-    "user_persona": true,
-    "unfakeable_metric": true,
-    "scope": true,
-    "non_goals": true,
-    "hard_constraints": true,
-    "five_whys_trace": true,
-    "created_at": true,
-    "ambiguities_resolved": true
-  },
   "ambiguities_resolved": [
     {
       "question": "Where does the autobuilder repo's 'project' live for the gate \u2014 repo root or autobuilder/ workspace?",
