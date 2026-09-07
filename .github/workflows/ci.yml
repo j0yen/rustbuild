@@ -49,3 +49,5 @@ jobs:
 
       - name: cargo deny check
         run: cargo deny check
+
+# diagnostic touch: PRD-fleet-ci-green 2026-09-07T16:53:12Z
