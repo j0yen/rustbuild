@@ -51,3 +51,4 @@ jobs:
         run: cargo deny check
 
 # diagnostic touch: PRD-fleet-ci-green 2026-09-07T16:53:12Z
+# retest after explicit actions-permissions PUT: 2026-09-07T16:56:25Z
