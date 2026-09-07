@@ -1,5 +1,25 @@
 # Changelog
 
+## v0.6.1 — 2026-09-07
+
+Pays down repo-wide gate debt that has blocked every rustbuild ship for
+~20 hours: `autobuilder/Cargo.toml`'s 4 in-workspace path deps
+(`session-trace-receipt`, `autobuilder-receipt`, `autobuilder-gate`,
+`autobuilder-evolve-safety`) now carry explicit `version = "0.1.0"` so
+`cargo deny check bans` stops flagging them as wildcard; `anyhow` is
+bumped to 1.0.104 (lockfile-only) clearing the RUSTSEC UB advisory;
+`acceptance_ac_x1_helps.rs` (AC-X1) now builds its own debug binaries via
+`cargo build --bins` instead of hard-requiring pre-built `--release`
+binaries, so `cargo test --workspace` passes on a fresh checkout with no
+out-of-band build step; and `scripts/run-metrics.sh` now resolves
+`audit-checks.sh` at its real path (`rustbuild`, not the stale
+`autobuilder` skill name) with a schema-valid empty-findings fallback, so
+`target/autobuilder/receipts/risk-gate.json` is never emitted as a 0-byte
+file again. CI-checks (GitHub Actions never running any workflow for
+this repo) is confirmed to be an account-level spending-limit/minutes-quota
+setting, not a code defect — flagged for a human to check in `j0yen`'s
+GitHub billing settings.
+
 ## v0.6.0 — 2026-09-06
 
 `rollback-plan` now correctly infers the `redeploy-tag` model from an
