@@ -16,10 +16,6 @@
       "reason": "verdict=block not in [\"pass\"]"
     },
     {
-      "name": "ci-checks",
-      "reason": "verdict=block not in [\"pass\", \"skipped\"]"
-    },
-    {
       "name": "secrets-scan",
       "reason": "verdict=block not in [\"pass\"]"
     }
