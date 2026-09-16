@@ -9,6 +9,12 @@
 # Exit 0 when every producer wrote a receipt whose verdict is pass|skipped; 1 otherwise.
 set -uo pipefail
 crate="${1:?crate dir}"; par="${2:-6}"; export PATH="$HOME/.cargo/bin:$PATH"
+# Keep the cargo route shims (cargo-budget-bin, burst-lane-bin) AHEAD of rustup's
+# cargo: prepending ~/.cargo/bin above shadowed them, so every producer's cargo
+# (flake-audit's 3x full test suite, mutation-kill, ...) ran local and unbudgeted
+# even with the burst lane enabled — 2026-09-16, gates 30+ min local on RedBaron.
+_shims="$(printf '%s' "$PATH" | tr ':' '\n' | grep -E '/(cargo-budget-bin|burst-lane-bin)$' | paste -sd: -)"
+[ -n "$_shims" ] && export PATH="$_shims:$PATH"
 producers="supply-audit license-audit secrets-scan sbom msrv-verify binary-size semver-check cli-surface schema-compat ac-traceability flake-audit hermetic-build determinism cold-build-time bench-delta mutation-kill experiment"
 for p in $producers; do command -v "$p" >/dev/null || { echo "missing producer bin: $p (cargo install --path ~/wintermute/rustbuild/autobuilder/crates/extended-gates --locked)" >&2; exit 2; }; done
 t0=$(date +%s)
