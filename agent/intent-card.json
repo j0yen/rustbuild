@@ -1,8 +1,8 @@
 {
   "schema": "autobuilder.intent_card.v1",
-  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-autobuilder-secrets-scan-allowlist.md",
-  "intent_slug": "autobuilder-secrets-scan-allowlist",
-  "root_motivation": "PRD-autobuilder-gate-debt (2026-09-07) investigated fixing this for `~/wintermute/autobuilder` and stopped short: routing around the planted fixture would require editing `secrets_scan.rs` itself, which lives in the shared `extended-gates` crate \u2014 out of that PRD's declared scope (repo-local scaffolding only, no library changes). The same false positive independently blocks `~/wintermute/rustbuild`'s own gate. Every day this stays unfixed, every repo vendoring `extended-gates` either baselines `secrets-scan` (weakening the gate to a formality for that receipt, per the exact drift the 2026-09-06 gate-debt PRDs were written to stop) or has no test fixture proving the scanner actually catches a real secret.",
+  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-rustbuild-hermetic-local-route.md",
+  "intent_slug": "rustbuild-hermetic-local-route",
+  "root_motivation": "**Who:** every Rust branch in the build loop, and the operator who reads `blockers=hermetic-build` as \"the build phoned home\".",
   "user_persona": "The autobuilder skill orchestrator (a Claude session) and the human invoking `/autobuilder` from their own project. Both shell out to this binary for the receipt + gate steps that must not live in bash.",
   "unfakeable_metric": {
     "name": "stage4_receipt_producers_callable",
@@ -14,32 +14,44 @@
     {
       "id": "AC1",
       "level": "MUST",
-      "description": "Given no `extended-gates.toml` or no `secrets_scan_allowlist` key, When `secrets-scan` runs, Then behavior is byte-for-byte identical to today (regression check against the existing `acceptance_secrets_scan_planted.rs`).",
+      "description": "Given a fake `cargo` that dumps its env, When hermetic-build runs under a parent env with `BUILD_BURST_ENABLED=1 BURST_LANE=1`, Then the dump shows `BUILD_BURST_ENABLED=0` and `BURST_LANE=0` and no `BURST_LANE_SH`, and the receipt has `cargo_route: \"local-pinned\"`.",
       "test": "tests/acceptance_ac1.rs"
     },
     {
       "id": "AC2",
       "level": "MUST",
-      "description": "Given a `secrets_scan_allowlist` glob matching a file containing a planted secret pattern, When `secrets-scan` runs, Then that file is skipped and does not appear in `findings`.",
+      "description": "Given a fake `cargo` that opens a TCP connection to the host's non-loopback address, When the producer runs, Then the verdict is `block`, the socket is attributed, and `route_observed` is `local`.",
       "test": "tests/acceptance_ac2.rs"
     },
     {
       "id": "AC3",
       "level": "MUST",
-      "description": "Given a synthetic secret planted at a path NOT covered by any allowlist entry, When `secrets-scan` runs, Then `verdict=block` and the finding appears \u2014 the control check this PRD exists to add.",
+      "description": "Given a fake `cargo` that appends `<ts> burst cargo build` to `target/autobuilder/route.log`, When the producer runs, Then the verdict is `block` with `cause: \"route-not-local\"` and the journal line ends `route=burst`.",
       "test": "tests/acceptance_ac3.rs"
     },
     {
       "id": "AC4",
       "level": "MUST",
-      "description": "Given `~/wintermute/rustbuild`'s own `extended-gates.toml` allowlists its planted-fixture path, When `extend-gate.sh ~/wintermute/rustbuild` re-runs at HEAD, Then `secrets-scan`'s receipt reports `verdict=pass` (no longer needs to be in that repo's baseline \u2014 actual un-baselining left to that repo's own follow-up commit per Non-goals).",
+      "description": "Given a quiet fake `cargo` and no route.log, When the producer runs, Then the verdict is `pass`, `route_observed` is `unknown`, and `ignore_rules` is unchanged.",
       "test": "tests/acceptance_ac4.rs"
     },
     {
       "id": "AC5",
-      "level": "SHOULD",
-      "description": "Given `~/wintermute/autobuilder` picks up the same crate update (out of this PRD's `build_into`, but verify the mechanism transplants cleanly), When its own `extended-gates.toml` allowlists its planted-fixture path, Then `secrets-scan` passes there too.",
+      "level": "MUST",
+      "description": "Given the existing `hermetic_scope_ac1..ac4` tests, When `cargo test -p extended-gates` runs, Then they still pass unchanged.",
       "test": "tests/acceptance_ac5.rs"
+    },
+    {
+      "id": "AC6",
+      "level": "SHOULD",
+      "description": "Given RedBaron with build-skill's real shim first on PATH and `BUILD_BURST_ENABLED=1`, When the producer runs on a one-file crate, Then the receipt shows `route_observed: \"local\"`, verdict `pass`, and the changelog quotes the receipt.",
+      "test": "tests/acceptance_ac6.rs"
+    },
+    {
+      "id": "AC7",
+      "level": "SHOULD",
+      "description": "Given the shipped producer and routing re-enabled through `burst-lane.sh enable`, When the next mcphost branch gate runs, Then its blockers list does not contain `hermetic-build`; the changelog quotes the gate line.",
+      "test": "tests/acceptance_ac7.rs"
     }
   ],
   "scope": [

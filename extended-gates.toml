@@ -1,2 +1,2 @@
 # Config for the rustbuild extended-gates producers (Stage 4).
-prd_path = "PRD-rustbuild-hermetic-scope.md"
+prd_path = "PRD-rustbuild-hermetic-local-route.md"
