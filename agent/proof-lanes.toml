@@ -62,8 +62,8 @@ required_commands = [
 
 [[lane]]
 id = "agent"
-description = "Intent-card / proof-lanes / owner-map / test-map changes, including the autobuilder/agent -> ../agent symlink autobuilder's own binary reads when --project resolves to autobuilder/ (PRD-build-extend-gate-nested-crate-project)"
-globs = ["agent/**", "autobuilder/agent"]
+description = "Intent-card / proof-lanes / owner-map / test-map changes, including the autobuilder/agent -> ../agent symlink autobuilder's own binary reads when --project resolves to autobuilder/ (PRD-build-extend-gate-nested-crate-project). Also covers the repo-root extended-gates.toml (distinct from autobuilder/extended-gates.toml, the nested-crate lane below): a `prd_path` pointer intent-card-refresh.sh rewrites on every ship — until now this file had no lane at all, so main-scope vti-plan blocked every ship's own refresh commit as unrouted (found by PRD-rustbuild-hermetic-local-route's own ship)."
+globs = ["agent/**", "autobuilder/agent", "extended-gates.toml"]
 required_commands = [
   "autobuilder vti-plan --project . --base origin/main",
 ]
