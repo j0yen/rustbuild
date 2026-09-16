@@ -118,6 +118,25 @@ struct Payload {
     ignore_rules: Vec<&'static str>,
     /// True if `--strict` was requested (loopback also attributed).
     strict: bool,
+    /// PRD-rustbuild-hermetic-local-route R1: always `"local-pinned"` —
+    /// this producer forces its own cargo child onto the local route
+    /// regardless of what the gate's own environment requested (see
+    /// `pin_cargo_to_local_route` below).
+    cargo_route: &'static str,
+    /// Boolean twin of `cargo_route` above (R3 names both fields
+    /// explicitly). Always `true` — the pin is unconditional.
+    route_pinned: bool,
+    /// What the shim actually did, per `route.log` (R2): `"local"` (the
+    /// pin held, or nothing attests either way but a log exists),
+    /// `"burst"` (the pin was overridden — a shim routed off-box anyway),
+    /// or `"unknown"` (no `route.log` at all for this project).
+    route_observed: &'static str,
+    /// `Some("route-not-local")` exactly when `route_observed` is
+    /// `"burst"` — a distinct, named block cause so the operator can tell
+    /// "the shim ignored the pin" from an ordinary attributed-socket
+    /// block. Omitted from the receipt otherwise (additive field, R3).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    cause: Option<&'static str>,
 }
 
 /// Decode a `/proc/net/tcp{,6}` hex address field (before the `:port`) into
@@ -260,6 +279,46 @@ fn descendants(root: i32) -> BTreeSet<i32> {
     visited
 }
 
+/// Bound applied when scanning `route.log` (Non-functional requirement,
+/// PRD-rustbuild-hermetic-local-route): never consider more than this many
+/// trailing lines.
+const ROUTE_LOG_TAIL_LINES: usize = 2000;
+
+/// Read `<project>/target/autobuilder/route.log` (when present — the same
+/// path `extend-gate.sh` points `BURST_ROUTE_LOG` at for the whole gate
+/// run, so a burst shim invoked anywhere during this project's build logs
+/// here) and decide what this build's cargo child actually did, per R2:
+///
+/// - `"burst"` — a line at or after `since` (this build's start,
+///   RFC3339, string-comparable since both this producer and the shim
+///   write fixed-width UTC-`Z` timestamps) carries the literal field
+///   `burst` as its route/decision column. The pin (R1) was overridden.
+/// - `"local"` — `route.log` exists but no such line was found in the
+///   tail window: either a shim logged `local`/`passthrough` here, or
+///   nothing new was written at all (also consistent with a held pin).
+/// - `"unknown"` — no `route.log` exists for this project at all; no
+///   shim ever attested to a route decision either way.
+///
+/// Field position is deliberately not assumed: `burst-lane-bin/cargo`'s
+/// real format is `<ts> <pid> <sub> <decision> <cause> <pwd>` (decision at
+/// index 3), while a synthetic fixture may write a shorter line — this
+/// only requires that some whitespace-separated field after the leading
+/// timestamp equal `burst` exactly.
+fn read_route_observed(project: &Path, since: &str) -> &'static str {
+    let path = project.join("target/autobuilder/route.log");
+    let Ok(text) = std::fs::read_to_string(&path) else {
+        return "unknown";
+    };
+    let burst = text.lines().rev().take(ROUTE_LOG_TAIL_LINES).any(|line| {
+        let mut fields = line.split_whitespace();
+        let Some(ts) = fields.next() else {
+            return false;
+        };
+        ts >= since && fields.any(|f| f == "burst")
+    });
+    if burst { "burst" } else { "local" }
+}
+
 /// One parsed row from a `/proc/net/{tcp,tcp6,udp,udp6}` table.
 struct ConnRow {
     inode: u64,
@@ -348,41 +407,31 @@ fn sample_once(root_pid: i32, strict: bool, out: &mut BTreeSet<AttributedSocket>
     }
 }
 
-/// Run the hermetic-build audit.
+/// Spawn the hermetic-build cargo child (pinned local per R1, PRD-
+/// rustbuild-hermetic-local-route), sample its process tree until it
+/// exits, and return `(exit_code, attributed_sockets, route_check_start)`
+/// — `route_check_start` is this build's own RFC3339 start timestamp, for
+/// `read_route_observed` to filter `route.log` against.
 ///
 /// # Errors
 ///
-/// Returns an error if cargo can't be spawned or the receipt write fails.
-pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
-    if !cfg!(target_os = "linux") {
-        write_receipt(
-            project,
-            spec,
-            "skipped",
-            Payload {
-                platform: std::env::consts::OS.to_owned(),
-                new_sockets: Vec::new(),
-                cargo_exit_code: None,
-                rustc_wrapper_disabled: false,
-                sample_interval_ms: u64::try_from(SAMPLE_INTERVAL.as_millis()).unwrap_or(u64::MAX),
-                ignore_rules: Vec::new(),
-                strict: false,
-            },
-        )?;
-        return Ok(format!(
-            "hermetic-build: skipped (platform={})",
-            std::env::consts::OS
-        ));
-    }
-
-    // Wired by the `hermetic-build --strict` CLI flag (see src/bin/hermetic_build.rs
-    // and set_strict above).
-    let strict = STRICT.load(Ordering::SeqCst);
-    let ignore_rules: Vec<&'static str> = if strict {
-        vec!["unix-domain"]
-    } else {
-        vec!["loopback", "unix-domain"]
-    };
+/// Returns an error if a timestamp can't be formed, cargo can't be
+/// spawned, or polling the child fails.
+fn spawn_and_sample(project: &Path, strict: bool) -> Result<(Option<i32>, Vec<AttributedSocket>, String)> {
+    // R1: this producer's verdict means nothing if its own cargo child
+    // ships the build to a burst box — the socket-attribution tree would
+    // then be watching the wrong machine. So pin the child to the local
+    // route unconditionally, whatever the gate's own environment
+    // requested: BUILD_BURST_ENABLED and BURST_LANE both force-cleared to
+    // "0" (cargo-budget-bin/cargo's own burst_configured() and burst-lane-
+    // bin/cargo's own routing `if` both re-read their OWN process env, not
+    // any ancestor's, so this child-scoped override is sufficient without
+    // touching the gate's environment at all), and BURST_LANE_SH unset
+    // defensively. `route_check_start` captures this build's window so
+    // `read_route_observed` can tell a burst line from before this build
+    // started apart from one written during it.
+    let route_check_start =
+        autobuilder_receipt::now_rfc3339().context("RFC3339 timestamp for route-pin window start")?;
 
     // A hermetic build has no rustc wrapper by definition. Force both env
     // vars empty so a locally configured `rustc-wrapper = sccache` in
@@ -393,6 +442,9 @@ pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
         .current_dir(project)
         .env("RUSTC_WRAPPER", "")
         .env("CARGO_BUILD_RUSTC_WRAPPER", "")
+        .env("BUILD_BURST_ENABLED", "0")
+        .env("BURST_LANE", "0")
+        .env_remove("BURST_LANE_SH")
         .spawn()
         .context("spawn cargo build --offline")?;
     // Safe on the platforms this producer runs on (Linux only, gated above):
@@ -413,14 +465,72 @@ pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
     // read_ppid / read_comm all degrade to empty/"?" rather than erroring).
     sample_once(root_pid, strict, &mut attributed);
 
-    let new_sockets: Vec<AttributedSocket> = attributed.into_iter().collect();
-    let verdict = if new_sockets.is_empty() && exit == Some(0) {
+    Ok((exit, attributed.into_iter().collect(), route_check_start))
+}
+
+/// Run the hermetic-build audit.
+///
+/// # Errors
+///
+/// Returns an error if cargo can't be spawned or the receipt write fails.
+pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
+    if !cfg!(target_os = "linux") {
+        write_receipt(
+            project,
+            spec,
+            "skipped",
+            Payload {
+                platform: std::env::consts::OS.to_owned(),
+                new_sockets: Vec::new(),
+                cargo_exit_code: None,
+                rustc_wrapper_disabled: false,
+                sample_interval_ms: u64::try_from(SAMPLE_INTERVAL.as_millis()).unwrap_or(u64::MAX),
+                ignore_rules: Vec::new(),
+                strict: false,
+                cargo_route: "local-pinned",
+                route_pinned: true,
+                route_observed: "unknown",
+                cause: None,
+            },
+        )?;
+        return Ok(format!(
+            "hermetic-build: skipped (platform={})",
+            std::env::consts::OS
+        ));
+    }
+
+    // Wired by the `hermetic-build --strict` CLI flag (see src/bin/hermetic_build.rs
+    // and set_strict above).
+    let strict = STRICT.load(Ordering::SeqCst);
+    let ignore_rules: Vec<&'static str> = if strict {
+        vec!["unix-domain"]
+    } else {
+        vec!["loopback", "unix-domain"]
+    };
+
+    let (exit, new_sockets, route_check_start) = spawn_and_sample(project, strict)?;
+
+    let mut verdict = if new_sockets.is_empty() && exit == Some(0) {
         "pass"
     } else {
         "block"
     };
+
+    // R2: a burst-routed line in this build's own route.log window means
+    // the pin above was overridden by a shim — a named block, distinct
+    // from (and independent of) whatever the socket attribution above
+    // decided. `attributed_sockets` (new_sockets) is left exactly as
+    // observed either way.
+    let route_observed = read_route_observed(project, &route_check_start);
+    let cause = if route_observed == "burst" {
+        verdict = "block";
+        Some("route-not-local")
+    } else {
+        None
+    };
+
     let summary = format!(
-        "hermetic-build: cargo exit={exit:?}, {} attributed socket(s) (tree-scoped{})",
+        "hermetic-build: cargo exit={exit:?}, {} attributed socket(s) (tree-scoped{}) route={route_observed}",
         new_sockets.len(),
         if strict { ", strict" } else { "" }
     );
@@ -436,6 +546,10 @@ pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
             sample_interval_ms: u64::try_from(SAMPLE_INTERVAL.as_millis()).unwrap_or(u64::MAX),
             ignore_rules,
             strict,
+            cargo_route: "local-pinned",
+            route_pinned: true,
+            route_observed,
+            cause,
         },
     )?;
     Ok(summary)
