@@ -60,11 +60,19 @@ If you skip falsification ("looks good"), your receipt is invalid. The risk gate
 
 ## Output: `target/autobuilder/receipts/reviewer-agent.json`
 
+`intent_card_sha` is copied verbatim from `review-request.json`'s
+`intent_card_sha256` — including its `sha256:` prefix. Do not recompute the
+digest yourself and do not strip the prefix; `finalize` accepts either the
+prefixed or bare form, but copying the field verbatim is the one way to
+guarantee you never transcribe it wrong (PRD-autobuilder-reviewer-intent-card-sha,
+2026-09-17 proof-lane incident: a bare-hex transcription made `finalize`
+reject a valid `block` verdict as an infra failure).
+
 ```jsonc
 {
   "schema": "autobuilder.reviewer_agent_receipt.v1",
   "head_sha": "<full sha>",
-  "intent_card_sha": "<sha256 of intent-card.json>",
+  "intent_card_sha": "<copy intent_card_sha256 from target/autobuilder/review-request.json verbatim, prefix included — do NOT compute it yourself>",
   "decision": "pass" | "concern" | "block",
   "block_reasons": ["<short-kebab-case-slug>", ...],
   "concern_reasons": [
