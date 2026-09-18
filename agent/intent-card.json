@@ -1,8 +1,8 @@
 {
   "schema": "autobuilder.intent_card.v1",
-  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-build-burst-gate-canary-invariant.md",
-  "intent_slug": "build-burst-gate-canary-invariant",
-  "root_motivation": "**Who:** the operator (Joe) and the loop's dispatcher. **What:** they cannot know whether a box will pass the gate until real branches have blocked on it. On 2026-09-15 the box served 209 routed runs and 117 blocks before a hand-launched canary (`gate-launch.sh \u2026 --scope main --slug mcphost-gate-debt-a1fcdba`) passed 25/25 at 16:32Z; on 2026-09-16 the operator asked for \"canary and variants\" by hand again after `casper up`. **Why they cannot today:** `prove` proves one cargo build (`proof.json`: routed, fresh, image_id); `enable` gates on `proof_routed` only; no gate variant is ever run by the lane, and no receipt diff against a local run exists. **Consequence:** a day of box time judged on no evidence, the box deleted (17:50Z 09-15) and re-bought (02:51Z 09-16), and every future image or lane change re-opens the question.",
+  "prd_source": "/home/jsy/Documents/PRDs/build-queue/PRD-build-diff-scoped-gate.md",
+  "intent_slug": "build-diff-scoped-gate",
+  "root_motivation": "Joe's objective is all gates green; today green is a property of the whole checkout and the box, so a clean diff reads red. Evidence: in the 14-day histogram no test, clippy, fmt, or deny receipt is in the top five; `rollback-plan` blocks 147 times on \"commits not all revert-clean\" for commits already on main; `ci-checks` blocks 157 times mostly on `no-runs-on-ref`/pending; `extended-receipts` is one bit over 17 producers with an 1,800 s wall budget (`EXTEND_GATE_LOOP_WALL_S`, `extend-gate.sh:319`), and 59 blocked gates exceeded 1,500 s. Consequence: a branch's verdict measures the crate and the hour, not the PRD; every re-gate costs 10-28 min of the one build host.",
   "user_persona": "The autobuilder skill orchestrator (a Claude session) and the human invoking `/autobuilder` from their own project. Both shell out to this binary for the receipt + gate steps that must not live in bash.",
   "unfakeable_metric": {
     "name": "stage4_receipt_producers_callable",
@@ -14,140 +14,68 @@
     {
       "id": "AC1",
       "level": "MUST",
-      "description": "Given a live proven box and green mcphost main, When `burst-lane.sh canary` runs, Then three journal lines `canary main|branch|delta` appear with `pass`, `canary.json` exists under the box's state dir with `diverged=[]`, and wall time is under 25 minutes cold. (Real-box; deferrable only with a justification naming why no box was reachable.)",
+      "description": "Given a worktree whose diff adds a failing test, When `--scope branch` runs, Then `verdict=block` names the tests receipt and no `rollback-plan` or `ci-checks` receipt is in `blocks[]`.",
       "test": "tests/acceptance_ac1.rs"
     },
     {
       "id": "AC2",
       "level": "MUST",
-      "description": "Given no local baseline for HEAD, When `canary` runs, Then a local `--scope main` gate at `nice -n 10` is run first, `baseline_dir` is populated, and the diff runs against it; Given `--no-baseline`, Then the journal says `baseline=skipped` and no divergence is reported.",
+      "description": "Given a worktree with a clean diff on a main whose last three commits are not revert-clean, When `--scope branch` runs, Then `verdict=pass` and `rollback-plan` is listed `not-run class=history-infra`.",
       "test": "tests/acceptance_ac2.rs"
     },
     {
       "id": "AC3",
       "level": "MUST",
-      "description": "Given fixture receipts where `extended-receipts` passes locally and fails on the box, When `gate-receipt-diff.sh` runs, Then it prints `extended-receipts pass fail burst:<id> DIVERGED`, exits 1, and `canary.json.diverged` names the producer and route.",
+      "description": "Given an extended producer with no class declaration, When the gate runs at branch scope, Then it is `not-run` and journaled `class=history-infra (undeclared)`.",
       "test": "tests/acceptance_ac3.rs"
     },
     {
       "id": "AC4",
       "level": "MUST",
-      "description": "Given fixture receipts identical except wall, timestamps and `target/` paths, When the diff runs, Then every producer prints `same` and exit is 0.",
+      "description": "Given a landing whose own commit is not revert-clean, When `--scope main` runs, Then `main-health` has an `in-scope` rollback-plan block and `archive-gate.sh` refuses naming it; given the same block on an older commit, Then archive proceeds and the block is `inherited`.",
       "test": "tests/acceptance_ac4.rs"
     },
     {
       "id": "AC5",
       "level": "MUST",
-      "description": "Given a fresh box with `proof_routed=true` and `canary=missing`, When `burst-lane.sh enable` runs, Then it refuses with `cause=canary-missing` and no drop-in is written; When `canary` passes and `enable` re-runs, Then the drop-in is written. (Real-box; deferrable only with a justification naming why no box was reachable.)",
+      "description": "Given a producer exceeding its per-producer budget, When the gate runs, Then that receipt is `incomplete`, retried once, and the verdict is never `block` on its account.",
       "test": "tests/acceptance_ac5.rs"
     },
     {
       "id": "AC6",
       "level": "MUST",
-      "description": "Given a canary run whose diff reports a divergence (fixture-injected via `BURST_LANE_GATE_TOOLS_REMOTE_BIN_DIR` breaking one producer's tool on the box), When the daily unit runs, Then dispatch is disabled, the journal carries `canary diverged (producer=\u2026 route=burst:<id>)`, and `alert-deliver.sh` was invoked with the producer name. (Real-box; deferrable only with a justification naming why no box was reachable.)",
+      "description": "Given an unchanged tree, When `--scope branch` runs twice, Then the second run is a cache hit under 10 s.",
       "test": "tests/acceptance_ac6.rs"
     },
     {
       "id": "AC7",
       "level": "MUST",
-      "description": "Given a canary in flight, When a second `canary` starts, Then it refuses with `cause=inflight` within 1 s.",
+      "description": "Given the fix landed on RedBaron, When the next mcphost branch gate runs, Then its journal line reports `wall=` under 600 s and `class=tree` receipts only. (Live; evidence: `journal:gate  mcphost-[a-z0-9-]+  (pass|delta-pass|block) .*scope=branch .*class=tree`)",
       "test": "tests/acceptance_ac7.rs"
     },
     {
       "id": "AC8",
       "level": "MUST",
-      "description": "Given `burst-lane.sh status` on a box with a passing canary, When it runs, Then line 2 contains `canary=pass@<age>h head=<sha7>`. (Real-box; deferrable only with a justification naming why no box was reachable.)",
+      "description": "Given a session start after one main-health run, When the banner prints, Then a `main-health:` line with sha, verdict, and age is present.",
       "test": "tests/acceptance_ac8.rs"
     },
     {
       "id": "AC9",
-      "level": "MUST",
-      "description": "Given mcphost main red (fixture `gh run list` returning failure), When `canary` runs without `--head`, Then it refuses with `cause=no-green-head` and boots nothing.",
+      "level": "SHOULD",
+      "description": "Given four tree producers and two cargo-budget slots, When the gate runs, Then at most two run concurrently and receipts are written per producer.",
       "test": "tests/acceptance_ac9.rs"
     },
     {
       "id": "AC10",
-      "level": "MUST",
-      "description": "Given `tests/canary_ac*.sh`, When `scripts/canary-selftest.sh` runs on RedBaron, Then 0 FAIL.",
+      "level": "SHOULD",
+      "description": "Given no landing for 7 h, When the scheduled probe fires, Then `main-health` runs once and journals it.",
       "test": "tests/acceptance_ac10.rs"
     },
     {
       "id": "AC11",
-      "level": "MUST",
-      "description": "Given mcphost main red and a tag whose CI was green, When `canary` runs without `--head`, Then it runs against that tag, journals `head_source=last-green-tag`, and `canary.json.head_source` says the same; AC9's fixture has no green tag, which is why it refuses.",
+      "level": "MAY",
+      "description": "Given `--what-if <sha>`, When it runs, Then each known block is printed with its class and nothing executes.",
       "test": "tests/acceptance_ac11.rs"
-    },
-    {
-      "id": "AC12",
-      "level": "MUST",
-      "description": "Given a routed `--scope main` gate at a green HEAD passed 3 h ago, When the daily timer fires, Then no canary runs and the journal carries `canary skipped (cause=recent-routed-pass \u2026)`; Given the last such pass is 25 h old, Then the canary runs.",
-      "test": "tests/acceptance_ac12.rs"
-    },
-    {
-      "id": "AC13",
-      "level": "MUST",
-      "description": "Given a first divergence, When the daily unit handles it, Then `alert-deliver.sh` is invoked, the journal shows `confirm=pending`, dispatch is still enabled, and the variant is re-run at once; Given the re-run also diverges, Then `cmd_disable` runs with `confirm=2/2`; Given the re-run passes, Then dispatch stays enabled and the journal shows `canary flake (\u2026)`.",
-      "test": "tests/acceptance_ac13.rs"
-    },
-    {
-      "id": "AC14",
-      "level": "MUST",
-      "description": "Given dispatch disabled by a confirmed divergence, When a later canary passes, Then dispatch is re-enabled with `canary re-enable (after=diverged@<ts>)` and no operator command was needed. (Real-box; deferrable only with a justification naming why no box was reachable.)",
-      "test": "tests/acceptance_ac14.rs"
-    },
-    {
-      "id": "AC15",
-      "level": "MUST",
-      "description": "Given a burst-intended gate whose per-gate `route.log` has zero ` burst ` lines at gate end, When extend-gate computes the route attestation, Then the gate verdict is `block` with `cause=route-mismatch intended=burst burst=0 local=<n> first_local_cause=<cause>` and no dirty-only probe; fixture: `BURST_LANE` unset with `BUILD_BURST_ENABLED=1` reproduces cause `burst-lane-disabled`.",
-      "test": "tests/acceptance_ac15.rs"
-    },
-    {
-      "id": "AC16",
-      "level": "MUST",
-      "description": "Given `select-guard.sh` with a fixture burst status `gate_ready=true` and no `width`/`run_slots.cap`, When five same-target candidates are offered with `BUILD_DISTINCT_TARGETS=0`, Then exactly one is admitted, the rest are journaled `same-target-blocked cause=cap-unbounded-under-burst`, and the summary carries `cap_source=blocked`; Given the same fixture with `run_slots.cap=4`, Then four are admitted with `cap=4 source=burst`.",
-      "test": "tests/acceptance_ac16.rs"
-    },
-    {
-      "id": "AC17",
-      "level": "MUST",
-      "description": "Given a burst-intended gate and a fixture `extended-receipts.sh` that prepends `$HOME/.cargo/bin` to PATH, When the gate finishes, Then it blocks with `cause=producer-cargo-unattested producer=flake-audit` and the journal names every producer in `state/cargo-producers.txt` with no ledger row; Given the shim-first PATH, Then every listed producer has a ledger row with `parent_step=<producer>` and the gate is not blocked by R15.",
-      "test": "tests/acceptance_ac17.rs"
-    },
-    {
-      "id": "AC18",
-      "level": "MUST",
-      "description": "Given `tests/fixtures/burst-status.json`, When the fixture parity test runs on RedBaron against the live `burst-lane.sh status --json`, Then it passes when the key sets match and fails naming the missing or extra keys otherwise; `select-guard-same-target-cap-selftest.sh` AC9 loads this fixture and still reports `cap=4 source=burst` and `cap=2 source=burst`. (Real-box for the live half; the fixture half runs anywhere.)",
-      "test": "tests/acceptance_ac18.rs"
-    },
-    {
-      "id": "AC19",
-      "level": "MUST",
-      "description": "Given a selftest file under `scripts/` or `tests/` containing an inline JSON literal with a `gate_ready` key, When the selftest lint runs, Then it fails with `handwritten-interface-fixture <file>:<line>`; Given the same file loading `tests/fixtures/burst-status.json` and overriding fields, Then the lint passes.",
-      "test": "tests/acceptance_ac19.rs"
-    },
-    {
-      "id": "AC20",
-      "level": "MUST",
-      "description": "Given the three 2026-09-16 regressions replayed as fixtures (`BURST_LANE` unexported; `$HOME/.cargo/bin` ahead of the shims; status JSON with `width` only and with neither key), When `scripts/canary-selftest.sh` runs, Then AC15, AC17 and AC16 each catch their case and the suite reports 0 FAIL.",
-      "test": "tests/acceptance_ac20.rs"
-    },
-    {
-      "id": "AC21",
-      "level": "MUST",
-      "description": "Given `BUILD_BURST_ENABLED=1` in the drop-in and no `state/burst-lane/enable.json`, When `select-tick.sh` runs, Then the journal has `ALARM burst-knob-unsanctioned (source=burst.conf)`, the notify stub receives it under rule `gate-red`, and the tick's admitted gates run with `BUILD_BURST_ENABLED=0`.",
-      "test": "tests/acceptance_ac21.rs"
-    },
-    {
-      "id": "AC22",
-      "level": "MUST",
-      "description": "Given `burst-lane.sh enable` after a canary `pass` (fixture), When it completes, Then `enable.json` records `canary_verdict=pass` with the canary ts and head, both knob files read 1, and the next tick journals no knob alarm.",
-      "test": "tests/acceptance_ac22.rs"
-    },
-    {
-      "id": "AC23",
-      "level": "MUST",
-      "description": "Given `enable.json` whose `canary_ts` is 25 h old, When the tick runs, Then the knob alarm fires with `cause=canary-stale` and routing is off for that tick. - iter_log: 2026-09-16T14:55:00Z amended by /dream (Joe 2026-09-16 \"FIX IT ALL\", ten whys level 8: hand-set knob bypassed the canary) \u2014 R17 + AC21\u201323 appended (knob only via enable after canary pass; unsanctioned knob alarmed via gate-red and routing off for the tick); ACs 1\u201320 unchanged",
-      "test": "tests/acceptance_ac23.rs"
     }
   ],
   "scope": [
