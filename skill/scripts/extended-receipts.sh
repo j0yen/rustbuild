@@ -17,6 +17,44 @@ _shims="$(printf '%s' "$PATH" | tr ':' '\n' | grep -E '/(cargo-budget-bin|burst-
 [ -n "$_shims" ] && export PATH="$_shims:$PATH"
 producers="supply-audit license-audit secrets-scan sbom msrv-verify binary-size semver-check cli-surface schema-compat ac-traceability flake-audit hermetic-build determinism cold-build-time bench-delta mutation-kill experiment"
 for p in $producers; do command -v "$p" >/dev/null || { echo "missing producer bin: $p (cargo install --path ~/wintermute/rustbuild/autobuilder/crates/extended-gates --locked)" >&2; exit 2; }; done
+
+# PRD-build-diff-scoped-gate requirement 1 (P0, AC1/AC3): each producer's
+# class — `tree` (hermetic, keyed only by the branch tree — safe to run
+# at extend-gate.sh's --scope branch) or `history-infra` (reads a
+# previous/published baseline, an external registry, or other non-tree
+# state — deferred at --scope branch, per extend-gate.sh's own
+# risk-gate/intake/rollback-plan/ci-checks table). This is a declaration
+# only — extend-gate.sh does not yet read it to skip history-infra
+# producers at branch scope (that consumer wiring is a separate step);
+# today this script still runs every producer regardless of scope,
+# unchanged. A producer with NO entry here is history-infra by
+# construction (producer_class's own fallback below) — fail safe, so an
+# undeclared producer can never wrongly get treated as safe-to-run at
+# branch scope once a consumer does read this.
+#   tree: secrets-scan, sbom, msrv-verify, binary-size, cli-surface,
+#         ac-traceability, flake-audit, hermetic-build, determinism,
+#         cold-build-time, mutation-kill — each reads/builds only the
+#         crate's own tree (no comparison against a prior release, no
+#         registry/network lookup beyond what `cargo build` itself needs).
+#   history-infra: supply-audit, license-audit (query the crates.io/RUSTSEC
+#         registry, not just the tree), semver-check, schema-compat,
+#         bench-delta (each compares HEAD against a previous published
+#         version or a stored baseline — history, not tree).
+#   `experiment` is deliberately NOT declared: its inputs vary per use and
+#   no single class is safe to assume — it falls through to history-infra
+#   by the fail-safe default below rather than a guessed classification.
+declare -A producer_class=(
+  [secrets-scan]=tree [sbom]=tree [msrv-verify]=tree [binary-size]=tree
+  [cli-surface]=tree [ac-traceability]=tree [flake-audit]=tree
+  [hermetic-build]=tree [determinism]=tree [cold-build-time]=tree
+  [mutation-kill]=tree
+  [supply-audit]=history-infra [license-audit]=history-infra
+  [semver-check]=history-infra [schema-compat]=history-infra
+  [bench-delta]=history-infra
+)
+producer_class_of() {  # $1=producer name -> prints its class, defaults history-infra
+  printf '%s\n' "${producer_class[$1]:-history-infra}"
+}
 t0=$(date +%s)
 # PRD-build-burst-gate-canary-invariant R15: tag each producer's own cargo
 # call with its own name, not the blanket "extended-receipts" step
