@@ -291,20 +291,40 @@ const ROUTE_LOG_TAIL_LINES: usize = 2000;
 ///
 /// - `"burst"` — a line at or after `since` (this build's start,
 ///   RFC3339, string-comparable since both this producer and the shim
-///   write fixed-width UTC-`Z` timestamps) carries the literal field
-///   `burst` as its route/decision column. The pin (R1) was overridden.
+///   write fixed-width UTC-`Z` timestamps) whose pid field equals
+///   `own_pid` carries the literal field `burst` as its route/decision
+///   column. The pin (R1) was overridden.
 /// - `"local"` — `route.log` exists but no such line was found in the
-///   tail window: either a shim logged `local`/`passthrough` here, or
-///   nothing new was written at all (also consistent with a held pin).
+///   tail window: either a shim logged `local`/`passthrough` here for
+///   `own_pid`, or nothing new was written at all (also consistent with a
+///   held pin).
 /// - `"unknown"` — no `route.log` exists for this project at all; no
 ///   shim ever attested to a route decision either way.
 ///
-/// Field position is deliberately not assumed: `burst-lane-bin/cargo`'s
-/// real format is `<ts> <pid> <sub> <decision> <cause> <pwd>` (decision at
-/// index 3), while a synthetic fixture may write a shorter line — this
-/// only requires that some whitespace-separated field after the leading
-/// timestamp equal `burst` exactly.
-fn read_route_observed(project: &Path, since: &str) -> &'static str {
+/// `own_pid` (this build's own cargo child, `child.id()` from
+/// `spawn_and_sample`) is required to match the line's pid field (index
+/// 1). Confirmed 2026-09-18 (rustbuild-hermetic-route-pid): both
+/// `cargo_route_log` (scripts/lib/cargo-route.sh) and burst-lane-bin/
+/// cargo's own `route_log` write their line with `$$` BEFORE any `exec`
+/// that would swap the process image, and the one path that later forks
+/// a grandchild (cargo-budget.sh's slot-acquiring `cmd_run`) only ever
+/// runs *after* that line was already written — so the pid a route
+/// decision is attributed to is always the top-level cargo-shim
+/// invocation's own pid, never a grandchild's. `target/autobuilder/
+/// route.log` is shared between this build's own gate and any concurrent
+/// gate/branch-agent building the same repo (they share `target/`), so
+/// filtering on time alone (the pre-fix behavior) let a concurrent gate's
+/// own burst-routed line block this build's pinned-local verdict
+/// (cause=route-not-local) even though this build's own `cargo_route` was
+/// local. Matching pid closes that gap without needing a run-id: a
+/// foreign gate's shim invocation always has a different top-level pid.
+///
+/// Field position is deliberately not assumed for the trailing fields:
+/// `burst-lane-bin/cargo`'s real format is `<ts> <pid> <sub> <decision>
+/// <cause> <pwd>` (decision at index 3), while a synthetic fixture may
+/// write a shorter line — this only requires that some whitespace-
+/// separated field after `<ts> <pid>` equal `burst` exactly.
+fn read_route_observed(project: &Path, since: &str, own_pid: &str) -> &'static str {
     let path = project.join("target/autobuilder/route.log");
     let Ok(text) = std::fs::read_to_string(&path) else {
         return "unknown";
@@ -314,7 +334,10 @@ fn read_route_observed(project: &Path, since: &str) -> &'static str {
         let Some(ts) = fields.next() else {
             return false;
         };
-        ts >= since && fields.any(|f| f == "burst")
+        let Some(pid) = fields.next() else {
+            return false;
+        };
+        ts >= since && pid == own_pid && fields.any(|f| f == "burst")
     });
     if burst { "burst" } else { "local" }
 }
@@ -409,15 +432,19 @@ fn sample_once(root_pid: i32, strict: bool, out: &mut BTreeSet<AttributedSocket>
 
 /// Spawn the hermetic-build cargo child (pinned local per R1, PRD-
 /// rustbuild-hermetic-local-route), sample its process tree until it
-/// exits, and return `(exit_code, attributed_sockets, route_check_start)`
-/// — `route_check_start` is this build's own RFC3339 start timestamp, for
-/// `read_route_observed` to filter `route.log` against.
+/// exits, and return `(exit_code, attributed_sockets, route_check_start,
+/// root_pid)` — `route_check_start` is this build's own RFC3339 start
+/// timestamp and `root_pid` this build's own cargo child pid, both for
+/// `read_route_observed` to filter `route.log` against (PRD-rustbuild-
+/// hermetic-route-pid: pid, not just the time window, is what tells this
+/// build's own route decision apart from a concurrent gate's sharing the
+/// same `target/` dir).
 ///
 /// # Errors
 ///
 /// Returns an error if a timestamp can't be formed, cargo can't be
 /// spawned, or polling the child fails.
-fn spawn_and_sample(project: &Path, strict: bool) -> Result<(Option<i32>, Vec<AttributedSocket>, String)> {
+fn spawn_and_sample(project: &Path, strict: bool) -> Result<(Option<i32>, Vec<AttributedSocket>, String, i32)> {
     // R1: this producer's verdict means nothing if its own cargo child
     // ships the build to a burst box — the socket-attribution tree would
     // then be watching the wrong machine. So pin the child to the local
@@ -465,7 +492,7 @@ fn spawn_and_sample(project: &Path, strict: bool) -> Result<(Option<i32>, Vec<At
     // read_ppid / read_comm all degrade to empty/"?" rather than erroring).
     sample_once(root_pid, strict, &mut attributed);
 
-    Ok((exit, attributed.into_iter().collect(), route_check_start))
+    Ok((exit, attributed.into_iter().collect(), route_check_start, root_pid))
 }
 
 /// Run the hermetic-build audit.
@@ -508,7 +535,7 @@ pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
         vec!["loopback", "unix-domain"]
     };
 
-    let (exit, new_sockets, route_check_start) = spawn_and_sample(project, strict)?;
+    let (exit, new_sockets, route_check_start, root_pid) = spawn_and_sample(project, strict)?;
 
     let mut verdict = if new_sockets.is_empty() && exit == Some(0) {
         "pass"
@@ -516,12 +543,16 @@ pub fn run(spec: &ProducerSpec, project: &Path) -> Result<String> {
         "block"
     };
 
-    // R2: a burst-routed line in this build's own route.log window means
-    // the pin above was overridden by a shim — a named block, distinct
-    // from (and independent of) whatever the socket attribution above
-    // decided. `attributed_sockets` (new_sockets) is left exactly as
-    // observed either way.
-    let route_observed = read_route_observed(project, &route_check_start);
+    // R2: a burst-routed line in this build's own route.log window,
+    // attributed to this build's own cargo child pid, means the pin above
+    // was overridden by a shim — a named block, distinct from (and
+    // independent of) whatever the socket attribution above decided.
+    // `attributed_sockets` (new_sockets) is left exactly as observed
+    // either way. Matching `root_pid` (PRD-rustbuild-hermetic-route-pid)
+    // is what keeps a concurrent gate's own burst-routed line — sharing
+    // this project's `target/autobuilder/route.log` — from being
+    // misattributed to this build.
+    let route_observed = read_route_observed(project, &route_check_start, &root_pid.to_string());
     let cause = if route_observed == "burst" {
         verdict = "block";
         Some("route-not-local")
@@ -611,5 +642,104 @@ mod tests {
         assert!(socket_inodes(bogus_pid).is_empty());
         assert_eq!(read_comm(bogus_pid), "?");
         assert_eq!(read_ppid(bogus_pid), None);
+    }
+
+    /// Scratch project dir for a `read_route_observed` case: a fresh
+    /// `target/autobuilder/` under a unique subdir of the OS temp dir, torn
+    /// down on drop so parallel `cargo test` runs never collide.
+    struct RouteLogFixture {
+        project: std::path::PathBuf,
+    }
+
+    impl RouteLogFixture {
+        fn new(name: &str) -> Self {
+            let project = std::env::temp_dir().join(format!(
+                "hermetic-build-route-fixture-{name}-{}-{}",
+                std::process::id(),
+                name.len() // cheap extra entropy alongside the pid
+            ));
+            let dir = project.join("target/autobuilder");
+            std::fs::create_dir_all(&dir).expect("create fixture target/autobuilder dir");
+            Self { project }
+        }
+
+        fn write_route_log(&self, contents: &str) {
+            std::fs::write(self.project.join("target/autobuilder/route.log"), contents)
+                .expect("write fixture route.log");
+        }
+    }
+
+    impl Drop for RouteLogFixture {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.project);
+        }
+    }
+
+    #[test]
+    fn route_observed_unknown_when_no_route_log() {
+        let fixture = RouteLogFixture::new("no-log");
+        assert_eq!(
+            read_route_observed(&fixture.project, "2026-09-18T00:00:00Z", "4242"),
+            "unknown"
+        );
+    }
+
+    #[test]
+    fn route_observed_local_when_only_own_pid_local() {
+        let fixture = RouteLogFixture::new("own-local");
+        fixture.write_route_log(
+            "2026-09-18T19:10:00Z 4242 build local budget:not-configured /tmp/proj\n",
+        );
+        assert_eq!(
+            read_route_observed(&fixture.project, "2026-09-18T19:00:00Z", "4242"),
+            "local"
+        );
+    }
+
+    #[test]
+    fn route_observed_burst_when_own_pid_burst_line_present() {
+        let fixture = RouteLogFixture::new("own-burst");
+        fixture.write_route_log(
+            "2026-09-18T19:10:00Z 4242 build burst budget:burst /tmp/proj\n",
+        );
+        assert_eq!(
+            read_route_observed(&fixture.project, "2026-09-18T19:00:00Z", "4242"),
+            "burst"
+        );
+    }
+
+    /// PRD-rustbuild-hermetic-route-pid regression: a foreign gate sharing
+    /// this project's `target/autobuilder/route.log` (a concurrent branch-
+    /// agent build of the same repo, say) routes to burst legitimately —
+    /// that line lands well after `since` with the literal `burst` field,
+    /// but under a DIFFERENT pid (9999, not this build's own 4242). The
+    /// pre-fix time-window-only heuristic misattributed lines like this to
+    /// whichever build happened to be scanning; pid-matching must not.
+    #[test]
+    fn route_observed_local_when_foreign_pid_burst_line_present() {
+        let fixture = RouteLogFixture::new("foreign-burst");
+        fixture.write_route_log(concat!(
+            "2026-09-18T18:00:00Z 4242 build local budget:not-configured /tmp/proj\n",
+            "2026-09-18T19:13:42Z 9999 test burst budget:burst /tmp/proj\n",
+        ));
+        assert_eq!(
+            read_route_observed(&fixture.project, "2026-09-18T19:00:00Z", "4242"),
+            "local"
+        );
+    }
+
+    #[test]
+    fn route_observed_ignores_own_pid_burst_line_before_since() {
+        let fixture = RouteLogFixture::new("own-stale-burst");
+        // A burst line under our OWN pid, but from before this build's
+        // window started (a stale/reused pid from an earlier build) — the
+        // `since` bound still applies on top of the pid match.
+        fixture.write_route_log(
+            "2026-09-18T10:00:00Z 4242 build burst budget:burst /tmp/proj\n",
+        );
+        assert_eq!(
+            read_route_observed(&fixture.project, "2026-09-18T19:00:00Z", "4242"),
+            "local"
+        );
     }
 }
